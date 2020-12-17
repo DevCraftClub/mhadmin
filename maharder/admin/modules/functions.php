@@ -12,6 +12,15 @@
 // Do not change anything!                                      
 //===============================================================
 
+/**
+ * 
+ * @global array $config
+ * @param string $section
+ * @param string $request
+ * @param array $header
+ * @param array $post
+ * @return array
+ */
 function letsCurl($section, $request = 'GET', $header = array(), $post = array()) {
 	global $config;
 	
@@ -44,12 +53,32 @@ function letsCurl($section, $request = 'GET', $header = array(), $post = array()
 	return $response;
 }
 
-function htmlStatic($data = array(), $type = 'css') {
+/**
+ * 
+ * @param mixed $data
+ * @param string $type
+ * @return array
+ */
+function htmlStatic($data, $view = 'html', $type = 'css') {
 	$out = array();
-	
-	foreach($data as $d) {
-		if($type == 'css') $out[] = "<link rel='stylesheet' type='text/css' href='{$d}'>";
-		elseif($type == 'js') $out[] = "<srcipt src='{$d}'></script>";
+	if($view == 'html') {
+		if(is_array($data)) {
+			foreach($data as $d) {
+				if($type == 'css') $out[] = "<link rel='stylesheet' type='text/css' href='{$d}'>";
+				elseif($type == 'js') $out[] = "<script src='{$d}'></script>";
+			}
+		} else {
+			if($type == 'css') $out[] = "<link rel='stylesheet' type='text/css' href='{$data}'>";
+			elseif($type == 'js') $out[] = "<script src='{$data}'></script>";
+		}
+	} elseif ($view == 'link') {
+		if(is_array($data)) {
+			foreach($data as $d) {
+				$out[] = $d;
+			}
+		} else {
+			$out[] = $data;
+		}
 	}
 	
 	return $out;

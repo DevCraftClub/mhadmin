@@ -12,15 +12,7 @@
 // Do not change anything!                                      
 //===============================================================
 
-/**
- * 
- * @global array $config
- * @param string $section
- * @param string $request
- * @param array $header
- * @param array $post
- * @return array
- */
+
 function letsCurl($section, $request = 'GET', $header = array(), $post = array()) {
 	global $config;
 	
@@ -53,12 +45,6 @@ function letsCurl($section, $request = 'GET', $header = array(), $post = array()
 	return $response;
 }
 
-/**
- * 
- * @param mixed $data
- * @param string $type
- * @return array
- */
 function htmlStatic($data, $view = 'html', $type = 'css') {
 	$out = array();
 	if($view == 'html') {

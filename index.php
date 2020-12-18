@@ -1,27 +1,26 @@
 <?php
 
+
+// Подключаем классы, функции и основные переменные
 require_once './maharder/admin/index.php';
 
+// Подключаем переменные модуля и его функционал
+// Используем переменную sites для навигации в модуле
+
+switch ($_GET['sites']) {
+	// Страница с логами изменений
+//	case 'changelog':
 
 
-// Как добавить свои стили?
-// 1. Вариант
-// добавляем дополнительные стили в существующий массив: $variables['css'][] = htmlStatic("путь/к/стилям.css");
-// тем самым добавив новый стиль к существующим
-// 
-// 2. Вариант
-// создаём новый массив с новыми стилями и перезаписываем переменную для рендера
-// $variables['css'] = htmlStatic($newCssArray); 
+//		break;
 
-// Как добавить свои сkripty?
-// 1. Вариант
-// добавляем дополнительные скрипты в существующий массив: $variables['js'][] = htmlStatic("путь/к/скриптам.js", "html", "js");
-// тем самым добавив новый скрипт к существующим
-// 
-// 2. Вариант
-// создаём новый массив с новыми скриптами и перезаписываем переменную для рендера
-// $variables['js'] = htmlStatic($newJssArray, "js"); 
+	default:
+		require_once MH_DIR . '/modules/main.php';
+		break;
+}
 
+// Загружаем шаблон
+$template = $mh_admin->load($htmlTemplate);
 
-$template = $mh_admin->load('base.html');
-echo $template->render($variables);
+// Отображаем всё на сайте
+echo $template->render(array_merge($variables, $modVars));

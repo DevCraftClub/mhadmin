@@ -60,12 +60,12 @@ class __TwigTemplate_b3ad63568c3d1fe4aef587bfb757ac47c6c023d6b33639535462b71dc23
         // line 14
         echo "\t</head>
 \t<body>
-\t\t
+
 \t\t";
         // line 17
         $this->loadTemplate("sidebar.html", "base.html", 17)->display($context);
         // line 18
-        echo "\t\t
+        echo "
 \t\t<div class=\"ui main container\">
 \t\t\t<h1 class=\"ui header\">";
         // line 20
@@ -78,32 +78,37 @@ class __TwigTemplate_b3ad63568c3d1fe4aef587bfb757ac47c6c023d6b33639535462b71dc23
         echo twig_escape_filter($this->env, ($context["module_description"] ?? null), "html", null, true);
         echo "</p>
 \t\t</div>
-\t\t
+
 \t\t";
         // line 24
         $this->loadTemplate("menu.html", "base.html", 24)->display($context);
         // line 25
-        echo "\t\t
+        echo "
 \t\t<div class=\"ui container dimmed pusher\">
-\t\t\t";
-        // line 27
-        $this->loadTemplate("breadcrumb.html", "base.html", 27)->display($context);
+\t\t\t<div class=\"ui segment\">
+\t\t\t\t";
         // line 28
-        echo "\t\t\t";
-        $this->displayBlock('content', $context, $blocks);
+        $this->loadTemplate("breadcrumb.html", "base.html", 28)->display($context);
         // line 29
-        echo "\t\t</div>
-\t\t";
-        // line 30
-        $this->loadTemplate("footer.html", "base.html", 30)->display($context);
+        echo "\t\t\t</div>
+\t\t\t<div class=\"ui piled segments\">
+\t\t\t\t";
         // line 31
-        echo "\t\t";
+        $this->displayBlock('content', $context, $blocks);
         // line 32
+        echo "\t\t\t</div>
+\t\t</div>
+\t\t";
+        // line 34
+        $this->loadTemplate("footer.html", "base.html", 34)->display($context);
+        // line 35
+        echo "\t\t";
+        // line 36
         echo "\t\t\t";
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["js"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["script"]) {
-            // line 33
+            // line 37
             echo "\t\t\t\t";
             echo $context["script"];
             echo "
@@ -112,9 +117,9 @@ class __TwigTemplate_b3ad63568c3d1fe4aef587bfb757ac47c6c023d6b33639535462b71dc23
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['script'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 35
+        // line 39
         echo "\t\t";
-        // line 36
+        // line 40
         echo "\t</body>
 </html>
 ";
@@ -128,7 +133,7 @@ class __TwigTemplate_b3ad63568c3d1fe4aef587bfb757ac47c6c023d6b33639535462b71dc23
         echo "</title>";
     }
 
-    // line 28
+    // line 31
     public function block_content($context, array $blocks = [])
     {
     }
@@ -145,7 +150,7 @@ class __TwigTemplate_b3ad63568c3d1fe4aef587bfb757ac47c6c023d6b33639535462b71dc23
 
     public function getDebugInfo()
     {
-        return array (  132 => 28,  124 => 5,  118 => 36,  116 => 35,  107 => 33,  102 => 32,  100 => 31,  98 => 30,  95 => 29,  92 => 28,  90 => 27,  86 => 25,  84 => 24,  78 => 21,  72 => 20,  68 => 18,  66 => 17,  61 => 14,  59 => 13,  50 => 11,  45 => 10,  40 => 6,  38 => 5,  32 => 1,);
+        return array (  137 => 31,  129 => 5,  123 => 40,  121 => 39,  112 => 37,  107 => 36,  105 => 35,  103 => 34,  99 => 32,  97 => 31,  93 => 29,  91 => 28,  86 => 25,  84 => 24,  78 => 21,  72 => 20,  68 => 18,  66 => 17,  61 => 14,  59 => 13,  50 => 11,  45 => 10,  40 => 6,  38 => 5,  32 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -173,19 +178,23 @@ class __TwigTemplate_b3ad63568c3d1fe4aef587bfb757ac47c6c023d6b33639535462b71dc23
 \t\t{% endautoescape %}
 \t</head>
 \t<body>
-\t\t
+
 \t\t{% include 'sidebar.html' %}
-\t\t
+
 \t\t<div class=\"ui main container\">
 \t\t\t<h1 class=\"ui header\">{{ module_name }} v{{ module_version }}</h1>
 \t\t\t<p>{{ module_description }}</p>
 \t\t</div>
-\t\t
+
 \t\t{% include 'menu.html' %}
-\t\t
+
 \t\t<div class=\"ui container dimmed pusher\">
-\t\t\t{% include 'breadcrumb.html' %}
-\t\t\t{% block content %}{% endblock %}
+\t\t\t<div class=\"ui segment\">
+\t\t\t\t{% include 'breadcrumb.html' %}
+\t\t\t</div>
+\t\t\t<div class=\"ui piled segments\">
+\t\t\t\t{% block content %}{% endblock %}
+\t\t\t</div>
 \t\t</div>
 \t\t{% include 'footer.html' %}
 \t\t{% autoescape 'html' %}

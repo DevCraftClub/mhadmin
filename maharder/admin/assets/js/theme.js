@@ -1,18 +1,22 @@
 var iw = 0, topMenu = '.main.menu', sideMenu = '.sidemenu';
-$(() => {
+$(document).ready(() => {
 
 	$('.ui.checkbox').checkbox();
 	$('.dropdown').dropdown();
 	$('.no.label.ui.dropdown').dropdown({
 		useLabels: false
 	});
+	$('.ui.accordion').accordion();
 
-	$('.menuToggler').on('click', function() {
-		$(sideMenu).sidebar('toggle');
+	$('.menuToggler').on('click', () => {
+		menuToggler();
 	});
 
 	// Настройки верхнего меню
-	$(topMenu, sideMenu).visibility({
+	$(topMenu).visibility({
+		type: 'fixed'
+	});
+	$(sideMenu).visibility({
 		type: 'fixed'
 	});
 	$('.overlay').visibility({
@@ -23,19 +27,11 @@ $(() => {
 	$(topMenu + '  .ui.dropdown').dropdown({
 		on: 'hover'
 	});
+	changeMenus();
 
-	$(document).on('resize', function () {
-		let mainWidth = $(topMenu).outerWidth(), browserWidth = document.body.offsetWidth;
-		console.log(browserWidth < mainWidth);
-		if (browserWidth < mainWidth) {
-			$(topMenu).hide();
-			$(sideMenu).show();
-		} else {
-
-			$(topMenu).show();
-			$(sideMenu).hide();
-		}
-	})
+	$(window).on('resize', () => {
+		changeMenus();
+	});
 
 	//$('.chosen').tokenfield();
 	autosize(document.querySelectorAll('textarea'));
@@ -52,8 +48,12 @@ $(() => {
 				$(helper).hide(250);
 			}, 2500);
 		});
-	})
+	});
 
+});
+
+$(document).on('resize', () => {
+	changeMenus();
 });
 
 function startLoading() {
@@ -63,95 +63,45 @@ function hideLoading() {
 	$('.ui.dimmer').removeClass('active');
 }
 
-function setTabs(tab) {
-	var thisWidth = $(tab).outerWidth(), nav = $(tab);
+function menuToggler(set = '') {
+	let s = '.adminSidebar';
 
-	function createDropDown(elements, selector) {
-		var select = "", temp = "", html = "";
-		if (selector[0] == "#")
-			select = "id";
-		else if (selector[0] == ".")
-			select = "class";
-		if (select == "id")
-			html += "<div class=\"ui floating dropdown labeled icon button attached\" id='" + selector.replace("#", "") + "'>";
-		else if (select == "class")
-			html += "<div class=\"ui floating dropdown labeled icon button attached " + selector.replace(".", "") + "\">";
+	if ($(s).sidebar('is visible') || set == 'hide') {
+		$(s).sidebar('hide');
+		if ($('body').hasClass('pushable')) setTimeout(() => { $('body').removeClass('pushable'); }, 1000);
+		$(s).removeClass('uncover');
+	} else {
+		$(s).sidebar('show');
+		$('body').addClass('pushable');
+	}
+}
 
-		$(elements).find('.item').each(function () {
-			if ($(this).hasClass('active')) {
-				html += "<span class=\"text\">" + $(this).html() + "</span><div class=\"menu\">";
-			}
-			temp += "<div class=\"item";
-			if ($(this).hasClass('active')) {
-				temp += " active selected";
-			}
-			temp += "\" data-tab='" + $(this).data('tab') + "'>" + $(this).html() + "</div>";
+function changeMenus() {
+	let mainWidth = $(topMenu).outerWidth(), menuWidth = 0;
+
+	function itemWidth() {
+		$(topMenu).find('.firstLine').each(function () {
+			let temp = $(this).outerWidth();
+			menuWidth = Math.abs(menuWidth + temp);
 		});
-		html += temp;
-		html += "</div></div>";
-
-		return html;
 	}
 
-	function createMenu(elements, selector) {
+	itemWidth();
 
-		var select = "", temp = "", html = "";
-		if (selector[0] == "#")
-			select = "id";
-		else if (selector[0] == ".")
-			select = "class";
-		if (select == "id")
-			html += "<div class=\"ui top attached tabular menu\" id='" + selector.replace("#", "") + "'>";
-		else if (select == "class")
-			html += "<div class=\"ui top attached tabular menu " + selector.replace(".", "") + "\">";
-
-		$(elements).find('.item').each(function () {
-			temp += "<a href='#' class=\"item";
-			if ($(this).hasClass('active')) {
-				temp += " active";
-			}
-			temp += "\" data-tab='" + $(this).data('tab') + "'>" + $(this).html() + "</a>";
-		});
-		html += temp;
-		html += "</div>";
-
-		return html;
+	if (menuWidth >= mainWidth) {
+		$(topMenu).hide();
+		setTimeout(() => { $(topMenu + '.constraint').hide(); }, 100);
+		$(sideMenu).show();
+		$(sideMenu + '.constraint').hide();
+	} else {
+		$(topMenu).show();
+		$(topMenu + '.constraint').hide();
+		$(sideMenu).hide();
+		setTimeout(() => { $(sideMenu + '.constraint').hide(); }, 100);
+		menuToggler('hide');
 	}
 
-	function resizeW(tabs, items, elements, selector) {
-		let parent = $(selector).parent();
-		if (items >= tabs) {
-			$(selector).remove();
-			$(parent).prepend(createDropDown(elements, selector));
-			$(".dropdown").dropdown();
-		} else {
-			$(selector).remove();
-			$(parent).prepend(createMenu(elements, selector));
-			$(selector + ' .item').tab();
-		}
-	}
 
-	function changeWidths(selector) {
-		if (iw == 0) {
-			$(selector).find('.item').each(function () {
-				let temp = $(this).outerWidth();
-				iw = Math.abs(iw + temp);
-			});
-		}
-		thisWidth = $(selector).outerWidth();
-	}
-
-	$(document).find(tab).each(function () {
-		$(tab + ' .item').tab();
-
-		changeWidths(tab);
-		$(window).resize(function () {
-			changeWidths(tab);
-		});
-
-		resizeW(thisWidth, iw, nav, tab);
-
-	});
 }
 
 function unserialize(data) {
@@ -357,38 +307,38 @@ function unserialize(data) {
 				dataoffset += 1
 				break
 			case 'O':
-			{
-				// O:<class name length>:"class name":<prop count>:{<props and values>}
-				// O:8:"stdClass":2:{s:3:"foo";s:3:"bar";s:3:"bar";s:3:"baz";}
-				readData = readUntil(data, dataoffset, ':') // read class name length
-				dataoffset += readData[0] + 1
-				readData = readUntil(data, dataoffset, ':')
+				{
+					// O:<class name length>:"class name":<prop count>:{<props and values>}
+					// O:8:"stdClass":2:{s:3:"foo";s:3:"bar";s:3:"bar";s:3:"baz";}
+					readData = readUntil(data, dataoffset, ':') // read class name length
+					dataoffset += readData[0] + 1
+					readData = readUntil(data, dataoffset, ':')
 
-				if (readData[1] !== '"stdClass"') {
-					throw Error('Unsupported object type: ' + readData[1])
+					if (readData[1] !== '"stdClass"') {
+						throw Error('Unsupported object type: ' + readData[1])
+					}
+
+					dataoffset += readData[0] + 1 // skip ":"
+					readData = readUntil(data, dataoffset, ':')
+					keys = parseInt(readData[1], 10)
+
+					dataoffset += readData[0] + 2 // skip ":{"
+					obj = {}
+
+					for (i = 0; i < keys; i++) {
+						readData = _unserialize(data, dataoffset)
+						key = readData[2]
+						dataoffset += readData[1]
+
+						readData = _unserialize(data, dataoffset)
+						dataoffset += readData[1]
+						obj[key] = readData[2]
+					}
+
+					dataoffset += 1 // skip "}"
+					readdata = obj
+					break
 				}
-
-				dataoffset += readData[0] + 1 // skip ":"
-				readData = readUntil(data, dataoffset, ':')
-				keys = parseInt(readData[1], 10)
-
-				dataoffset += readData[0] + 2 // skip ":{"
-				obj = {}
-
-				for (i = 0; i < keys; i++) {
-					readData = _unserialize(data, dataoffset)
-					key = readData[2]
-					dataoffset += readData[1]
-
-					readData = _unserialize(data, dataoffset)
-					dataoffset += readData[1]
-					obj[key] = readData[2]
-				}
-
-				dataoffset += 1 // skip "}"
-				readdata = obj
-				break
-			}
 			default:
 				throw SyntaxError('Unknown / Unhandled data type(s): ' + dtype)
 		}

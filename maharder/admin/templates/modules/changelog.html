@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="ui segment">
+	<div class="ui accordion">
+		{% for name, log in logs %}
+		<div class="{% if loop.first %}active {% endif %}title">
+			<i class="dropdown icon"></i>
+			{{name}}
+		</div>
+		<div class="{% if loop.first %}active {% endif %}content">
+
+			<div class="ui divided list">
+				{% for l in log %}
+				<div class="item">{{l}}</div>
+				{% endfor %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

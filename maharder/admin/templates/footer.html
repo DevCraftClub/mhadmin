@@ -1,11 +1,12 @@
 <div class="ui inverted vertical footer segment">
-    <div class="ui center aligned container">
+	<div class="ui center aligned container">
 		<div class="ui stackable inverted divided grid">
 			<div class="five wide column">
 				<h4 class="ui inverted header">Модуль</h4>
 				<div class="ui inverted link list">
-					<a href="{{modindex}}" class="item">Главная</a>
-					<a href="{{changelog}}" class="item">Изменения</a>
+					{% for b in breadcrumbs %}
+					<a href="{{b.ur}}" class="item">{{b.name}}</a>
+					{% endfor %}
 					{% block modullinks %} {% endblock %}
 				</div>
 			</div>
@@ -38,7 +39,9 @@
 							{% for d in author.donate %}
 							<div class="item">
 								<div class="content">
-									{% if d.link != '' %}<a href="{{d.link}}" rel='' target="_blank" title="{{d.name}}">{% else %}<span title="{{d.name}}">{% endif %}{{d.value}}{% if d.link != '' %}</a>{% else %}</span>{% endif %}
+									{% if d.link != '' %}<a href="{{d.link}}" rel='' target="_blank"
+										title="{{d.name}}">{% else %}<span title="{{d.name}}">{% endif %}{{d.value}}{%
+											if d.link != '' %}</a>{% else %}</span>{% endif %}
 								</div>
 							</div>
 							{% endfor %}
@@ -47,5 +50,5 @@
 				</div>
 			</div>
 		</div>
-    </div>
+	</div>
 </div>

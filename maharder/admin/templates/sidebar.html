@@ -1,32 +1,34 @@
-<div class="ui left vertical menu sidebar">
-	{% for link in links %}
-	{% if link.type == 'dropdown' %}
-	<div class="ui dropdown item top left pointing" tabindex="0">
-		{{link.name}} <i class="dropdown icon"></i>
-		<div class="menu" tabindex="0">
-			{% for child in link.children %}
-			{% if child.type == 'dropdown' %}
-			<div class="item">
-				<i class="dropdown icon"></i>
-				{{ child.name }}
-				<div class="menu">
-					{% for subchild in child.children %}
-					<a href="{{ subchild.href }}" class="item">{{ subchild.name }}</a>
-					{% endfor %}
+<div class="ui left sidebar vertical menu inverted adminSidebar">
+	<div class="ui accordion fluid inverted">
+		{% for link in links %}
+		{% if link.type == 'dropdown' %}
+		<div class="item" tabindex="0">
+			<a class="{% if loop.first %}active {%endif%}title"><i class="dropdown icon"></i>&nbsp;{{link.name}}</a>
+			<div class="{% if loop.first %}active {%endif%}content">
+				{% for child in link.children %}
+				{% if child.type == 'dropdown' %}
+				<div class="accordion">
+					<a class="title"><i class="dropdown icon"></i>&nbsp;{{child.name}}</a>
+					<div class="content">
+						{% for subchild in child.children %}
+						<a href="{{ subchild.href }}" class="item">{{ subchild.name }}</a>
+						{% endfor %}
+					</div>
 				</div>
+				{% elseif child.type == 'divider' %}
+				<div class="divider"></div>
+				{% else %}
+				<a href="{{ child.href }}" class="item">{{ child.name }}</a>
+				{% endif %}
+				{% endfor %}
 			</div>
-			{% elseif child.type == 'divider' %}
-			<div class="divider"></div>
-			{% else %}
-			<a href="{{ child.href }}" class="item">{{ child.name }}</a>
-			{% endif %}
-			{% endfor %}
 		</div>
+		{% elseif child.type == 'divider' %}
+		<div class="divider"></div>
+		{% else %}
+		<a href="{{ link.href }}" class="item">{{ link.name }}</a>
+		{% endif %}
+		{% endfor %}
 	</div>
-	{% elseif child.type == 'divider' %}
-	<div class="divider"></div>
-	{% else %}
-	<a href="{{ link.href }}" class="item">{{ link.name }}</a>
-	{% endif %}
-	{% endfor %}
+	<div class="item menuToggler link"><i class="icon close"></i>&nbsp;Закрыть меню</div>
 </div>

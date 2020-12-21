@@ -1,7 +1,9 @@
+
 <div class="ui huge breadcrumb">
-	<a class="section" href="{{modulindex}}">Главная</a>
-	<i class="right chevron icon divider"></i>
-	<a class="section">Registration</a>
-	<i class="right chevron icon divider"></i>
-	<div class="active section">Personal Information</div>
+	{% for b in breadcrumbs %}
+		<a class="section" href="{{ b.url }}">{{ b.name }}</a>
+		{% if loop.last %}{% else %}
+			<i class="right chevron icon divider"></i>
+		{% endif %}
+	{% endfor %}
 </div>

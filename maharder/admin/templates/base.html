@@ -13,19 +13,23 @@
 		{% endautoescape %}
 	</head>
 	<body>
-		
+
 		{% include 'sidebar.html' %}
-		
+
 		<div class="ui main container">
 			<h1 class="ui header">{{ module_name }} v{{ module_version }}</h1>
 			<p>{{ module_description }}</p>
 		</div>
-		
+
 		{% include 'menu.html' %}
-		
+
 		<div class="ui container dimmed pusher">
-			{% include 'breadcrumb.html' %}
-			{% block content %}{% endblock %}
+			<div class="ui segment">
+				{% include 'breadcrumb.html' %}
+			</div>
+			<div class="ui piled segments">
+				{% block content %}{% endblock %}
+			</div>
 		</div>
 		{% include 'footer.html' %}
 		{% autoescape 'html' %}

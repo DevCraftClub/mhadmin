@@ -38,18 +38,22 @@ class __TwigTemplate_e28a5f59a8c4850c2da5c37012cd9a799f0a417025705dd7d9f55cb5541
 \t\t\t\t\t";
         // line 7
         $context['_parent'] = $context;
-        $context['_seq'] = twig_ensure_traversable(($context["breadcrumbs"] ?? null));
-        foreach ($context['_seq'] as $context["_key"] => $context["b"]) {
+        $context['_seq'] = twig_ensure_traversable(($context["links"] ?? null));
+        foreach ($context['_seq'] as $context["_key"] => $context["l"]) {
             // line 8
-            echo "\t\t\t\t\t<a href=\"";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["b"], "ur", []), "html", null, true);
-            echo "\" class=\"item\">";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["b"], "name", []), "html", null, true);
-            echo "</a>
-\t\t\t\t\t";
+            echo "\t\t\t\t\t";
+            if (($this->getAttribute($context["l"], "type", []) == "link")) {
+                echo "<a href=\"";
+                echo twig_escape_filter($this->env, $this->getAttribute($context["l"], "href", []), "html", null, true);
+                echo "\" class=\"item\">";
+                echo twig_escape_filter($this->env, $this->getAttribute($context["l"], "name", []), "html", null, true);
+                echo "</a>";
+            }
+            // line 9
+            echo "\t\t\t\t\t";
         }
         $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['b'], $context['_parent'], $context['loop']);
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['l'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
         // line 10
         echo "\t\t\t\t\t";
@@ -184,7 +188,7 @@ class __TwigTemplate_e28a5f59a8c4850c2da5c37012cd9a799f0a417025705dd7d9f55cb5541
 
     public function getDebugInfo()
     {
-        return array (  171 => 18,  165 => 10,  154 => 48,  146 => 45,  140 => 44,  131 => 43,  125 => 42,  121 => 40,  117 => 39,  110 => 34,  96 => 30,  92 => 28,  88 => 27,  83 => 25,  75 => 19,  73 => 18,  69 => 17,  65 => 16,  58 => 11,  55 => 10,  44 => 8,  40 => 7,  32 => 1,);
+        return array (  175 => 18,  169 => 10,  158 => 48,  150 => 45,  144 => 44,  135 => 43,  129 => 42,  125 => 40,  121 => 39,  114 => 34,  100 => 30,  96 => 28,  92 => 27,  87 => 25,  79 => 19,  77 => 18,  73 => 17,  69 => 16,  62 => 11,  59 => 10,  53 => 9,  44 => 8,  40 => 7,  32 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -203,8 +207,8 @@ class __TwigTemplate_e28a5f59a8c4850c2da5c37012cd9a799f0a417025705dd7d9f55cb5541
 \t\t\t<div class=\"five wide column\">
 \t\t\t\t<h4 class=\"ui inverted header\">Модуль</h4>
 \t\t\t\t<div class=\"ui inverted link list\">
-\t\t\t\t\t{% for b in breadcrumbs %}
-\t\t\t\t\t<a href=\"{{b.ur}}\" class=\"item\">{{b.name}}</a>
+\t\t\t\t\t{% for l in links %}
+\t\t\t\t\t{% if l.type =='link' %}<a href=\"{{l.href}}\" class=\"item\">{{l.name}}</a>{% endif %}
 \t\t\t\t\t{% endfor %}
 \t\t\t\t\t{% block modullinks %} {% endblock %}
 \t\t\t\t</div>

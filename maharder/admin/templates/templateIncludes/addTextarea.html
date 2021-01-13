@@ -1,0 +1,6 @@
+<div class="field">
+	<textarea id="{{name}}" name="{{name}}" placeholder="{{label}}">{{value}}</textarea>
+	{% if editor %}
+	$('#{{name}}').wysibb(wbbOpt);
+	{% endif %}
+</div>

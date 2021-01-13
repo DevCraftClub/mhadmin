@@ -38,7 +38,13 @@ $logs= [
 $modVars = [
 	'title' => 'История изменений',
 	'module_icon' => 'fad fa-robot',
-	"logs" => $logs
+	"logs" => $logs,
+	"bsp" => [
+		'unb' => "U N B",
+		'dos' => [
+			'dodo' => 'hahaha'
+		]
+	]
 ];
 
 $htmlTemplate = 'modules/changelog.html';

@@ -1,0 +1,11 @@
+<div class="field">
+	<input type="{{type}}" id="{{name}}" name="{{name}}" placeholder="{{label}}" value="{{value}}" {% if type=='file'
+		%}class="icheck" {%else%}{%if chosen%}class="chosen" {%endif%}{%endif%}>
+	{% if type == 'file' %}
+	<br>
+	<div class='ui checkbox'>
+		{{ include('templateIncludes/addCheckbox.html', {name: name, class: 'switch', selected: false}) }}
+		<label for="{{name}}_check">{{label}} заменить?</label>
+	</div>
+	{%endif%}
+</div>

@@ -19,6 +19,7 @@ $cssArr = [
 	URL.'/maharder/admin/assets/css/tokens.css',
 	URL.'/maharder/admin/assets/css/prettify.css',
 	URL.'/maharder/admin/assets/css/theme.css',
+	URL.'/maharder/admin/assets/wysibb/theme/default/wbbtheme.css',
 ];
 
 $jsArr = [
@@ -28,6 +29,8 @@ $jsArr = [
 	URL.'/maharder/admin/assets/js/mask.js',
 	URL.'/maharder/admin/assets/js/tokens.js',
 	URL.'/maharder/admin/assets/js/theme.js',
+	URL.'/maharder/admin/assets/wysibb/jquery.wysibb.min.js',
+	URL.'/maharder/admin/assets/wysibb/lang/ru.js',
 ];
 
 $variables = [
@@ -108,6 +111,7 @@ $breadcrumbs = [
 ];
 
 $loader = new \Twig\Loader\FilesystemLoader(MH_DIR.'/templates');
+
 $mh_admin = new \Twig\Environment($loader, [
 	'cache' => MH_DIR.'/cache',
 	'debug' => true,

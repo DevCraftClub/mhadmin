@@ -480,3 +480,62 @@ function serialize(mixedValue) {
 
 	return val
 }
+
+
+var wbbOpt = {
+	lang: 'ru',
+	//onlyBBmode: true,
+	buttons: "bold,italic,underline,strike,|,justifyleft,justifycenter,justifyright,|,bullist,numlist,listitem,|,spoiler,removeFormat",
+	allButtons: {
+		bold: {
+			hotkey: "ctrl+b",
+			transform: {
+				'<b>{SELTEXT}</b>':'[b]{SELTEXT}[/b]'
+			}
+		},
+		italic: {
+			hotkey: "ctrl+i",
+			transform: {
+				'<i>{SELTEXT}</i>':'[i]{SELTEXT}[/i]'
+			}
+		},
+		underline: {
+			hotkey: "ctrl+u",
+			transform: {
+				'<u>{SELTEXT}</u>':'[u]{SELTEXT}[/u]'
+			}
+		},
+		strike: {
+			hotkey: "ctrl+s",
+			transform: {
+				'<s>{SELTEXT}</s>':'[s]{SELTEXT}[/s]'
+			}
+		},
+		bullist : {
+			transform : {
+				'<ul class="ui bulleted list">{SELTEXT}</ul>':"[list]{SELTEXT}[/list]",
+				'<li class="item">{SELTEXT}</li>':"[*]{SELTEXT}"
+			}
+		},
+		numlist : {
+			transform : {
+				'<ol class="ui bulleted list">{SELTEXT}</ol>':"[list=1]{SELTEXT}[/list]",
+				'<li class="item">{SELTEXT}</li>':"[*]{SELTEXT}"
+			}
+		},
+		listitem: {
+			title: '{$textFields[0]}',
+			buttonText: 'Item',
+			transform: {
+				'<li class="item">{SELTEXT}</li>':"[*]{SELTEXT}"
+			}
+		},
+		spoiler: {
+			title: '{$textFields[1]}',
+			buttonText: 'SPOILER',
+			transform: {
+				'[spoiler]{SELTEXT}[/spoiler]':"[spoiler]{SELTEXT}[/spoiler]"
+			}
+		}
+	}
+};

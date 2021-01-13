@@ -4,8 +4,8 @@
 			<div class="five wide column">
 				<h4 class="ui inverted header">Модуль</h4>
 				<div class="ui inverted link list">
-					{% for b in breadcrumbs %}
-					<a href="{{b.ur}}" class="item">{{b.name}}</a>
+					{% for l in links %}
+					{% if l.type =='link' %}<a href="{{l.href}}" class="item">{{l.name}}</a>{% endif %}
 					{% endfor %}
 					{% block modullinks %} {% endblock %}
 				</div>

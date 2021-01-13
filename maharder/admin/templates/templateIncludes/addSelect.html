@@ -1,0 +1,45 @@
+<div class="field">
+	<div class="ui search clearable selection fluid dropdown{% if multiple %} multiple{% endif %}">
+		<input type="hidden" id="{{name}}" name="{{name}}" value="{{selected}}">
+		<i class="dropdown icon"></i>
+		<div class="default text">{{label}}</div>
+		<div class="menu">
+			{% for n,v in values %}
+				{% if v is iterable %}
+					{% for i,k in v %}
+						<div data-value="{{i}}" class="item{% if i in selected|split(',') %} active selected{% endif %}">{{k}}</div>
+					{% endfor %}
+				{% else %}
+					<div data-value="{{n}}" class="item{% if n in selected|split(',') %} active selected{% endif %}">{{v}}</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+	{% if multiple %}
+		<script>
+			setTimeout(()=> {
+				$('#{{name}}').parent().dropdown({
+					values: [
+						{% for n,v in values %}
+							{% if v is iterable %}
+								{% for i,k in v %}
+									{
+										name: '{{k}}',
+										value: '{{i}}',
+										{% if i in selected|split(',') %} selected : true{% endif %}
+									},
+								{% endfor %}
+							{% else %}
+									{
+										name: '{{v}}',
+										value: '{{n}}',
+										{% if n in selected|split(',') %} selected : true{% endif %}
+									},
+							{% endif %}
+						{% endfor %}
+					]
+				});
+		}, 100);
+		</script>
+	{% endif %}
+</div>

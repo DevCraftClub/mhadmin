@@ -31,7 +31,7 @@
 // $variables['js'] = htmlStatic( $newJssArray, 'js' );
 
 $modVars = [
-	'title' => 'Basic Template',
+	'title' => 'Настройки модуля',
 	'module_icon' => 'fad fa-robot',
 ];
 

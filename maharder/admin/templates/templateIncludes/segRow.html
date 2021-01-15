@@ -1,9 +1,9 @@
 <div class="two column row">
-	<div class="four wide column">
+	<div class="eight wide column rowDescr">
 		<label for="{{id}}">{{name}}</label><br>
-		<small>{{descr}}</small>
+		<small>{{descr|raw}}</small>
 	</div>
-	<div class="twelve wide column">
+	<div class="eight wide column">
 		{% if type == 'input' or type == 'tag_input' %}
 		{{ include('templateIncludes/addInput.html', {
 		type: 'text',
@@ -12,7 +12,7 @@
 		value: variable[id],
 		chosen: extra['chosen']
 		})}}
-		{% elseif type == 'number_input'%}
+		{% elseif type == 'number_input' or type == 'number' %}
 		{{ include('templateIncludes/addInput.html', { type: 'number', name: id, label: name, value: variable[id],
 		chosen:
 		false})}}
@@ -24,14 +24,18 @@
 		{{ include('templateIncludes/addInput.html', { type: 'file', name: id, label: name, value: variable[id], chosen:
 		false})}}
 		{% elseif type == 'select'%}
-		{{ include('templateIncludes/addSelect.html', { name: id, label: name, values: variable, multiple: multiple,
+		{{ include('templateIncludes/addSelect.html', { name: id, label: name, values: values, multiple: multiple,
 		selected: selected})}}
 		{% elseif type == 'textarea'%}
-		{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor: false})}}
+		{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor:
+		false})}}
 		{% elseif type == 'editor'%}
-		{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor: true})}}
+		{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor:
+		true})}}
 		{% elseif type == 'checkbox'%}
 		{{ include('templateIncludes/addCheckbox.html', { name: id, label: name, selected: variable[id]})}}
+		{% else %}
+		{{ html|raw }}
 		{%endif%}
 	</div>
 </div>

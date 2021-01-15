@@ -48,13 +48,18 @@ class __TwigTemplate_30bbc2be5ee925d22a5384c9efb7f2340ff894772c4605e85fe4f5ef278
         }
         foreach ($context['_seq'] as $context["_key"] => $context["b"]) {
             // line 4
-            echo "\t\t<a class=\"section\" href=\"";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["b"], "url", []), "html", null, true);
-            echo "\">";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["b"], "name", []), "html", null, true);
-            echo "</a>
-\t\t";
+            echo "\t\t";
+            if ($this->getAttribute($context["loop"], "last", [])) {
+                echo twig_escape_filter($this->env, $this->getAttribute($context["b"], "name", []), "html", null, true);
+            } else {
+                echo "<a class=\"section\" href=\"";
+                echo twig_escape_filter($this->env, $this->getAttribute($context["b"], "url", []), "html", null, true);
+                echo "\">";
+                echo twig_escape_filter($this->env, $this->getAttribute($context["b"], "name", []), "html", null, true);
+                echo "</a>";
+            }
             // line 5
+            echo "\t\t";
             if ($this->getAttribute($context["loop"], "last", [])) {
             } else {
                 // line 6
@@ -92,7 +97,7 @@ class __TwigTemplate_30bbc2be5ee925d22a5384c9efb7f2340ff894772c4605e85fe4f5ef278
 
     public function getDebugInfo()
     {
-        return array (  79 => 9,  65 => 8,  61 => 6,  58 => 5,  51 => 4,  34 => 3,  30 => 1,);
+        return array (  84 => 9,  70 => 8,  66 => 6,  62 => 5,  51 => 4,  34 => 3,  30 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -108,7 +113,7 @@ class __TwigTemplate_30bbc2be5ee925d22a5384c9efb7f2340ff894772c4605e85fe4f5ef278
         return new Source("
 <div class=\"ui huge breadcrumb\">
 \t{% for b in breadcrumbs %}
-\t\t<a class=\"section\" href=\"{{ b.url }}\">{{ b.name }}</a>
+\t\t{% if loop.last %}{{ b.name }}{% else %}<a class=\"section\" href=\"{{ b.url }}\">{{ b.name }}</a>{% endif %}
 \t\t{% if loop.last %}{% else %}
 \t\t\t<i class=\"right chevron icon divider\"></i>
 \t\t{% endif %}

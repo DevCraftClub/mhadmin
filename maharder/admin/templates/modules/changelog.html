@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="ui segment">
 	<div class="ui accordion">
@@ -17,52 +18,5 @@
 		{% endfor %}
 	</div>
 
-	<ul>
-		{% for i,k in bsp %}
-		<li>{%if k is iterable %}
-			{%for ki,kk in k%}
-			-- ({{kk}})
-			{%endfor%}
-			{%else%}
-			{{k}}
-			{%endif%}
-		</li>
-		{% endfor %}
-	</ul>
-	<div class="ui form">
-	{% autoescape 'html' %}
-	{{
-	include('templateIncludes/segRow.html', {
-	id: 'test',
-	name: 'Testinput',
-	descr: 'Testdescr',
-	type: 'input',
-	extra: {
-	chosen: true
-	}, variable: {
-	test: 'Testvalue'
-	}
-	})
-	}}
-	{{ include('templateIncludes/segRow.html', {
-	id: 'testSelect',
-	name: 'Test Selector',
-	type: 'select',
-	variable: {test: 'test', test2: {test3:
-	'Test 3', tdes: 'ASdd'}},
-	selected: 'test',
-	multiple: true
-	})}}
-	{{ include('templateIncludes/segRow.html', {
-	id: 'testCheckBox',
-	name: 'Test Selector',
-	type: 'checkbox',
-	variable: {test: 'test', test2: {test3:
-	'Test 3', tdes: 'ASdd'}},
-	selected: 'test',
-	})}}
-
-	{% endautoescape %}
-	</div>
 </div>
 {% endblock %}

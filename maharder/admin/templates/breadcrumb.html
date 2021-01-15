@@ -1,7 +1,7 @@
 
 <div class="ui huge breadcrumb">
 	{% for b in breadcrumbs %}
-		<a class="section" href="{{ b.url }}">{{ b.name }}</a>
+		{% if loop.last %}{{ b.name }}{% else %}<a class="section" href="{{ b.url }}">{{ b.name }}</a>{% endif %}
 		{% if loop.last %}{% else %}
 			<i class="right chevron icon divider"></i>
 		{% endif %}

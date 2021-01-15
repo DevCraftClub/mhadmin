@@ -1,0 +1,10 @@
+<div class="ui top attached tabular menu" id="box-navi">
+
+	{% for id,box in boxes %}
+	<a href="{{box.link}}" class="item{% if loop.index0 == 0 %} active{% endif %}" {% if box.link=='#' %}
+		data-tab="{{id}}" {% endif %}>
+		<i class="{{box.icon}}"></i>&nbsp;&nbsp;{{box.name}}
+	</a>
+	{% endfor %}
+
+</div>

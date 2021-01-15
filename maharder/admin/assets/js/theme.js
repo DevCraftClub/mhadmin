@@ -6,6 +6,7 @@ $(document).ready(() => {
 	$('.no.label.ui.dropdown').dropdown({
 		useLabels: false
 	});
+	setTabs('#box-navi');
 	$('.ui.accordion').accordion();
 
 	$('.menuToggler').on('click', () => {
@@ -29,8 +30,13 @@ $(document).ready(() => {
 	});
 	changeMenus();
 
+	$(document).on('click', '#box-navi.dropdown .item', function () {
+		$.tab('change tab', $(this).data('tab'));
+	});
+
 	$(window).on('resize', () => {
 		changeMenus();
+		setTabs('#box-navi');
 	});
 
 	//$('.chosen').tokenfield();
@@ -52,15 +58,99 @@ $(document).ready(() => {
 
 });
 
-$(document).on('resize', () => {
-	changeMenus();
-});
-
-function startLoading() {
+function startLoading(text = '') {
+	if (text != '') $('.ui.dimmer .text').html(text);
+	else $('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
 	$('.ui.dimmer').addClass('active');
 }
 function hideLoading() {
 	$('.ui.dimmer').removeClass('active');
+}
+function setTabs(tab) {
+	var thisWidth = $(tab).outerWidth(), nav = $(tab);
+
+	function createDropDown(elements, selector){
+		var select = "", temp = "", html = "";
+		if (selector[0] == "#") select = "id";
+		else if (selector[0] == ".") select = "class";
+		if (select == "id")
+			html += "<div class=\"ui floating dropdown labeled icon button attached\" id='" + selector.replace("#", "") + "'>";
+		else if (select == "class")
+			html += "<div class=\"ui floating dropdown labeled icon button attached " + selector.replace(".", "") + "\">";
+
+		$(elements).find('.item').each(function () {
+			if ($(this).hasClass('active')) {
+				html += "<span class=\"text\">" + $(this).html() + "</span><div class=\"menu\">";
+			}
+			temp += "<div class=\"item";
+			if ($(this).hasClass('active')) {
+				temp += " active selected";
+			}
+			temp += "\" data-tab='" + $(this).data('tab') + "'>" + $(this).html() + "</div>";
+		});
+		html += temp;
+		html += "</div></div>";
+
+		return html;
+	}
+
+	function createMenu(elements, selector){
+
+		var select = "", temp = "", html = "";
+		if (selector[0] == "#") select = "id";
+		else if (selector[0] == ".") select = "class";
+		if (select == "id")
+			html += "<div class=\"ui top attached tabular menu\" id='" + selector.replace("#", "") + "'>";
+		else if (select == "class")
+			html += "<div class=\"ui top attached tabular menu " + selector.replace(".", "") + "\">";
+
+		$(elements).find('.item').each(function () {
+			temp += "<a href='#' class=\"item";
+			if ($(this).hasClass('active')) {
+				temp += " active";
+			}
+			temp += "\" data-tab='" + $(this).data('tab') + "'>" + $(this).html() + "</a>";
+		});
+		html += temp;
+		html += "</div>";
+
+		return html;
+	}
+
+	function resizeW(tabs, items, elements, selector) {
+		let parent = $(selector).parent();
+		if(items >= tabs) {
+			$(selector).remove();
+			$(parent).prepend(createDropDown(elements, selector));
+			$(".dropdown").dropdown();
+		} else {
+			$(selector).remove();
+			$(parent).prepend(createMenu(elements, selector));
+			$(selector + ' .item').tab();
+		}
+	}
+
+	function changeWidths(selector) {
+		if (iw == 0) {
+			$(selector).find('.item').each(function () {
+				let temp = $(this).outerWidth();
+				iw = Math.abs(iw + temp);
+			});
+		}
+		thisWidth = $(selector).outerWidth();
+	}
+
+	$(document).find(tab).each(function () {
+		$(tab + ' .item').tab();
+
+		changeWidths(tab);
+		$(window).resize(function () {
+			changeWidths(tab);
+		});
+
+		resizeW(thisWidth, iw, nav, tab);
+
+	});
 }
 
 function menuToggler(set = '') {
@@ -480,62 +570,3 @@ function serialize(mixedValue) {
 
 	return val
 }
-
-
-var wbbOpt = {
-	lang: 'ru',
-	//onlyBBmode: true,
-	buttons: "bold,italic,underline,strike,|,justifyleft,justifycenter,justifyright,|,bullist,numlist,listitem,|,spoiler,removeFormat",
-	allButtons: {
-		bold: {
-			hotkey: "ctrl+b",
-			transform: {
-				'<b>{SELTEXT}</b>':'[b]{SELTEXT}[/b]'
-			}
-		},
-		italic: {
-			hotkey: "ctrl+i",
-			transform: {
-				'<i>{SELTEXT}</i>':'[i]{SELTEXT}[/i]'
-			}
-		},
-		underline: {
-			hotkey: "ctrl+u",
-			transform: {
-				'<u>{SELTEXT}</u>':'[u]{SELTEXT}[/u]'
-			}
-		},
-		strike: {
-			hotkey: "ctrl+s",
-			transform: {
-				'<s>{SELTEXT}</s>':'[s]{SELTEXT}[/s]'
-			}
-		},
-		bullist : {
-			transform : {
-				'<ul class="ui bulleted list">{SELTEXT}</ul>':"[list]{SELTEXT}[/list]",
-				'<li class="item">{SELTEXT}</li>':"[*]{SELTEXT}"
-			}
-		},
-		numlist : {
-			transform : {
-				'<ol class="ui bulleted list">{SELTEXT}</ol>':"[list=1]{SELTEXT}[/list]",
-				'<li class="item">{SELTEXT}</li>':"[*]{SELTEXT}"
-			}
-		},
-		listitem: {
-			title: '{$textFields[0]}',
-			buttonText: 'Item',
-			transform: {
-				'<li class="item">{SELTEXT}</li>':"[*]{SELTEXT}"
-			}
-		},
-		spoiler: {
-			title: '{$textFields[1]}',
-			buttonText: 'SPOILER',
-			transform: {
-				'[spoiler]{SELTEXT}[/spoiler]':"[spoiler]{SELTEXT}[/spoiler]"
-			}
-		}
-	}
-};

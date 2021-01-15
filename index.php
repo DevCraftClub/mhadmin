@@ -5,10 +5,10 @@ require_once './maharder/admin/index.php';
 
 // заполняем важную и нужную инофрмацию о модуле
 $modInfo = [
-	'module_name' => 'Testmodule',
-	'module_version' => '1.0.0',
-	'module_description' => 'Testmodule description',
-	'module_code' => 'test',
+	'module_name' => 'MaHarder Assets',
+	'module_version' => '2.0.0',
+	'module_description' => 'Административная панель для моих разработок, а так-же настройка модуля мультиязычности',
+	'module_code' => 'maharder',
 	'site_link' => '',
 	'docs_link' => '',
 ];
@@ -24,6 +24,12 @@ $links[] = [
 	'type' => 'link',
 	'children' => [],
 ];
+$links[] = [
+	'name' => 'Список языков',
+	'href' => THIS_SELF.'?sites=langlist',
+	'type' => 'link',
+	'children' => [],
+];
 
 // Подключаем переменные модуля и его функционал
 // Используем переменную sites для навигации в модуле
@@ -32,6 +38,10 @@ switch ($_GET['sites']) {
 	case 'changelog':
 		require_once MH_DIR.'/modules/changelog.php';
 
+		break;
+
+	case 'langlist':
+		require_once MH_DIR.'/modules/langList.php';
 		break;
 
 	default:

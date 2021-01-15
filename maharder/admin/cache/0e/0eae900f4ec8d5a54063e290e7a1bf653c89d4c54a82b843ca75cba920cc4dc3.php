@@ -28,7 +28,7 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
     {
         // line 1
         echo "<div class=\"two column row\">
-\t<div class=\"four wide column\">
+\t<div class=\"eight wide column rowDescr\">
 \t\t<label for=\"";
         // line 3
         echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
@@ -37,10 +37,10 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
         echo "</label><br>
 \t\t<small>";
         // line 4
-        echo twig_escape_filter($this->env, ($context["descr"] ?? null), "html", null, true);
+        echo ($context["descr"] ?? null);
         echo "</small>
 \t</div>
-\t<div class=\"twelve wide column\">
+\t<div class=\"eight wide column\">
 \t\t";
         // line 7
         if (((($context["type"] ?? null) == "input") || (($context["type"] ?? null) == "tag_input"))) {
@@ -54,8 +54,8 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
             // line 14
             echo "
 \t\t";
-        } elseif ((        // line 15
-($context["type"] ?? null) == "number_input")) {
+        } elseif (((        // line 15
+($context["type"] ?? null) == "number_input") || (($context["type"] ?? null) == "number"))) {
             // line 16
             echo "\t\t";
             echo twig_include($this->env, $context, "templateIncludes/addInput.html", ["type" => "number", "name" => ($context["id"] ?? null), "label" => ($context["name"] ?? null), "value" => $this->getAttribute(($context["variable"] ?? null), ($context["id"] ?? null), [], "array"), "chosen" => false]);
@@ -82,7 +82,7 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
 ($context["type"] ?? null) == "select")) {
             // line 27
             echo "\t\t";
-            echo twig_include($this->env, $context, "templateIncludes/addSelect.html", ["name" => ($context["id"] ?? null), "label" => ($context["name"] ?? null), "values" => ($context["variable"] ?? null), "multiple" => ($context["multiple"] ?? null), "selected" =>             // line 28
+            echo twig_include($this->env, $context, "templateIncludes/addSelect.html", ["name" => ($context["id"] ?? null), "label" => ($context["name"] ?? null), "values" => ($context["values"] ?? null), "multiple" => ($context["multiple"] ?? null), "selected" =>             // line 28
 ($context["selected"] ?? null)]);
             echo "
 \t\t";
@@ -91,24 +91,32 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
             // line 30
             echo "\t\t";
             echo twig_include($this->env, $context, "templateIncludes/addTextarea.html", ["name" => ($context["id"] ?? null), "label" => ($context["name"] ?? null), "value" => $this->getAttribute(($context["variable"] ?? null), ($context["id"] ?? null), [], "array"), "editor" => false]);
+            // line 31
             echo "
 \t\t";
-        } elseif ((        // line 31
+        } elseif ((        // line 32
 ($context["type"] ?? null) == "editor")) {
-            // line 32
+            // line 33
             echo "\t\t";
             echo twig_include($this->env, $context, "templateIncludes/addTextarea.html", ["name" => ($context["id"] ?? null), "label" => ($context["name"] ?? null), "value" => $this->getAttribute(($context["variable"] ?? null), ($context["id"] ?? null), [], "array"), "editor" => true]);
+            // line 34
             echo "
 \t\t";
-        } elseif ((        // line 33
+        } elseif ((        // line 35
 ($context["type"] ?? null) == "checkbox")) {
-            // line 34
+            // line 36
             echo "\t\t";
             echo twig_include($this->env, $context, "templateIncludes/addCheckbox.html", ["name" => ($context["id"] ?? null), "label" => ($context["name"] ?? null), "selected" => $this->getAttribute(($context["variable"] ?? null), ($context["id"] ?? null), [], "array")]);
             echo "
 \t\t";
+        } else {
+            // line 38
+            echo "\t\t";
+            echo ($context["html"] ?? null);
+            echo "
+\t\t";
         }
-        // line 36
+        // line 40
         echo "\t</div>
 </div>
 ";
@@ -126,7 +134,7 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
 
     public function getDebugInfo()
     {
-        return array (  112 => 36,  106 => 34,  104 => 33,  99 => 32,  97 => 31,  92 => 30,  90 => 29,  86 => 28,  84 => 27,  82 => 26,  79 => 25,  76 => 24,  74 => 23,  71 => 22,  68 => 20,  66 => 19,  63 => 18,  60 => 16,  58 => 15,  55 => 14,  53 => 13,  52 => 12,  51 => 11,  50 => 10,  48 => 8,  46 => 7,  40 => 4,  34 => 3,  30 => 1,);
+        return array (  120 => 40,  114 => 38,  108 => 36,  106 => 35,  103 => 34,  100 => 33,  98 => 32,  95 => 31,  92 => 30,  90 => 29,  86 => 28,  84 => 27,  82 => 26,  79 => 25,  76 => 24,  74 => 23,  71 => 22,  68 => 20,  66 => 19,  63 => 18,  60 => 16,  58 => 15,  55 => 14,  53 => 13,  52 => 12,  51 => 11,  50 => 10,  48 => 8,  46 => 7,  40 => 4,  34 => 3,  30 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -140,11 +148,11 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
     public function getSourceContext()
     {
         return new Source("<div class=\"two column row\">
-\t<div class=\"four wide column\">
+\t<div class=\"eight wide column rowDescr\">
 \t\t<label for=\"{{id}}\">{{name}}</label><br>
-\t\t<small>{{descr}}</small>
+\t\t<small>{{descr|raw}}</small>
 \t</div>
-\t<div class=\"twelve wide column\">
+\t<div class=\"eight wide column\">
 \t\t{% if type == 'input' or type == 'tag_input' %}
 \t\t{{ include('templateIncludes/addInput.html', {
 \t\ttype: 'text',
@@ -153,7 +161,7 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
 \t\tvalue: variable[id],
 \t\tchosen: extra['chosen']
 \t\t})}}
-\t\t{% elseif type == 'number_input'%}
+\t\t{% elseif type == 'number_input' or type == 'number' %}
 \t\t{{ include('templateIncludes/addInput.html', { type: 'number', name: id, label: name, value: variable[id],
 \t\tchosen:
 \t\tfalse})}}
@@ -165,14 +173,18 @@ class __TwigTemplate_fafd476956a7bd01d23073a167e6750db1da5f6075e3de32e4e569a6796
 \t\t{{ include('templateIncludes/addInput.html', { type: 'file', name: id, label: name, value: variable[id], chosen:
 \t\tfalse})}}
 \t\t{% elseif type == 'select'%}
-\t\t{{ include('templateIncludes/addSelect.html', { name: id, label: name, values: variable, multiple: multiple,
+\t\t{{ include('templateIncludes/addSelect.html', { name: id, label: name, values: values, multiple: multiple,
 \t\tselected: selected})}}
 \t\t{% elseif type == 'textarea'%}
-\t\t{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor: false})}}
+\t\t{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor:
+\t\tfalse})}}
 \t\t{% elseif type == 'editor'%}
-\t\t{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor: true})}}
+\t\t{{ include('templateIncludes/addTextarea.html', { name: id, label: name, value: variable[id]|raw, editor:
+\t\ttrue})}}
 \t\t{% elseif type == 'checkbox'%}
 \t\t{{ include('templateIncludes/addCheckbox.html', { name: id, label: name, selected: variable[id]})}}
+\t\t{% else %}
+\t\t{{ html|raw }}
 \t\t{%endif%}
 \t</div>
 </div>

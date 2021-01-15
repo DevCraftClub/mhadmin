@@ -19,7 +19,7 @@ $cssArr = [
 	URL.'/maharder/admin/assets/css/tokens.css',
 	URL.'/maharder/admin/assets/css/prettify.css',
 	URL.'/maharder/admin/assets/css/theme.css',
-	URL.'/maharder/admin/assets/wysibb/theme/default/wbbtheme.css',
+	URL.'/maharder/admin/assets/editor/themes/default.min.css',
 ];
 
 $jsArr = [
@@ -28,9 +28,14 @@ $jsArr = [
 	URL.'/maharder/admin/assets/js/autosize.min.js',
 	URL.'/maharder/admin/assets/js/mask.js',
 	URL.'/maharder/admin/assets/js/tokens.js',
+	URL.'/maharder/admin/assets/editor/sceditor.min.js',
+	URL.'/maharder/admin/assets/editor/formats/bbcode.js',
+	URL.'/maharder/admin/assets/editor/icons/material.js',
+	URL.'/maharder/admin/assets/editor/plugins/autosave.js',
+	URL.'/maharder/admin/assets/editor/plugins/autoyoutube.js',
+	URL.'/maharder/admin/assets/editor/plugins/undo.js',
+	URL.'/maharder/admin/assets/editor/languages/ru.js',
 	URL.'/maharder/admin/assets/js/theme.js',
-	URL.'/maharder/admin/assets/wysibb/jquery.wysibb.min.js',
-	URL.'/maharder/admin/assets/wysibb/lang/ru.js',
 ];
 
 $variables = [
@@ -38,6 +43,7 @@ $variables = [
 	'js_dir' => URL.'/maharder/admin/assets/js',
 	'css' => htmlStatic($cssArr),
 	'js' => htmlStatic($jsArr, 'html', 'js'),
+	'url' => URL,
 	'author' => [
 		'name' => 'Maxim Harder',
 		'contacts' => [

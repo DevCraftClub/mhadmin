@@ -1,0 +1,6 @@
+<div class="ui left floated compact segment">
+	<div class="ui toggle checkbox">
+		<input id="{{name}}" class="{{class}}" name="{{name}}" type="checkbox" {% if selected==1 or selected=='on' %}checked{%endif%}>
+		{% if label != '' %}<label for="{{name}}">{{label}}</label>{% endif %}
+	</div>
+</div>

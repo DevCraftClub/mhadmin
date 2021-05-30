@@ -1,0 +1,54 @@
+<footer class="ui inverted vertical footer segment">
+	<div class="ui center aligned container">
+		<div class="ui stackable inverted divided grid">
+			<div class="five wide column">
+				<h4 class="ui inverted header">Модуль</h4>
+				<div class="ui inverted link list">
+					{% for l in links %}
+						{% if( l.href != '#' or l.href != '') and l.type == 'link' %}<a href="{{l.href}}" class="item">{{l.name}}</a>{% endif %}
+					{% endfor %}
+					{% block modullinks %} {% endblock %}
+				</div>
+			</div>
+			<div class="five wide column">
+				<h4 class="ui inverted header">Доп. ссылки</h4>
+				<div class="ui inverted link list">
+					<a href="{{site_link}}" class="item">На сайте автора</a>
+					<a href="{{docs_link}}" class="item">Документация</a>
+					{% block extralinks %}{% endblock %}
+				</div>
+			</div>
+			<div class="six wide column">
+				<h4 class="ui inverted header">Об авторе</h4>
+				<div class="ui inverted list">
+					<div class="item">
+						<div class="header">{{ author.name }}</div>
+						<div class="ui horizontal inverted divided list">
+							{% for c in author.contacts %}
+							<div class="item">
+								<div class="content">
+									<a href="{{c.link}}" target="_blank" title="{{c.name}}">{{c.name}}</a>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div class="item">
+						<div class="header">Финансовая поддержка (добровольная)</div>
+						<div class="ui horizontal inverted divided list">
+							{% for d in author.donate %}
+							<div class="item">
+								<div class="content">
+									{% if d.link != '' %}<a href="{{d.link}}" rel='' target="_blank"
+										title="{{d.name}}">{% else %}<span title="{{d.name}}">{% endif %}{{d.value}}{%
+											if d.link != '' %}</a>{% else %}</span>{% endif %}
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>

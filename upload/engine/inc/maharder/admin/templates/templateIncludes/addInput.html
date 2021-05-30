@@ -1,0 +1,51 @@
+<div class="field">
+	{% if type == 'file' %}
+		<input type="{{type}}" id="{{name}}_file" name="{{name}}_file{% if extra.multiple !='' %}[]{% endif %}" placeholder="{{label}}"
+			{% if extra.accept !='' %}
+			   accept="{{extra.accept}}"
+			{% endif %}
+			{% if extra.multiple !='' %}
+			   multiple
+			{% endif %}
+		>
+		{% if value != '' %}
+			<br>Текущее значение:<input type="text" id="{{name}}" name="{{name}}" placeholder="Текущее значение" value="{{value}}" readonly>
+			<br>
+			<div class='ui checkbox'>
+				{{ include('templateIncludes/addCheckbox.html', {name: name ~ '_replace', class: 'switch', selected: false, label: '"' ~ label ~ '" заменить?' }) }}
+			</div>
+		{% endif %}
+	{% else %}
+		{% if tags == true %}
+			<input type="hidden" id="{{name}}" name="{{name}}" placeholder="{{label}}" value="{{value}}">
+			<input type="{{type}}" id="{{name}}_tags" placeholder="{{label}}" value="" >
+
+			{% autoescape 'html' %}
+				<script>
+					var {{name}}_list = [], {{name}}_input;
+					setTimeout(() => {
+						{{name}}_list = $('#{{name}}').val().split(',');
+						{{name}}_input = $('#{{name}}_tags').tokenizer({
+							allowUnknownTags: true,
+							placeholder: '{{label}}',
+							separators: [',', ';'],
+							namespace: '{{name}}',
+							callback: function ($input) {
+								{{name}}_list = $input.tokenizer('get');
+								$('#{{name}}').val({{name}}_list.join(','));
+							}
+						});
+
+						for (let i = 0, max = {{name}}_list.length; i < max; i++) {
+							if ({{name}}_list[i] !== '')
+							{{name}}_input.tokenizer('push', {{name}}_list[i]);
+						}
+					}, 1000);
+				</script>
+			{% endautoescape %}
+		{% else %}
+			<input type="{{type}}" id="{{name}}" name="{{name}}" placeholder="{{label}}" value="{{value}}" >
+		{% endif %}
+	{% endif %}
+
+</div>

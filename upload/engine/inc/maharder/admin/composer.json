@@ -1,0 +1,22 @@
+{
+    "name": "mh/admin",
+    "description": "MaHarder AdminPanel",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Maxim Harder",
+            "email": "dev@devcraft.club"
+        }
+    ],
+	"config": {
+		"platform": {
+			"php": "5.6.19"
+		},
+		"vendor-dir": "../functions/vendor"
+	},
+    "require": {
+        "twig/twig": "*",
+		"bes/mobiledetect-twig-extension": "*",
+		"ext-curl": "*"
+    }
+}

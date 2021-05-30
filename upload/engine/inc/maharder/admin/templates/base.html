@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	{% block title %}<title>{{ title }}</title>{% endblock %}
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	{% autoescape 'html' %}
+		{% for style in css %}
+			{{ style|raw }}
+		{% endfor %}
+	{% endautoescape %}
+</head>
+
+<body>
+	<div id="top"></div>
+	{% if is_mobile() or is_tablet() %}
+		{% include 'sidebar.html' %}
+	{% endif %}
+	<div class="ui main container">
+		<h1 class="ui header">
+			<i class="icon {{module_icon}}" style="float: left;margin-right: 2rem;"></i>
+			<div class="content" style="padding: 0">
+				{{ module_name }} v{{ module_version }}
+			</div>
+		</h1>
+		<p style="margin-top: -18px;color: #afafaf;">{{ module_description }}</p>
+	</div>
+
+	{% include 'menu.html' %}
+
+	<div class="ui container dimmed pusher">
+		<div class="ui segment">
+			{% include 'breadcrumb.html' %}
+		</div>
+		<div class="ui piled segments">
+			{% block content %}{% endblock %}
+		</div>
+
+		{{ include('templateIncludes/loader.html', {text: 'Подождите, идёт загрузка...'})}}
+	</div>
+	{% include 'footer.html' %}
+	{% autoescape 'html' %}
+		<script>
+			var is_mobile = {% if is_mobile() or is_tablet() %}true{% else %}false{% endif %};
+		</script>
+		{% for script in js %}
+			{{ script|raw }}
+		{% endfor %}
+	{% endautoescape %}
+	{% block scripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dleplugin>
+	<name>MaHarder Assets</name>
+	<description>Универсальная административная панель для модификаций от MaHarder</description>
+	<icon></icon>
+	<version>2.0</version>
+	<dleversion>13</dleversion>
+	<versioncompare>greater</versioncompare>
+	<upgradeurl></upgradeurl>
+	<filedelete>1</filedelete>
+	<needplugin></needplugin>
+	<mnotice>0</mnotice>
+	<mysqlinstall><![CDATA[]]></mysqlinstall>
+	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections
+(name, title, descr, icon, allow_groups)
+VALUES('maharder', 'MaHarder Assets v2.0.0', 'Настройки языков и отладки', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.0';]]></mysqlupgrade>
+	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections
+(name, title, descr, icon, allow_groups)
+VALUES('maharder', 'MaHarder Assets v2.0.0', 'Настройки языков и отладки', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.0';]]></mysqlenable>
+	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
+	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
+	<phpinstall><![CDATA[]]></phpinstall>
+	<phpupgrade><![CDATA[$objects = scandir(ENGINE_DIR . '/skins/maharder');
+foreach ($objects as $object) {
+	if ($object != "." && $object != "..") {
+    	if (filetype(ENGINE_DIR . '/skins/maharder'."/".$object) == "dir")
+          @rmdir(ENGINE_DIR . '/skins/maharder'."/".$object); 
+      	else
+          @unlink(ENGINE_DIR . '/skins/maharder'."/".$object);
+	}
+}
+reset($objects);
+@rmdir(ENGINE_DIR . '/skins/maharder');
+
+$objects = scandir(ENGINE_DIR . '/inc/maharder/assets');
+foreach ($objects as $object) {
+	if ($object != "." && $object != "..") {
+    	if (filetype(ENGINE_DIR . '/inc/maharder/assets'."/".$object) == "dir")
+          @rmdir(ENGINE_DIR . '/inc/maharder/assets'."/".$object); 
+      	else
+          @unlink(ENGINE_DIR . '/inc/maharder/assets'."/".$object);
+	}
+}
+reset($objects);
+@rmdir(ENGINE_DIR . '/inc/maharder/assets');
+
+$objects = scandir(ENGINE_DIR . '/inc/maharder/maharder');
+foreach ($objects as $object) {
+	if ($object != "." && $object != "..") {
+    	if (filetype(ENGINE_DIR . '/inc/maharder/maharder'."/".$object) == "dir")
+          @rmdir(ENGINE_DIR . '/inc/maharder/maharder'."/".$object); 
+      	else
+          @unlink(ENGINE_DIR . '/inc/maharder/maharder'."/".$object);
+	}
+}
+reset($objects);
+@rmdir(ENGINE_DIR . '/inc/maharder/maharder');]]></phpupgrade>
+	<phpenable><![CDATA[]]></phpenable>
+	<phpdisable><![CDATA[]]></phpdisable>
+	<phpdelete><![CDATA[]]></phpdelete>
+	<notice><![CDATA[]]></notice>
+	<file name="engine/inc/include/functions.inc.php">
+		<operation action="replace">
+			<searchcode><![CDATA['engine/skins/fonts/fontawesome/styles.min.css',]]></searchcode>
+			<replacecode><![CDATA['engine/inc/maharder/admin/assets/css/fa_fix.css',
+'engine/inc/maharder/admin/assets/css/fa_old.css',
+'engine/inc/maharder/admin/assets/css/icons.css',]]></replacecode>
+			<searchcount>1</searchcount>
+		</operation>
+	</file>
+	<file name="engine/classes/uploads/upload.class.php">
+		<operation action="replace">
+			<searchcode><![CDATA[$this->area = totranslit($area);]]></searchcode>
+			<replacecode><![CDATA[		// MaHarder
+		if (is_array($area)) {
+			$this->area = totranslit('maharder');
+			$this->model_name = totranslit($area[1]);
+			$this->model_field = $area[2];
+		} else {
+			$this->area = totranslit($area);
+		}]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+		</operation>
+		<operation action="replace">
+			<searchcode><![CDATA[				if( $this->area == "template" ) {
+
+					$db->query( "INSERT INTO " . PREFIX . "_static_files (static_id, author, date, name, onserver, size, checksum) values ('{$this->news_id}', '{$this->author}', '{$added_time}', '{$filename}', '". FOLDER_PREFIX ."{$uploaded_filename}', '{$size}', '{$md5}')" );
+					$id = $db->insert_id();]]></searchcode>
+			<replacecode><![CDATA[				// MaHarder
+				if( $this->area == "template" || $this->area == 'maharder' ) {
+
+					// MaHarder
+					if ($this->area == 'maharder' && !empty($this->model_name) && !empty($this->model_field)) {
+						$thisType = 'file';
+						if( in_array( $type, $this->allowed_video ) ) $thisType = 'video';
+						elseif( in_array( $type, $this->allowed_extensions ) ) $thisType = 'image';
+						$db->query( "INSERT INTO {$this->model_field} (name, model_name, model_id, path, hash, uploader, size, type) values ('{$filename}', '{$this->model_name}','{$this->news_id}', '". FOLDER_PREFIX ."{$uploaded_filename}', '{$md5}', '{$this->author}', '{$size}', '{$thisType}')" );
+					} else {
+						$db->query("INSERT INTO ".PREFIX."_static_files (static_id, author, date, name, onserver, size, checksum) values ('{$this->news_id}', '{$this->author}', '{$added_time}', '{$filename}', '".FOLDER_PREFIX."{$uploaded_filename}', '{$size}', '{$md5}')");
+					}]]></replacecode>
+		</operation>
+		<operation action="replace">
+			<searchcode><![CDATA[$return_box = "<div class=\"uploadedfile\"><div class=\"info\">{$filename}</div><div class=\"uploadimage\"><a class=\"uploadfile\" href=\"{$data_url}\" data-src=\"{$id}:{$filename}\" data-type=\"file\" data-play=\"{$file_play}\"><img style=\"width:auto;height:auto;max-width:100px;max-height:90px;\" src=\"" . $file_link . "\" /></a></div><div class=\"info\"><input type=\"checkbox\" id=\"file\" name=\"static_files[]\" value=\"{$id}\" data-type=\"file\">&nbsp;".formatsize($size)."</div></div>";]]></searchcode>
+			<replacecode><![CDATA[// MaHarder
+					if ($this->area == 'maharder')
+						$return_box = "<div class=\"uploadedfile\"><div class=\"info\">{$filename}</div><div class=\"uploadimage\"><a class=\"uploadfile\" href=\"{$data_url}\" data-src=\"{$id}:{$filename}\" data-type=\"file\" data-play=\"{$file_play}\"><img style=\"width:auto;height:auto;max-width:100px;max-height:90px;\" src=\"" . $file_link . "\" /></a></div><div class=\"info\"><input type=\"checkbox\" id=\"file\" name=\"files[]\" value=\"{$id}\" data-type=\"file\">&nbsp;".formatsize($size)."</div></div>";
+					else
+						$return_box = "<div class=\"uploadedfile\"><div class=\"info\">{$filename}</div><div class=\"uploadimage\"><a class=\"uploadfile\" href=\"{$data_url}\" data-src=\"{$id}:{$filename}\" data-type=\"file\" data-play=\"{$file_play}\"><img style=\"width:auto;height:auto;max-width:100px;max-height:90px;\" src=\"" . $file_link . "\" /></a></div><div class=\"info\"><input type=\"checkbox\" id=\"file\" name=\"static_files[]\" value=\"{$id}\" data-type=\"file\">&nbsp;".formatsize($size)."</div></div>";]]></replacecode>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[				if( $this->area == "template" ) {
+
+					$inserts = FOLDER_PREFIX . $uploaded_filename;
+					$db->query( "INSERT INTO " . PREFIX . "_static_files (static_id, author, date, name) values ('{$this->news_id}', '{$this->author}', '{$added_time}', '{$inserts}')" );
+					$id = $db->insert_id();
+				}]]></searchcode>
+			<replacecode><![CDATA[				// MaHarder
+				if( $this->area == "maharder" && !empty($this->model_name) && !empty($this->model_field)) {
+
+					$inserts = FOLDER_PREFIX . $uploaded_filename;
+					$db->query( "INSERT INTO {$this->model_field} (name, model_name, model_id, uploader, type) values ('{$inserts}', '{$this->model_name}', '{$this->news_id}', '{$this->author}', 'image')" );
+					$id = $db->insert_id();
+				}]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[elseif( $this->area != "template" ) {
+
+					$return_box = "<div class=\"uploadedfile\"><div class=\"info\">{$filename}</div><div class=\"uploadimage\"><a class=\"uploadfile\" href=\"{$data_url}\" data-src=\"{$data_url}\" data-thumb=\"{$thumb_data}\" data-medium=\"{$medium_data}\" data-type=\"image\"><img style=\"width:auto;height:auto;max-width:100px;max-height:90px;\" src=\"" . $img_url . "\" /></a></div><div class=\"info\"><input type=\"checkbox\" name=\"images[" . FOLDER_PREFIX . $uploaded_filename . "]\" value=\"" . FOLDER_PREFIX . $uploaded_filename . "\" data-thumb=\"{$thumb_data}\" data-medium=\"{$medium_data}\" data-type=\"image\" data-src=\"{$data_url}\">&nbsp;{$i_info[0]}x{$i_info[1]}</div></div>";
+
+				}]]></searchcode>
+			<replacecode><![CDATA[elseif( $this->area == "maharder" ) {
+
+					$return_box = "<div class=\"uploadedfile\"><div class=\"info\">{$filename}</div><div class=\"uploadimage\"><a class=\"uploadfile\" href=\"{$data_url}\" data-src=\"{$data_url}\" data-thumb=\"{$thumb_data}\" data-medium=\"{$medium_data}\" data-type=\"image\"><img style=\"width:auto;height:auto;max-width:100px;max-height:90px;\" src=\"" . $img_url . "\" /></a></div><div class=\"info\"><input type=\"checkbox\" name=\"files[]\" value=\"{$id}\" data-thumb=\"{$thumb_data}\" data-medium=\"{$medium_data}\" data-type=\"image\" data-src=\"{$data_url}\">&nbsp;{$i_info[0]}x{$i_info[1]}</div></div>";
+
+				}]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[private $use_prefix = true;]]></searchcode>
+			<replacecode><![CDATA[	// MaHarder
+	private $model_name = '';
+	private $model_field = '';]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+		</operation>
+	</file>
+	<file name="engine/skins/default.skin.php">
+		<operation action="before">
+			<searchcode><![CDATA[<a href="?mod=addnews&amp;action=addnews" class="btn btn-link btn-float text-size-small has-text"><i class="fa fa-file-text-o text-primary"></i> <span>{$lang['add_news']}</span></a>]]></searchcode>
+			<replacecode><![CDATA[								<a rel="button" class="btn btn-link btn-float text-size-small has-text clear_cache">
+									<i class="fa fa-trash text-danger-600"></i> 
+									<span class="text-danger-600">{$lang['btn_clearcache']}</span>
+								</a>]]></replacecode>
+		</operation>
+		<operation action="before">
+			<searchcode><![CDATA[</body>]]></searchcode>
+			<replacecode><![CDATA[<script>
+		$(function(){
+
+			$('.clear_cache').click(function() {
+				ShowLoading();
+
+				$.get("engine/ajax/controller.php?mod=adminfunction&action=clearcache&user_hash={$dle_login_hash}", function( data ){
+
+					Growl.info({
+						title: '{$lang['p_info']}',
+						text: data
+					});
+                  	HideLoading();
+
+				});
+				return false;
+			});
+		});
+</script>
+]]></replacecode>
+		</operation>
+	</file>
+</dleplugin>

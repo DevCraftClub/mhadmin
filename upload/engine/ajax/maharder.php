@@ -10,7 +10,9 @@
 	//	===============================
 
 
-	if(!defined('DATALIFEENGINE')) {
+use MaHarder\classes\Admin;
+
+if(!defined('DATALIFEENGINE')) {
 		header( "HTTP/1.1 403 Forbidden" );
 		header ( 'Location: ../../../../' );
 		die( "Hacking attempt!" );
@@ -31,7 +33,7 @@
 
 	require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/classes/Admin.php'));
 
-	$mh_admin = new AdminPanel();
+	$mh_admin = new Admin();
 
 	if ( file_exists( DLEPlugins::Check(ENGINE_DIR . '/ajax/maharder/' . $module . '/' . $mod_file . '.php') ) ) {
 

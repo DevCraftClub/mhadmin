@@ -6,6 +6,8 @@ if( !defined( 'DATALIFEENGINE' ) ) {
 	die( "Hacking attempt!" );
 }
 
+global $lang;
+
 const MH_ROOT = ENGINE_DIR . '/inc/maharder';
 const MH_ADMIN = MH_ROOT . '/admin';
 const ROOT = ROOT_DIR;
@@ -13,8 +15,9 @@ define('THIS_HOST', $_SERVER['HTTP_HOST']);
 define('THIS_SELF', $_SERVER['PHP_SELF']);
 define('URL', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http').'://'.THIS_HOST.'/engine/inc');
 
-require_once DLEPlugins::Check(MH_ROOT.'/functions/maharder.class.php');
-require_once DLEPlugins::Check(MH_ROOT.'/functions/vendor/autoload.php');
+require_once DLEPlugins::Check(MH_ROOT.'/_includes/vendor/autoload.php');
+require_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/Admin.php');
+require_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/DeclineExtension.php');
 require_once DLEPlugins::Check(ENGINE_DIR.'/inc/include/functions.inc.php');
 require_once DLEPlugins::Check(ENGINE_DIR.'/skins/default.skin.php');
 require_once DLEPlugins::Check(ENGINE_DIR.'/data/config.php');
@@ -22,11 +25,12 @@ require_once DLEPlugins::Check(ENGINE_DIR.'/data/config.php');
 $loader = new \Twig\Loader\FilesystemLoader(MH_ADMIN.'/templates');
 
 $mh_template = new \Twig\Environment($loader, [
-	'cache' => MH_ADMIN.'/cache',
+	'cache' => MH_ADMIN.'/_cache',
 	'debug' => true,
 ]);
 
 $mh_template->addExtension(new Bes\Twig\Extension\MobileDetectExtension());
+$mh_template->addExtension(new DeclineExtension());
 
 $dle_links_header = [
 	'config' => $lang['opt_hopt'],
@@ -101,19 +105,19 @@ foreach($options as $o => $a) {
 // Тип ссылок может быть одним из "link (просто ссылка)", "divider (разделитель)" или "dropdown (выпадающее меню - настроенно до второго уровня)"
 // Подссылки имеют тот же формат, что и сами ссылки
 $links = [
-	[
+	'dle' => [
 		'name' => 'Страницы DLE',
 		'href' => '',
 		'type' => 'dropdown',
 		'children' => $admin_links,
 	],
-	[
+	'index' => [
 		'name' => 'Главная',
 		'href' => THIS_SELF.'?mod='.$modInfo['module_code'],
 		'type' => 'link',
 		'children' => [],
 	],
-	[
+	'changelog' => [
 		'name' => 'История изменений',
 		'href' => THIS_SELF.'?mod='.$modInfo['module_code'].'&sites=changelog',
 		'type' => 'link',
@@ -123,7 +127,8 @@ $links = [
 
 $breadcrumbs = [
 	[
-		'name' => $links[1]['name'],
-		'url' => $links[1]['href'],
+		'name' => $links['index']['name'],
+		'url' => $links['index']['href'],
 	],
 ];
+

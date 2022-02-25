@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form class="ui form segment">
+	<div class="ui bottom attached tab active" data-tab="main">
+		<h4 class="ui dividing header">Создание модуля</h4>
+		<div class="ui four column grid">
+			{% autoescape 'html' %}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'name',
+						name: 'Название модуля',
+						descr: 'Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'translit',
+						name: 'Название модуля на латинице',
+						descr: 'Введите название модуля на латинице, иначе будет использована стандартная функция DLE для приобразования названия.',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'description',
+						name: 'Описание модуля',
+						descr: 'Введите описание модуля',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'version',
+						name: 'Версия модуля',
+						descr: 'Введите версию модуля',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'icon',
+						name: 'Иконка',
+						descr: 'Класс иконки. К сайту подключены FontAwesome PRO.<br>По умолчанию: <i class="fad fa-cogs"></i> (fad fa-cogs)',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'plugin_icon',
+						name: 'Иконка плагина',
+						descr: 'Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'link',
+						name: 'Ссылка на модуль автора',
+						descr: 'Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'docs',
+						name: 'Ссылка на документацию модуля',
+						descr: 'Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)',
+						type: 'text'
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'db',
+						name: 'Добавить в плагины?',
+						descr: 'Скрипт создаст начальный плагин и добавит его в базу данных',
+						type: 'checkbox',
+						settings: {
+							selected: true
+						}
+					})
+				}}
+
+				{{ include('templateIncludes/segRow.html', {
+						id: 'override',
+						name: 'Перезаписать файлы?',
+						descr: 'Скрипт перезапишет существующие файлы шаблонами.<br><span class="ui red text">На свой страх и риск!</span>',
+						type: 'checkbox',
+						settings: {
+							selected: false
+						}
+					})
+				}}
+
+			{% endautoescape %}
+		</div>
+	</div>
+</form>
+<div class="ui segment" id="lists" style="display:none">
+	<div class="ui list" id="dirs_success" style="display:none">
+
+	</div>
+	<div class="ui list" id="dirs_failed" style="display:none">
+
+	</div>
+	<div class="ui list" id="files_success" style="display:none">
+
+	</div>
+	<div class="ui list" id="files_failed" style="display:none">
+
+	</div>
+	<div class="ui list" id="plugin_success" style="display:none">
+
+	</div>
+	<div class="ui list" id="plugin_failed" style="display:none">
+
+	</div>
+</div>
+<div class="ui segment">
+	<div class="ui button create" tabindex="0">Создать</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+{% autoescape 'js' %}
+<script>
+	function shiftFieldStatus(id, error = false) {
+		let field = $(`#${id}`).parents('.field');
+		if (error) $(field).addClass('error');
+		else $(field).removeClass('error');
+	}
+
+	function item(name, icon = 'folder', descr = '') {
+		return `<div class="item">
+					<i class="${icon} icon"></i>
+					<div class="content">
+                        <div class="header">${name}</div>
+                        <div class="description">${descr}</div>
+                    </div>
+                </div>`;
+	}
+
+	$(() => {
+		$(document).on('click', '.create', function () {
+			startLoading();
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: '{{module_code}}',
+					file: 'master',
+					method: 'new_module',
+					data: $('.form').serializeArray()
+				},
+				type: 'POST',
+				success: function (data) {
+					try {
+						data = JSON.parse(data);
+					} catch(err) {}
+
+					let d = data.data;
+					shiftFieldStatus('name');
+					shiftFieldStatus('description');
+					shiftFieldStatus('version');
+					$('#dirs_success').html('').hide();
+					$('#files_success').html('').hide();
+					$('#plugin_success').html('').hide();
+					$('#dirs_failed').html('').hide();
+					$('#files_failed').html('').hide();
+					$('#plugin_failed').html('').hide();
+					$('#lists').hide();
+
+					console.log(data);
+
+					if (data.status === 'success') {
+						if (data.success.dirs.length > 0) {
+							data.success.dirs.forEach(function (e, i) {
+								$('#dirs_success').append(item(e));
+							});
+							$('#dirs_success').show();
+						}
+						if (data.success.files.length > 0) {
+							data.success.files.forEach(function (e, i) {
+								$('#files_success').append(item(`Файл ${e} создан`, 'file'));
+							});
+							$('#files_success').show();
+						}
+						if (data.success.plugin.length > 0) {
+							data.success.plugin.forEach(function (e, i) {
+								$('#plugin_success').append(item(`Плагин "<b>${e.name}</b>" был создан`, 'cloud download alternate', `<a href="${link}" target="_blank">Открыть на сайте</a>`));
+							});
+							$('#plugin_success').show();
+						}
+
+						if (data.failed.dirs.length > 0) {
+							data.failed.dirs.forEach(function (e, i) {
+								$('#dirs_failed').append(item(e.dir, 'folder', e.message));
+							});
+							$('#dirs_failed').show();
+						}
+						if (data.failed.files.length > 0) {
+							data.failed.files.forEach(function (e, i) {
+								$('#files_failed').append(item(e.file, 'file', e.message));
+							});
+							$('#files_failed').show();
+						}
+						if (data.failed.plugin.length > 0) {
+							data.failed.plugin.forEach(function (e, i) {
+								$('#plugin_failed').append(item('Плагин не был создан!', 'cloud download alternate', e.message));
+							});
+							$('#plugin_failed').show();
+						}
+
+						$('#lists').show();
+
+						$('body').toast({
+							class: 'success',
+							title: `Всё отлично!`,
+							message: `Модуль был создан!`,
+							showProgress: 'bottom'
+						});
+
+					} else {
+						if (d.name === '') shiftFieldStatus('name', true);
+						if (d.description === '') shiftFieldStatus('description', true);
+						if (d.version === '') shiftFieldStatus('version', true);
+
+						$('#lists').show();
+
+						$('body').toast({
+							class: 'error',
+							title: `Произошла ошибка!`,
+							message: data.message,
+							showProgress: 'bottom'
+						});
+					}
+
+					hideLoading('');
+				}
+			});
+		});
+	});
+</script>
+{% endautoescape %}
+{% endblock %}

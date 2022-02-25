@@ -1,0 +1,319 @@
+{% extends 'base.html' %} {% block content %}
+
+<form class="ui form segment">
+	<div class="ui bottom attached tab active" data-tab="main">
+		<h4 class="ui dividing header">Настройки</h4>
+		<div class="ui four column grid">
+			{% autoescape 'html' %}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'list_count',
+					name: 'Количество объектов',
+					descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д.. Это глобальное
+					значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
+					отображаемых новостей на страницу" => ' ~ dle_config.news_number ~ '.',
+					type: 'number',
+					variable: settings
+				})
+			}}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'logs',
+					name: 'Включить логирование?',
+					descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/logs</b>',
+					type: 'checkbox',
+					variable: settings
+				})
+			}}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'theme',
+					name: 'Тема оформления админки',
+					descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу',
+					type: 'select',
+					variable: settings,
+					values: {
+						light: 'Светлая',
+						dark: 'Тёмная',
+					}
+				})
+			}}
+
+			{% endautoescape %}
+		</div>
+	</div>
+</form>
+<div class="ui segment">
+	<div class="ui button tiny save" tabindex="0">Сохранить</div>
+	<div class="ui labeled button" tabindex="0">
+		<div class="ui tiny button" data-action="check_assets">
+			<i class="sync icon"></i> Проверить обновления
+		</div>
+		<a class="ui left pointing label new_assets_count">
+			0
+		</a>
+	</div>
+	<div class="ui special popup">
+		<div class="header">Идёт загрузка...</div>
+		<br><b>Загружается:</b> <span id="file_loading"></span><br>
+		Загружено <span id="now_loading">0</span> из <span id="total_loading">0</span> ...
+	</div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+
+{% autoescape 'js' %}
+<script>
+	function generate_list(id, data) {
+		let list = '<ul class="ui list" id="'+id+'" style="margin-left: 1.5rem;">\n';
+		for(let k in data) {
+			list += '<li>' + k + '</li>';
+		}
+		list += '</ul>';
+
+		return list;
+	}
+	function generate_item(show, header, description = '', list = {
+		enable: false,
+		id: '',
+		data: []
+	}) {
+		if(show) {
+
+
+			let item = '<div class="item">\n' +
+					'    <div class="content">\n' +
+					'        <a class="header">' + header + '</a>' +
+					'        <div class="description">';
+			if (list.enable) item += generate_list(list.id, list.data);
+			else item += description;
+			item += '        </div>\n' +
+					'    </div>\n' +
+					'</div>\n';
+
+			return item;
+		}
+
+		return '';
+	}
+
+	function check_assets() {
+		let name = 'mh_assets_check', cookies = getCookie(name);
+		if (cookies === undefined || cookies != 1) {
+			$('[data-action="check_assets"] .icon').addClass('loading');
+			startLoading('Проверка обновлений');
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: 'maharder',
+					file: 'master',
+					method: 'check_assets',
+				},
+				type: 'POST',
+				success: function (data) {
+					$('[data-action="check_assets"] .icon').removeClass('loading');
+					hideLoading('');
+					try {
+						data = JSON.parse(data);
+					} catch (e) {
+					}
+					if (data.local !== data.on_server) {
+						let total = Math.abs(data.missing_count + data.update_count);
+						$('.new_assets_count').html(total);
+						if (total > 0) {
+							$('[data-action="check_assets"]').addClass('basic').addClass('red');
+							$('.new_assets_count').addClass('red');
+						}
+
+
+					}
+
+				}
+			});
+            setCookie(name, 1);
+		}
+	}
+	function save_asset(file, data) {
+		statusLoading(`Загружаем файл: <b>${file}</b>!<br>Результат находится в консоли браузера!`);
+		$.ajax({
+			url: 'engine/ajax/controller.php?mod=maharder',
+			data: {
+				user_hash: '{{dle_login_hash}}',
+				module: 'maharder',
+				file: 'master',
+				method: 'save_asset',
+				data: {
+					file: file,
+					data: data
+				}
+			},
+			type: 'POST',
+			success: function (response) {
+				try {
+					response = JSON.parse(response);
+				} catch (e) {}
+				console.log(response);
+				let count_obj = $(document).find('#now_loading').first(), count = $(count_obj).html();
+				try {
+					count = parseInt(count);
+				} catch (e) {
+					count = 0;
+				}
+				count++;
+				$(count_obj).html(count);
+				$('#file_loading').html(file);
+			}
+		});
+	}
+
+	$(() => {
+
+		$(document).on('click', '[data-action="check_assets"]', function () {
+			$('[data-action="check_assets"] .icon').addClass('loading');
+			startLoading();
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: 'maharder',
+					file: 'master',
+					method: 'check_assets',
+				},
+				type: 'POST',
+				success: function (data) {
+					hideLoading('');
+					$('[data-action="check_assets"] .icon').removeClass('loading');
+					try {
+						data = JSON.parse(data);
+					} catch (e) {}
+					console.log(data)
+					if(data.local === data.on_server && data.missing_count === 0 && data.update_count === 0)
+						$('body').toast({
+							class: 'info',
+							title: `Информация!`,
+							message: `Обновлений нет`,
+							showProgress: 'bottom'
+						});
+					else {
+						$('[data-action="check_assets"]').addClass('basic').addClass('red').popup({
+							popup: '.special.popup'
+						}).popup('toggle');
+						$('.new_assets_count').html(Math.abs(data.missing_count + data.update_count)).addClass('red');
+						$.confirm({
+							title: 'Обновлениям быть!',
+							content: '<div class="ui middle aligned divided list">\n' +
+									'  <div class="item">\n' +
+									'    <div class="content">\n' +
+									'      <a class="header">На сервере</a> \n' +
+									'       <div class="description">' + data.on_server + ' файлов</div>' +
+									'    </div>\n' +
+									'  </div>\n' +
+									'  <div class="item">\n' +
+									'    <div class="content">\n' +
+									'      <a class="header">Загружено на сайт</a> ' +
+									'       <div class="description">' + data.local + ' файлов</div>\n' +
+									'    </div>\n' +
+									'  </div>\n' +
+									generate_item(data.missing_count > 0, 'Требуют установки', '', {
+										enable: true,
+										id: 'assets_to_install',
+										data: data.missing
+									}) +
+									generate_item(data.update_count > 0, 'Требуют обновления', '', {
+										enable: true,
+										id: 'assets_to_update',
+										data: data.update
+									}) +
+									'</div>',
+							closeIcon: true,
+							columnClass: 'four wide',
+							offsetBottom: 40,
+							useBootstrap: false,
+							theme: 'material',
+							draggable: true,
+							backgroundDismiss: false,
+							backgroundDismissAnimation: 'shake',
+							buttons: {
+								installAll: {
+									text: 'Установить всё',
+									btnClass: 'ui green button',
+									action: function () {
+										startLoading();
+										$('[data-action="check_assets"]').popup('toggle');
+										$('#total_loading').html((data.missing_count + data.update_count));
+										if (data.missing_count > 0) for( let f in data.missing) {
+											save_asset(f, data.missing[f]);
+										}
+										if (data.update_count > 0) for( let f in data.update) {
+											save_asset(f, data.update[f]);
+										}
+										hideLoading('');
+									}
+								},
+								onlyInstall: {
+									text: 'Установить недостающие',
+									btnClass: 'ui blue button',
+									action: function () {
+										startLoading();
+										$('[data-action="check_assets"]').popup('toggle');
+										$('#total_loading').html(data.missing_count);
+										if (data.missing_count > 0) for( let f in data.missing) {
+											save_asset(f, data.missing[f]);
+										}
+										hideLoading('');
+									}
+								},
+								onlyUpdate: {
+									text: 'Установить обновления',
+									btnClass: 'ui orange button',
+									action: function () {
+										startLoading();
+										$('[data-action="check_assets"]').popup('toggle');
+										$('#total_loading').html(data.update_count);
+										if (data.update_count > 0) for( let f in data.update) {
+											save_asset(f, data.update[f]);
+										}
+										hideLoading('');
+									}
+								},
+							}
+						});
+					}
+				}
+			});
+		});
+		$(document).on('click', '.save', function () {
+			startLoading();
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: '{{module_code}}',
+					file: 'master',
+					method: 'settings',
+					data: $('.form').serializeArray()
+				},
+				type: 'POST',
+				success: function (data) {
+					hideLoading('');
+					$('body').toast({
+						class: 'success',
+						title: `Всё отлично!`,
+						message: `<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>`,
+						showProgress: 'bottom'
+					});
+					setTimeout(() => {
+                        window.location.reload();
+					}, 1000);
+				}
+			});
+		});
+
+		check_assets();
+	});
+</script>
+{% endautoescape %}
+{% endblock %}

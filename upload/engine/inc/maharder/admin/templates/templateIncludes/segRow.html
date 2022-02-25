@@ -1,15 +1,15 @@
-<div class="two column row">
+<div class="two column row" {% if type == 'hidden_input' %} style="display:none;"{% endif %}>
 	<div class="eight wide column rowDescr">
 		<label for="{{id}}">{{name}}</label><br>
 		<small>{{descr|raw}}</small>
 	</div>
 	<div class="eight wide column">
-		{% if type == 'input'%}
+		{% if type == 'input' or type == 'text' %}
 			{{ include('templateIncludes/addInput.html', {
 					type: 'text',
 					name: id,
 					label: name,
-					value: settings[id],
+					value: variable[id],
 					tags: false
 				})
 			}}
@@ -18,7 +18,7 @@
 					type: 'text',
 					name: id,
 					label: name,
-					value: settings[id],
+					value: variable[id],
 					tags: true
 				})
 			}}
@@ -27,7 +27,7 @@
 					type: 'number',
 					name: id,
 					label: name,
-					value: settings[id]
+					value: variable[id]
 				})
 			}}
 		{% elseif type == 'hidden_input'%}
@@ -35,7 +35,7 @@
 					type: 'hidden',
 					name: id,
 					label: name,
-					value: settings[id]
+					value: variable[id]
 				})
 			}}
 		{% elseif type == 'input_file'%}
@@ -43,7 +43,7 @@
 					type: 'file',
 					name: id,
 					label: name,
-					value: settings[id],
+					value: variable[id],
 					extra: extra
 				})
 			}}
@@ -53,14 +53,14 @@
 					label: name,
 					values: values,
 					multiple: multiple,
-					selected: settings[id]
+					selected: variable[id]
 				})
 			}}
 		{% elseif type == 'textarea'%}
 			{{ include('templateIncludes/addTextarea.html', {
 					name: id,
 					label: name,
-					value: settings[id]|raw,
+					value: variable[id]|raw,
 					editor: false
 				})
 			}}
@@ -68,21 +68,21 @@
 			{{ include('templateIncludes/addTextarea.html', {
 					name: id,
 					label: name,
-					value: settings[id]|raw,
+					value: variable[id]|raw,
 					editor:	true
 				})
 			}}
 		{% elseif type == 'checkbox'%}
 			{{ include('templateIncludes/addCheckbox.html', {
 					name: id,
-					selected: settings[id]
+					selected: variable[id]
 				})
 			}}
 		{% elseif type == 'checkbox_label'%}
 			{{ include('templateIncludes/addCheckbox.html', {
 					name: id,
 					label: name,
-					selected: settings[id]
+					selected: variable[id]
 				})
 			}}
 		{% else %}

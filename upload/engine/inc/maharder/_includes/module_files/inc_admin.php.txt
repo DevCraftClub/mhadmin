@@ -1,0 +1,63 @@
+<?php
+
+//===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===
+// Mod: %name%
+// File: main.php
+// Path: %path%
+// ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  =
+// Author: Maxim Harder <dev@devcraft.club> (c) %year%
+// Website: https://devcraft.club
+// Telegram: http://t.me/MaHarder
+// ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  =
+// Do not change anything!
+//===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===
+
+use MaHarder\classes\Admin;
+
+// заполняем важную и нужную инофрмацию о модуле
+
+$modInfo = [
+	'module_name' => '%name%',
+	'module_version' => '%version%',
+	'module_description' => '%description%',
+	'module_code' => '%latin%',
+	'module_icon' => '%icon%',
+	'site_link' => '%link%',
+	'docs_link' => '%docs%',
+	'dle_config' => $config,
+	'dle_login_hash' => $dle_login_hash,
+	'_get' => filter_input_array(INPUT_GET),
+    '_post' => filter_input_array(INPUT_POST)
+];
+
+// Подключаем классы, функции и основные переменные
+require_once DLEPlugins::Check(__DIR__.'/maharder/admin/index.php');
+
+$mh = new Admin();
+
+// Подключаем переменные модуля и его функционал
+// Используем переменную sites для навигации в модуле
+switch ($_GET['sites']) {
+	// Главная страница
+	default:
+		require_once DLEPlugins::Check(MH_ADMIN.'/modules/%latin%/main.php');
+		break;
+}
+
+$xtraVariable = [
+	'links' => $links,
+	'breadcrumbs' => $breadcrumbs,
+	'settings' => $mh->getConfig($modInfo['module_code']),
+];
+
+$mh->setVars($modInfo);
+$mh->setLinks($links);
+$mh->setVars($xtraVariable);
+$mh->setVars($modVars);
+
+// Загружаем шаблон
+$template = $mh_template->load($htmlTemplate);
+
+// Отображаем всё на сайте
+// При помощи array_merge() можно объединить любое кол-во массивов
+echo $template->render($mh->getVariables());

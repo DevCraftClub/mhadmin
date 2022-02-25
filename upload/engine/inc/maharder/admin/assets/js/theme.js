@@ -69,12 +69,17 @@ function startLoading(text = '') {
 		easing: "linear" // по умолчанию «swing»
 	});
 
-	if (text != '') $('.ui.dimmer .text').html(text);
+	if (text !== '') $('.ui.dimmer .text').html(text);
 	else $('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
 	$('.ui.dimmer').addClass('active');
 }
+function statusLoading(text = '') {
+	if (text !== '') $('.ui.dimmer .text').html(text);
+	else $('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
+}
 function hideLoading() {
 	$('.ui.dimmer').removeClass('active');
+	statusLoading();
 }
 function setTabs(tab) {
 	var thisWidth = $(tab).outerWidth(), nav = $(tab);
@@ -579,4 +584,46 @@ function serialize(mixedValue) {
 	}
 
 	return val
+}
+
+function getCookie(name) {
+	let matches = document.cookie.match(new RegExp(
+		"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+	));
+	return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function setCookie(name, value, options = {}) {
+
+	let date = new Date(Date.now() + 86400e3);
+	date = date.toUTCString();
+
+	options = {
+		path: '/',
+		expires: date,
+		// при необходимости добавьте другие значения по умолчанию
+		...options
+	};
+
+	if (options.expires instanceof Date) {
+		options.expires = options.expires.toUTCString();
+	}
+
+	let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+	for (let optionKey in options) {
+		updatedCookie += "; " + optionKey;
+		let optionValue = options[optionKey];
+		if (optionValue !== true) {
+			updatedCookie += "=" + optionValue;
+		}
+	}
+
+	document.cookie = updatedCookie;
+}
+
+function deleteCookie(name) {
+	setCookie(name, "", {
+		'max-age': -1
+	})
 }

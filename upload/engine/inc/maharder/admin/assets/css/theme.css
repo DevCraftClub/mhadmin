@@ -187,3 +187,40 @@ footer {
 	text-align: center;
 	margin: 10px 10px auto;
 }
+b, strong {
+	font-weight: bolder !important;
+}
+
+.ui.header>i.fad,
+.ui.header>i.fas,
+.ui.header>i.fab,
+.ui.header>i.far,
+.ui.header>i.fal,
+.ui.header>i.fa {
+	display: table-cell;
+	opacity: 1;
+	font-size: 2em;
+	padding-top: .2em;
+	vertical-align: top;
+}
+
+i.icon.fad {
+	font-family: "Font Awesome 5 Duotone" !important;
+}
+i.icon.fab {
+	font-family: "Font Awesome 5 Brands" !important;
+}
+i.icon.fas,
+i.icon.fa,
+i.icon.far,
+i.icon.fal {
+	font-family: "Font Awesome 5 Pro" !important;
+}
+
+.jconfirm-content {
+	overflow: visible !important;
+}
+
+.jconfirm .jconfirm-box div.jconfirm-content-pane.no-scroll {
+	overflow: visible !important;
+}

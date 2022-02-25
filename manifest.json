@@ -1,6 +1,14 @@
 {
-	"version": "2.0.0",
+	"version": "2.0.1 Beta",
 	"status": "dev",
+	"dle": [
+		"13.x",
+		"14.x",
+		"15.x"
+	],
+	"php": [
+		"7.2"
+	],
 	"name": "MaHarder Assets",
 	"description": "Административная панель для DLE"
 }

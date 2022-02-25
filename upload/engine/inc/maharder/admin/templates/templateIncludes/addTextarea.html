@@ -5,18 +5,18 @@
 		var texteditor_{{ name }} = document.getElementById('{{name}}_editor');
 		setTimeout(() => {
 			sceditor.create(texteditor_{{ name }}, {
-			format: 'bbcode',
-			style: '{{url}}/maharder/admin/assets/editor/themes/content/default.min.css',
-			emoticonsEnabled: true,
-			emoticonsRoot: '{{url}}/maharder/admin/assets/editor/',
-			icons: 'material',
-			dateFormat: 'day.month.year',
-			autoExpand: true,
-			autoUpdate: true,
-			plugins: 'autosave,autoyoutube,undo',
-			toolbar: 'bold,italic,underline,strike,subscript,superscript|left,center,right,justify|font,size,color,removeformat|bulletlist,orderedlist,table|code,quote,horizontalrule,image,link,unlink,emoticon,youtube|date,time|maximize,source',
-			locale: 'ru'
-		});
+				format: 'bbcode',
+				style: '{{url}}/maharder/admin/assets/editor/themes/content/default.min.css',
+				emoticonsEnabled: true,
+				emoticonsRoot: '{{url}}/maharder/admin/assets/editor/',
+				icons: 'material',
+				dateFormat: 'day.month.year',
+				autoExpand: true,
+				autoUpdate: true,
+				plugins: 'autosave,autoyoutube,undo',
+				toolbar: 'bold,italic,underline,strike,subscript,superscript|left,center,right,justify|font,size,color,removeformat|bulletlist,orderedlist,table|code,quote,horizontalrule,image,link,unlink,emoticon,youtube|date,time|maximize,source',
+				locale: 'ru'
+			});
 		}, 100);
 	</script>
 	{% endif %}

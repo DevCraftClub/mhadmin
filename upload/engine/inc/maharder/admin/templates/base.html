@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	{% block title %}<title>{{ title }}</title>{% endblock %}
+	{% block title %}<title>[MH] {{ title }} » {{ module_name }}</title>{% endblock %}
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -21,7 +21,7 @@
 	{% endif %}
 	<div class="ui main container">
 		<h1 class="ui header">
-			<i class="icon {{module_icon}}" style="float: left;margin-right: 2rem;"></i>
+			<i class="{{module_icon}}" style="float: left;margin-right: 2rem;"></i>
 			<div class="content" style="padding: 0">
 				{{ module_name }} v{{ module_version }}
 			</div>

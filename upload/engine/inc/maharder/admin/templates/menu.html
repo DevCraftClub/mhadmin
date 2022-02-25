@@ -1,39 +1,53 @@
+{% if _get.sites is null %}
+	{% set site = 'index' %}
+{% else %}
+	{% set site = _get.sites %}
+{% endif %}
+
 <div class="ui borderless main menu ">
+
 	<div class="ui container">
+
 		<div class="header item firstLine">
-			<i class="icon {{module_icon}}"></i>&nbsp;&nbsp;
+			<i class="{{module_icon}}"></i>&nbsp;&nbsp;
 			{{ module_name }}
 		</div>
-		{% for link in links %}
-		{% if link.type == 'dropdown' %}
-		<div class="ui dropdown item firstLine" tabindex="0">
-			{{link.name}} <i class="dropdown icon"></i>
-			<div class="menu" tabindex="0">
-				{% for child in link.children %}
-				{% if child.type == 'dropdown' %}
-				<div class="item">
-					<i class="dropdown icon"></i>
-					{{ child.name }}
-					<div class="menu">
-						{% for subchild in child.children %}
-						<a href="{{ subchild.href }}" class="item">{{ subchild.name }}</a>
+
+
+
+		{% for type, link in links %}
+			{% if link.type == 'dropdown' %}
+				<div class="ui dropdown item firstLine{% if site == type %} active{% endif %}" tabindex="0">
+					{{link.name}} <i class="dropdown icon"></i>
+					<div class="menu" tabindex="0">
+						{% for child in link.children %}
+						{% if child.type == 'dropdown' %}
+						<div class="item">
+							<i class="dropdown icon"></i>
+							{{ child.name }}
+							<div class="menu">
+								{% for subchild in child.children %}
+								<a href="{{ subchild.href }}" class="item">{{ subchild.name }}</a>
+								{% endfor %}
+							</div>
+						</div>
+						{% elseif child.type == 'divider' %}
+						<div class="divider"></div>
+						{% else %}
+						<a href="{{ child.href }}" class="item">{{ child.name }}</a>
+						{% endif %}
 						{% endfor %}
 					</div>
 				</div>
-				{% elseif child.type == 'divider' %}
+			{% elseif child.type == 'divider' %}
 				<div class="divider"></div>
-				{% else %}
-				<a href="{{ child.href }}" class="item">{{ child.name }}</a>
-				{% endif %}
-				{% endfor %}
-			</div>
-		</div>
-		{% elseif child.type == 'divider' %}
-		<div class="divider"></div>
-		{% else %}
-		<a href="{{ link.href }}" class="item firstLine">{{ link.name }}</a>
-		{% endif %}
+			{% else %}
+				<a href="{{ link.href }}" class="item firstLine{% if site == type %} active{% endif %}">{{ link.name }}</a>
+			{% endif %}
+
 		{% endfor %}
+
+
 	</div>
 </div>
 

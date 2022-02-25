@@ -10,13 +10,14 @@
     ],
 	"config": {
 		"platform": {
-			"php": "5.6.19"
+			"php": "7.2"
 		},
-		"vendor-dir": "../functions/vendor"
+		"vendor-dir": "../_includes/vendor"
 	},
     "require": {
-        "twig/twig": "*",
 		"bes/mobiledetect-twig-extension": "*",
-		"ext-curl": "*"
-    }
+		"ext-curl": "*",
+		"twig/twig": "*",
+        "twig/extensions": "*"
+	}
 }

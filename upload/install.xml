@@ -2,23 +2,21 @@
 <dleplugin>
 	<name>MaHarder Assets</name>
 	<description>Универсальная административная панель для модификаций от MaHarder</description>
-	<icon>engine/inc/maharder/admin/assets/img/admin/icon.png</icon>
-	<version>2.0.2 Beta</version>
+	<icon></icon>
+	<version>2.0.3</version>
 	<dleversion>13</dleversion>
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
 	<filedelete>1</filedelete>
-	<needplugin></needplugin>
+	<needplugin>MaHarder Assets</needplugin>
 	<mnotice>0</mnotice>
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
-	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections
-(name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MaHarder Assets v2.0.2 Beta', 'Административная панель для управления модулями', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.2 Beta';]]></mysqlupgrade>
-	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections
-(name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MaHarder Assets v2.0.2 Beta', 'Административная панель для управления модулями', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.2 Beta';]]></mysqlenable>
+	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
+VALUES('maharder', 'MaHarder Assets v2.0.3', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.3';]]></mysqlupgrade>
+	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
+VALUES('maharder', 'MaHarder Assets v2.0.3', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.3';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
 	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
 	<phpinstall><![CDATA[]]></phpinstall>
@@ -32,31 +30,7 @@ foreach ($objects as $object) {
 	}
 }
 reset($objects);
-@rmdir(ENGINE_DIR . '/skins/maharder');
-
-$objects = scandir(ENGINE_DIR . '/inc/maharder/assets');
-foreach ($objects as $object) {
-	if ($object != "." && $object != "..") {
-    	if (filetype(ENGINE_DIR . '/inc/maharder/assets'."/".$object) == "dir")
-          @rmdir(ENGINE_DIR . '/inc/maharder/assets'."/".$object); 
-      	else
-          @unlink(ENGINE_DIR . '/inc/maharder/assets'."/".$object);
-	}
-}
-reset($objects);
-@rmdir(ENGINE_DIR . '/inc/maharder/assets');
-
-$objects = scandir(ENGINE_DIR . '/inc/maharder/maharder');
-foreach ($objects as $object) {
-	if ($object != "." && $object != "..") {
-    	if (filetype(ENGINE_DIR . '/inc/maharder/maharder'."/".$object) == "dir")
-          @rmdir(ENGINE_DIR . '/inc/maharder/maharder'."/".$object); 
-      	else
-          @unlink(ENGINE_DIR . '/inc/maharder/maharder'."/".$object);
-	}
-}
-reset($objects);
-@rmdir(ENGINE_DIR . '/inc/maharder/maharder');]]></phpupgrade>
+@rmdir(ENGINE_DIR . '/skins/maharder');]]></phpupgrade>
 	<phpenable><![CDATA[]]></phpenable>
 	<phpdisable><![CDATA[]]></phpdisable>
 	<phpdelete><![CDATA[]]></phpdelete>
@@ -64,43 +38,101 @@ reset($objects);
 	<file name="engine/inc/include/functions.inc.php">
 		<operation action="replace">
 			<searchcode><![CDATA['engine/skins/fonts/fontawesome/styles.min.css',]]></searchcode>
-			<replacecode><![CDATA['engine/inc/maharder/admin/assets/css/fa_fix.css',
-'engine/inc/maharder/admin/assets/css/fa_old.css',
-'engine/inc/maharder/admin/assets/css/icons.css',]]></replacecode>
 			<searchcount>1</searchcount>
+			<enabled>1</enabled>
+		</operation>
+		<operation action="before">
+			<searchcode><![CDATA[$css_array = array();]]></searchcode>
+			<replacecode><![CDATA[$default_array = array_merge($default_array, $icons_replace);]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[function build_css($css) {
+	global $config]]></searchcode>
+			<replacecode><![CDATA[, $icons_replace]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>
 	<file name="engine/skins/default.skin.php">
 		<operation action="before">
 			<searchcode><![CDATA[<a href="?mod=addnews&amp;action=addnews" class="btn btn-link btn-float text-size-small has-text"><i class="fa fa-file-text-o text-primary"></i> <span>{$lang['add_news']}</span></a>]]></searchcode>
-			<replacecode><![CDATA[								<a rel="button" class="btn btn-link btn-float text-size-small has-text clear_cache">
-									<i class="fa fa-trash text-danger-600"></i> 
-									<span class="text-danger-600">{$lang['btn_clearcache']}</span>
-								</a>]]></replacecode>
+			<replacecode><![CDATA[								{$clear_cache}]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 		<operation action="before">
 			<searchcode><![CDATA[</body>]]></searchcode>
-			<replacecode><![CDATA[<script>
-		$(function(){
+			<replacecode><![CDATA[{$clear_cache_script}]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[if(!defined('DATALIFEENGINE')) {
+	header( "HTTP/1.1 403 Forbidden" );
+	header ( 'Location: ../../' );
+	die( "Hacking attempt!" );
+}]]></searchcode>
+			<replacecode><![CDATA[
+global $clear_cache, $clear_cache_script;]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
+	</file>
+	<file name="engine/inc/include/init.php">
+		<operation action="before">
+			<searchcode><![CDATA[if ($is_loged_in AND isset($_SESSION['timeout_session']) AND $_SESSION['timeout_session'])]]></searchcode>
+			<replacecode><![CDATA[$mh_config = [
+	'icons' => false,
+	'cache_icon' => false
+];
+$clear_cache = '';
+$clear_cache_script = '';
+$icons_replace = [
+	'engine/skins/fonts/fontawesome/styles.min.css',
+];
 
-			$('.clear_cache').click(function() {
-				ShowLoading();
+if(is_file(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json'))) {
+	$mh_config = json_decode(file_get_contents(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json')), true);
 
-				$.get("engine/ajax/controller.php?mod=adminfunction&action=clearcache&user_hash={$dle_login_hash}", function( data ){
+  
+  	if($mh_config['cache_icon']) {
+        $clear_cache = <<<HTML
+                                    <a rel="button" class="btn btn-link btn-float text-size-small has-text clear_cache">
+                                        <i class="fa fa-trash text-danger-600"></i> 
+                                        <span class="text-danger-600">{$lang['btn_clearcache']}</span>
+                                    </a>
+HTML;
+        $clear_cache_script = <<<JS
+    <script>
+            $(function(){
 
-					Growl.info({
-						title: '{$lang['p_info']}',
-						text: data
-					});
-                  	HideLoading();
+                $('.clear_cache').click(function() {
+                    ShowLoading();
 
-				});
-				return false;
-			});
-		});
-</script>
+                    $.get("engine/ajax/controller.php?mod=adminfunction&action=clearcache&user_hash={$dle_login_hash}", function( data ){
+
+                        Growl.info({
+                            title: '{$lang['p_info']}',
+                            text: data
+                        });
+                        HideLoading();
+
+                    });
+                    return false;
+                });
+            });
+    </script>
+
+JS;
+
+    }
+  	
+  	if($mh_config['icons']) {
+        $icons_replace = [
+            'engine/inc/maharder/admin/assets/css/fa_fix.css',
+            'engine/inc/maharder/admin/assets/css/fa_old.css',
+            'engine/inc/maharder/admin/assets/css/icons.css',
+        ];
+    }
+
+}
 ]]></replacecode>
 			<enabled>1</enabled>
 		</operation>

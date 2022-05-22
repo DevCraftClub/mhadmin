@@ -1,11 +1,20 @@
-var iw = 0, topMenu = '.main.menu', sideMenu = '.sidemenu';
+const topMenu = '.top_menu',
+      tp_menu = topMenu + ' .container',
+      sideMenu = '.sidemenu',
+      tm_ch = $(tp_menu).children('.firstLine');
+let iw = 0,
+    tm_ch_width = 0,
+    tm_items_stop = 0,
+    tm_width = $(topMenu).outerWidth();
+
+
 $(document).ready(() => {
 
+	shortMenu();
+
 	$('.ui.checkbox').checkbox();
-	$('.dropdown').dropdown();
-	$('.no.label.ui.dropdown').dropdown({
-		useLabels: false
-	});
+	$('.ui.dropdown').dropdown();
+	$('.no.label.ui.dropdown').dropdown({useLabels: false});
 	$('.ui.accordion').accordion();
 
 	$('.menuToggler').on('click', () => {
@@ -14,17 +23,16 @@ $(document).ready(() => {
 
 	// Настройки верхнего меню
 	$(topMenu).visibility({
-		type: 'fixed'
-	});
+		                      type: 'fixed'
+	                      });
 	$('.overlay').visibility({
-		type: 'fixed',
-		offset: 80
-	});
-	$('.dropdown').dropdown();
-	$(topMenu + '  .ui.dropdown').dropdown({
-		on: 'hover'
-	});
-	if(is_mobile) {
+		                         type:   'fixed',
+		                         offset: 80
+	                         });
+	$(topMenu + ' .ui.dropdown').dropdown({
+		                                      on: 'hover'
+	                                      });
+	if (is_mobile) {
 		setTabs('#box-navi');
 		changeMenus();
 		$(window).on('resize', () => {
@@ -32,13 +40,13 @@ $(document).ready(() => {
 			setTabs('#box-navi');
 		});
 		$(sideMenu).visibility({
-			type: 'fixed'
-		});
+			                       type: 'fixed'
+		                       });
 	} else {
 		$('#box-navi .item').tab();
 	}
 
-	$(document).on('click', '#box-navi.dropdown .item', function () {
+	$(document).on('click', '#box-navi.dropdown .item', function() {
 		$.tab('change tab', $(this).data('tab'));
 	});
 
@@ -63,37 +71,51 @@ $(document).ready(() => {
 
 function startLoading(text = '') {
 	$('html, body').animate({
-		scrollTop: $('#top').offset().top
-	}, {
-		duration: 370,   // по умолчанию «400»
-		easing: "linear" // по умолчанию «swing»
-	});
+		                        scrollTop: $('#top').offset().top
+	                        }, {
+		                        duration: 370,   // по умолчанию «400»
+		                        easing:   "linear" // по умолчанию «swing»
+	                        });
 
-	if (text !== '') $('.ui.dimmer .text').html(text);
-	else $('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
+	if (text !== '') {
+		$('.ui.dimmer .text').html(text);
+	} else {
+		$('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
+	}
 	$('.ui.dimmer').addClass('active');
 }
+
 function statusLoading(text = '') {
-	if (text !== '') $('.ui.dimmer .text').html(text);
-	else $('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
+	if (text !== '') {
+		$('.ui.dimmer .text').html(text);
+	} else {
+		$('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
+	}
 }
+
 function hideLoading() {
 	$('.ui.dimmer').removeClass('active');
 	statusLoading();
 }
+
 function setTabs(tab) {
 	var thisWidth = $(tab).outerWidth(), nav = $(tab);
 
-	function createDropDown(elements, selector){
+	function createDropDown(elements, selector) {
 		var select = "", temp = "", html = "";
-		if (selector[0] == "#") select = "id";
-		else if (selector[0] == ".") select = "class";
-		if (select == "id")
-			html += "<div class=\"ui floating dropdown labeled icon button attached\" id='" + selector.replace("#", "") + "'>";
-		else if (select == "class")
-			html += "<div class=\"ui floating dropdown labeled icon button attached " + selector.replace(".", "") + "\">";
+		if (selector[0] == "#") {
+			select = "id";
+		} else if (selector[0] == ".") select = "class";
+		if (select == "id") {
+			html +=
+				"<div class=\"ui floating dropdown labeled icon button attached\" id='" + selector.replace("#", "") +
+				"'>";
+		} else if (select == "class") {
+			html +=
+				"<div class=\"ui floating dropdown labeled icon button attached " + selector.replace(".", "") + "\">";
+		}
 
-		$(elements).find('.item').each(function () {
+		$(elements).find('.item').each(function() {
 			if ($(this).hasClass('active')) {
 				html += "<span class=\"text\">" + $(this).html() + "</span><div class=\"menu\">";
 			}
@@ -109,17 +131,19 @@ function setTabs(tab) {
 		return html;
 	}
 
-	function createMenu(elements, selector){
+	function createMenu(elements, selector) {
 
 		var select = "", temp = "", html = "";
-		if (selector[0] == "#") select = "id";
-		else if (selector[0] == ".") select = "class";
-		if (select == "id")
+		if (selector[0] == "#") {
+			select = "id";
+		} else if (selector[0] == ".") select = "class";
+		if (select == "id") {
 			html += "<div class=\"ui top attached tabular menu\" id='" + selector.replace("#", "") + "'>";
-		else if (select == "class")
+		} else if (select == "class") {
 			html += "<div class=\"ui top attached tabular menu " + selector.replace(".", "") + "\">";
+		}
 
-		$(elements).find('.item').each(function () {
+		$(elements).find('.item').each(function() {
 			temp += "<a href='#' class=\"item";
 			if ($(this).hasClass('active')) {
 				temp += " active";
@@ -134,7 +158,7 @@ function setTabs(tab) {
 
 	function resizeW(tabs, items, elements, selector) {
 		let parent = $(selector).parent();
-		if(items >= tabs) {
+		if (items >= tabs) {
 			$(selector).remove();
 			$(parent).prepend(createDropDown(elements, selector));
 			$(".dropdown").dropdown();
@@ -147,19 +171,19 @@ function setTabs(tab) {
 
 	function changeWidths(selector) {
 		if (iw == 0) {
-			$(selector).find('.item').each(function () {
+			$(selector).find('.item').each(function() {
 				let temp = $(this).outerWidth();
-				iw = Math.abs(iw + temp);
+				iw       = Math.abs(iw + temp);
 			});
 		}
 		thisWidth = $(selector).outerWidth();
 	}
 
-	$(document).find(tab).each(function () {
+	$(document).find(tab).each(function() {
 		$(tab + ' .item').tab();
 
 		changeWidths(tab);
-		$(window).resize(function () {
+		$(window).resize(function() {
 			changeWidths(tab);
 		});
 
@@ -180,20 +204,55 @@ function menuToggler(set = '') {
 		$('body').addClass('pushable');
 	}
 }
+function itemWidth() {
+	tm_ch_width = 0;
+	tm_width = $('#content').outerWidth();
+	let stop_set = false;
+	$(tp_menu).find('.firstLine').each(function(i,e) {
+		if (tm_width > tm_ch_width) tm_items_stop = i;
+		let temp  = $(e).outerWidth();
+		tm_ch_width = Math.abs(tm_ch_width + temp);
+		if (tm_width < tm_ch_width) {
+			if(!stop_set) {
+				tm_items_stop = (i-1);
+				stop_set = true;
+			}
+		}
+	});
+}
+
+function shortMenu() {
+	itemWidth();
+	let items = [];
+
+	$(document).find('.more_items').first().remove();
+
+	if (tm_ch_width >= tm_width) {
+		for (let i = tm_items_stop, max = tm_ch.length; i < max; i++) {
+			let el = tm_ch[i];
+			// items.push($(el).first().removeClass('firstLine'));
+			items.push(el.outerHTML);
+			$(el).remove();
+		}
+
+		$(tp_menu).append(`<div class="ui dropdown item firstLine more_items" tabindex="0">
+\t\t\t\tПрочее <i class="dropdown icon"></i>
+\t\t\t\t<div class="menu" tabindex="0">
+\t\t\t\t\t${items.join('\n')}
+\t\t\t\t</div>
+\t\t\t</div>`);
+		setTimeout(() => {
+			$(document).find('.more_items').dropdown({on: 'hover'});
+			$('.more_items').dropdown({on: 'hover'});
+		}, 100);
+	}
+}
 
 function changeMenus() {
-	let mainWidth = $(topMenu).outerWidth(), menuWidth = 0;
-
-	function itemWidth() {
-		$(topMenu).find('.firstLine').each(function () {
-			let temp = $(this).outerWidth();
-			menuWidth = Math.abs(menuWidth + temp);
-		});
-	}
 
 	itemWidth();
 
-	if (menuWidth >= mainWidth) {
+	if (tm_width >= tm_ch_width) {
 		$(topMenu).hide();
 		setTimeout(() => { $(topMenu + '.constraint').hide(); }, 100);
 		$(sideMenu).show();
@@ -244,7 +303,7 @@ function unserialize(data) {
 	//   example 5: unserialize('O:8:"stdClass":1:{s:3:"foo";b:1;}')
 	//   returns 5: { foo: true }
 
-	var utf8Overhead = function (str) {
+	var utf8Overhead = function(str) {
 		var s = str.length
 		for (var i = str.length - 1; i >= 0; i--) {
 			var code = str.charCodeAt(i)
@@ -260,8 +319,8 @@ function unserialize(data) {
 		}
 		return s - 1
 	}
-	var readUntil = function (data, offset, stopchr) {
-		var i = 2
+	var readUntil    = function(data, offset, stopchr) {
+		var i   = 2
 		var buf = []
 		var chr = data.slice(offset, offset + 1)
 
@@ -275,7 +334,7 @@ function unserialize(data) {
 		}
 		return [buf.length, buf.join('')]
 	}
-	var readChrs = function (data, offset, length) {
+	var readChrs     = function(data, offset, length) {
 		var i, chr, buf
 
 		buf = []
@@ -286,6 +345,7 @@ function unserialize(data) {
 		}
 		return [buf.length, buf.join('')]
 	}
+
 	function _unserialize(data, offset) {
 		var dtype
 		var dataoffset
@@ -306,8 +366,8 @@ function unserialize(data) {
 		var vprops
 		var vchrs
 		var value
-		var chrs = 0
-		var typeconvert = function (x) {
+		var chrs        = 0
+		var typeconvert = function(x) {
 			return x
 		}
 
@@ -320,16 +380,16 @@ function unserialize(data) {
 
 		switch (dtype) {
 			case 'i':
-				typeconvert = function (x) {
+				typeconvert = function(x) {
 					return parseInt(x, 10)
 				}
-				readData = readUntil(data, dataoffset, ';')
-				chrs = readData[0]
-				readdata = readData[1]
+				readData    = readUntil(data, dataoffset, ';')
+				chrs        = readData[0]
+				readdata    = readData[1]
 				dataoffset += chrs + 1
 				break
 			case 'b':
-				typeconvert = function (x) {
+				typeconvert = function(x) {
 					const value = parseInt(x, 10)
 
 					switch (value) {
@@ -341,31 +401,31 @@ function unserialize(data) {
 							throw SyntaxError('Invalid boolean value')
 					}
 				}
-				readData = readUntil(data, dataoffset, ';')
-				chrs = readData[0]
-				readdata = readData[1]
+				readData    = readUntil(data, dataoffset, ';')
+				chrs        = readData[0]
+				readdata    = readData[1]
 				dataoffset += chrs + 1
 				break
 			case 'd':
-				typeconvert = function (x) {
+				typeconvert = function(x) {
 					return parseFloat(x)
 				}
-				readData = readUntil(data, dataoffset, ';')
-				chrs = readData[0]
-				readdata = readData[1]
+				readData    = readUntil(data, dataoffset, ';')
+				chrs        = readData[0]
+				readdata    = readData[1]
 				dataoffset += chrs + 1
 				break
 			case 'n':
 				readdata = null
 				break
 			case 's':
-				ccount = readUntil(data, dataoffset, ':')
-				chrs = ccount[0]
+				ccount       = readUntil(data, dataoffset, ':')
+				chrs         = ccount[0]
 				stringlength = ccount[1]
 				dataoffset += chrs + 2
 
 				readData = readChrs(data, dataoffset + 1, parseInt(stringlength, 10))
-				chrs = readData[0]
+				chrs     = readData[0]
 				readdata = readData[1]
 				dataoffset += chrs + 2
 				if (chrs !== parseInt(stringlength, 10) && chrs !== readdata.length) {
@@ -376,8 +436,8 @@ function unserialize(data) {
 				readdata = {}
 
 				keyandchrs = readUntil(data, dataoffset, ':')
-				chrs = keyandchrs[0]
-				keys = keyandchrs[1]
+				chrs       = keyandchrs[0]
+				keys       = keyandchrs[1]
 				dataoffset += chrs + 2
 
 				length = parseInt(keys, 10)
@@ -385,13 +445,13 @@ function unserialize(data) {
 
 				for (i = 0; i < length; i++) {
 					kprops = _unserialize(data, dataoffset)
-					kchrs = kprops[1]
-					key = kprops[2]
+					kchrs  = kprops[1]
+					key    = kprops[2]
 					dataoffset += kchrs
 
 					vprops = _unserialize(data, dataoffset)
-					vchrs = vprops[1]
-					value = vprops[2]
+					vchrs  = vprops[1]
+					value  = vprops[2]
 					dataoffset += vchrs
 
 					if (key !== i) {
@@ -411,39 +471,38 @@ function unserialize(data) {
 
 				dataoffset += 1
 				break
-			case 'O':
-				{
-					// O:<class name length>:"class name":<prop count>:{<props and values>}
-					// O:8:"stdClass":2:{s:3:"foo";s:3:"bar";s:3:"bar";s:3:"baz";}
-					readData = readUntil(data, dataoffset, ':') // read class name length
-					dataoffset += readData[0] + 1
-					readData = readUntil(data, dataoffset, ':')
+			case 'O': {
+				// O:<class name length>:"class name":<prop count>:{<props and values>}
+				// O:8:"stdClass":2:{s:3:"foo";s:3:"bar";s:3:"bar";s:3:"baz";}
+				readData = readUntil(data, dataoffset, ':') // read class name length
+				dataoffset += readData[0] + 1
+				readData = readUntil(data, dataoffset, ':')
 
-					if (readData[1] !== '"stdClass"') {
-						throw Error('Unsupported object type: ' + readData[1])
-					}
-
-					dataoffset += readData[0] + 1 // skip ":"
-					readData = readUntil(data, dataoffset, ':')
-					keys = parseInt(readData[1], 10)
-
-					dataoffset += readData[0] + 2 // skip ":{"
-					obj = {}
-
-					for (i = 0; i < keys; i++) {
-						readData = _unserialize(data, dataoffset)
-						key = readData[2]
-						dataoffset += readData[1]
-
-						readData = _unserialize(data, dataoffset)
-						dataoffset += readData[1]
-						obj[key] = readData[2]
-					}
-
-					dataoffset += 1 // skip "}"
-					readdata = obj
-					break
+				if (readData[1] !== '"stdClass"') {
+					throw Error('Unsupported object type: ' + readData[1])
 				}
+
+				dataoffset += readData[0] + 1 // skip ":"
+				readData = readUntil(data, dataoffset, ':')
+				keys     = parseInt(readData[1], 10)
+
+				dataoffset += readData[0] + 2 // skip ":{"
+				obj = {}
+
+				for (i = 0; i < keys; i++) {
+					readData = _unserialize(data, dataoffset)
+					key      = readData[2]
+					dataoffset += readData[1]
+
+					readData = _unserialize(data, dataoffset)
+					dataoffset += readData[1]
+					obj[key] = readData[2]
+				}
+
+				dataoffset += 1 // skip "}"
+				readdata = obj
+				break
+			}
 			default:
 				throw SyntaxError('Unknown / Unhandled data type(s): ' + dtype)
 		}
@@ -490,14 +549,14 @@ function serialize(mixedValue) {
 
 	var val, key, okey
 	var ktype = ''
-	var vals = ''
+	var vals  = ''
 	var count = 0
 
-	var _utf8Size = function (str) {
+	var _utf8Size = function(str) {
 		return ~-encodeURI(str).split(/%..|./).length
 	}
 
-	var _getType = function (inp) {
+	var _getType = function(inp) {
 		var match
 		var key
 		var cons
@@ -512,7 +571,7 @@ function serialize(mixedValue) {
 			if (!inp.constructor) {
 				return 'object'
 			}
-			cons = inp.constructor.toString()
+			cons  = inp.constructor.toString()
 			match = cons.match(/(\w+)\(/)
 			if (match) {
 				cons = match[1].toLowerCase()
@@ -596,10 +655,10 @@ function getCookie(name) {
 function setCookie(name, value, options = {}) {
 
 	let date = new Date(Date.now() + 86400e3);
-	date = date.toUTCString();
+	date     = date.toUTCString();
 
 	options = {
-		path: '/',
+		path:    '/',
 		expires: date,
 		// при необходимости добавьте другие значения по умолчанию
 		...options

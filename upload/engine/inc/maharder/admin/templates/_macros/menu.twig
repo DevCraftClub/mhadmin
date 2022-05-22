@@ -1,0 +1,36 @@
+{% macro item(items, _site, _first, _child, _fclass) %}
+	{% import _self as macro %}
+	{% set first_class = _fclass|default('') %}
+	{% set first = _first|default('yes') %}
+	{% set child = _child|default('no') %}
+	{% set site = _site|default('') %}
+
+	{% for type, link in items %}
+		{% if link.type == 'dropdown' %}
+			<div class="{% if child == 'no' %}ui {% endif %}dropdown item{%if first == 'yes' %} {{ first_class }}{% endif %}{% if site == type %} active{% endif %}" tabindex="0">
+				{%if first == 'yes' %}
+					<input type="hidden" name="{{ type }}" id="{{ type }}">
+					<div class="text">
+				{% endif %}
+						{{link.name|trans}}
+				{%if first == 'yes' %}
+					</div>
+				{% endif %}
+				<i class="dropdown icon"></i>
+				<div class="menu" tabindex="0">
+					{{ macro.item(link.children, '', 'no', 'yes') }}
+				</div>
+			</div>
+		{% elseif link.type == 'divider' %}
+			<div class="divider"></div>
+		{% elseif link.type == 'data' %}
+			<div class="item" data-value="{{ link.data }}">
+				<span class="description">{{ link.data }}</span>
+				{{link.name|trans}}
+			</div>
+		{% else %}
+			<a href="{{ link.href }}" class="item {%if first == 'yes' %} {{ first_class }}{% endif %}{% if site == type %} active{% endif %}">{{ link.name|trans }}</a>
+		{% endif %}
+
+	{% endfor %}
+{% endmacro %}

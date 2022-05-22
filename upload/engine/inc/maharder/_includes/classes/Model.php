@@ -1,33 +1,37 @@
 <?php
 
-namespace MaHarder\classes;
-
-use DateTime;
-use Exception;
+require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/LogGenerator.php');
+require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/DataLoader.php');
+require_once DLEPlugins::Check(__DIR__ . '/Table.php');
 
 /**
  * Класс по управлению данных в базе данных
  */
-class Model extends Admin {
-	
-	protected string $model, $table, $id_name;
-	public array $table_vars = [];
-	
+class Model {
+	use LogGenerator;
+	use DataLoader;
+
 	/**
-	 * @param string $model_name    Название модели / модуля
-	 * @param string $table_name    Название таблицы
-	 * @param string $id_name       Название идентификатора таблицы
-	 * @param array $vars           Параметры таблицы
+	 * @var Table
 	 */
-	public function __construct(string $model_name, string $table_name, string $id_name, array $vars) {
-		parent::__construct();
-		
-		$this->model = $model_name;
-		$this->table = $table_name;
-		$this->id_name = $id_name;
-		$this->table_vars = $vars;
+	protected Table $table;
+
+	/**
+	 * Конструктор модели
+	 *
+	 * @param string $model_name //  Название модели / модуля
+	 * @param string $table_name //  Название таблицы
+	 * @param string $id_name    //  Название идентификатора таблицы
+	 * @param array  $vars       //  Параметры таблицы
+	 * @param array  $table_keys //  Ключи таблицы
+	 * @throws \JsonException
+	 */
+	public function __construct(string $model_name, string $table_name, string $id_name, array $vars, array $table_keys = []) {
+		$this->table = new Table($id_name, $table_name, $model_name, $vars, $table_keys);
+		$this->table->checkMigrations();
 	}
-	
+
+
 	/**
 	 * Получаем объект по ID
 	 *
@@ -36,70 +40,79 @@ class Model extends Admin {
 	 * @return array|mixed
 	 */
 	public function getSingle($id) {
-		
-		if($id && $id > 0)
-			return $this->load_data($this->table, [
-				'table' => $this->table,
+
+		if ($id && $id > 0) {
+			return $this->load_data($this->table->getName(), [
+				'table' => $this->table->getName(),
 				'where' => [
-					$this->id_name => $id
+					$this->table->getId() => $id
 				]
 			])[0];
-		else
-			$this->generate_log($this->model, 'getSingle', 'ID не должен быть пустым');
-		
+		} else {
+			$this->generate_log($this->table->getModel(), 'getSingle', 'ID не должен быть пустым');
+		}
+
 		return [];
 	}
-	
+
 	/**
 	 * Получаем все объекты
 	 *
 	 * @param array $vars
 	 *
-	 * @return mixed
+	 * @return array
 	 */
-	public function getAll($vars = ['limit' => null, 'order' => ['created_date' => 'ASC'], 'where' => [], 'selects' => []]) {
-		
-		return $this->load_data($this->table, [
-			'table' => $this->table,
-			'limit' => $vars['limit'],
-			'order' => $vars['order'],
-			'where' => $vars['where'],
+	public function getAll(array $vars = [
+		'limit'   => null,
+		'order'   => ['created_date' => 'ASC'],
+		'where'   => [],
+		'selects' => []
+	]): array {
+
+		return $this->load_data($this->table->getName(), [
+			'table'   => $this->table->getName(),
+			'limit'   => $vars['limit'],
+			'order'   => $vars['order'],
+			'where'   => $vars['where'],
 			'selects' => $vars['selects'],
 		]);
 	}
-	
+
 	/**
 	 * Создаём обьект
 	 *
 	 * @return array|mixed
 	 */
 	public function create(array $values) {
-		global $db;
-		
+		$db = self::getDb();
+
 		try {
 			$t_names = [];
 			$t_values = [];
-			foreach($this->table_vars as $t) {
+			foreach ($this->table->getColumns() as $t) {
 				$t_names[] = $t['name'];
-				$t_values[] = $this->defType($values[$t['name']], $t['type']);
+				$t_values[] = self::defType($values[$t['name']], $t['type']);
 			}
-			$sql_insert = 'INSERT INTO ' . PREFIX. "_{$this->table} (" . implode(", ", $t_names) . ") VALUES (" . implode(", ", $t_values) . ");";
-			
+			$sql_insert = 'INSERT INTO ' . PREFIX . "_{$this->table->getName()} (" . implode(", ", $t_names) . ") VALUES (" . implode(", ", $t_values) . ");";
+
 			$db->query($sql_insert);
 			$id = $db->insert_id();
-			
-			clear_cache();
-			
+
+			$this->clear_cache($this->table->getName());
+
 			return $this->getSingle($id);
-			
+
 		} catch (Exception $e) {
-			$report = ['success' => false, 'error' => $e->getMessage()];
-			$this->generate_log($this->model, 'create', $report);
-			
+			$report = [
+				'success' => false,
+				'error'   => $e->getMessage()
+			];
+			$this->generate_log($this->table->getModel(), 'create', $report);
+
 			return $report;
 		}
 	}
-	
+
 	/**
 	 * Удаляем объект
 	 *
@@ -107,65 +120,79 @@ class Model extends Admin {
 	 *
 	 * @return array|bool[]
 	 */
-	public function delete($id): array
-	{
-		global $db;
-		
+	public function delete($id): array {
+		$db = self::getDb();
+
 		try {
-			
-			$db->query('DELETE FROM ' . PREFIX . "_{$this->table} WHERE {$this->id_name} = {$id}");
-			
+
+			$db->query('DELETE FROM ' . PREFIX . "_{$this->table->getName()} WHERE {$this->table->getId()} = {$id}");
+
 			clear_cache();
-			
+
 			return ['success' => true];
-			
+
 		} catch (Exception $e) {
-			$report = ['success' => false, 'error' => $e->getMessage(), 'message' => 'ID не может быть пустым'];
-			$this->generate_log($this->model, 'delete', $report);
-			
+			$report = [
+				'success' => false,
+				'error'   => $e->getMessage(),
+				'message' => 'ID не может быть пустым'
+			];
+			$this->generate_log($this->table->getModel(), 'delete', $report);
+
 			return $report;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Обновляем объект по его ID
 	 *
-	 * @param   int     $id
-	 * @param   array   $values
+	 * @param int $id
+	 * @param array $values
 	 * @return  array
 	 */
-	public function update(int $id, array $values = []): array	{
-		global $db;
-		
+	public function update(int $id, array $values = []): array {
+		global $member_id;
+		$db = self::getDb();
+
 		try {
-			$update = array();
-			foreach($this->table_vars as $t) {
+			$update = [];
+			foreach ($this->table->getColumns() as $t) {
 				if (isset($values[$t['name']])) {
-					$value = $this->defType($values[$t['name']], $t['type']);
-					$update[] = "{$t['name']} = $value";
+					$value = self::defType($values[$t['name']], $t['type']);
+					$update[] = "{$t['name']} = {$value}";
 				}
 			}
-			$update['update_date'] = new DateTime();
-			
+			$update[] = "updated_date = '{$this->table->getNow()}'";
+			$update[] = "editor = '{$member_id['user_id']}'";
+
 			$update = implode(', ', $update);
-			
-			if (!empty($update))
-				$db->query('UPDATE ' . PREFIX . "_{$this->table} SET {$update} WHERE {$this->id_name} = {$id}");
-			
-			clear_cache();
-			
-			return ['success' => true];
-			
+
+			if (!empty($update)) {
+				$update_sql = 'UPDATE ' . PREFIX . "_{$this->table->getName()} SET {$update} WHERE {$this->table->getId()} = {$id}";
+				$db->query($update_sql);
+			}
+
+			$this->clear_cache($this->table->getName());
+
+			return [
+				'success' => true,
+				'data' => $this->getSingle($id)
+			];
+
 		} catch (Exception $e) {
-			$report = ['success' => false, 'error' => $e->getMessage(), 'message' => 'ID не может быть пустым'];
-			$this->generate_log($this->model, 'update', $report);
-			
+			$report = [
+				'success' => false,
+				'error'   => $e->getMessage(),
+				'message' => 'ID не может быть пустым'
+			];
+			$this->generate_log($this->table->getModel(), 'update', $report);
+
 			return $report;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Обновляем объект по любому типу
 	 *
@@ -173,63 +200,103 @@ class Model extends Admin {
 	 * @param array $values
 	 * @return array|bool[]
 	 */
-	public function updateByVal($where_values = [], $values = []): array {
-		global $db;
-		
+	public function updateByVal(array $where_values = [], array $values = []): array {
+		$db = self::getDb();
+
 		try {
-			$update = array();
-			foreach($this->table_vars as $t) {
+			$update = [];
+			foreach ($this->table->getColumns() as $t) {
 				if (isset($values[$t['name']])) {
-					$value = $this->defType($values[$t['name']], $t['type']);
+					$value = self::defType($values[$t['name']], $t['type']);
 					$update[] = "{$t['name']} = $value";
 				}
 			}
-			$update['update_date'] = new DateTime();
-			
+			$update[] = "updated_date = '{$this->table->getNow()}'";
+
 			$update = implode(', ', $update);
-			
-			$where = array();
+
+			$where = [];
 			foreach ($where_values as $key => $value) $where[$key] = $this->getComparer($value);
 			$where = implode(' AND ', $where);
-			
-			if (!empty($update))
-				$db->query('UPDATE ' . PREFIX . "_{$this->table} SET {$update} WHERE {$where}");
-			
+
+			if (!empty($update)) $db->query('UPDATE ' . PREFIX . "_{$this->table->getName()} SET {$update} WHERE {$where}");
+
 			clear_cache();
-			
+
 			return ['success' => true];
-			
+
 		} catch (Exception $e) {
-			$report = ['success' => false, 'error' => $e->getMessage(), 'message' => 'ID не может быть пустым'];
-			$this->generate_log($this->model, 'updateByVal', $report);
-			
+			$report = [
+				'success' => false,
+				'error'   => $e->getMessage(),
+				'message' => 'ID не может быть пустым'
+			];
+			$this->generate_log($this->table->getModel(), 'updateByVal', $report);
+
 			return $report;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Вытаскиваем данные из базы данных
 	 *
 	 * @param array $vars
 	 * @return array
 	 */
-	public function selectData(array $vars = ['where' => [], 'limit' => null, 'order' => []]) : array {
+	public function selectData(array $vars = [
+		'where' => [],
+		'limit' => null,
+		'order' => []
+	]): array {
 		try {
-			
-			return $this->load_data($this->table, [
-				'table' => $this->table,
+
+			return $this->load_data($this->table->getName(), [
+				'table' => $this->table->getName(),
 				'where' => $vars['where'],
 				'limit' => $vars['limit'],
 				'order' => $vars['order']
 			]);
-			
+
 		} catch (Exception $e) {
-			$report = ['success' => false, 'error' => $e->getMessage(), 'message' => 'ID не может быть пустым'];
-			$this->generate_log($this->model, 'selectData', $report);
-			
+			$report = [
+				'success' => false,
+				'error'   => $e->getMessage(),
+				'message' => 'ID не может быть пустым'
+			];
+			$this->generate_log($this->table->getModel(), 'selectData', $report);
+
 			return $report;
 		}
 	}
-	
+
+	/**
+	 * Возвращает количество записей в базе данных
+	 *
+	 * @return int
+	 * @throws \JsonException
+	 */
+	public function count()
+	: int {
+		return (int) $this->load_data($this->table->getName(), [
+			'table'   => $this->table->getName(),
+			'selects' => ['count(*) as count'],
+		])[0]['count'];
+	}
+
+	/**
+	 * Чистый запрос в базу данных
+	 *
+	 * @param $query
+	 *
+	 * @return array
+	 * @throws \JsonException
+	 */
+	public function raw($query) : array {
+		return $this->load_data($this->table->getName(), [
+			'table'   => $this->table->getName(),
+			'sql' => $query,
+		]);
+	}
+
 }

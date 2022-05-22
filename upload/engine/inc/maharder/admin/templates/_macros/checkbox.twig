@@ -1,0 +1,12 @@
+{% import _self as macro %}
+
+{% macro checkbox(id, name, descr, opts) %}
+	{{ include('templateIncludes/segRow.html', {
+		id: id,
+		name: name,
+		descr: descr,
+		type: 'checkbox',
+		variable: opts
+	})
+	}}
+{% endmacro %}

@@ -1,0 +1,47 @@
+@font-face{font-family:"FontAwesome";font-style:normal;font-weight:300;src:url(../webfonts/fa-light-300.eot);src:url(../webfonts/fa-light-300.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-light-300.woff2) format("woff2"),url(../webfonts/fa-light-300.woff) format("woff"),url(../webfonts/fa-light-300.ttf) format("truetype"),url(../webfonts/fa-light-300.svg#fontawesome) format("svg")}
+@font-face{font-family:"Icons";font-style:normal;font-weight:900;src:url(../webfonts/fa-light-300.eot);src:url(../webfonts/fa-light-300.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-light-300.woff2) format("woff2"),url(../webfonts/fa-light-300.woff) format("woff"),url(../webfonts/fa-light-300.ttf) format("truetype"),url(../webfonts/fa-light-300.svg#fontawesome) format("svg")}
+
+.fa {
+    font-family: "FontAwesome", "Font Awesome 6 Pro" !important;
+    font-weight: 300 !important;
+}
+
+.fa-file-text-o:before {
+    content: "\f15c";
+}
+
+.fa-commenting-o:before {
+    content: "\f4ad";
+}
+
+.fa-envelope-o:before {
+    content: "\f0e0";
+}
+
+.fa-user-circle-o:before {
+    content: "\f2bd";
+}
+
+.fa-picture-o:before {
+    content: "\f302";
+}
+
+.fa-floppy-o:before {
+    content: "\f0c7";
+}
+
+.fa-trash-o:before {
+    content: "\f2ed";
+}
+
+.fa-pencil-square-o:before {
+    content: "\f14b";
+}
+
+.fa-file-code-o:before {
+    content: "\f1c9";
+}
+
+.a-paper-plane-o:before {
+    content: "\f1d8";
+}

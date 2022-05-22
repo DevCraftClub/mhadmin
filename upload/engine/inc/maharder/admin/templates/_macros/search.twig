@@ -1,0 +1,82 @@
+
+
+{% macro search(module, file, _type, _rmenu, _lmenu) %}
+	{% from "_macros/menu.twig" import item %}
+
+	{% set type = _type|default|default('') %}
+	{% set left_menu = _lmenu|default|default({}) %}
+	{% set right_menu = _rmenu|default|default({}) %}
+
+	<form class="ui {{ type }} menu">
+
+		{% if left_menu is not empty %}
+			{{ item(left_menu) }}
+		{% endif %}
+
+		<div class="right menu">
+
+			{% if right_menu is not empty %}
+				{{ item(right_menu) }}
+			{% endif %}
+
+			<div class="ui right aligned category search item">
+				<div class="ui transparent icon input">
+					<input class="prompt" name="search" id="search" type="search" placeholder="{% trans %}Поисковая фраза{% endtrans %}...">
+					<i alt="{% trans %}Искать{% endtrans %}" title="{% trans %}Искать{% endtrans %}" class="search link icon go_search"></i>
+				</div>
+				<div class="results"></div>
+			</div>
+			<div class="ui item go_search" role="button">
+				{% trans %}Искать{% endtrans %}
+			</div>
+		</div>
+
+	</form>
+
+	{% autoescape 'js' %}
+		<script>
+            setTimeout(() => {
+                $(() => {
+                    var $search = $('ui.search')
+
+                    {#$(document).on('click', '.go_search', function () {#}
+
+                    {#    startLoading();#}
+
+                    {#    $.ajax({#}
+                    {#        url: 'engine/ajax/controller.php?mod=maharder',#}
+                    {#        data: {#}
+                    {#            user_hash: '{{ dle_login_hash }}',#}
+                    {#            module: '{{ module }}',#}
+                    {#            file: '{{ file }}',#}
+                    {#            action: 'search',#}
+                    {#            search_data: $('form').serialize()#}
+                    {#        },#}
+                    {#        type: 'POST',#}
+                    {#        success: function (data) {#}
+                    {#            try {#}
+                    {#                data = JSON.parse(data);#}
+                    {#            } catch (e) {#}
+                    {#                if (typeof (data) != 'object') {#}
+                    {#                    console.log(e, data);#}
+                    {#                }#}
+                    {#            }#}
+
+                    {#            hideLoading();#}
+                    {#        }#}
+                    {#    });#}
+                    {#});#}
+
+	                $search.search({
+                        apiSettings: {
+                            url: '//api.github.com/search/repositories?q={query}'
+                        }
+	                });
+
+                });
+            }, 100);
+
+		</script>
+	{% endautoescape %}
+
+{% endmacro %}

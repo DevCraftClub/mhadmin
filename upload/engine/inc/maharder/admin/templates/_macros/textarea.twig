@@ -1,0 +1,27 @@
+{% import _self as macro %}
+
+{% macro text(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'textarea',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts
+	})
+	}}
+
+{% endmacro %}
+
+{% macro editor(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'editor',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts
+	})
+	}}
+
+{% endmacro %}

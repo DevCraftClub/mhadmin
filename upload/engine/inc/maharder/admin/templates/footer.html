@@ -2,25 +2,25 @@
 	<div class="ui center aligned container">
 		<div class="ui stackable inverted divided grid">
 			<div class="five wide column">
-				<h4 class="ui inverted header">Модуль</h4>
+				<h4 class="ui inverted header">{% trans %}Модуль{% endtrans %}</h4>
 				<div class="ui inverted link list">
 					{% for l in links %}
-						{% if( l.href != '#' or l.href != '') and l.type == 'link' %}<a href="{{l.href}}" class="item">{{l.name}}</a>{% endif %}
+						{% if( l.href != '#' or l.href != '') and l.type == 'link' %}<a href="{{l.href}}" class="item">{{l.name|trans}}</a>{% endif %}
 					{% endfor %}
 					{% block modullinks %} {% endblock %}
 				</div>
 			</div>
 			<div class="five wide column">
-				<h4 class="ui inverted header">Доп. ссылки</h4>
+				<h4 class="ui inverted header">{% trans %}Доп. ссылки{% endtrans %}</h4>
 				<div class="ui inverted link list">
-					<a href="{{site_link}}" target="_blank" class="item">На сайте автора</a>
-					<a href="{{docs_link}}" target="_blank" class="item">Документация</a>
-					<a href="{{lic_link}}" target="_blank" class="item">Пользовательское соглашение</a>
+					<a href="{{site_link}}" target="_blank" class="item">{% trans %}На сайте автора{% endtrans %}</a>
+					<a href="{{docs_link}}" target="_blank" class="item">{% trans %}Документация{% endtrans %}</a>
+					<a href="{{lic_link}}" target="_blank" class="item">{% trans %}Пользовательское соглашение{% endtrans %}</a>
 					{% block extralinks %}{% endblock %}
 				</div>
 			</div>
 			<div class="six wide column">
-				<h4 class="ui inverted header">Об авторе</h4>
+				<h4 class="ui inverted header">{% trans %}Об авторе{% endtrans %}</h4>
 				<div class="ui inverted list">
 					<div class="item">
 						<div class="header">{{ author.name }}</div>
@@ -28,21 +28,25 @@
 							{% for c in author.contacts %}
 							<div class="item">
 								<div class="content">
-									<a href="{{c.link}}" target="_blank" title="{{c.name}}">{{c.name}}</a>
+									<a href="{{c.link}}" target="_blank" title="{{c.name|trans}}">{{c.name|trans}}</a>
 								</div>
 							</div>
 							{% endfor %}
 						</div>
 					</div>
 					<div class="item">
-						<div class="header">Финансовая поддержка (добровольная)</div>
+						<div class="header">{% trans %}Финансовая поддержка (добровольная){% endtrans %}</div>
 						<div class="ui horizontal inverted divided list">
 							{% for d in author.donate %}
 							<div class="item">
 								<div class="content">
-									{% if d.link != '' %}<a href="{{d.link}}" rel='' target="_blank"
-										title="{{d.name}}">{% else %}<span title="{{d.name}}">{% endif %}{{d.value}}{%
-											if d.link != '' %}</a>{% else %}</span>{% endif %}
+									{% if d.link != '' %}
+										<a href="{{d.link}}" rel='' target="_blank"	title="{{d.name|trans}}">
+									{% else %}
+											<span title="{{d.name|trans}}">
+									{% endif %}
+										{{d.value}}
+									{% if d.link != '' %}</a>{% else %}</span>{% endif %}
 								</div>
 							</div>
 							{% endfor %}

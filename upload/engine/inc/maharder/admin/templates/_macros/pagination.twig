@@ -1,0 +1,73 @@
+
+{% macro urlMaker(page, page_name) %}
+	{{ plugin_url }}?{{ page_name|default('page') }}={{ page }}
+{% endmacro %}
+
+{% macro page(page, page_name, content) %}
+	{% set inhalt = content|raw|default(page) %}
+
+	{% autoescape 'html' %}
+		<a href="{{ _self.urlMaker(page, page_name) }}" class="item">
+			{% if inhalt == "left" or inhalt == "right" %}
+				<i class='chevron circle {{ inhalt }} icon'></i>
+			{% else %}
+				{{ inhalt }}
+			{% endif %}
+		</a>
+	{% endautoescape %}
+{% endmacro %}
+
+{% macro pagination(total, current, pages_name, first_last_page, active_pages)  %}
+
+	{% set pg_name = pages_name|default('page') %}
+	{% set se_pages = first_last_page|default(2) %}
+	{% set a_pages = active_pages|default(3) %}
+
+	{% if total > 1 %}
+		<div class="ui fluid pagination menu segment">
+			{% if current > 1 %}
+				{{ _self.page((current - 1), pg_name, 'left') }}
+
+				{% for i in range(1, se_pages) %}
+					{% if ( i < (current - a_pages) ) %}
+						{{ _self.page(i, pg_name) }}
+					{% endif %}
+				{% endfor %}
+
+				{% if (se_pages + 1) < (current - a_pages) %}
+					<div class="disabled item">...</div>
+				{% endif %}
+
+				{% for i in range((current - a_pages), (current - 1)) %}
+					{% if i > 0 %}
+						{{ _self.page(i, pg_name) }}
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+
+			<a href="{{ _self.urlMaker(current, pg_name) }}" class="active item">
+				{{ current }}
+			</a>
+
+			{% if current < total %}
+				{% for i in range((current + 1), (current + a_pages)) %}
+					{% if i <= total %}
+						{{ _self.page(i, pg_name) }}
+					{% endif %}
+				{% endfor %}
+
+				{% if  (total - se_pages) > (current + a_pages) %}
+					<div class="disabled item">...</div>
+				{% endif %}
+
+				{% for i in range((total - se_pages + 1), total) %}
+					{% if i > (current + a_pages) %}
+						{{ _self.page(i, pg_name) }}
+					{% endif %}
+				{% endfor %}
+
+				{{ _self.page((current + 1), pg_name, 'right') }}
+			{% endif %}
+		</div>
+	{% endif %}
+{% endmacro %}

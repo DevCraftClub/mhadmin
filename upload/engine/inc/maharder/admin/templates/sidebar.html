@@ -1,34 +1,13 @@
+{% if _get.sites is null %}
+	{% set site = 'index' %}
+{% else %}
+	{% set site = _get.sites %}
+{% endif %}
+{% from "_macros/menu.twig" import item as items %}
+
 <div class="ui left sidebar vertical menu inverted adminSidebar">
 	<div class="ui accordion fluid inverted">
-		{% for link in links %}
-		{% if link.type == 'dropdown' %}
-		<div class="item" tabindex="0">
-			<a class="{% if loop.first %}active {%endif%}title"><i class="dropdown icon"></i>&nbsp;{{link.name}}</a>
-			<div class="{% if loop.first %}active {%endif%}content">
-				{% for child in link.children %}
-				{% if child.type == 'dropdown' %}
-				<div class="accordion">
-					<a class="title"><i class="dropdown icon"></i>&nbsp;{{child.name}}</a>
-					<div class="content">
-						{% for subchild in child.children %}
-						<a href="{{ subchild.href }}" class="item">{{ subchild.name }}</a>
-						{% endfor %}
-					</div>
-				</div>
-				{% elseif child.type == 'divider' %}
-				<div class="divider"></div>
-				{% else %}
-				<a href="{{ child.href }}" class="item">{{ child.name }}</a>
-				{% endif %}
-				{% endfor %}
-			</div>
-		</div>
-		{% elseif child.type == 'divider' %}
-		<div class="divider"></div>
-		{% else %}
-		<a href="{{ link.href }}" class="item">{{ link.name }}</a>
-		{% endif %}
-		{% endfor %}
+		{{ items(links, site, 'yes', 'no', 'firstLine') }}
 	</div>
-	<div class="item menuToggler link"><i class="icon close"></i>&nbsp;Закрыть меню</div>
+	<div class="item menuToggler link"><i class="icon close"></i>&nbsp;{% trans %}Закрыть меню{% endtrans %}</div>
 </div>

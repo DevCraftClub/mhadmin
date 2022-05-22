@@ -1,0 +1,69 @@
+{% import _self as macro %}
+
+{% macro input(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'text',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts,
+		tags: false
+	})
+	}}
+
+{% endmacro %}
+
+{% macro tags(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'text',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts,
+		tags: true
+	})
+	}}
+
+{% endmacro %}
+
+{% macro number(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'number',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts
+	})
+	}}
+
+{% endmacro %}
+
+{% macro hidden(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'hidden',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts
+	})
+	}}
+
+{% endmacro %}
+
+{% macro file(id, name, descr, opts, extra) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'file',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts,
+		extra: extra
+	})
+	}}
+
+{% endmacro %}

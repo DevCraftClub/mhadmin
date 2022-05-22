@@ -1,6 +1,28 @@
 <?php
 
-if( !defined( 'DATALIFEENGINE' ) ) {
+use Twig\TwigFilter;
+use jblond\TwigTrans\Translation;
+use Twig\Extension\DebugExtension;
+use MaHarder\Classes\DeclineExtension;
+use MaHarder\Classes\AdminUrlExtension;
+use MaHarder\Classes\MobileDetectExtension;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Twig\Environment;
+use Twig\Extra\Cache\CacheExtension;
+use Twig\Extra\Cache\CacheRuntime;
+use Twig\Extra\CssInliner\CssInlinerExtension;
+use Twig\Extra\Html\HtmlExtension;
+use Twig\Extra\Inky\InkyExtension;
+use Twig\Extra\Intl\IntlExtension;
+use Twig\Extra\Markdown\DefaultMarkdown;
+use Twig\Extra\Markdown\MarkdownExtension;
+use Twig\Extra\Markdown\MarkdownRuntime;
+use Twig\Extra\String\StringExtension;
+use Twig\Loader\FilesystemLoader;
+use Twig\RuntimeLoader\RuntimeLoaderInterface;
+
+if( !defined('DATALIFEENGINE' ) ) {
 	header( "HTTP/1.1 403 Forbidden" );
 	header ( 'Location: ../../../../' );
 	die( "Hacking attempt!" );
@@ -8,9 +30,7 @@ if( !defined( 'DATALIFEENGINE' ) ) {
 
 global $lang;
 
-const MH_ROOT = ENGINE_DIR . '/inc/maharder';
-const MH_ADMIN = MH_ROOT . '/admin';
-const ROOT = ROOT_DIR;
+require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 define('THIS_HOST', $_SERVER['HTTP_HOST']);
 define('THIS_SELF', $_SERVER['PHP_SELF']);
 define('URL', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http').'://'.THIS_HOST.'/engine/inc');
@@ -18,19 +38,76 @@ define('URL', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' 
 require_once DLEPlugins::Check(MH_ROOT.'/_includes/vendor/autoload.php');
 require_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/Admin.php');
 require_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/DeclineExtension.php');
+require_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/MobileDetectExtension.php');
+require_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/AdminUrlExtension.php');
 require_once DLEPlugins::Check(ENGINE_DIR.'/inc/include/functions.inc.php');
 require_once DLEPlugins::Check(ENGINE_DIR.'/skins/default.skin.php');
 require_once DLEPlugins::Check(ENGINE_DIR.'/data/config.php');
 
-$loader = new \Twig\Loader\FilesystemLoader(MH_ADMIN.'/templates');
+$loader = new FilesystemLoader(MH_ADMIN.'/templates');
 
-$mh_template = new \Twig\Environment($loader, [
-	'cache' => MH_ADMIN.'/_cache',
+$langCode = 'ru_RU';
+putenv("LC_ALL=$langCode.UTF-8");
+if (setlocale(LC_ALL, "$langCode.UTF-8", $langCode, 'ru') === false) {
+	echo sprintf('Языковой код %s не найден', $langCode);
+}
+
+$localDir = MH_ADMIN . '/_locales';
+if(!mkdir($localDir . '/' . $langCode, 0777, true) && !is_dir($localDir)) {
+	throw new \RuntimeException(sprintf('Папка "%s" не могла быть создана', $localDir));
+}
+
+bindtextdomain("MHAdmin", $localDir);
+textdomain("MHAdmin");
+
+$debug = true;
+
+$twigConfigDebug = [
+	'cache' => false,
 	'debug' => true,
-]);
+	'auto_reload' => true
+];
+$twigConfig = ['cache' => MH_ADMIN.'/_cache'];
 
-$mh_template->addExtension(new Bes\Twig\Extension\MobileDetectExtension());
+if($debug) $twigConfig = array_merge($twigConfig, $twigConfigDebug);
+
+$mh_template = new Environment($loader, $twigConfig);
+
+$filter = new TwigFilter(
+	'trans',
+	function ($context, $string) {
+		return Translation::transGetText($string, $context);
+	},
+	['needs_context' => true]
+);
+$mh_template->addFilter($filter);
+
+$mh_template->addExtension(new MobileDetectExtension());
 $mh_template->addExtension(new DeclineExtension());
+$mh_template->addExtension(new AdminUrlExtension());
+$mh_template->addExtension(new MarkdownExtension());
+$mh_template->addExtension(new CacheExtension());
+$mh_template->addExtension(new IntlExtension());
+$mh_template->addExtension(new CssInlinerExtension());
+$mh_template->addExtension(new StringExtension());
+$mh_template->addExtension(new HtmlExtension());
+$mh_template->addExtension(new InkyExtension());
+$mh_template->addExtension(new Translation());
+if($debug) $mh_template->addExtension(new DebugExtension());
+$mh_template->addRuntimeLoader(new class implements RuntimeLoaderInterface {
+	public function load($class) {
+		if (MarkdownRuntime::class === $class) {
+			return new MarkdownRuntime(new DefaultMarkdown());
+		}
+	}
+});
+$mh_template->addRuntimeLoader(new class implements RuntimeLoaderInterface {
+	public function load($class) {
+		if (CacheRuntime::class === $class) {
+			return new CacheRuntime(new TagAwareAdapter(new FilesystemAdapter()));
+		}
+	}
+});
 
 $dle_links_header = [
 	'config' => $lang['opt_hopt'],
@@ -55,7 +132,7 @@ $admin_links = [
 		'children' => []
 	],
 	[
-		'name' => 'Новости',
+		'name' => _('Новости'),
 		'href' => '',
 		'type' => 'dropdown',
 		'children' => [
@@ -106,19 +183,19 @@ foreach($options as $o => $a) {
 // Подссылки имеют тот же формат, что и сами ссылки
 $links = [
 	'dle' => [
-		'name' => 'Страницы DLE',
+		'name' => _('Страницы DLE'),
 		'href' => '',
 		'type' => 'dropdown',
 		'children' => $admin_links,
 	],
 	'index' => [
-		'name' => 'Главная',
+		'name' => _('Главная'),
 		'href' => THIS_SELF.'?mod='.$modInfo['module_code'],
 		'type' => 'link',
 		'children' => [],
 	],
 	'changelog' => [
-		'name' => 'История изменений',
+		'name' => _('История изменений'),
 		'href' => THIS_SELF.'?mod='.$modInfo['module_code'].'&sites=changelog',
 		'type' => 'link',
 		'children' => [],

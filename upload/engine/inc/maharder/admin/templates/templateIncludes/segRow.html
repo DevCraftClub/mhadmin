@@ -4,6 +4,7 @@
 		<small>{{descr|raw}}</small>
 	</div>
 	<div class="eight wide column">
+
 		{% if type == 'input' or type == 'text' %}
 			{{ include('templateIncludes/addInput.html', {
 					type: 'text',
@@ -69,7 +70,8 @@
 					name: id,
 					label: name,
 					value: variable[id]|raw,
-					editor:	true
+					editor:	true,
+					url: assets_url
 				})
 			}}
 		{% elseif type == 'checkbox'%}

@@ -1,0 +1,16 @@
+{% import _self as macro %}
+
+{% macro select(id, name, descr, opts, vals) %}
+
+	{{ include('templateIncludes/segRow.html', {
+			type: 'select',
+			id: id,
+			name: name,
+			descr: descr,
+			values: vals,
+			multiple: false,
+			variable: opts
+		})
+	}}
+
+{% endmacro %}

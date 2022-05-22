@@ -1,18 +1,18 @@
 <?php
 
-class DeclineExtension extends Twig_Extension {
-	public function __construct()
-	{
+namespace MaHarder\classes;
 
-	}
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+
+class DeclineExtension extends AbstractExtension {
+
 
 	public function getFunctions()
 	{
-		$functions = array(
-			new \Twig_SimpleFunction('decline', array($this, 'decline'))
+		return array(
+			new TwigFunction('decline', array($this, 'decline'))
 		);
-
-		return $functions;
 	}
 
 	public function decline($number, $titles)

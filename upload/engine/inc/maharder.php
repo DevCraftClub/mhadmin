@@ -2,11 +2,10 @@
 
 // заполняем важную и нужную инофрмацию о модуле
 
-use MaHarder\classes\Admin;
 
 $modInfo = [
 	'module_name' => 'MaHarder Assets',
-	'module_version' => '2.0.1',
+	'module_version' => '2.0.3',
 	'module_description' => 'Административная панель для моих разработок',
 	'module_code' => 'maharder',
 	'module_icon' => 'fad fa-robot',
@@ -19,7 +18,8 @@ $modInfo = [
 ];
 
 // Подключаем классы, функции и основные переменные
-require_once DLEPlugins::Check(__DIR__.'/maharder/admin/index.php');
+include_once DLEPlugins::Check(__DIR__.'/maharder/admin/index.php');
+include_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/Admin.php');
 
 $mh = new Admin();
 

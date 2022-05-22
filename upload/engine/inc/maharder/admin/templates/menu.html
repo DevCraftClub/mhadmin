@@ -3,51 +3,19 @@
 {% else %}
 	{% set site = _get.sites %}
 {% endif %}
+{% from "_macros/menu.twig" import item as items %}
 
-<div class="ui borderless main menu ">
+
+<div class="ui borderless main menu top_menu">
 
 	<div class="ui container">
 
 		<div class="header item firstLine">
 			<i class="{{module_icon}}"></i>&nbsp;&nbsp;
-			{{ module_name }}
+			{{ module_name|trans }}
 		</div>
 
-
-
-		{% for type, link in links %}
-			{% if link.type == 'dropdown' %}
-				<div class="ui dropdown item firstLine{% if site == type %} active{% endif %}" tabindex="0">
-					{{link.name}} <i class="dropdown icon"></i>
-					<div class="menu" tabindex="0">
-						{% for child in link.children %}
-						{% if child.type == 'dropdown' %}
-						<div class="item">
-							<i class="dropdown icon"></i>
-							{{ child.name }}
-							<div class="menu">
-								{% for subchild in child.children %}
-								<a href="{{ subchild.href }}" class="item">{{ subchild.name }}</a>
-								{% endfor %}
-							</div>
-						</div>
-						{% elseif child.type == 'divider' %}
-						<div class="divider"></div>
-						{% else %}
-						<a href="{{ child.href }}" class="item">{{ child.name }}</a>
-						{% endif %}
-						{% endfor %}
-					</div>
-				</div>
-			{% elseif child.type == 'divider' %}
-				<div class="divider"></div>
-			{% else %}
-				<a href="{{ link.href }}" class="item firstLine{% if site == type %} active{% endif %}">{{ link.name }}</a>
-			{% endif %}
-
-		{% endfor %}
-
-
+		{{ items(links, site, 'yes', 'no', 'firstLine') }}
 	</div>
 </div>
 
@@ -55,8 +23,8 @@
 	<div class="ui container">
 		<div class="header item">
 			<i class="icon {{module_icon}}"></i>&nbsp;&nbsp;
-			{{ module_name }}
+			{{ module_name|trans }}
 		</div>
-		<div class="item menuToggler link"><i class="fa fa-bars"></i>&nbsp;Открыть меню</div>
+		<div class="item menuToggler link"><i class="fa fa-bars"></i>&nbsp;{% trans %}Открыть меню{% endtrans %}</div>
 	</div>
 </div>

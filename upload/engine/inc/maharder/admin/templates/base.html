@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	{% block title %}<title>[MH] {{ title }} » {{ module_name }}</title>{% endblock %}
+	{% block title %}<title>{{ title|trans }} » {{ module_name|trans }}</title>{% endblock %}
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -23,15 +23,15 @@
 		<h1 class="ui header">
 			<i class="{{module_icon}}" style="float: left;margin-right: 2rem;"></i>
 			<div class="content" style="padding: 0">
-				{{ module_name }} v{{ module_version }}
+				{{ module_name|trans }} v{{ module_version }}
 			</div>
 		</h1>
-		<p style="margin-top: -18px;color: #afafaf;">{{ module_description }}</p>
+		<p style="margin-top: -18px;color: #afafaf;">{{ module_description|trans }}</p>
 	</div>
 
 	{% include 'menu.html' %}
 
-	<div class="ui container dimmed pusher">
+	<div class="ui container dimmed pusher" id="content">
 		<div class="ui segment">
 			{% include 'breadcrumb.html' %}
 		</div>
@@ -39,7 +39,7 @@
 			{% block content %}{% endblock %}
 		</div>
 
-		{{ include('templateIncludes/loader.html', {text: 'Подождите, идёт загрузка...'})}}
+		{{ include('templateIncludes/loader.html', {text: '{%trans%}Подождите, идёт загрузка...{%endtrans%}'})}}
 	</div>
 	{% include 'footer.html' %}
 	{% autoescape 'html' %}

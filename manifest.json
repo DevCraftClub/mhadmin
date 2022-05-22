@@ -1,5 +1,5 @@
 {
-	"version": "2.0.2 Beta",
+	"version": "2.0.3 Beta",
 	"status": "dev",
 	"dle": [
 		"13.x",
@@ -7,7 +7,7 @@
 		"15.x"
 	],
 	"php": [
-		"7.2"
+		"7.2.9"
 	],
 	"name": "MaHarder Assets",
 	"description": "Административная панель для DLE"

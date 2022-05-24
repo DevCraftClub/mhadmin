@@ -69,6 +69,7 @@ trait LogGenerator {
 					break;
 
 				case 'Debug':
+				case 'debug':
 				default:
 					$log_level = Level::Debug;
 			}
@@ -90,10 +91,11 @@ trait LogGenerator {
 	}
 
 	/**
-	 * @return bool|int
+	 * @return bool
 	 */
-	public function getLogs() {
-		return $this->logs;
+	public function getLogs()
+	: bool {
+		return (bool) $this->logs;
 	}
 
 	/**

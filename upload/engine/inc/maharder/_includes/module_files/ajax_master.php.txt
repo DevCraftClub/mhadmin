@@ -30,10 +30,8 @@
 	if (!$method) {
 		exit();
 	}
-	$save_con = $_POST['data'];
-	$data = [];
-
-	foreach ($save_con as $id => $d) {
+	parse_str($_POST['data'], $data);
+	foreach ($data as $id => $d) {
 		$name = $d['name'];
 		$value = $d['value'];
 		$value = htmlspecialchars($value);

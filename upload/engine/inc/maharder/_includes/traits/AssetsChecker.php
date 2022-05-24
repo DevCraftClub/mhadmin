@@ -3,7 +3,7 @@
 trait AssetsChecker {
 
 	/**
-	 * Массив с со всеми данными для обновления стилей и скриптов
+	 * Массив со всеми данными для обновления стилей и скриптов
 	 *
 	 * @var array
 	 */
@@ -17,7 +17,7 @@ trait AssetsChecker {
 	private string $assets_dir = ENGINE_DIR . '/inc/maharder/admin/assets';
 
 	/**
-	 * Файл с информацием и хешами вспомогательных файлов
+	 * Файл с информацией и хешами вспомогательных файлов
 	 *
 	 * @var string
 	 */
@@ -114,7 +114,7 @@ trait AssetsChecker {
 	 * @return array|false
 	 * @throws JsonException
 	 */
-	public function save_asset($data, $file) {
+	public function save_asset(array $data, string $file) {
 
 		if(!function_exists('format_bytes')) {
 			function format_bytes(int $size) {
@@ -161,12 +161,12 @@ trait AssetsChecker {
 	/**
 	 * Подгатавливает информацию о файле на локальном сервере и сохраняет в массиве с данными
 	 *
-	 * @param $arr //  Массив с файлами
-	 * @param $dir //  Исходная папка для поиска
+	 * @param $arr        //  Массив с файлами
+	 * @param string $dir //  Исходная папка для поиска
 	 *
 	 * @return void
 	 */
-	private function prepare_assets($arr, $dir = __DIR__) {
+	private function prepare_assets(array $arr, string $dir = __DIR__) {
 
 		foreach($arr as $key => $value) {
 			if(is_array($value)) {

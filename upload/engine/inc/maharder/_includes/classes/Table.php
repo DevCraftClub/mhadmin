@@ -26,7 +26,7 @@ class Table {
 		'inside' => [], 'after' => [],
 	];
 	/**
-	 * @var DateTime
+	 * @var ?string
 	 */
 	private ?string $now = null;
 
@@ -314,9 +314,9 @@ class Table {
 			'RESTRICT', 'CASCADE', 'SET NULL', 'NO ACTION', 'SET DEFAULT'
 		];
 		$ondelete = (isset($vars['on_delete']) && (in_array(strtoupper($vars['on_delete']), $opts)))
-			? " ON DELETE {$vars['on_delete']}" : '';
+			? " ON DELETE {$vars['on_delete']}" : 'NO ACTION';
 		$onupdate = (isset($vars['on_update']) && (in_array(strtoupper($vars['on_update']), $opts)))
-			? " ON UPDATE {$vars['on_update']}" : '';
+			? " ON UPDATE {$vars['on_update']}" : 'NO ACTION';
 
 		switch($type) {
 
@@ -629,7 +629,7 @@ class Table {
 	/**
 	 * Возвращает ключи в виде массива
 	 *
-	 * @param null $type //  Параметр возврата определённого типа, по умолчанию - все
+	 * @param string $type //  Параметр возврата определённого типа, по умолчанию - все
 	 *
 	 * @return array
 	 */

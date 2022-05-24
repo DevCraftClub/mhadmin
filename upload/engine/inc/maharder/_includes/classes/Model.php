@@ -239,38 +239,6 @@ class Model {
 	}
 
 	/**
-	 * Вытаскиваем данные из базы данных
-	 *
-	 * @param array $vars
-	 * @return array
-	 */
-	public function selectData(array $vars = [
-		'where' => [],
-		'limit' => null,
-		'order' => []
-	]): array {
-		try {
-
-			return $this->load_data($this->table->getName(), [
-				'table' => $this->table->getName(),
-				'where' => $vars['where'],
-				'limit' => $vars['limit'],
-				'order' => $vars['order']
-			]);
-
-		} catch (Exception $e) {
-			$report = [
-				'success' => false,
-				'error'   => $e->getMessage(),
-				'message' => 'ID не может быть пустым'
-			];
-			$this->generate_log($this->table->getModel(), 'selectData', $report);
-
-			return $report;
-		}
-	}
-
-	/**
 	 * Возвращает количество записей в базе данных
 	 *
 	 * @return int

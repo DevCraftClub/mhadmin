@@ -12,8 +12,6 @@
 // Do not change anything!
 //===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===
 
-use MaHarder\classes\Admin;
-
 // заполняем важную и нужную инофрмацию о модуле
 
 $modInfo = [
@@ -40,7 +38,7 @@ $mh = new Admin();
 switch ($_GET['sites']) {
 	// Главная страница
 	default:
-		require_once DLEPlugins::Check(MH_ADMIN.'/modules/%latin%/main.php');
+		require_once DLEPlugins::Check(MH_ADMIN.'/modules/' . $modInfo['module_code'] . '/main.php');
 		break;
 }
 

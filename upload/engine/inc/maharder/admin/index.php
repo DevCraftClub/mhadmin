@@ -60,7 +60,7 @@ if(!mkdir($localDir . '/' . $langCode, 0777, true) && !is_dir($localDir)) {
 bindtextdomain("MHAdmin", $localDir);
 textdomain("MHAdmin");
 
-$debug = true;
+$debug = false;
 
 $twigConfigDebug = [
 	'cache' => false,

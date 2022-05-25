@@ -21,11 +21,7 @@ $modInfo = [
 	'module_code' => '%latin%',
 	'module_icon' => '%icon%',
 	'site_link' => '%link%',
-	'docs_link' => '%docs%',
-	'dle_config' => $config,
-	'dle_login_hash' => $dle_login_hash,
-	'_get' => filter_input_array(INPUT_GET),
-    '_post' => filter_input_array(INPUT_POST)
+	'docs_link' => '%docs%'
 ];
 
 // Подключаем классы, функции и основные переменные

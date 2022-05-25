@@ -5,16 +5,13 @@
 
 $modInfo = [
 	'module_name' => 'MaHarder Assets',
-	'module_version' => '2.0.3',
+	'module_version' => '2.0.4',
 	'module_description' => 'Административная панель для моих разработок',
 	'module_code' => 'maharder',
 	'module_icon' => 'fad fa-robot',
 	'site_link' => 'https://devcraft.club/downloads/maharder-assets.4/',
 	'docs_link' => 'https://devcraft.club/articles/maharder-assets.10/',
 	'dle_config' => $config,
-	'dle_login_hash' => $dle_login_hash,
-	'_get' => filter_input_array(INPUT_GET),
-	'_post' => filter_input_array(INPUT_POST)
 ];
 
 // Подключаем классы, функции и основные переменные

@@ -3,7 +3,7 @@
 	{% set first_class = _fclass|default('') %}
 	{% set first = _first|default('yes') %}
 	{% set child = _child|default('no') %}
-	{% set site = _site|default('') %}
+	{% set site = _site|default('index') %}
 
 	{% for type, link in items %}
 		{% if link.type == 'dropdown' %}

@@ -8,7 +8,7 @@
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
 	<filedelete>1</filedelete>
-	<needplugin>MaHarder Assets</needplugin>
+	<needplugin></needplugin>
 	<mnotice>0</mnotice>
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)

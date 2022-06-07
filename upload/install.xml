@@ -3,7 +3,7 @@
 	<name>MaHarder Assets</name>
 	<description>Универсальная административная панель для модификаций от MaHarder</description>
 	<icon></icon>
-	<version>2.0.4</version>
+	<version>2.0.5</version>
 	<dleversion>13</dleversion>
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
@@ -12,11 +12,11 @@
 	<mnotice>0</mnotice>
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MaHarder Assets v2.0.4', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.4';]]></mysqlupgrade>
+VALUES('maharder', 'MaHarder Assets v2.0.5', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.5';]]></mysqlupgrade>
 	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MaHarder Assets v2.0.4', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.4';]]></mysqlenable>
+VALUES('maharder', 'MaHarder Assets v2.0.5', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.5';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
 	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
 	<phpinstall><![CDATA[]]></phpinstall>
@@ -50,6 +50,24 @@ reset($objects);
 			<searchcode><![CDATA[function build_css($css) {
 	global $config]]></searchcode>
 			<replacecode><![CDATA[, $icons_replace]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
+			<replacecode><![CDATA[
+
+	include_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/classes/Ajax.php');
+	$mh_ajax = new Ajax();
+	$data = !$cache_areas ? 'all' : $cache_areas;
+	$mh_ajax->clear_cache($data);]]></replacecode>
+			<searchcount>1</searchcount>
+			<enabled>1</enabled>
+		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[listdir( ENGINE_DIR . '/cache/system/plugins' );]]></searchcode>
+			<replacecode><![CDATA[
+	listdir( ENGINE_DIR . '/inc/maharder/_cache' );]]></replacecode>
+			<searchcount>1</searchcount>
 			<enabled>1</enabled>
 		</operation>
 	</file>
@@ -134,6 +152,18 @@ JS;
 
 }
 ]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
+	</file>
+	<file name="engine/modules/functions.php">
+		<operation action="after">
+			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
+			<replacecode><![CDATA[
+
+	include_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/classes/Ajax.php');
+	$mh_ajax = new Ajax();
+	$data = !$cache_areas ? 'all' : $cache_areas;
+	$mh_ajax->clear_cache($data);]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>

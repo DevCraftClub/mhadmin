@@ -12,10 +12,6 @@
   ~  @copyright (c) 2022, Maxim Harder
   -->
 
-
-{{dump(_server)}}
-{{dump(dle_login_hash)}}
-
 <form class="ui form segment">
 	<div class="ui bottom attached tab active" data-tab="main">
 		<h4 class="ui dividing header">Настройки</h4>
@@ -23,54 +19,63 @@
 			{% autoescape 'html' %}
 
 			{{ include('templateIncludes/segRow.html', {
-			id: 'list_count',
-			name: 'Количество объектов',
-			descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д.. Это глобальное
-			значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
-			отображаемых новостей на страницу" => ' ~ dle_config.news_number ~ '.',
-			type: 'number',
-			variable: settings
+				id: 'list_count',
+				name: 'Количество объектов',
+				descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д.. Это глобальное
+				значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
+				отображаемых новостей на страницу" => ' ~ dle_config.news_number ~ '.',
+				type: 'number',
+				variable: settings
 			})
 			}}
 
 			{{ include('templateIncludes/segRow.html', {
-			id: 'logs',
-			name: 'Включить логирование?',
-			descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/logs</b>',
-			type: 'checkbox',
-			variable: settings
+				id: 'logs',
+				name: 'Включить логирование?',
+				descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/logs</b>',
+				type: 'checkbox',
+				variable: settings
 			})
 			}}
 
 			{{ include('templateIncludes/segRow.html', {
-			id: 'icons',
-			name: 'Заменять иконки?',
-			descr: 'При включении, в админпанеле DLE будут заменены старые иконки на обновлённые',
-			type: 'checkbox',
-			variable: settings
+				id: 'icons',
+				name: 'Заменять иконки?',
+				descr: 'При включении, в админпанеле DLE будут заменены старые иконки на обновлённые',
+				type: 'checkbox',
+				variable: settings
 			})
 			}}
 
 			{{ include('templateIncludes/segRow.html', {
-			id: 'cache_icon',
-			name: 'Добавить кнопку с очищением кеша?',
-			descr: 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша
-			системы',
-			type: 'checkbox',
-			variable: settings
+				id: 'cache_icon',
+				name: 'Добавить кнопку с очищением кеша?',
+				descr: 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша
+				системы',
+				type: 'checkbox',
+				variable: settings
 			})
 			}}
 
 			{{ include('templateIncludes/segRow.html', {
-			id: 'theme',
-			name: 'Тема оформления админки',
-			descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу',
-			type: 'select',
-			variable: settings,
-			values: {
-			light: 'Светлая',
-			dark: 'Тёмная',
-			}
+				id: 'cache_timer',
+				name: 'Время хранения кеша',
+				descr: 'Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.<br><b><i>По умолчанию: 60 минут</i></b>',
+				type: 'number',
+				variable: settings
+			})
+			}}
+
+			{{ include('templateIncludes/segRow.html', {
+				id: 'theme',
+				name: 'Тема оформления админки',
+				descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу',
+				type: 'select',
+				variable: settings,
+				values: {
+					light: 'Светлая',
+					dark: 'Тёмная',
+				}
 			})
 			}}
 

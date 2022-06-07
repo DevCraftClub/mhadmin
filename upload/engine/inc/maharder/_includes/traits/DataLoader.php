@@ -65,6 +65,28 @@ trait DataLoader {
 	}
 
 	/**
+	 * Функция по созданию аббревиатуры для базы данных
+	 *
+	 * @link https://stackoverflow.com/questions/15830222/text-abbreviation-from-a-string-in-php
+	 * @param $string
+	 * @param $id
+	 * @param $l
+	 *
+	 * @return string
+	 */
+	protected static function abbr($string, $id = null, $l = 2){
+		$results = ''; // empty string
+		$vowels = array('a', 'e', 'i', 'o', 'u', 'y'); // vowels
+		preg_match_all('/[A-Z][a-z]*/', ucfirst($string), $m); // Match every word that begins with a capital letter, added ucfirst() in case there is no uppercase letter
+		foreach($m[0] as $substring){
+			$substring = str_replace($vowels, '', strtolower($substring)); // String to lower case and remove all vowels
+			$results .= preg_replace('/([a-z]{'.$l.'})(.*)/', '$1', $substring); // Extract the first N letters.
+		}
+		$results .= '_'. str_pad($id, 4, 0, STR_PAD_LEFT); // Add the ID
+		return $results;
+	}
+
+	/**
 	 * Функция создания кеша запросов,
 	 * чтобы сократить кол-во обращений к базе данных
 	 *
@@ -96,7 +118,8 @@ trait DataLoader {
 		$vars = [
 			'table' => null, 'sql' => null, 'where' => [], 'selects' => [], 'order' => [], 'limit' => null
 		];
-		$vars = array_merge($vars, self::nameArgs($_vars));
+		$_vars = self::nameArgs($_vars);
+		$vars = array_replace($vars, $_vars);
 
 		$where = [];
 		$order = [];
@@ -121,9 +144,19 @@ trait DataLoader {
 			$order[] = "{$n} {$sort}";
 		}
 
-		$file_name .= '_' . md5(md5($file_suffix));
+		if(!empty($vars['sql'])) $file_suffix = $vars['sql'];
 
-		if(!file_exists($this->getCacheFolder() . "/{$name}/{$file_name}.php")) {
+		$file_name .= '_' . md5(md5($file_suffix));
+		$file_path = $this->getCacheFolder() . "/{$name}/{$file_name}.php";
+
+		if(file_exists($file_path)) {
+			$file_created = filectime($file_path);
+			$now = time();
+			$mh_config = $this->getConfig('maharder');
+			if(($now - $file_created) >= ($mh_config['cache_timer'] * 60)) @unlink($file_path);
+		}
+
+		if(!file_exists($file_path)) {
 			$data = [];
 			$prefix = $this->getPrefix();
 
@@ -205,31 +238,26 @@ trait DataLoader {
 	 */
 	public function clear_cache($type = 'all')
 	: void {
-		$type = totranslit($type, true, false);
 
 		$dirname = $this->cache_folder;
-		if($type !== 'all') $dirname .= '/' . $type;
-		foreach(self::dirToArray($dirname) as $i => $name) {
-			try {
-				if(is_array($name)) {
-					@rmdir($dirname . DIRECTORY_SEPARATOR . $i);
-				} else @unlink($dirname . DIRECTORY_SEPARATOR . $name);
-			} catch(Exception $e) {
-				$this->generate_log('maharder', 'clear_cache', $e->getMessage());
+		if($type !== 'all') {
+			if(is_array($type)) {
+				foreach($type as $key) $this->clear_cache($key);
+			} else {
+				$type = totranslit($type, true, false);
+				$dirname .= '/' . $type;
+				foreach(self::dirToArray($dirname) as $i => $name) {
+					try {
+						if(is_array($name)) {
+							@rmdir($dirname . DIRECTORY_SEPARATOR . $i);
+						} else @unlink($dirname . DIRECTORY_SEPARATOR . $name);
+					} catch(Exception $e) {
+						$this->generate_log('maharder', 'clear_cache', $e->getMessage());
+					}
+				}
 			}
 		}
 
-		if($type === 'all') {
-			try {
-				if(function_exists('clear_all_caches')) clear_all_caches(); elseif(function_exists(
-					'clear_cache'
-				)) clear_cache();
-			} catch(Exception $e) {
-				if(function_exists('clear_cache')) clear_cache();
-			}
-		} else {
-			if(function_exists('clear_cache')) clear_cache();
-		}
 	}
 
 	/**
@@ -335,9 +363,7 @@ trait DataLoader {
 			}
 		}
 
-		return array_unique(
-			array_filter($returnArr, static function($value) { return !is_null($value) && $value !== ''; })
-		);
+		return array_filter($returnArr, static function($value) { return !is_null($value) && $value !== ''; });
 	}
 
 	/**

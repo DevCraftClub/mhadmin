@@ -2,6 +2,7 @@
 
 namespace MaHarder\classes;
 
+use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
@@ -60,13 +61,35 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 				: self::getThisSelf() . "?{self::getServerData()['QUERY_STRING']}");
 	}
 
-	public function getGlobals()
-	: array {
+	public function parseUrl(string $url) : string {
+		$parts = parse_url(trim(str_replace(['&amp;', '\t', '\n'], ['&', '', ''], $url)));
+		parse_str($parts['query'], $_url_data);
+
+		foreach ($_url_data as $param => $value) {
+			$_url_data[$param] = $value;
+		}
+
+		$url_path = '';
+		if(isset($parts['scheme'])) $url_path .= "{$parts['scheme']}://";
+		if(isset($parts['host'])) $url_path .= $parts['host'];
+		if(isset($parts['path'])) $url_path .= $parts['path'];
+
+		return "{$url_path}?" . http_build_query($_url_data);
+	}
+
+	public function getGlobals() : array {
 
 		return [
 			'assets_url'     => self::getAssetsUrl(), 'plugin_url' => self::getModulesUrl(),
 			'dle_login_hash' => self::getUserHash(), 'dle_config' => self::getDleConfig(),
 			'_server'        => self::getServerData(), '_get' => self::getGetParams(), '_post' => self::getPostParams(),
+
+		];
+	}
+
+	public function getFunctions() {
+		return [
+			new TwigFunction('parse_url', [$this, 'parseUrl'])
 		];
 	}
 }

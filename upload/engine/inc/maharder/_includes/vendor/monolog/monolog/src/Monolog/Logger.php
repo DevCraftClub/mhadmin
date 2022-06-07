@@ -91,9 +91,9 @@ class Logger implements LoggerInterface, ResettableInterface
      *
      * @var int
      */
-    public const API = 2;
+    public const API   = 2;
 
-    /**
+	/**
      * This is a static variable and not a constant to serve as an extension point for custom levels
      *
      * @var array<int, string> $levels Logging levels with the levels as key

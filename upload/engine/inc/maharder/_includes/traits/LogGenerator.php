@@ -1,4 +1,9 @@
 <?php
+
+if ( ! class_exists('Monolog\Logger')) {
+	include_once ENGINE_DIR . '/inc/maharder/_includes/vendor/autoload.php';
+}
+
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\ChromePHPHandler;
 use Monolog\Logger;
@@ -43,41 +48,41 @@ trait LogGenerator {
 
 			switch ($type) {
 				case 'error':
-					$log_level = Level::Error;
+					$log_level = Logger::ERROR;
 					break;
 
 				case 'info':
-					$log_level = Level::Info;
+					$log_level = Logger::INFO;
 					break;
 
 				case 'notice':
-					$log_level = Level::Notice;
+					$log_level = Logger::NOTICE;
 					break;
 
 				case 'warn':
 				case 'warning':
-					$log_level = Level::Warning;
+					$log_level = Logger::WARNING;
 					break;
 
 				case 'crit':
 				case 'critical':
-					$log_level = Level::Critical;
+					$log_level = Logger::CRITICAL;
 					break;
 
 				case 'alert':
-					$log_level = Level::Alert;
+					$log_level = Logger::ALERT;
 					break;
 
 				case 'Debug':
 				case 'debug':
 				default:
-					$log_level = Level::Debug;
+					$log_level = Logger::DEBUG;
 			}
 
 			$logger->pushHandler(new StreamHandler($file, $log_level));
-			$logger->pushHandler(new FirePHPHandler());
-			$logger->pushHandler(new ChromePHPHandler());
-			$logger->pushHandler(new BrowserConsoleHandler());
+			$logger->pushHandler(new FirePHPHandler($log_level));
+			$logger->pushHandler(new ChromePHPHandler($log_level));
+			$logger->pushHandler(new BrowserConsoleHandler($log_level));
 
 			// You can now use your logger
 			$logger->info($type, [

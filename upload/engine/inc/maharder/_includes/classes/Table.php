@@ -1,5 +1,7 @@
 <?php
 
+require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+
 require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/LogGenerator.php');
 require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/DataLoader.php');
 
@@ -19,6 +21,7 @@ class Table {
 	private ?string $name            = null;
 	private ?string $id              = null;
 	private ?string $migrations_path = null;
+	private bool $exists = false;
 	/**
 	 * @var array
 	 */
@@ -33,16 +36,18 @@ class Table {
 	/**
 	 * Конструктор
 	 *
-	 * @param string         $id       //  Название ID колонки
-	 * @param string         $name     //  Название таблицы
-	 * @param string         $model    //  Название модели
-	 * @param array          $vars     //  Параметры колонок
-	 * @param array          $col_keys //  Параметры ключей таблицы
+	 * @param string      $id       //  Название ID колонки
+	 * @param string      $name     //  Название таблицы
+	 * @param string      $model    //  Название модели
+	 * @param array       $vars     //  Параметры колонок
+	 * @param array       $col_keys //  Параметры ключей таблицы
 	 * @param string|null $now      //  Параметр текущей даты и времени
 	 *
 	 * @throws \JsonException
 	 */
-	public function __construct(string $id, string $name, string $model, array $vars, array $col_keys, string $now = null) {
+	public function __construct(
+		string $id, string $name, string $model, array $vars, array $col_keys, string $now = null
+	) {
 		$this->setId($id);
 		$this->setName($name);
 		$this->setModel($model);
@@ -110,6 +115,8 @@ class Table {
 				])) {
 					$attributes['type'] = 'tinyint';
 					$attributes['limit'] = 1;
+				} else {
+					if(!isset($attributes['limit']))$attributes['limit'] = 11;
 				}
 				$fields = [
 					'limit', 'default', 'unique', 'auto_inc',
@@ -229,12 +236,12 @@ class Table {
 
 		$keys = is_array($table_col) ? implode(',', $table_col) : $table_col;
 
-		$indexes = $type === 'inside'
+		$indexes = ($type === 'inside')
 			? []
-			: $this->load_data("{$table_name}_indexes", [
+			: ($this->exists ? $this->load_data("{$table_name}_indexes", [
 				'table' => $table_name, 'sql' => "SHOW INDEXES FROM {$table_name} WHERE {$where}",
 				'where' => ['Column_name' => $table_col]
-			]);
+			]) : []);
 
 		$name = strtolower($name);
 		$exists = false;
@@ -258,7 +265,7 @@ class Table {
 					]);
 					return '';
 				}
-				$vars['target_table'] = $this->getPrefix() . $vars['target_table'];
+				$vars['target_table'] = $this->getPrefix() . '_' . $vars['target_table'];
 				if(empty($vars['target_column'])) {
 					$this->generate_log('Table', 'setKey', [
 						'Параметр target_column в массиве \$vars либо пустой, либо отсутствует', $vars
@@ -309,14 +316,21 @@ class Table {
 		string $type, bool $exists, string $table, string $key_type, string $key_name, string $keys, array ...$vars
 	)
 	: string {
+
+		$vars = self::nameArgs($vars);
+
 		$param_string = '';
 		$opts = [
 			'RESTRICT', 'CASCADE', 'SET NULL', 'NO ACTION', 'SET DEFAULT'
 		];
-		$ondelete = (isset($vars['on_delete']) && (in_array(strtoupper($vars['on_delete']), $opts)))
-			? " ON DELETE {$vars['on_delete']}" : 'NO ACTION';
-		$onupdate = (isset($vars['on_update']) && (in_array(strtoupper($vars['on_update']), $opts)))
-			? " ON UPDATE {$vars['on_update']}" : 'NO ACTION';
+		$ondelete = " ON DELETE " . ((isset($vars['on_delete']) && (in_array(strtoupper($vars['on_delete']), $opts)))
+			? $vars['on_delete'] : 'NO ACTION');
+		$onupdate = " ON UPDATE " . ((isset($vars['on_update']) && (in_array(strtoupper($vars['on_update']), $opts)))
+			? $vars['on_update'] : 'NO ACTION');
+
+		if(!preg_grep('/(' . $this->getPrefix() .'_)/', explode("\n", $table))) {
+			$table = $this->getPrefix() . '_' . $table;
+		}
 
 		switch($type) {
 
@@ -356,7 +370,7 @@ class Table {
 				if($exists) $param_string .= $this->keyAction(
 					'delete', $exists, $table, $key_type, $key_name, $keys, ...$vars
 				);
-				$param_string .= $this->keyAction('create', $exists, $table, $key_type, $key_name, $keys, ...$vars);
+				$param_string .= $this->keyAction('create', false, $table, $key_type, $key_name, $keys, ...$vars);
 				break;
 		}
 
@@ -431,18 +445,20 @@ class Table {
 			];
 			file_put_contents($info_file, json_encode($mig_data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
 		} else {
+			$this->exists = true;
 			$mig_data = json_decode(file_get_contents($info_file), true, 512, JSON_THROW_ON_ERROR);
 			$file = $dir . '/' . end($migrations);
 		}
-		if($mig_data['file'] !== $file) {
 
-			$mig_ch = $this->generateMigration($file);
-			if($mig_ch['changes']) {
-				$mig_data['last_migration'] = $this->getNow();
-				$mig_data['file'] = $mig_ch['file'];
-				file_put_contents($info_file, json_encode($mig_data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
-			}
+		$mig_ch = $this->generateMigration($file);
+
+
+		if($mig_ch['changes']) {
+			$mig_data['last_migration'] = $this->getNow();
+			$mig_data['file'] = $mig_ch['file'];
+			file_put_contents($info_file, json_encode($mig_data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
 		}
+
 
 	}
 
@@ -461,15 +477,15 @@ class Table {
 		$table = $this->prepareTable();
 		preg_match('/^.+(\d{3,})_.+\.sql$/', $file, $output_array);
 		$last_mig_id = (int)$output_array[1];
-		$next_mig_id = isset($output_array[1]) ? $last_mig_id+1 : $last_mig_id;
+		$next_mig_id = isset($output_array[1]) ? $last_mig_id + 1 : $last_mig_id;
 		$new_mig_id = str_pad($next_mig_id, 3, '0', STR_PAD_LEFT);
 
 		$table_name = "{$this->getPrefix()}_{$this->getName()}";
 		$sql = [];
 		$_file = [$new_mig_id];
 
-		$table_check = $db->super_query("SHOW TABLES LIKE '{$table_name}'");
-		if(count($table_check) === 0 || $last_mig_id == 0) {
+		$table_check = $db->query("SHOW TABLES LIKE '{$table_name}'");
+		if($table_check->num_rows === 0 || $last_mig_id == 0) {
 			$_file[] = 'init';
 			$sql_temp = "create table {$table_name} (";
 			$sql_arr = [];
@@ -477,42 +493,52 @@ class Table {
 				$sql_arr[] = $this->generate_column_sql($t);
 			}
 			$sql_arr = array_unique(array_merge($sql_arr, $this->getColKeys('inside')));
-			$sql_temp .= implode(',', $sql_arr);
+			$sql_temp .= implode(',' . PHP_EOL, $sql_arr);
 			$sql_temp .= ") ENGINE=InnoDB;";
-			$sql_temp .= implode('', $this->getColKeys('after'));
 			$sql[] = $sql_temp;
+			$sql[] = implode('', $this->getColKeys('after'));
 
 		} else {
 			foreach($table as $t) {
-				$col_check = $db->query("SHOW COLUMNS FROM `{$table_name}` LIKE '{$t['name']}';");
-				if(!(bool)$col_check->num_rows()) {
+				$sql_check = "SHOW COLUMNS FROM `{$table_name}` LIKE '{$t['name']}';";
+				$col_check = $db->query($sql_check);
+				if($col_check->num_rows === 0) {
 					$_file[] = "add_column_{$t['name']}";
 					$sql[] = "ALTER TABLE {$table_name} ADD {$t['name']}" . $this->generate_column_sql($t) . ';';
 				} else {
-					$_file[] = "modify_column_{$t['name']}";
-					$sql[] = "ALTER TABLE {$table_name} MODIFY {$t['name']}" . $this->generate_column_sql($t) . ';';
+					$col_arr = $db->get_array($col_check);
+					preg_match('/([^()]*)/', $col_arr['Type'], $type_array);
+					$type = $type_array[0];
+					if($type !== $t['type']) {
+						$_file[] = "modify_column_{$t['name']}";
+						$sql[] = "ALTER TABLE {$table_name} MODIFY {$t['name']}" . $this->generate_column_sql($t) . ';';
+					}
 				}
 			}
 		}
 
+		$changes = false;
+
 		$file_name = substr(implode('_', $_file), 0, 100);
-		$dir = is_file($file) ? dirname($file) : $file;
+		$dir = file_exists($file_name) ? dirname($file) : ((is_dir($file)) ? $file : dirname($file));
 		$file_path = str_replace('//', '/', "{$dir}/{$file_name}.sql");
 		$temp_file_path = str_replace('//', '/', "{$dir}/_temp.sql");
-		$sql_data = implode('\n\r', $sql);
-		file_put_contents($temp_file_path, $sql_data);
-		$changes = false;
-		if(hash_file('md5', $temp_file_path) !== hash_file('md5', $file)) {
-			file_put_contents($file_path, $sql_data);
 
-			if(count($table_check) === 0 || $last_mig_id === 0) {
-				foreach($sql as $q) $db->query($q);
+		if(count($sql) > 0) {
+			$sql_data = implode(PHP_EOL, $sql);
+			file_put_contents($temp_file_path, $sql_data);
+			if(hash_file('md5', $temp_file_path) !== hash_file('md5', $file)) {
+				file_put_contents($file_path, $sql_data);
+
+				if($table_check->num_rows === 0 || $last_mig_id === 0) {
+					foreach($sql as $q) $db->query($q);
+				}
+
+				$changes = true;
+
 			}
-
-			$changes = true;
-
+			@unlink($temp_file_path);
 		}
-		@unlink($temp_file_path);
 
 		return [
 			'changes' => $changes, 'file' => $file_path
@@ -662,7 +688,8 @@ class Table {
 	 *
 	 * @return string
 	 */
-	public function getNow() : string {
+	public function getNow()
+	: string {
 		if($this->now === null) $this->setNow();
 		return $this->now;
 	}
@@ -677,8 +704,6 @@ class Table {
 		$this->now = date("Y-m-d H:i:s");
 		if($now !== null) $this->now = $now;
 	}
-
-
 
 
 }

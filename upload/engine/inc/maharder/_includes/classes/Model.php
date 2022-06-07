@@ -1,5 +1,7 @@
 <?php
 
+require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+
 require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/LogGenerator.php');
 require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/DataLoader.php');
 require_once DLEPlugins::Check(__DIR__ . '/Table.php');
@@ -98,7 +100,7 @@ class Model {
 			$db->query($sql_insert);
 			$id = $db->insert_id();
 
-			$this->clear_cache($this->table->getName());
+			$this->clear_cache($this->table->getModel());
 
 			return $this->getSingle($id);
 
@@ -127,7 +129,7 @@ class Model {
 
 			$db->query('DELETE FROM ' . PREFIX . "_{$this->table->getName()} WHERE {$this->table->getId()} = {$id}");
 
-			clear_cache();
+			$this->clear_cache();
 
 			return ['success' => true];
 
@@ -265,6 +267,14 @@ class Model {
 			'table'   => $this->table->getName(),
 			'sql' => $query,
 		]);
+	}
+
+	public function getTableName() : string {
+		return $this->table->getName();
+	}
+
+	public function getTableId() : string {
+		return $this->table->getId();
 	}
 
 }

@@ -12,14 +12,18 @@ if (!mkdir($concurrentDirectory = ENGINE_DIR . '/inc/maharder/_config', 0777, tr
 	&& !is_dir(
 		$concurrentDirectory
 	)) {
-	$mh_admin->generate_log('maharder', 'save_setting', serialize(sprintf('Папка "%s" не была создана',
-		$concurrentDirectory)));
+	$mh_admin->generate_log('maharder', 'save_setting', sprintf('Папка "%s" не была создана',
+		$concurrentDirectory));
 }
 $file = $concurrentDirectory.'/'.$_POST['module'].'.json';
 
 
 if (empty($data['list_count']) || !isset($data['list_count'])) {
 	$data['list_count'] = $config['news_number'];
+}
+
+if (empty($data['cache_timer']) || !isset($data['cache_timer'])) {
+	$data['cache_timer'] = 60;
 }
 
 

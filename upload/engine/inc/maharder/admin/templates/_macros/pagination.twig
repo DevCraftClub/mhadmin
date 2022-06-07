@@ -1,13 +1,15 @@
 
 {% macro urlMaker(page, page_name) %}
-	{{ plugin_url }}?{{ page_name|default('page') }}={{ page }}
+	{{ plugin_url }}&{{ page_name|default('page') }}={{ page }}
 {% endmacro %}
 
 {% macro page(page, page_name, content) %}
-	{% set inhalt = content|raw|default(page) %}
-
 	{% autoescape 'html' %}
-		<a href="{{ _self.urlMaker(page, page_name) }}" class="item">
+
+		{% set inhalt = content|raw|default(page) %}
+		{% set link = parse_url(_self.urlMaker(page, page_name)) %}
+
+		<a href="{{ link }}" class="item">
 			{% if inhalt == "left" or inhalt == "right" %}
 				<i class='chevron circle {{ inhalt }} icon'></i>
 			{% else %}
@@ -45,7 +47,7 @@
 				{% endfor %}
 			{% endif %}
 
-			<a href="{{ _self.urlMaker(current, pg_name) }}" class="active item">
+			<a href="{{ parse_url(_self.urlMaker(current, pg_name)) }}" class="active item">
 				{{ current }}
 			</a>
 

@@ -31,6 +31,13 @@ class Model {
 	public function __construct(string $model_name, string $table_name, string $id_name, array $vars, array $table_keys = []) {
 		$this->table = new Table($id_name, $table_name, $model_name, $vars, $table_keys);
 		$this->table->checkMigrations();
+
+		$mh_settings = $this->getConfig('maharder');
+		$this->setLogs(isset($mh_settings['logs']));
+		$this->setTelegramType($mh_settings["logs_telegram_type"]);
+		$this->setTelegramBot($mh_settings["logs_telegram_api"]);
+		$this->setTelegramChannel($mh_settings["logs_telegram_channel"]);
+		$this->setTelegramSend(isset($mh_settings["logs_telegram"]));
 	}
 
 

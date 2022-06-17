@@ -1,3 +1,7 @@
+{% from "_macros/checkbox.twig" import checkbox %}
+{% from "_macros/input.twig" import input, number %}
+{% from "_macros/select.twig" import multi %}
+
 {% extends 'base.html' %} {% block content %}
 
 <!--
@@ -32,11 +36,25 @@
 			{{ include('templateIncludes/segRow.html', {
 				id: 'logs',
 				name: 'Включить логирование?',
-				descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/logs</b>',
+				descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/_logs</b>',
 				type: 'checkbox',
 				variable: settings
 			})
 			}}
+
+			{{ checkbox('logs_telegram', 'Отправлять логи в телеграм?', 'При включённом параметре и заполненных полях ниже - скрипт будет отправлять логи в ваш телеграм канал', settings) }}
+			{{ input('logs_telegram_api', 'API ключ бота', 'API ключ бота, который можно получить у <a href="https://t.me/BotFather" target="_blank">@BothFather</a>, более детальная информация <a href="https://readme.devcraft.club/latest/dev/telegramposting/bot/" target="_blank">здесь</a>.', settings) }}
+			{{ input('logs_telegram_channel', 'Канал телеграма', 'Как получить ID канала можно узнать <a href="https://readme.devcraft.club/latest/dev/telegramposting/bot/#_5" target="_blank">здесь</a>.', settings) }}
+			{{ multi('logs_telegram_type', 'Тип оповещений', 'Вариация оповещений в канал:<div class="ui bulleted list">
+			<div class="item"><b>Все</b> - Отправляет буквально все отчёты и логи в канал</div>
+			<div class="item"><b>Ошибки</b> - Отправляет только ошибки в канал</div>
+			<div class="item"><b>Информация</b> - Отправляет только информационные отчёты в канал</div>
+			<div class="item"><b>Уведомления</b> - Отправляет только уведомления в канал</div>
+			<div class="item"><b>Предупреждения</b> - Отправляет только предупреждения в канал</div>
+			<div class="item"><b>Критические ошибки</b> - Отправляет только критические ошибки в канал</div>
+			<div class="item"><b>Отладка</b> - Отправляет только информацию об отладке в канал</div>
+		</div><br>
+			Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.<br>Если выбрано "Все", то остальные выбранные параметры игнорируются', settings, {'all': "Все",'error': "Ошибки",'info': "Информация",'notice': "Уведомления",'warning': "Предупреждения",'critical': "Критические ошибки",'debug': "Отладка"}) }}
 
 			{{ include('templateIncludes/segRow.html', {
 				id: 'icons',

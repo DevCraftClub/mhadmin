@@ -61,11 +61,12 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 				: self::getThisSelf() . "?{self::getServerData()['QUERY_STRING']}");
 	}
 
-	public function parseUrl(string $url) : string {
+	public function parseUrl(string $url)
+	: string {
 		$parts = parse_url(trim(str_replace(['&amp;', '\t', '\n'], ['&', '', ''], $url)));
 		parse_str($parts['query'], $_url_data);
 
-		foreach ($_url_data as $param => $value) {
+		foreach($_url_data as $param => $value) {
 			$_url_data[$param] = $value;
 		}
 
@@ -77,7 +78,8 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 		return "{$url_path}?" . http_build_query($_url_data);
 	}
 
-	public function getGlobals() : array {
+	public function getGlobals()
+	: array {
 
 		return [
 			'assets_url'     => self::getAssetsUrl(), 'plugin_url' => self::getModulesUrl(),

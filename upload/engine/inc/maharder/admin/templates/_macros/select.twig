@@ -14,3 +14,19 @@
 	}}
 
 {% endmacro %}
+
+{% macro multi(id, name, descr, opts, vals) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'select',
+		id: id,
+		name: name,
+		descr: descr,
+		values: vals,
+		multiple: true,
+		variable: opts
+	})
+	}}
+
+{% endmacro %}
+

@@ -116,13 +116,16 @@ class Admin {
 		$this->setVar('js', $this->htmlStatic($this->jsArr, 'html', 'js'));
 		$this->preSetMenu();
 		$mh_settings = $this->getConfig('maharder');
-		$this->logs = isset($mh_settings['logs']);
-		if(file_exists(ENGINE_DIR . '/inc/maharder/admin/assets/css/dark.css')) if(isset($mh_settings['theme'])
-		                                                                           && $mh_settings['theme']
-		                                                                              === 'dark') $this->setCss(
-			URL . '/maharder/admin/assets/css/dark.css'
-		);
-
+		$this->setLogs(isset($mh_settings['logs']));
+		$this->setTelegramType($mh_settings["logs_telegram_type"]);
+		$this->setTelegramBot($mh_settings["logs_telegram_api"]);
+		$this->setTelegramChannel($mh_settings["logs_telegram_channel"]);
+		$this->setTelegramSend(isset($mh_settings["logs_telegram"]));
+		if(file_exists(ENGINE_DIR . '/inc/maharder/admin/assets/css/dark.css')) {
+			if(isset($mh_settings['theme']) && $mh_settings['theme'] === 'dark') {
+				$this->setCss(URL . '/maharder/admin/assets/css/dark.css');
+			}
+		}
 		if(!mkdir($cache_folder = $this->getCacheFolder(), 0755, true) && !is_dir($cache_folder)) {
 			$this->generate_log('maharder', 'construct', sprintf('Directory "%s" was not created', $cache_folder));
 		}

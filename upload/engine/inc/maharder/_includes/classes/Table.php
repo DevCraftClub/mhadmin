@@ -55,6 +55,13 @@ class Table {
 		if($now !== 0) $this->setNow($now); else $this->setNow();
 		$this->setPrefix($name);
 		foreach($col_keys as $key) $this->setColKeys($this->setKey($key['name'], $key));
+
+		$mh_settings = $this->getConfig('maharder');
+		$this->setLogs(isset($mh_settings['logs']));
+		$this->setTelegramType($mh_settings["logs_telegram_type"]);
+		$this->setTelegramBot($mh_settings["logs_telegram_api"]);
+		$this->setTelegramChannel($mh_settings["logs_telegram_channel"]);
+		$this->setTelegramSend(isset($mh_settings["logs_telegram"]));
 	}
 
 	/**

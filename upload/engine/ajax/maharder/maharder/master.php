@@ -54,9 +54,9 @@
 
 		case 'check_assets':
 			try {
-				echo json_encode($mh_admin->checkAssets(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+				echo json_encode($mh_admin->checkAssets(),  JSON_UNESCAPED_UNICODE);
 			} catch (\Exception $e) {
-				$mh_admin->generate_log('maharder', 'check_assets', serialize($e->getMessage()));
+				LogGenerator::generate_log('maharder', 'check_assets', serialize($e->getMessage()));
 				echo json_encode([]);
 			}
 
@@ -66,9 +66,9 @@
 		case 'save_asset':
 
 			try {
-				echo json_encode($mh_admin->save_asset($_POST['data']['data'], $_POST['data']['file']), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+				echo json_encode($mh_admin->save_asset($_POST['data']['data'], $_POST['data']['file']), JSON_UNESCAPED_UNICODE);
 			} catch (\Exception $e) {
-				$mh_admin->generate_log('maharder', 'save_asset', serialize($e->getMessage()));
+				LogGenerator::generate_log('maharder', 'save_asset', serialize($e->getMessage()));
 				echo json_encode([]);
 			}
 			sleep(0.5);

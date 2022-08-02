@@ -10,13 +10,12 @@
 // Do not change anything!
 //===============================================================
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
-require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/LogGenerator.php');
+require_once DLEPlugins::Check(__DIR__ . '/LogGenerator.php');
 require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/DataLoader.php');
 require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/DleData.php');
 require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/AssetsChecker.php');
 
 class Admin {
-	use LogGenerator;
 	use DataLoader;
 	use DleData;
 	use AssetsChecker;
@@ -24,27 +23,35 @@ class Admin {
 	private /**
 	 * Массив со стилями
 	 *
-	 * @var string[]
+	 * @var array
 	 */
 		$cssArr = [
-		URL . '/maharder/admin/assets/css/base.css', URL . '/maharder/admin/assets/css/icons.css',
-		URL . '/maharder/admin/assets/css/tokens.css', URL . '/maharder/admin/assets/css/prettify.css',
-		URL . '/maharder/admin/assets/css/jquery-confirm.min.css', URL . '/maharder/admin/assets/css/theme.css',
+		URL . '/maharder/admin/assets/css/base.css',
+		URL . '/maharder/admin/assets/css/icons.css',
+		URL . '/maharder/admin/assets/css/tokens.css',
+		URL . '/maharder/admin/assets/css/prettify.css',
+		URL . '/maharder/admin/assets/css/jquery-confirm.min.css',
+		URL . '/maharder/admin/assets/css/theme.css',
 		URL . '/maharder/admin/assets/editor/themes/default.min.css',
 	], /**
 	 * Массив со скриптами
 	 *
-	 * @var string[]
+	 * @var array
 	 */
 		$jsArr = [
-		URL . '/maharder/admin/assets/js/jquery.js', URL . '/maharder/admin/assets/js/base.js',
-		URL . '/maharder/admin/assets/js/autosize.min.js', URL . '/maharder/admin/assets/js/mask.js',
-		URL . '/maharder/admin/assets/js/tokens.js', URL . '/maharder/admin/assets/js/jquery-confirm.min.js',
-		URL . '/maharder/admin/assets/editor/sceditor.min.js', URL . '/maharder/admin/assets/editor/formats/bbcode.js',
+		URL . '/maharder/admin/assets/js/jquery.js',
+		URL . '/maharder/admin/assets/js/base.js',
+		URL . '/maharder/admin/assets/js/autosize.min.js',
+		URL . '/maharder/admin/assets/js/mask.js',
+		URL . '/maharder/admin/assets/js/tokens.js',
+		URL . '/maharder/admin/assets/js/jquery-confirm.min.js',
+		URL . '/maharder/admin/assets/editor/sceditor.min.js',
+		URL . '/maharder/admin/assets/editor/formats/bbcode.js',
 		URL . '/maharder/admin/assets/editor/icons/material.js',
 		URL . '/maharder/admin/assets/editor/plugins/autosave.js',
 		URL . '/maharder/admin/assets/editor/plugins/autoyoutube.js',
-		URL . '/maharder/admin/assets/editor/plugins/undo.js', URL . '/maharder/admin/assets/editor/languages/ru.js',
+		URL . '/maharder/admin/assets/editor/plugins/undo.js',
+		URL . '/maharder/admin/assets/editor/languages/ru.js',
 		URL . '/maharder/admin/assets/js/theme.js',
 	],
 
@@ -71,39 +78,69 @@ class Admin {
 		 * @var array
 		 */
 		$variables = [
-		'css_dir'  => '', 'js_dir' => '', 'css' => [], 'js' => [], 'url' => URL,
-		'lic_link' => 'https://devcraft.club/pages/licence-agreement/', 'author' => [
-			'name'      => 'Maxim Harder', 'contacts' => [
+		'css_dir'     => '',
+		'js_dir'      => '',
+		'css'         => [],
+		'js'          => [],
+		'url'         => URL,
+		'lic_link'    => 'https://devcraft.club/pages/licence-agreement/',
+		'author'      => [
+			'name'     => 'Maxim Harder',
+			'contacts' => [
 				[
-					'name' => 'E-Mail', 'link' => 'mailto:dev@devcraft.club',
-				], [
-					'name' => 'Telegram', 'link' => 'https://t.me/MaHarder',
-				], [
-					'name' => 'Вебсайт', 'link' => 'https://devcraft.club/misc/contact',
+					'name' => 'E-Mail',
+					'link' => 'mailto:dev@devcraft.club',
 				],
-			], 'donate' => [
 				[
-					'name' => 'WME (Webmoney (EU))', 'value' => 'E275336355586', 'link' => '',
-				], [
-					'name' => 'WMZ (Webmoney (USD))', 'value' => 'Z139685140004', 'link' => '',
-				], [
-					'name' => 'PayPal', 'value' => 'paypal.me/MaximH', 'link' => 'https://paypal.me/MaximH',
-				], [
-					'name' => 'Ko-Fi', 'value' => 'ko-fi.com/devcraft', 'link' => 'https://ko-fi.com/J3J118N1C',
-				], [
-					'name' => 'Yandex.Money (Sobe.ru)', 'value' => '41001454367103',
-					'link' => 'https://sobe.ru/na/devcraftclub',
-				], [
-					'name' => 'Yandex.Money (YooMoney)', 'value' => '41001454367103',
-					'link' => 'https://yoomoney.ru/to/41001454367103',
-				], [
-					'name' => 'DonationAlerts', 'value' => '/r/maharder',
-					'link' => 'https://www.donationalerts.com/r/maharder',
+					'name' => 'Telegram',
+					'link' => 'https://t.me/MaHarder',
+				],
+				[
+					'name' => 'Вебсайт',
+					'link' => 'https://devcraft.club/misc/contact',
 				],
 			],
-		], 'menu'  => [], 'breadcrumbs' => [],
-	]
-	;
+			'donate'   => [
+				[
+					'name'  => 'WME (Webmoney (EU))',
+					'value' => 'E275336355586',
+					'link'  => '',
+				],
+				[
+					'name'  => 'WMZ (Webmoney (USD))',
+					'value' => 'Z139685140004',
+					'link'  => '',
+				],
+				[
+					'name'  => 'PayPal',
+					'value' => 'paypal.me/MaximH',
+					'link'  => 'https://paypal.me/MaximH',
+				],
+				[
+					'name'  => 'Ko-Fi',
+					'value' => 'ko-fi.com/devcraft',
+					'link'  => 'https://ko-fi.com/J3J118N1C',
+				],
+				[
+					'name'  => 'Yandex.Money (Sobe.ru)',
+					'value' => '41001454367103',
+					'link'  => 'https://sobe.ru/na/devcraftclub',
+				],
+				[
+					'name'  => 'Yandex.Money (YooMoney)',
+					'value' => '41001454367103',
+					'link'  => 'https://yoomoney.ru/to/41001454367103',
+				],
+				[
+					'name'  => 'DonationAlerts',
+					'value' => '/r/maharder',
+					'link'  => 'https://www.donationalerts.com/r/maharder',
+				],
+			],
+		],
+		'menu'        => [],
+		'breadcrumbs' => [],
+	];
 
 	/**
 	 * Конструктор класса
@@ -115,30 +152,28 @@ class Admin {
 		$this->setVar('css', $this->htmlStatic($this->cssArr));
 		$this->setVar('js', $this->htmlStatic($this->jsArr, 'html', 'js'));
 		$this->preSetMenu();
-		$mh_settings = $this->getConfig('maharder');
-		$this->setLogs(isset($mh_settings['logs']));
-		$this->setTelegramType($mh_settings["logs_telegram_type"]);
-		$this->setTelegramBot($mh_settings["logs_telegram_api"]);
-		$this->setTelegramChannel($mh_settings["logs_telegram_channel"]);
-		$this->setTelegramSend(isset($mh_settings["logs_telegram"]));
-		if(file_exists(ENGINE_DIR . '/inc/maharder/admin/assets/css/dark.css')) {
-			if(isset($mh_settings['theme']) && $mh_settings['theme'] === 'dark') {
+		$mh_settings = self::getConfig('maharder');
+		LogGenerator::setLogs(isset($mh_settings['logs']));
+		LogGenerator::setTelegramType($mh_settings["logs_telegram_type"]);
+		LogGenerator::setTelegramBot($mh_settings["logs_telegram_api"]);
+		LogGenerator::setTelegramChannel($mh_settings["logs_telegram_channel"]);
+		LogGenerator::setTelegramSend(isset($mh_settings["logs_telegram"]));
+		if (file_exists(ENGINE_DIR . '/inc/maharder/admin/assets/css/dark.css')) {
+			if (isset($mh_settings['theme']) && $mh_settings['theme'] === 'dark') {
 				$this->setCss(URL . '/maharder/admin/assets/css/dark.css');
 			}
 		}
-		if(!mkdir($cache_folder = $this->getCacheFolder(), 0755, true) && !is_dir($cache_folder)) {
-			$this->generate_log('maharder', 'construct', sprintf('Directory "%s" was not created', $cache_folder));
+		if (!mkdir($cache_folder = $this->getCacheFolder(), 0755, true) && !is_dir($cache_folder)) {
+			LogGenerator::generate_log('maharder', 'construct', sprintf('Directory "%s" was not created', $cache_folder));
 		}
 
-		if(is_dir($cache_folder)) {
-			file_put_contents(
-				$cache_folder . DIRECTORY_SEPARATOR . '.htaccess', 'Order Deny,Allow
-Deny from all'
-			);
+		if (is_dir($cache_folder)) {
+			file_put_contents($cache_folder . DIRECTORY_SEPARATOR . '.htaccess', 'Order Deny,Allow
+Deny from all');
 			chmod($cache_folder . DIRECTORY_SEPARATOR . '.htaccess', 0666);
 		}
 
-		if($mh_settings['theme'] === 'dark') $this->setCss(URL . '/maharder/admin/assets/editor/themes/dark.css');
+		if ($mh_settings['theme'] === 'dark') $this->setCss(URL . '/maharder/admin/assets/editor/themes/dark.css');
 
 	}
 
@@ -154,10 +189,13 @@ Deny from all'
 	 *
 	 * @return array
 	 */
-	public static function generate_link(string $name, string $href, string $type = 'link', array $children = [], ?string $data_val = null)
-	: array {
+	public static function generate_link(string $name, string $href, string $type = 'link', array $children = [], ?string $data_val = null): array {
 		return [
-			'name' => $name, 'href' => $href, 'type' => $type, 'children' => $children, 'data' => $data_val
+			'name'     => $name,
+			'href'     => $href,
+			'type'     => $type,
+			'children' => $children,
+			'data'     => $data_val
 		];
 	}
 
@@ -180,7 +218,7 @@ Deny from all'
 	 * @return void
 	 */
 	public function setLinks($links) {
-		foreach($links as $link) {
+		foreach ($links as $link) {
 			$this->setLink($link);
 		}
 	}
@@ -195,22 +233,27 @@ Deny from all'
 		global $lang;
 		require_once DLEPlugins::Check(ENGINE_DIR . '/skins/default.skin.php');
 		$dle_links_header = [
-			'config'         => $lang['opt_hopt'], 'user' => $lang['opt_s_acc'], 'templates' => $lang['opt_s_tem'],
-			'filter'         => $lang['opt_s_fil'], 'others' => $lang['opt_s_oth'],
+			'config'         => $lang['opt_hopt'],
+			'user'           => $lang['opt_s_acc'],
+			'templates'      => $lang['opt_s_tem'],
+			'filter'         => $lang['opt_s_fil'],
+			'others'         => $lang['opt_s_oth'],
 			'admin_sections' => $lang['admin_other_section'],
 		];
 
 		$admin_links = [
 			self::generate_link($lang['header_all'], '?mod=options&action=options'),
-			self::generate_link('', '', 'divider'), self::generate_link('Новости', '', 'dropdown', [
+			self::generate_link('', '', 'divider'),
+			self::generate_link('Новости', '', 'dropdown', [
 				self::generate_link($lang['add_news'], '?mod=addnews&action=addnews'),
 				self::generate_link($lang['edit_news'], '?mod=editnews&action=list'),
-			]), self::generate_link('', '', 'divider')
+			]),
+			self::generate_link('', '', 'divider')
 		];
 
-		foreach($options as $o => $a) {
+		foreach ($options as $o => $a) {
 			$opt_children = [];
-			foreach($a as $c) $opt_children[] = self::generate_link($c['name'], $c['url']);
+			foreach ($a as $c) $opt_children[] = self::generate_link($c['name'], $c['url']);
 			$admin_links[] = self::generate_link($dle_links_header[$o], '', 'dropdown', $opt_children);
 		}
 
@@ -242,7 +285,7 @@ Deny from all'
 	 * @return void
 	 */
 	public function setVars($arr = []) {
-		foreach($arr as $name => $value) {
+		foreach ($arr as $name => $value) {
 			$this->setVar($name, $value);
 		}
 	}
@@ -255,8 +298,8 @@ Deny from all'
 	 * @return void
 	 */
 	public function setCss($css) {
-		if(is_array($css)) {
-			foreach($css as $file) $this->cssArr[] = $file;
+		if (is_array($css)) {
+			foreach ($css as $file) $this->cssArr[] = $file;
 		} else $this->cssArr[] = $css;
 		$this->setVar('css', $this->htmlStatic($this->cssArr));
 	}
@@ -269,8 +312,8 @@ Deny from all'
 	 * @return void
 	 */
 	public function setJs($js) {
-		if(is_array($js)) {
-			foreach($js as $file) $this->jsArr[] = $file;
+		if (is_array($js)) {
+			foreach ($js as $file) $this->jsArr[] = $file;
 		} else $this->jsArr[] = $js;
 		$this->setVar('js', $this->htmlStatic($this->jsArr, 'html', 'js'));
 	}
@@ -286,25 +329,25 @@ Deny from all'
 	 */
 	public function htmlStatic($data, $view = 'html', $type = 'css') {
 		$out = [];
-		if('html' == $view) {
-			if(is_array($data)) {
-				foreach($data as $d) {
-					if('css' == $type) {
+		if ('html' == $view) {
+			if (is_array($data)) {
+				foreach ($data as $d) {
+					if ('css' == $type) {
 						$out[] = "<link rel='stylesheet' type='text/css' href='{$d}'>";
-					} elseif('js' == $type) {
+					} elseif ('js' == $type) {
 						$out[] = "<script src='{$d}'></script>";
 					}
 				}
 			} else {
-				if('css' == $type) {
+				if ('css' == $type) {
 					$out[] = "<link rel='stylesheet' type='text/css' href='{$data}'>";
-				} elseif('js' == $type) {
+				} elseif ('js' == $type) {
 					$out[] = "<script src='{$data}'></script>";
 				}
 			}
-		} elseif('link' == $view) {
-			if(is_array($data)) {
-				foreach($data as $d) {
+		} elseif ('link' == $view) {
+			if (is_array($data)) {
+				foreach ($data as $d) {
 					$out[] = $d;
 				}
 			} else {

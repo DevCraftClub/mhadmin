@@ -4,7 +4,7 @@ trait DleData {
 	/**
 	 * Возвращает массив с использованными доп. полями в новости
 	 *
-	 * @param $id          // ID объекта
+	 * @param        $id   // ID объекта
 	 * @param string $type // Тип объекта, post или user
 	 * @return array|false
 	 * @throws \JsonException

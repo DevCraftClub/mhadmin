@@ -10,13 +10,12 @@ require_once DLEPlugins::Check(__DIR__ . '/Table.php');
  * Класс по управлению данных в базе данных
  */
 class Model {
-	use LogGenerator;
 	use DataLoader;
 
 	/**
 	 * @var Table
 	 */
-	protected Table $table;
+	protected $table;
 
 	/**
 	 * Конструктор модели
@@ -33,11 +32,11 @@ class Model {
 		$this->table->checkMigrations();
 
 		$mh_settings = $this->getConfig('maharder');
-		$this->setLogs(isset($mh_settings['logs']));
-		$this->setTelegramType($mh_settings["logs_telegram_type"]);
-		$this->setTelegramBot($mh_settings["logs_telegram_api"]);
-		$this->setTelegramChannel($mh_settings["logs_telegram_channel"]);
-		$this->setTelegramSend(isset($mh_settings["logs_telegram"]));
+		LogGenerator::setLogs(isset($mh_settings['logs']));
+		LogGenerator::setTelegramType($mh_settings["logs_telegram_type"]);
+		LogGenerator::setTelegramBot($mh_settings["logs_telegram_api"]);
+		LogGenerator::setTelegramChannel($mh_settings["logs_telegram_channel"]);
+		LogGenerator::setTelegramSend(isset($mh_settings["logs_telegram"]));
 	}
 
 
@@ -58,7 +57,7 @@ class Model {
 				]
 			])[0];
 		} else {
-			$this->generate_log($this->table->getModel(), 'getSingle', 'ID не должен быть пустым');
+			LogGenerator::generate_log($this->table->getModel(), 'getSingle', 'ID не должен быть пустым');
 		}
 
 		return [];
@@ -116,7 +115,7 @@ class Model {
 				'success' => false,
 				'error'   => $e->getMessage()
 			];
-			$this->generate_log($this->table->getModel(), 'create', $report);
+			LogGenerator::generate_log($this->table->getModel(), 'create', $report);
 
 			return $report;
 		}
@@ -146,7 +145,7 @@ class Model {
 				'error'   => $e->getMessage(),
 				'message' => 'ID не может быть пустым'
 			];
-			$this->generate_log($this->table->getModel(), 'delete', $report);
+			LogGenerator::generate_log($this->table->getModel(), 'delete', $report);
 
 			return $report;
 		}
@@ -195,7 +194,7 @@ class Model {
 				'error'   => $e->getMessage(),
 				'message' => 'ID не может быть пустым'
 			];
-			$this->generate_log($this->table->getModel(), 'update', $report);
+			LogGenerator::generate_log($this->table->getModel(), 'update', $report);
 
 			return $report;
 		}
@@ -240,7 +239,7 @@ class Model {
 				'error'   => $e->getMessage(),
 				'message' => 'ID не может быть пустым'
 			];
-			$this->generate_log($this->table->getModel(), 'updateByVal', $report);
+			LogGenerator::generate_log($this->table->getModel(), 'updateByVal', $report);
 
 			return $report;
 		}

@@ -26,6 +26,7 @@
 		"twig/inky-extra": "*",
 		"twig/extra-bundle": "*",
 		"jblond/twig-trans": "*",
-		"monolog/monolog": "*"
+		"monolog/monolog": "*",
+		"php-curl-class/php-curl-class": "*"
 	}
 }

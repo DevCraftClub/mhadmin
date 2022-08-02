@@ -1,0 +1,89 @@
+@font-face{font-family:"FontAwesome";font-style:normal;font-weight:300;src:url(../webfonts/fa-light-300.eot);src:url(../webfonts/fa-light-300.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-light-300.woff2) format("woff2"),url(../webfonts/fa-light-300.woff) format("woff"),url(../webfonts/fa-light-300.ttf) format("truetype"),url(../webfonts/fa-light-300.svg#fontawesome) format("svg")}
+@font-face{font-family:"Icons";font-style:normal;font-weight:900;src:url(../webfonts/fa-light-300.eot);src:url(../webfonts/fa-light-300.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-light-300.woff2) format("woff2"),url(../webfonts/fa-light-300.woff) format("woff"),url(../webfonts/fa-light-300.ttf) format("truetype"),url(../webfonts/fa-light-300.svg#fontawesome) format("svg")}
+
+.fa {
+    font-family: "FontAwesome", "Font Awesome 6 Pro" !important;
+    font-weight: 300 !important;
+}
+
+.fa-file-text-o:before {
+    content: "\f15c";
+}
+
+.fa-commenting-o:before {
+    content: "\f4ad";
+}
+
+.fa-envelope-o:before {
+    content: "\f0e0";
+}
+
+.fa-user-circle-o:before {
+    content: "\f2bd";
+}
+
+.fa-picture-o:before {
+    content: "\f302";
+}
+
+.fa-floppy-o:before {
+    content: "\f0c7";
+}
+
+.fa-trash-o:before {
+    content: "\f2ed";
+}
+
+.fa-pencil-square-o:before {
+    content: "\f14b";
+}
+
+.fa-file-code-o:before {
+    content: "\f1c9";
+}
+
+.a-paper-plane-o:before {
+    content: "\f1d8";
+}
+
+.fa-comment-o:before {
+    content: "\f4ad";
+}
+
+.fa-google {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+.fa-google:before {
+    content: "\f1a0";
+}
+
+.fa-play-circle-o {
+    font-weight: 300 !important;
+}
+
+.fa-play-circle-o:before {
+    content: "\f144";
+}
+
+.fa-lightbulb-o:before {
+    content: "\f672";
+}
+
+.fa-id-card-o:before {
+    content: "\f2c2";
+}
+
+.fa-facebook-official {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+.fa-facebook-official:before {
+    content: "\f09a";
+}
+
+.fa-file-image-o:before {
+    content: "\f1c5";
+}

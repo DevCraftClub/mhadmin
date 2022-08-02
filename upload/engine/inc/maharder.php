@@ -16,7 +16,6 @@ $modInfo = [
 
 // Подключаем классы, функции и основные переменные
 include_once DLEPlugins::Check(__DIR__.'/maharder/admin/index.php');
-include_once DLEPlugins::Check(MH_ROOT.'/_includes/classes/Admin.php');
 
 $mh = new Admin();
 

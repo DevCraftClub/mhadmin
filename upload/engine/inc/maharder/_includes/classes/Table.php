@@ -11,27 +11,41 @@ require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/DataLoader.php');
  * @author Maxim Harder
  */
 class Table {
-	use LogGenerator;
 	use DataLoader;
 
 	/**
 	 * @var string|null
 	 */
-	private ?string $model           = null;
-	private ?string $name            = null;
-	private ?string $id              = null;
-	private ?string $migrations_path = null;
-	private bool $exists = false;
+	private  $model           = null;
+	/**
+	 * @var string|null
+	 */
+	private  $name            = null;
+	/**
+	 * @var string|null
+	 */
+	private  $id              = null;
+	/**
+	 * @var string|null
+	 */
+	/**
+	 * @var string|null
+	 */
+	private $migrations_path = null;
+	/**
+	 * @var bool
+	 */
+	private $exists = false;
 	/**
 	 * @var array
 	 */
-	private array $columns = [], $col_keys = [
+	private $columns = [], $col_keys = [
 		'inside' => [], 'after' => [],
 	];
 	/**
 	 * @var ?string
 	 */
-	private ?string $now = null;
+	private $now = null;
 
 	/**
 	 * Конструктор
@@ -56,12 +70,12 @@ class Table {
 		$this->setPrefix($name);
 		foreach($col_keys as $key) $this->setColKeys($this->setKey($key['name'], $key));
 
-		$mh_settings = $this->getConfig('maharder');
-		$this->setLogs(isset($mh_settings['logs']));
-		$this->setTelegramType($mh_settings["logs_telegram_type"]);
-		$this->setTelegramBot($mh_settings["logs_telegram_api"]);
-		$this->setTelegramChannel($mh_settings["logs_telegram_channel"]);
-		$this->setTelegramSend(isset($mh_settings["logs_telegram"]));
+		$mh_settings = self::getConfig('maharder');
+		LogGenerator::setLogs(isset($mh_settings['logs']));
+		LogGenerator::setTelegramType($mh_settings["logs_telegram_type"]);
+		LogGenerator::setTelegramBot($mh_settings["logs_telegram_api"]);
+		LogGenerator::setTelegramChannel($mh_settings["logs_telegram_channel"]);
+		LogGenerator::setTelegramSend(isset($mh_settings["logs_telegram"]));
 	}
 
 	/**
@@ -189,14 +203,14 @@ class Table {
 		$vars = self::nameArgs($vars);
 
 		if(empty($name)) {
-			$this->generate_log('Table', 'setKey', [
+			LogGenerator::generate_log('Table', 'setKey', [
 				'Параметр \$name пустой', $name
 			]);
 			return '';
 		}
 
 		if(empty($vars)) {
-			$this->generate_log('Table', 'setKey', [
+			LogGenerator::generate_log('Table', 'setKey', [
 				'Массив \$vars пустой', $vars
 			]);
 			return '';
@@ -204,7 +218,7 @@ class Table {
 
 		$type = $vars['type'];
 		if(empty($type)) {
-			$this->generate_log('Table', 'setKey', [
+			LogGenerator::generate_log('Table', 'setKey', [
 				'Параметр type в массиве \$vars либо пустой, либо отсутствует', $vars
 			]);
 			return '';
@@ -213,7 +227,7 @@ class Table {
 		if(!in_array($type, [
 			'inside', 'modify', 'change', 'delete', 'create', 'update', 'new', 'drop', 'alter'
 		])) {
-			$this->generate_log('Table', 'setKey', [
+			LogGenerator::generate_log('Table', 'setKey', [
 				'Параметр type в массиве \$vars либо не соответствует inside, delete, create или update', $vars
 			]);
 			return '';
@@ -221,7 +235,7 @@ class Table {
 
 		$table_col = $vars['column'];
 		if(empty($table_col)) {
-			$this->generate_log('Table', 'setKey', [
+			LogGenerator::generate_log('Table', 'setKey', [
 				'Параметр column в массиве \$vars либо пустой, либо отсутствует', $vars
 			]);
 			return '';
@@ -229,7 +243,7 @@ class Table {
 
 		$table_name = $vars['table'] ?: $this->name;
 		if(empty($table_name)) {
-			$this->generate_log('Table', 'setKey', [
+			LogGenerator::generate_log('Table', 'setKey', [
 				'Параметр table в массиве \$vars либо пустой, либо отсутствует', $vars
 			]);
 			return '';
@@ -267,14 +281,14 @@ class Table {
 
 			case 'foreign':
 				if(empty($vars['target_table'])) {
-					$this->generate_log('Table', 'setKey', [
+					LogGenerator::generate_log('Table', 'setKey', [
 						'Параметр target_table в массиве \$vars либо пустой, либо отсутствует', $vars
 					]);
 					return '';
 				}
 				$vars['target_table'] = $this->getPrefix() . '_' . $vars['target_table'];
 				if(empty($vars['target_column'])) {
-					$this->generate_log('Table', 'setKey', [
+					LogGenerator::generate_log('Table', 'setKey', [
 						'Параметр target_column в массиве \$vars либо пустой, либо отсутствует', $vars
 					]);
 					return '';
@@ -441,7 +455,7 @@ class Table {
 	: void {
 		$dir = ($path !== null) ? "{$path}/{$this->model}" : $this->getMigrationsPath();
 		if(!mkdir($dir, 0777, true) && !is_dir($dir)) {
-			$this->generate_log('ModelClass', 'checkMigrations', "Папка '{$dir}' не была создана!");
+			LogGenerator::generate_log('ModelClass', 'checkMigrations', "Папка '{$dir}' не была создана!");
 		}
 		$migrations = self::dirToArray($dir, '_init.json');
 		$info_file = "{$dir}/_init.json";
@@ -450,10 +464,10 @@ class Table {
 			$mig_data = [
 				'last_updated' => $this->now, 'last_migration' => '', 'file' => ''
 			];
-			file_put_contents($info_file, json_encode($mig_data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+			file_put_contents($info_file, json_encode($mig_data, JSON_UNESCAPED_UNICODE));
 		} else {
 			$this->exists = true;
-			$mig_data = json_decode(file_get_contents($info_file), true, 512, JSON_THROW_ON_ERROR);
+			$mig_data = json_decode(file_get_contents($info_file), true);
 			$file = $dir . '/' . end($migrations);
 		}
 
@@ -463,7 +477,7 @@ class Table {
 		if($mig_ch['changes']) {
 			$mig_data['last_migration'] = $this->getNow();
 			$mig_data['file'] = $mig_ch['file'];
-			file_put_contents($info_file, json_encode($mig_data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+			file_put_contents($info_file, json_encode($mig_data, JSON_UNESCAPED_UNICODE));
 		}
 
 

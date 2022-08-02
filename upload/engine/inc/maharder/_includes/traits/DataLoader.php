@@ -1,20 +1,28 @@
 <?php
 
+if (!class_exists('LogGenerator')) {
+	include_once DLEPlugins::Check(__DIR__ . '/LogGenerator.php');
+}
 
 trait DataLoader {
 
-	protected static ?db $db     = null;
-	private ?string      $prefix = null;
+	/**
+	 * @var db|null
+	 */
+	protected static $db = null;
+	/**
+	 * @var string|null
+	 */
+	private  $prefix = null;
 
 	/**
 	 * Функция подключения к базе данных
 	 *
 	 * @return void
 	 */
-	public static function connect()
-	: void {
-		if(self::$db === null) {
-			if(!defined('DBHOST')) {
+	public static function connect(): void {
+		if (self::$db === null) {
+			if (!defined('DBHOST')) {
 				include_once ENGINE_DIR . '/data/dbconfig.php';
 				$db = new db();
 			} else {
@@ -27,17 +35,15 @@ trait DataLoader {
 	/**
 	 * @return db
 	 */
-	public static function getDb()
-	: db {
-		if(self::$db === null) self::connect();
+	public static function getDb(): db {
+		if (self::$db === null) self::connect();
 		return self::$db;
 	}
 
 	/**
 	 * @param \db|null $db
 	 */
-	public static function setDb(?db $db)
-	: void {
+	public static function setDb(?db $db): void {
 		self::$db = $db;
 	}
 
@@ -46,21 +52,19 @@ trait DataLoader {
 	 *
 	 * @var string
 	 */
-	private string $cache_folder = ENGINE_DIR . '/inc/maharder/_cache';
+	private $cache_folder = ENGINE_DIR . '/inc/maharder/_cache';
 
 	/**
 	 * @return string
 	 */
-	public function getCacheFolder()
-	: string {
+	public function getCacheFolder(): string {
 		return $this->cache_folder;
 	}
 
 	/**
 	 * @param string $cache_folder
 	 */
-	public function setCacheFolder(string $cache_folder)
-	: void {
+	public function setCacheFolder(string $cache_folder): void {
 		$this->cache_folder = $cache_folder;
 	}
 
@@ -74,15 +78,16 @@ trait DataLoader {
 	 *
 	 * @return string
 	 */
-	protected static function abbr($string, $id = null, $l = 2){
-		$results = ''; // empty string
+	protected static function abbr($string, $id = null, $l = 2) {
+		$results = '';                                 // empty string
 		$vowels = array('a', 'e', 'i', 'o', 'u', 'y'); // vowels
-		preg_match_all('/[A-Z][a-z]*/', ucfirst($string), $m); // Match every word that begins with a capital letter, added ucfirst() in case there is no uppercase letter
-		foreach($m[0] as $substring){
-			$substring = str_replace($vowels, '', strtolower($substring)); // String to lower case and remove all vowels
-			$results .= preg_replace('/([a-z]{'.$l.'})(.*)/', '$1', $substring); // Extract the first N letters.
+		preg_match_all('/[A-Z][a-z]*/', ucfirst($string),
+		               $m);                            // Match every word that begins with a capital letter, added ucfirst() in case there is no uppercase letter
+		foreach ($m[0] as $substring) {
+			$substring = str_replace($vowels, '', strtolower($substring));           // String to lower case and remove all vowels
+			$results .= preg_replace('/([a-z]{' . $l . '})(.*)/', '$1', $substring); // Extract the first N letters.
 		}
-		$results .= '_'. str_pad($id, 4, 0, STR_PAD_LEFT); // Add the ID
+		$results .= '_' . str_pad($id, 4, 0, STR_PAD_LEFT); // Add the ID
 		return $results;
 	}
 
@@ -111,12 +116,16 @@ trait DataLoader {
 	 * @return array
 	 * @throws JsonException
 	 */
-	public function load_data(string $name, array ...$_vars)
-	: array {
+	public function load_data(string $name, array ...$_vars): array {
 		$db = self::getDb();
 
 		$vars = [
-			'table' => null, 'sql' => null, 'where' => [], 'selects' => [], 'order' => [], 'limit' => null
+			'table'   => null,
+			'sql'     => null,
+			'where'   => [],
+			'selects' => [],
+			'order'   => [],
+			'limit'   => null
 		];
 		$_vars = self::nameArgs($_vars);
 		$vars = array_replace($vars, $_vars);
@@ -125,12 +134,12 @@ trait DataLoader {
 		$order = [];
 		$file_name = $name;
 		$file_suffix = '';
-		foreach($vars['selects'] as $s) {
+		foreach ($vars['selects'] as $s) {
 			$file_suffix .= "_s{$s}";
 		}
-		foreach($vars['where'] as $id => $key) {
-			if(is_array($key)) {
-				foreach($key as $k) {
+		foreach ($vars['where'] as $id => $key) {
+			if (is_array($key)) {
+				foreach ($key as $k) {
 					$file_suffix .= "_{$id}-{$k}";
 					$where[] = $id . self::getComparer($k);
 				}
@@ -139,54 +148,55 @@ trait DataLoader {
 				$where[] = $id . self::getComparer($key);
 			}
 		}
-		foreach($vars['order'] as $n => $sort) {
+		foreach ($vars['order'] as $n => $sort) {
 			$file_suffix .= "_o{$n}-{$sort}";
 			$order[] = "{$n} {$sort}";
 		}
 
-		if(!empty($vars['sql'])) $file_suffix = $vars['sql'];
+		if (!empty($vars['sql'])) $file_suffix = $vars['sql'];
 
 		$file_name .= '_' . md5(md5($file_suffix));
 		$file_path = $this->getCacheFolder() . "/{$name}/{$file_name}.php";
 
-		if(file_exists($file_path)) {
+		if (file_exists($file_path)) {
 			$file_created = filectime($file_path);
 			$now = time();
 			$mh_config = $this->getConfig('maharder');
-			if(($now - $file_created) >= ($mh_config['cache_timer'] * 60)) @unlink($file_path);
+			if (($now - $file_created) >= ($mh_config['cache_timer'] * 60)) @unlink($file_path);
 		}
 
-		if(!file_exists($file_path)) {
+		if (!file_exists($file_path)) {
 			$data = [];
 			$prefix = $this->getPrefix();
 
 			$order = implode(', ', $order);
-			if(!empty($order)) $order = "ORDER BY {$order}";
+			if (!empty($order)) $order = "ORDER BY {$order}";
 
 			$limit = '';
-			if(!empty($vars['limit'])) $limit = "LIMIT {$vars['limit']}";
+			if (!empty($vars['limit'])) $limit = "LIMIT {$vars['limit']}";
 
-			if(count($vars['where']) > 0 && $vars['sql'] === null) {
+			if (count($vars['where']) > 0 && $vars['sql'] === null) {
 				$selects = implode(",", $vars['selects']);
-				if(empty($selects)) $selects = '*';
+				if (empty($selects)) $selects = '*';
 				$where = implode(' AND ', $where);
-				if(!empty($where)) $where = "WHERE {$where}";
+				if (!empty($where)) $where = "WHERE {$where}";
 
-				if($vars['table']
-				   !== null) $sql = "SELECT {$selects} FROM {$prefix}_{$vars['table']} {$where} {$order} {$limit}"; else $sql = "SELECT {$selects} FROM {$prefix}_{$name} {$where} {$order} {$limit}";
+				if ($vars['table'] !== null) {
+					$sql = "SELECT {$selects} FROM {$prefix}_{$vars['table']} {$where} {$order} {$limit}";
+				} else $sql = "SELECT {$selects} FROM {$prefix}_{$name} {$where} {$order} {$limit}";
 			} else {
-				if($vars['table'] === null && $vars['sql'] === null) $vars['table'] = $name;
+				if ($vars['table'] === null && $vars['sql'] === null) $vars['table'] = $name;
 
-				if($vars['table'] !== null) {
+				if ($vars['table'] !== null) {
 					$selects = implode(",", $vars['selects']);
-					if(empty($selects)) $selects = '*';
+					if (empty($selects)) $selects = '*';
 					$sql = "SELECT {$selects} FROM {$prefix}_{$vars['table']} {$order} {$limit}";
 				}
-				if($vars['sql'] !== null) $sql = $vars['sql'];
+				if ($vars['sql'] !== null) $sql = $vars['sql'];
 			}
 
 			$db->query($sql);
-			while($row = $db->get_row()) {
+			while ($row = $db->get_row()) {
 				$data[] = $row;
 			}
 
@@ -206,21 +216,22 @@ trait DataLoader {
 	 *
 	 * @return array
 	 */
-	protected static function dirToArray($dir, ...$except)
-	: array {
+	protected static function dirToArray($dir, ...$except): array {
 
 		$result = [];
 
 		$xcpt = [
-			'.', '..', '.htaccess'
+			'.',
+			'..',
+			'.htaccess'
 		];
-		if($except) {
+		if ($except) {
 			$xcpt = array_merge_recursive($xcpt, self::nameArgs($except));
 		}
 
-		foreach(scandir($dir, SCANDIR_SORT_NONE) as $key => $value) {
-			if(!in_array($value, $xcpt, true)) {
-				if(is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
+		foreach (scandir($dir, SCANDIR_SORT_NONE) as $key => $value) {
+			if (!in_array($value, $xcpt, true)) {
+				if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
 					$result[$value] = self::dirToArray($dir . DIRECTORY_SEPARATOR . $value);
 				} else {
 					$result[] = $value;
@@ -236,23 +247,22 @@ trait DataLoader {
 	 *
 	 * @param string $type
 	 */
-	public function clear_cache($type = 'all')
-	: void {
+	public function clear_cache($type = 'all'): void {
 
 		$dirname = $this->cache_folder;
-		if($type !== 'all') {
-			if(is_array($type)) {
-				foreach($type as $key) $this->clear_cache($key);
+		if ($type !== 'all') {
+			if (is_array($type)) {
+				foreach ($type as $key) $this->clear_cache($key);
 			} else {
 				$type = totranslit($type, true, false);
 				$dirname .= '/' . $type;
-				foreach(self::dirToArray($dirname) as $i => $name) {
+				foreach (self::dirToArray($dirname) as $i => $name) {
 					try {
-						if(is_array($name)) {
+						if (is_array($name)) {
 							@rmdir($dirname . DIRECTORY_SEPARATOR . $i);
 						} else @unlink($dirname . DIRECTORY_SEPARATOR . $name);
-					} catch(Exception $e) {
-						$this->generate_log('maharder', 'clear_cache', $e->getMessage());
+					} catch (Exception $e) {
+						LogGenerator::generate_log('maharder', 'clear_cache', $e->getMessage());
 					}
 				}
 			}
@@ -275,10 +285,10 @@ trait DataLoader {
 
 		$data = @file_get_contents($this->cache_folder . '/' . $type . DIRECTORY_SEPARATOR . $file . '.php');
 
-		if($data !== false) {
+		if ($data !== false) {
 
-			$data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
-			if(is_array($data) || is_int($data)) return $data;
+			$data = json_decode($data, true);
+			if (is_array($data) || is_int($data)) return $data;
 
 		}
 
@@ -295,26 +305,18 @@ trait DataLoader {
 	 *
 	 * @throws \JsonException
 	 */
-	private function set_cache($type, $name, $data)
-	: void {
+	private function set_cache($type, $name, $data): void {
 		$file = totranslit($name, true, false);
 		$type = totranslit($type, true, false);
 
-		if(!mkdir($concurrentDirectory = $this->cache_folder . '/' . $type, 0755, true)
-		   && !is_dir(
-				$concurrentDirectory
-			)) {
-			$this->generate_log(
-				'maharder', 'set_cache', sprintf('Directory "%s" was not created', $concurrentDirectory)
-			);
+		if (!mkdir($concurrentDirectory = $this->cache_folder . '/' . $type, 0755, true) && !is_dir($concurrentDirectory)) {
+			LogGenerator::generate_log('maharder', 'set_cache', sprintf('Directory "%s" was not created', $concurrentDirectory));
 		}
 
-		if(is_array($data) or is_int($data)) {
+		if (is_array($data) or is_int($data)) {
 
-			file_put_contents(
-				$concurrentDirectory . DIRECTORY_SEPARATOR . $file . '.php',
-				json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX
-			);
+			file_put_contents($concurrentDirectory . DIRECTORY_SEPARATOR . $file . '.php',
+			                  json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES), LOCK_EX);
 			@chmod($concurrentDirectory . DIRECTORY_SEPARATOR . $file . '.php', 0666);
 
 		}
@@ -326,14 +328,13 @@ trait DataLoader {
 	 * @param string ...$_path //  Может содержать несколько путей, коротые будут объеденены в один
 	 *
 	 * @return bool
+	 * @throws \Monolog\Handler\MissingExtensionException
 	 */
-	protected static function createDir(string ...$_path)
-	: bool {
-		$path = str_replace(['\/\/', DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, '//'], DIRECTORY_SEPARATOR,
-		                    implode('/', $_path));
+	protected static function createDir(string ...$_path): bool {
+		$path = str_replace(['\/\/', DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, '//'], DIRECTORY_SEPARATOR, implode('/', $_path));
 
-		if(!mkdir($path, 0777, true) && !is_dir($path)) {
-			$this->generate_log('DataLoader', 'createDir', "Путь \"{$path}\" не был создан");
+		if (!mkdir($path, 0777, true) && !is_dir($path)) {
+			LogGenerator::generate_log('DataLoader', 'createDir', "Путь \"{$path}\" не был создан");
 			return false;
 		}
 
@@ -347,16 +348,15 @@ trait DataLoader {
 	 *
 	 * @return array
 	 */
-	public static function nameArgs(?array $args)
-	: array {
+	public static function nameArgs(?array $args): array {
 		$returnArr = [];
 
-		foreach($args as $id => $arg) {
-			if(is_numeric($id) && is_array($arg)) {
+		foreach ($args as $id => $arg) {
+			if (is_numeric($id) && is_array($arg)) {
 				$returnArr = array_merge($returnArr, self::nameArgs($arg));
-			} elseif(is_numeric($id) && !is_array($arg)) {
+			} elseif (is_numeric($id) && !is_array($arg)) {
 				$returnArr[$arg] = $arg;
-			} elseif(is_array($id)) {
+			} elseif (is_array($id)) {
 				$returnArr = array_merge($returnArr, self::nameArgs($id));
 			} else {
 				$returnArr[$id] = $arg;
@@ -376,16 +376,20 @@ trait DataLoader {
 	 */
 	protected static function defType($value, $type) {
 
-		if(in_array($type, [
-			'double', 'float'
+		if (in_array($type, [
+			'double',
+			'float'
 		])) {
 			$output = (float)$value;
-		} elseif(in_array($type, [
-			'boolean', 'bool'
+		} elseif (in_array($type, [
+			'boolean',
+			'bool'
 		])) {
 			$output = (bool)$value;
-		} elseif(in_array($type, [
-			'integer', 'int', 'tinyint'
+		} elseif (in_array($type, [
+			'integer',
+			'int',
+			'tinyint'
 		])) {
 			$output = (int)$value;
 		} else $output = "'{$value}'";
@@ -400,23 +404,26 @@ trait DataLoader {
 	 *
 	 * @return string
 	 */
-	protected static function getComparer($value)
-	: string {
+	protected static function getComparer($value): string {
 
 		$firstSign = [
-			'!', '<', '>', '%'
+			'!',
+			'<',
+			'>',
+			'%'
 		];
 		$secondSign = ['='];
 		$type = gettype($value);
 		$outSign = '=';
 		$checkSign = null;
 
-		if(!in_array($type, [
-				'integer', 'double', 'boolean'
-			])
-		   && in_array($value[0], $firstSign, true)) {
+		if (!in_array($type, [
+				'integer',
+				'double',
+				'boolean'
+			]) && in_array($value[0], $firstSign, true)) {
 			$checkSign = $value[0];
-			if($value[1] === $secondSign) {
+			if ($value[1] === $secondSign) {
 				$checkSign .= $value[1];
 				$value = substr($value, 2);
 			} else {
@@ -424,13 +431,16 @@ trait DataLoader {
 			}
 		}
 
-		if($checkSign === '!') {
+		if ($checkSign === '!') {
 			$outSign = '<>';
-		} elseif(in_array($checkSign, [
-			'<', '>', '<=', '>='
+		} elseif (in_array($checkSign, [
+			'<',
+			'>',
+			'<=',
+			'>='
 		])) {
 			$outSign = $checkSign;
-		} elseif($checkSign === '%') {
+		} elseif ($checkSign === '%') {
 			$outSign = 'LIKE';
 			$value = '%' . $value . '%';
 		}
@@ -451,28 +461,27 @@ trait DataLoader {
 	 *
 	 * @return array
 	 */
-	public function getConfig($codename, $path = ENGINE_DIR . '/inc/maharder/_config', $confName = '')
-	: array {
+	public static function getConfig($codename, $path = ENGINE_DIR . '/inc/maharder/_config', $confName = ''): array {
 		$settings = [];
 
-		if(is_file($path . DIRECTORY_SEPARATOR . $codename . '.json')) {
+		if (is_file($path . DIRECTORY_SEPARATOR . $codename . '.json')) {
 			$settings = json_decode(file_get_contents($path . DIRECTORY_SEPARATOR . $codename . '.json'), true);
-			foreach($settings as $name => $value) {
-				if(!is_array($value)) $settings[$name] = htmlspecialchars_decode($value);
+			foreach ($settings as $name => $value) {
+				if (!is_array($value)) $settings[$name] = htmlspecialchars_decode($value);
 			}
 		} else {
-			if(!empty($confName)) {
+			if (!empty($confName)) {
 				$oldConfig = ENGINE_DIR . '/data/' . $codename . '.php';
-				if(is_file($oldConfig)) {
+				if (is_file($oldConfig)) {
 					$oldFile = file_get_contents(DLEPlugins::Check($oldConfig));
 					$oldFile = str_replace("\${$confName} = ", 'return ', $oldFile);
 					file_put_contents($oldConfig, $oldFile, LOCK_EX);
 					$oldSettings = include DLEPlugins::Check($oldConfig);
-					if(is_array($oldSettings)) $oldSettings = json_encode($oldSettings, JSON_UNESCAPED_UNICODE);
+					if (is_array($oldSettings)) $oldSettings = json_encode($oldSettings, JSON_UNESCAPED_UNICODE);
 					file_put_contents($path . DIRECTORY_SEPARATOR . $codename . '.json', $oldSettings);
 					@unlink($oldConfig);
 
-					foreach(json_decode($oldSettings, true) as $set => $val) $settings[$set] = $val;
+					foreach (json_decode($oldSettings, true) as $set => $val) $settings[$set] = $val;
 				}
 			}
 		}
@@ -483,19 +492,18 @@ trait DataLoader {
 	/**
 	 * @return string
 	 */
-	public function getPrefix()
-	: string {
-		if($this->prefix === null) $this->setPrefix();
+	public function getPrefix(): string {
+		if ($this->prefix === null) $this->setPrefix();
 		return $this->prefix;
 	}
 
 	/**
 	 */
-	public function setPrefix(?string $name = null)
-	: void {
+	public function setPrefix(?string $name = null): void {
 		$prefix = PREFIX;
-		if(in_array($name, [
-			'users', 'usergroup'
+		if (in_array($name, [
+			'users',
+			'usergroup'
 		])) {
 			$prefix = USERPREFIX;
 		}

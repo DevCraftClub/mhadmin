@@ -1,8 +1,6 @@
 <?php
 
-if (!class_exists('LogGenerator')) {
-	include_once DLEPlugins::Check(__DIR__ . '/LogGenerator.php');
-}
+require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 
 trait DataLoader {
 

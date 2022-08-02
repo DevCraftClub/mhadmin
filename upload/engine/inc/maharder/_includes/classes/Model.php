@@ -2,10 +2,6 @@
 
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 
-require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/LogGenerator.php');
-require_once DLEPlugins::Check(MH_ROOT . '/_includes/traits/DataLoader.php');
-require_once DLEPlugins::Check(__DIR__ . '/Table.php');
-
 /**
  * Класс по управлению данных в базе данных
  */

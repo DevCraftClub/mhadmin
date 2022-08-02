@@ -1,10 +1,9 @@
 <?php
 
+require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+
 use Curl\Curl;
 
-if(!class_exists('Curl')) {
-	include_once ENGINE_DIR . '/inc/maharder/_includes/vendor/autoload.php';
-}
 
 trait UpdatesChecker {
 

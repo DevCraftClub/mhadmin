@@ -1,11 +1,7 @@
 <?php
 
-if (!class_exists('Monolog\Logger')) {
-	include_once ENGINE_DIR . '/inc/maharder/_includes/vendor/autoload.php';
-}
-
-if (!class_exists('DataLoader')) {
-	include_once DLEPlugins::Check(dirname(__FILE__) . '/traits/DataLoader.php');
+if (!class_exists('Monolog\Logger') || !class_exists('DataLoader')) {
+	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 }
 
 use Monolog\Handler\BrowserConsoleHandler;

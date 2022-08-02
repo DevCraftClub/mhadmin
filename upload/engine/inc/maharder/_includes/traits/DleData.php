@@ -1,5 +1,7 @@
 <?php
 
+require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+
 trait DleData {
 	/**
 	 * Возвращает массив с использованными доп. полями в новости

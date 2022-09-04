@@ -16,6 +16,8 @@
 		exit('Hacking attempt!');
 	}
 
+	global $is_logged, $dle_login_hash, $mh_admin, $method, $data;
+
 	if (!$is_logged) {
 		exit('error');
 	}
@@ -26,20 +28,17 @@
 
 	require_once DLEPlugins::Check(__DIR__ . '/_functions.php');
 
-	$method = $_POST['method'];
 	if (!$method) {
 		exit();
 	}
 	$save_con = filter_var_array($_POST['data']);
-	$data = [];
 
 	foreach ($save_con as $id => $d) {
 		$name = $d['name'];
 		$value = $d['value'];
 		$value = htmlspecialchars($value);
-		$data[$name] = $value;
+		$save_con[$name] = $value;
 	}
-	$data = filter_var_array($data);
 
 	switch ($method) {
 		case 'settings':
@@ -54,9 +53,9 @@
 
 		case 'check_assets':
 			try {
-				echo json_encode($mh_admin->checkAssets(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+				echo json_encode($mh_admin->checkAssets(),  JSON_UNESCAPED_UNICODE);
 			} catch (\Exception $e) {
-				$mh_admin->generate_log('maharder', 'check_assets', serialize($e->getMessage()));
+				LogGenerator::generate_log('maharder', 'check_assets', $e->getMessage());
 				echo json_encode([]);
 			}
 
@@ -66,11 +65,23 @@
 		case 'save_asset':
 
 			try {
-				echo json_encode($mh_admin->save_asset($_POST['data']['data'], $_POST['data']['file']), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+				echo json_encode($mh_admin->save_asset($_POST['data']['data'], $_POST['data']['file']), JSON_UNESCAPED_UNICODE);
 			} catch (\Exception $e) {
-				$mh_admin->generate_log('maharder', 'save_asset', serialize($e->getMessage()));
+				LogGenerator::generate_log('maharder', 'save_asset', $e->getMessage());
 				echo json_encode([]);
 			}
 			sleep(0.5);
+			break;
+
+		case 'check_update':
+
+			try {
+				$mh_admin->setRecourceId($data['resource_id']);
+				echo json_encode($mh_admin->checkUpdate(), JSON_UNESCAPED_UNICODE);
+			} catch (Exception $e) {
+				LogGenerator::generate_log('maharder', 'check_update', $e->getMessage());
+				echo json_encode([]);
+			}
+
 			break;
 	}

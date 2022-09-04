@@ -1,24 +1,24 @@
 <?php
 
-if(!class_exists('Monolog\Logger')) {
-	include_once ENGINE_DIR . '/inc/maharder/_includes/vendor/autoload.php';
+if (!class_exists('Monolog\Logger') || !class_exists('DataLoader')) {
+	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 }
 
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\ChromePHPHandler;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Monolog\Handler\FirePHPHandler;
+use Monolog\Handler\StreamHandler;
 use Monolog\Handler\TelegramBotHandler;
+use Monolog\Logger;
 
-trait LogGenerator {
+abstract class LogGenerator {
 
 	/**
 	 * Регулятор логирования системы
 	 *
-	 * @var bool|int
+	 * @var bool
 	 */
-	protected int $logs = 0;
+	protected static $logs;
 
 	/**
 	 * Регулятор отправки логов в телеграм канал
@@ -26,25 +26,25 @@ trait LogGenerator {
 	 *
 	 * @var bool
 	 */
-	protected bool $telegram_send = false;
+	protected static $telegram_send = false;
 	/**
 	 * ID канала, куда будут отправляться логи
 	 *
 	 * @var int|string|null
 	 */
-	protected $telegram_channel = null;
+	protected static $telegram_channel = null;
 	/**
 	 * API телеграм бота, который будет отправлять логи
 	 *
 	 * @var string|null
 	 */
-	protected ?string $telegram_bot = null;
+	protected static $telegram_bot = null;
 	/**
 	 * Тип логов, которые будут отправлены в телеграм
 	 *
 	 * @var string|null
 	 */
-	protected ?string $telegram_type = null;
+	protected static $telegram_type = null;
 
 	/**
 	 * Генерация лог-файлов, если по какой-то причине произошла ошибка во время исполнения функционала
@@ -56,14 +56,13 @@ trait LogGenerator {
 	 *
 	 * @throws \Monolog\Handler\MissingExtensionException
 	 */
-	public function generate_log(string $service, string $function_name, $message, string $type = 'error')
-	: void {
-		if($this->getLogs()) {
+	public static function generate_log(string $service, string $function_name, $message, string $type = 'error'): void {
+		if (self::getLogs()) {
 			$root_dir = dirname(__DIR__, 2);
 			$date = date('Y-m-d d.m.Y H:i');
 			$concurrentDirectory = $root_dir . '/_logs/' . $service . '/' . $function_name;
 
-			if(!mkdir($concurrentDirectory, 0777, true) && !is_dir($concurrentDirectory)) {
+			if (!mkdir($concurrentDirectory, 0777, true) && !is_dir($concurrentDirectory)) {
 				echo "<b>Уведомление</b>:{$type}<br>";
 				echo "<b>Модуль</b>:{$service}<br>";
 				echo "<b>Функция</b>:{$function_name}<br>";
@@ -77,7 +76,7 @@ trait LogGenerator {
 
 			$logger = new Logger($service);
 
-			switch($type) {
+			switch ($type) {
 				case 'error':
 					$log_level = Logger::ERROR;
 					break;
@@ -120,28 +119,31 @@ trait LogGenerator {
 			$logger->pushHandler(new BrowserConsoleHandler($log_level));
 
 			$log_message = [
-				'plugin' => $service, 'function_name' => $function_name, 'datetime' => $date, 'message' => $message
+				'plugin'        => $service,
+				'function_name' => $function_name,
+				'datetime'      => $date,
+				'message'       => $message
 			];
 
 			$telegram_send = false;
 
-			if($this->isTelegramSend()) {
-				$telegramLogger = new TelegramBotHandler($this->getTelegramBot(), $this->getTelegramChannel(), $log_level);
+			if (self::isTelegramSend()) {
+				$telegramLogger = new TelegramBotHandler(self::getTelegramBot(), self::getTelegramChannel(), $log_level);
 				$telegramLogger->setParseMode('HTML');
 
-				$t_type = explode(' ', $this->getTelegramType());
-				if(is_array($t_type)) {
-					if(in_array('all', $t_type)) {
+				$t_type = explode(' ', self::getTelegramType());
+				if (is_array($t_type)) {
+					if (in_array('all', $t_type)) {
 						$logger->pushHandler($telegramLogger);
 						$telegram_send = true;
-					} elseif(in_array($type, $t_type)) {
+					} elseif (in_array($type, $t_type)) {
 						$logger->pushHandler($telegramLogger);
 						$telegram_send = true;
 					}
 				}
 			}
 
-			switch($type) {
+			switch ($type) {
 				case 'error':
 					$logger->error($function_name, $log_message);
 					break;
@@ -184,17 +186,21 @@ trait LogGenerator {
 	/**
 	 * @return bool
 	 */
-	public function getLogs()
-	: bool {
-		return (bool)$this->logs;
+	public static function getLogs(): bool {
+		$logs = self::$logs;
+		if ($logs === null) {
+			$config = DataLoader::getConfig('maharder');
+			$logs = isset($config['logs']) ? $config['logs'] : false;
+			self::setLogs($logs);
+		}
+		return (bool)$logs;
 	}
 
 	/**
 	 * @param bool|int $logs
 	 */
-	public function setLogs(?bool $logs)
-	: void {
-		$this->logs = (bool)$logs;
+	public static function setLogs($logs): void {
+		self::$logs = (bool)$logs;
 	}
 
 	/**
@@ -202,67 +208,57 @@ trait LogGenerator {
 	 *
 	 * @param bool $telegram_send
 	 */
-	public function setTelegramSend(bool $telegram_send = false)
-	: void {
-		$this->telegram_send = $telegram_send;
+	public static function setTelegramSend(bool $telegram_send = false): void {
+		self::$telegram_send = $telegram_send;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isTelegramSend()
-	: bool {
-		return $this->telegram_send;
+	public static function isTelegramSend(): bool {
+		return self::$telegram_send;
 	}
 
 	/**
-	 * @param int|null|string  $telegram_channel
+	 * @param int|null|string $telegram_channel
 	 */
-	public function setTelegramChannel($telegram_channel)
-	: void {
-		$this->telegram_channel = $telegram_channel;
+	public static function setTelegramChannel($telegram_channel): void {
+		self::$telegram_channel = $telegram_channel;
 	}
 
 	/**
 	 * @return int|null
 	 */
-	public function getTelegramChannel()
-	: ?int {
-		return $this->telegram_channel;
+	public function getTelegramChannel(): ?int {
+		return self::$telegram_channel;
 	}
 
 	/**
 	 * @param string|null $telegram_bot
 	 */
-	public function setTelegramBot(?string $telegram_bot)
-	: void {
-		$this->telegram_bot = $telegram_bot;
+	public static function setTelegramBot(?string $telegram_bot): void {
+		self::$telegram_bot = $telegram_bot;
 	}
 
 	/**
 	 * @return string|null
 	 */
-	public function getTelegramBot()
-	: ?string {
-		return $this->telegram_bot;
+	public static function getTelegramBot(): ?string {
+		return self::$telegram_bot;
 	}
 
 	/**
 	 * @param string|null $telegram_type
 	 */
-	public function setTelegramType(?string $telegram_type)
-	: void {
-		$this->telegram_type = $telegram_type;
+	public static function setTelegramType(?string $telegram_type): void {
+		self::$telegram_type = $telegram_type;
 	}
 
 	/**
 	 * @return string|null
 	 */
-	public function getTelegramType()
-	: ?string {
-		return $this->telegram_type;
+	public static function getTelegramType(): ?string {
+		return self::$telegram_type;
 	}
-
-
 
 }

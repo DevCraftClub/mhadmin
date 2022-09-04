@@ -1,6 +1,6 @@
 <?php
 
-namespace MaHarder\classes;
+//namespace MaHarder\classes;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

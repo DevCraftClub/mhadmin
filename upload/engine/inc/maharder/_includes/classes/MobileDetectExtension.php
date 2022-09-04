@@ -1,6 +1,6 @@
 <?php
 
-namespace MaHarder\classes;
+//namespace MaHarder\classes;
 
 use Mobile_Detect;
 use Twig\Extension\AbstractExtension;
@@ -18,7 +18,11 @@ require_once DLEPlugins::Check(ENGINE_DIR . '/classes/mobiledetect.class.php');
  * @link https://github.com/bes89/mobiledetect-twig-extension
  */
 class MobileDetectExtension extends AbstractExtension {
-	protected ?Mobile_Detect $detector = null;
+
+	/**
+	 * @var \Mobile_Detect|null
+	 */
+	protected $detector = null;
 
 	/**
 	 * Constructor
@@ -56,11 +60,11 @@ class MobileDetectExtension extends AbstractExtension {
 	public function getAvailableDevices(): array {
 		$availableDevices = array();
 		$rules = array();
-		$rules = array_unique(array_merge(array_change_key_case($this->detector::getPhoneDevices(), $rules)));
-		$rules = array_unique(array_merge(array_change_key_case($this->detector::getTabletDevices(), $rules)));
-		$rules = array_unique(array_merge(array_change_key_case($this->detector::getOperatingSystems(), $rules)));
-		$rules = array_unique(array_merge(array_change_key_case($this->detector::getBrowsers(), $rules)));
-		$rules = array_unique(array_merge(array_change_key_case($this->detector::getUtilities(), $rules)));
+		$rules = array_unique(array_merge(array_change_key_case($this->detector::getPhoneDevices()), $rules));
+		$rules = array_unique(array_merge(array_change_key_case($this->detector::getTabletDevices()), $rules));
+		$rules = array_unique(array_merge(array_change_key_case($this->detector::getOperatingSystems()), $rules));
+		$rules = array_unique(array_merge(array_change_key_case($this->detector::getBrowsers()), $rules));
+		$rules = array_unique(array_merge(array_change_key_case($this->detector::getUtilities()), $rules));
 
 		foreach ($rules as $device => $rule) {
 			$availableDevices[$device] = static::fromCamelCase($device);

@@ -1,10 +1,12 @@
 <?php
 
+require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+
 trait DleData {
 	/**
 	 * Возвращает массив с использованными доп. полями в новости
 	 *
-	 * @param $id          // ID объекта
+	 * @param        $id   // ID объекта
 	 * @param string $type // Тип объекта, post или user
 	 * @return array|false
 	 * @throws \JsonException

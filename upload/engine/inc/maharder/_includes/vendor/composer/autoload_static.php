@@ -87,6 +87,10 @@ class ComposerStaticInite09c041642592ad5faee91a90b0cc124
         array (
             'Monolog\\' => 8,
         ),
+        'C' => 
+        array (
+            'Curl\\' => 5,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -281,6 +285,10 @@ class ComposerStaticInite09c041642592ad5faee91a90b0cc124
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Curl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-curl-class/php-curl-class/src/Curl',
         ),
     );
 

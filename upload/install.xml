@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dleplugin>
-	<name>MaHarder Assets</name>
+	<name>MH Admin</name>
 	<description>Универсальная административная панель для модификаций от MaHarder</description>
 	<icon></icon>
 	<version>2.0.7</version>
@@ -8,29 +8,19 @@
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
 	<filedelete>1</filedelete>
-	<needplugin>MaHarder Assets</needplugin>
+	<needplugin></needplugin>
 	<mnotice>0</mnotice>
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MaHarder Assets v2.0.7', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.7';]]></mysqlupgrade>
+VALUES('maharder', 'MH Admin v2.0.7', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MH Admin v2.0.7';]]></mysqlupgrade>
 	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MaHarder Assets v2.0.7', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MaHarder Assets v2.0.7';]]></mysqlenable>
+VALUES('maharder', 'MH Admin v2.0.7', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MH Admin v2.0.7';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
 	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
 	<phpinstall><![CDATA[]]></phpinstall>
-	<phpupgrade><![CDATA[$objects = scandir(ENGINE_DIR . '/skins/maharder');
-foreach ($objects as $object) {
-	if ($object != "." && $object != "..") {
-    	if (filetype(ENGINE_DIR . '/skins/maharder'."/".$object) == "dir")
-          @rmdir(ENGINE_DIR . '/skins/maharder'."/".$object); 
-      	else
-          @unlink(ENGINE_DIR . '/skins/maharder'."/".$object);
-	}
-}
-reset($objects);
-@rmdir(ENGINE_DIR . '/skins/maharder');]]></phpupgrade>
+	<phpupgrade><![CDATA[@unlink(ENGINE_DIR . '/inc/maharder/_includes/traits/LogGenerator.php');]]></phpupgrade>
 	<phpenable><![CDATA[]]></phpenable>
 	<phpdisable><![CDATA[]]></phpdisable>
 	<phpdelete><![CDATA[]]></phpdelete>
@@ -56,7 +46,6 @@ reset($objects);
 			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
 			<replacecode><![CDATA[
 
-	include_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/classes/Ajax.php');
 	$mh_ajax = new Ajax();
 	$data = !$cache_areas ? 'all' : $cache_areas;
 	$mh_ajax->clear_cache($data);]]></replacecode>
@@ -154,16 +143,29 @@ JS;
 ]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
+		<operation action="after">
+			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php'));]]></searchcode>
+			<replacecode><![CDATA[
+include_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
 	</file>
 	<file name="engine/modules/functions.php">
 		<operation action="after">
 			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
 			<replacecode><![CDATA[
 
-	include_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/classes/Ajax.php');
 	$mh_ajax = new Ajax();
 	$data = !$cache_areas ? 'all' : $cache_areas;
 	$mh_ajax->clear_cache($data);]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
+	</file>
+	<file name="engine/init.php">
+		<operation action="after">
+			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));]]></searchcode>
+			<replacecode><![CDATA[
+include_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>

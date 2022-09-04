@@ -1,16 +1,17 @@
 <?php
 
-// заполняем важную и нужную инофрмацию о модуле
+// заполняем важную и нужную информацию о модуле
 
 
 $modInfo = [
 	'module_name' => 'MaHarder Assets',
-	'module_version' => '2.0.6',
+	'module_version' => '2.0.7',
 	'module_description' => 'Административная панель для моих разработок',
 	'module_code' => 'maharder',
+	'module_id' => 4,
 	'module_icon' => 'fad fa-robot',
 	'site_link' => 'https://devcraft.club/downloads/maharder-assets.4/',
-	'docs_link' => 'https://devcraft.club/articles/maharder-assets.10/',
+	'docs_link' => 'https://readme.devcraft.club/latest/dev/mhadmin/install/',
 	'dle_config' => $config,
 ];
 
@@ -22,7 +23,7 @@ $mh = new Admin();
 // Подключаем переменные модуля и его функционал
 // Используем переменную sites для навигации в модуле
 switch ($_GET['sites']) {
-	// Страница с с генератором модуля
+	// Страница с генератором модуля
 	case 'new_module':
 		require_once DLEPlugins::Check(MH_ADMIN.'/modules/admin/new_module.php');
 		break;

@@ -3,9 +3,6 @@
 use Twig\TwigFilter;
 use jblond\TwigTrans\Translation;
 use Twig\Extension\DebugExtension;
-use MaHarder\Classes\DeclineExtension;
-use MaHarder\Classes\AdminUrlExtension;
-use MaHarder\Classes\MobileDetectExtension;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Twig\Environment;
@@ -35,8 +32,6 @@ define('THIS_HOST', $_SERVER['HTTP_HOST']);
 define('THIS_SELF', $_SERVER['PHP_SELF']);
 define('URL', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http') . '://' . THIS_HOST . '/engine/inc');
 
-require_once DLEPlugins::Check(MH_ROOT . '/_includes/vendor/autoload.php');
-require_once DLEPlugins::Check(MH_ROOT . '/_includes/extras/autoloader.php');
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php');
 require_once DLEPlugins::Check(ENGINE_DIR . '/skins/default.skin.php');
 require_once DLEPlugins::Check(ENGINE_DIR . '/data/config.php');

@@ -40,6 +40,8 @@ class Admin {
 		URL . '/maharder/admin/assets/js/autosize.min.js',
 		URL . '/maharder/admin/assets/js/mask.js',
 		URL . '/maharder/admin/assets/js/tokens.js',
+		URL . '/maharder/admin/assets/js/jquery.timeago.js',
+		URL . '/maharder/admin/assets/js/timeago/jquery.timeago.ru.js',
 		URL . '/maharder/admin/assets/js/jquery-confirm.min.js',
 		URL . '/maharder/admin/assets/editor/sceditor.min.js',
 		URL . '/maharder/admin/assets/editor/formats/bbcode.js',

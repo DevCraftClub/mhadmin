@@ -15,6 +15,18 @@
 
 {% endmacro %}
 
+{% macro select_only(id, name, vals, selected) %}
+
+	<select id="{{ id }}" name="{{ id }}" class="ui search clearable selection fluid dropdown">
+		<option></option>
+		<option disabled>{{ name }}</option>
+		{% for c_id, c_name in vals %}
+			<option value="{{ c_id }}" {% if selected == c_id %}selected{% endif %}>{{ c_name }}</option>
+		{% endfor %}
+	</select>
+
+{% endmacro %}
+
 {% macro multi(id, name, descr, opts, vals) %}
 
 	{{ include('templateIncludes/segRow.html', {

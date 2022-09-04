@@ -24,7 +24,11 @@
 		<h1 class="ui header">
 			<i class="{{module_icon}}" style="float: left;margin-right: 2rem;"></i>
 			<div class="content" style="padding: 0">
-				{{ module_name|trans }} v{{ module_version }}
+				{{ module_name|trans }}
+				<div class="ui label update_checker" style="cursor:pointer;" data-id="{{module_id}}" data-version="{{module_version}}" data-position="bottom center" data-tooltip="Проверить на наличие новой версии">
+					v{{ module_version }}
+					<i class="sync alternate icon"></i>
+				</div>
 			</div>
 		</h1>
 		<p style="margin-top: -18px;color: #afafaf;">{{ module_description|trans }}</p>
@@ -46,6 +50,8 @@
 	{% autoescape 'html' %}
 		<script>
 			var is_mobile = {% if is_mobile() or is_tablet() %}true{% else %}false{% endif %};
+			var dle_login_hash = '{{dle_login_hash}}';
+			var module_code = '{{module_code}}';
 		</script>
 		{% for script in js %}
 			{{ script|raw }}

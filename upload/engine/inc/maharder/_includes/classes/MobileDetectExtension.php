@@ -1,6 +1,6 @@
 <?php
 
-namespace MaHarder\classes;
+//namespace MaHarder\classes;
 
 use Mobile_Detect;
 use Twig\Extension\AbstractExtension;
@@ -18,7 +18,11 @@ require_once DLEPlugins::Check(ENGINE_DIR . '/classes/mobiledetect.class.php');
  * @link https://github.com/bes89/mobiledetect-twig-extension
  */
 class MobileDetectExtension extends AbstractExtension {
-	protected ?Mobile_Detect $detector = null;
+
+	/**
+	 * @var \Mobile_Detect|null
+	 */
+	protected $detector = null;
 
 	/**
 	 * Constructor

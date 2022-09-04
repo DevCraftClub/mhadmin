@@ -6,6 +6,7 @@ require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/path
 class Ajax {
 	use DataLoader;
 	use AssetsChecker;
+	use UpdatesChecker;
 
 	public function __construct() {
 		$mh_settings = self::getConfig('maharder');

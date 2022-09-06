@@ -5,7 +5,7 @@
 
 $modInfo = [
 	'module_name' => 'MaHarder Assets',
-	'module_version' => '2.0.7',
+	'module_version' => '2.0.7.1',
 	'module_description' => 'Административная панель для моих разработок',
 	'module_code' => 'maharder',
 	'module_id' => 4,

@@ -257,12 +257,16 @@
 				$xcpt = array_merge_recursive($xcpt, self::nameArgs($except));
 			}
 
-			foreach (scandir($dir, SCANDIR_SORT_NONE) as $key => $value) {
-				if ( ! in_array($value, $xcpt, true)) {
-					if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
-						$result[$value] = self::dirToArray($dir.DIRECTORY_SEPARATOR.$value);
-					} else {
-						$result[] = $value;
+			$dir = str_replace(ENGINE_DIR, ROOT . DIRECTORY_SEPARATOR . 'engine', $dir);
+
+			if (is_dir($dir)) {
+				foreach (scandir($dir, SCANDIR_SORT_NONE) as $key => $value) {
+					if ( ! in_array($value, $xcpt, true)) {
+						if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
+							$result[$value] = self::dirToArray($dir.DIRECTORY_SEPARATOR.$value);
+						} else {
+							$result[] = $value;
+						}
 					}
 				}
 			}

@@ -4,10 +4,8 @@
 	@ini_set('pcre.backtrack_limit', 10000000 );
 	@ini_set('pcre.jit', false);
 
-
-
 	if (!function_exists('dirToArray')) {
-		function dirToArray($dir) {
+		function dirToArray($dir, ...$except) {
 			$result = [];
 
 			$xcpt = [
@@ -15,6 +13,9 @@
 				'..',
 				'.htaccess',
 			];
+			if ($except) {
+				foreach ($except as $ex) $xcpt = array_merge_recursive($xcpt, $ex);
+			}
 
 			foreach (scandir($dir, SCANDIR_SORT_NONE) as $key => $value) {
 				if ( ! in_array($value, $xcpt, true)) {
@@ -31,11 +32,11 @@
 	}
 
 	spl_autoload_register(function ($class_name) {
-		global $loader_paths;
+		global $mh_loader_paths;
 
 		$found = false;
 
-		foreach ($loader_paths as $path) {
+		foreach ($mh_loader_paths as $path) {
 			$dir_data = dirToArray($path);
 			foreach ($dir_data as $data) {
 				if ($class_name ===  str_replace('.php', '', $data)) {

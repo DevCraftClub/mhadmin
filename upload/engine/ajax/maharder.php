@@ -34,7 +34,7 @@ $method = $data['method'];
 
 include_once(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
 
-$mh_admin = new Ajax();
+$mh_admin = new MhAjax();
 
 if (file_exists(DLEPlugins::Check(ENGINE_DIR . '/ajax/maharder/' . $module . '/' . $mod_file . '.php'))) {
 

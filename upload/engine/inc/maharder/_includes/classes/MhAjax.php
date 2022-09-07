@@ -3,7 +3,7 @@
 
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 
-class Ajax {
+class MhAjax {
 	use DataLoader;
 	use AssetsChecker;
 	use UpdatesChecker;

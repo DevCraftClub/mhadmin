@@ -5,6 +5,8 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Gokujo/mhadmin.svg?style=flat-square)](https://github.com/Gokujo/mhadmin/issues)[![GitHub forks](https://img.shields.io/github/forks/Gokujo/mhadmin.svg?style=flat-square)](https://github.com/Gokujo/mhadmin/network)[![GitHub license](https://img.shields.io/github/license/Gokujo/mhadmin.svg?style=flat-square)](https://github.com/Gokujo/mhadmin/blob/master/LICENSE)
 
+[![Переведено | Translated](https://badges.crowdin.net/mh-admin/localized.svg)](https://crowdin.com/project/mh-admin)
+
 Административная панель для моих модулей для движка DLE. Основная часть функционала будет основана на CSS framework [Fomantic UI](https://fomantic-ui.com/), JS framework [jQuery](https://jquery.com/) и шаблонизаторе [Twig](https://twig.symfony.com/).
 
 

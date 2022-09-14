@@ -31,9 +31,10 @@
 	if (!$method) {
 		exit();
 	}
-	$save_con = filter_var_array($_POST['data']);
 
-	foreach ($save_con as $id => $d) {
+	$save_con = [];
+
+	foreach (filter_var_array($data['data']) as $id => $d) {
 		$name = $d['name'];
 		$value = $d['value'];
 		$value = htmlspecialchars($value);
@@ -65,7 +66,7 @@
 		case 'save_asset':
 
 			try {
-				echo json_encode($mh_admin->save_asset($_POST['data']['data'], $_POST['data']['file']), JSON_UNESCAPED_UNICODE);
+				echo json_encode($mh_admin->save_asset($data['data'], $data['file']), JSON_UNESCAPED_UNICODE);
 			} catch (\Exception $e) {
 				LogGenerator::generate_log('maharder', 'save_asset', $e->getMessage());
 				echo json_encode([]);

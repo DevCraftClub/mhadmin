@@ -27,5 +27,11 @@
 		// Custom paths //
 	];
 
+	if(!function_exists('__')) {
+		function __($mod, $phrase){
+			return $phrase;
+		}
+	}
+
 	include_once MH_ROOT.'/_includes/extras/mhLoader.php';
 	include_once ENGINE_DIR.'/inc/maharder/_includes/vendor/autoload.php';

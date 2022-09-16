@@ -28,7 +28,7 @@
 	];
 
 	if(!function_exists('__')) {
-		function __($mod, $phrase){
+		function __($mod, $phrase, $arr = [], $c = 0){
 			return $phrase;
 		}
 	}

@@ -1,6 +1,6 @@
 <?php
 
-	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+	require_once DLEPlugins::Check(ENGINE_DIR.'/inc/maharder/_includes/extras/paths.php');
 
 	trait DataLoader {
 
@@ -14,6 +14,13 @@
 		private $prefix = null;
 
 		/**
+		 * Папка кеша
+		 *
+		 * @var string
+		 */
+		private $cache_folder = ENGINE_DIR.'/inc/maharder/_cache';
+
+		/**
 		 * Функция подключения к базе данных
 		 *
 		 * @return void
@@ -21,7 +28,7 @@
 		public static function connect() {
 			if (is_null(self::$db)) {
 				if (!defined('DBHOST')) {
-					include_once ENGINE_DIR . '/data/dbconfig.php';
+					include_once ENGINE_DIR.'/data/dbconfig.php';
 					$db = new db();
 				} else {
 					global $db;
@@ -33,7 +40,7 @@
 		/**
 		 * @return db
 		 */
-		public static function getDb() {
+		public static function getDb(): db {
 			if (is_null(self::$db)) {
 				self::connect();
 			}
@@ -42,18 +49,11 @@
 		}
 
 		/**
-		 * @param \db|null $db
+		 * @param    \db|null    $db
 		 */
 		public static function setDb(?db $db) {
 			self::$db = $db;
 		}
-
-		/**
-		 * Папка кеша
-		 *
-		 * @var string
-		 */
-		private $cache_folder = ENGINE_DIR . '/inc/maharder/_cache';
 
 		/**
 		 * @return string
@@ -63,7 +63,7 @@
 		}
 
 		/**
-		 * @param string $cache_folder
+		 * @param    string    $cache_folder
 		 */
 		public function setCacheFolder(string $cache_folder) {
 			$this->cache_folder = $cache_folder;
@@ -81,17 +81,17 @@
 		 * @return string
 		 */
 		protected static function abbr($string, $id = null, $l = 2) {
-			$results = '';                                  // empty string
-			$vowels  = ['a', 'e', 'i', 'o', 'u', 'y'];      // vowels
+			$results = '';                                   // empty string
+			$vowels  = ['a', 'e', 'i', 'o', 'u', 'y'];       // vowels
 			preg_match_all(
 				'/[A-Z][a-z]*/', ucfirst($string),
 				$m
 			);                            // Match every word that begins with a capital letter, added ucfirst() in case there is no uppercase letter
 			foreach ($m[0] as $substring) {
-				$substring = str_replace($vowels, '', strtolower($substring));                 // String to lower case and remove all vowels
-				$results   .= preg_replace('/([a-z]{' . $l . '})(.*)/', '$1', $substring);     // Extract the first N letters.
+				$substring = str_replace($vowels, '', strtolower($substring));                   // String to lower case and remove all vowels
+				$results   .= preg_replace('/([a-z]{'.$l.'})(.*)/', '$1', $substring);           // Extract the first N letters.
 			}
-			$results .= '_' . str_pad($id, 4, 0, STR_PAD_LEFT); // Add the ID
+			$results .= '_'.str_pad($id, 4, 0, STR_PAD_LEFT); // Add the ID
 
 			return $results;
 		}
@@ -100,8 +100,8 @@
 		 * Функция создания кеша запросов,
 		 * чтобы сократить кол-во обращений к базе данных
 		 *
-		 * @param string $name                  //    Переменная для названия кеша
-		 * @param array  ...$vars               //    table       Название таблицы, в противном случае будет браться
+		 * @param    string    $name            //    Переменная для названия кеша
+		 * @param    array     ...$vars         //    table       Название таблицы, в противном случае будет браться
 		 *                                      переменная $name
 		 *                                      //    sql         Запрос полностью, если он заполнен, то будет исполняться
 		 *                                      именно он, другие значения игнорируются
@@ -146,11 +146,11 @@
 				if (is_array($key)) {
 					foreach ($key as $k) {
 						$file_suffix .= "_{$id}-{$k}";
-						$where[]     = $id . self::getComparer($k);
+						$where[]     = $id.self::getComparer($k);
 					}
 				} else {
 					$file_suffix .= "_{$id}-{$key}";
-					$where[]     = $id . self::getComparer($key);
+					$where[]     = $id.self::getComparer($key);
 				}
 			}
 			foreach ($vars['order'] as $n => $sort) {
@@ -166,8 +166,8 @@
 				$file_suffix .= "_l{$vars['limit']}";
 			}
 
-			$file_name .= '_' . md5(md5($file_suffix));
-			$file_path = $this->getCacheFolder() . "/{$name}/{$file_name}.php";
+			$file_name .= '_'.md5(md5($file_suffix));
+			$file_path = $this->getCacheFolder()."/{$name}/{$file_name}.php";
 
 			if (file_exists($file_path)) {
 				$file_created = filectime($file_path);
@@ -241,19 +241,13 @@
 		/**
 		 * Возвращает указанный путь в виде массива со всеми папками и файлами в нём
 		 *
-		 * @param $dir //  Путь, который нужно просканировать
+		 * @param $dir    //  Путь, который нужно просканировать
 		 *
 		 * @version 2.0.9
 		 * @return array
 		 */
 		public static function dirToArray($dir, ...$_ext) {
-			$ext = [
-				'php', 'js', 'css', 'twig', 'html', 'less', 'json', 'pdf', 'txt', 'md', 'log', 'sql', 'lng', 'png', 'jpg', 'gif', 'webp', 'jpeg', 'tpl', 'zip', 'rar', '7z', 'tar', 'gz', 'otf', 'svg', 'eot', 'ttf', 'woff', 'woff2', 'lic', 'lock', 'phar', 'xml'
-			];
-			foreach ($_ext as $e) if (!in_array($e, $ext))
-				$ext[] = $e;
-
-			return DLEFiles::ListDirectory($dir, $ext, 'local', true);
+			return dirToArray($dir, $_ext);
 		}
 
 		/**
@@ -261,33 +255,10 @@
 		 *
 		 * @version 2.0.9
 		 *
-		 * @param string $type
-		 *
-		 * @throws \Monolog\Handler\MissingExtensionException
+		 * @param    string    $type
 		 */
 		public function clear_cache($type = 'all') {
-			$dirname = $this->cache_folder;
-			if ($type !== 'all') {
-				if (is_array($type)) {
-					foreach ($type as $key) {
-						$this->clear_cache($key);
-					}
-				} else {
-					$type    = totranslit($type, true, false);
-					$dirname .= '/' . $type;
-					foreach (self::dirToArray($dirname) as $i => $name) {
-						try {
-							if (is_array($name)) {
-								DLEFiles::DeleteDirectory($dirname . DIRECTORY_SEPARATOR . $i, 'local');
-							} else {
-								DLEFiles::Delete($dirname . DIRECTORY_SEPARATOR . $name, 'local');
-							}
-						} catch (Exception $e) {
-							LogGenerator::generate_log('maharder', 'clear_cache', $e->getMessage());
-						}
-					}
-				}
-			}
+			CacheControl::init($this->cache_folder)->clear_cache($type);
 		}
 
 		/**
@@ -296,23 +267,10 @@
 		 * @param $type
 		 * @param $name
 		 *
-		 * @return array|false|int|mixed
-		 * @throws JsonException
+		 * @return array|false
 		 */
 		public function get_cache($type, $name) {
-			$file = totranslit($name, true, false);
-			$type = totranslit($type, true, false);
-
-			$data = @file_get_contents($this->cache_folder . '/' . $type . DIRECTORY_SEPARATOR . $file . '.php');
-
-			if ($data !== false) {
-				$data = json_decode($data, true);
-				if (is_array($data) || is_int($data)) {
-					return $data;
-				}
-			}
-
-			return false;
+			return CacheControl::init($this->cache_folder)->get_cache($type, $name);
 		}
 
 		/**
@@ -321,39 +279,22 @@
 		 * @param $type
 		 * @param $name
 		 * @param $data
-		 *
-		 * @throws \JsonException
 		 */
 		private function set_cache($type, $name, $data) {
-			$file                = totranslit($name, true, false);
-			$type                = totranslit($type, true, false);
-			$concurrentDirectory = $this->cache_folder . '/' . $type;
-			DLEFiles::CreateDirectory($concurrentDirectory);
-			if (!is_dir($concurrentDirectory)) {
-				LogGenerator::generate_log('maharder', 'set_cache', sprintf('Directory "%s" was not created', $concurrentDirectory));
-			}
-
-			if (is_array($data) or is_int($data)) {
-				file_put_contents(
-					$concurrentDirectory . DIRECTORY_SEPARATOR . $file . '.php',
-					json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX
-				);
-				@chmod($concurrentDirectory . DIRECTORY_SEPARATOR . $file . '.php', 0666);
-			}
+			CacheControl::init($this->cache_folder)->set_cache($type, $name, $data);
 		}
 
 		/**
 		 * Создаёт папку по указанному пути
 		 *
-		 * @param string ...$_path //  Может содержать несколько путей, которые будут объедены в один
+		 * @param    string    ...$_path    Может содержать несколько путей, которые будут объедены в один
 		 *
 		 * @return bool
-		 * @throws \Monolog\Handler\MissingExtensionException
 		 */
-		protected static function createDir(...$_path) {
+		public static function createDir(...$_path) {
 			foreach ($_path as $path) {
 				try {
-					DLEFiles::CreateDirectory($path, 'local');
+					@mkdir($path, 0755, true);
 				} catch (Exception $e) {
 					LogGenerator::generate_log('DataLoader', 'createDir', "Путь \"{$path}\" не был создан");
 
@@ -365,9 +306,9 @@
 		}
 
 		/**
-		 * Преобразует ... аргументы в понятный масссив
+		 * Преобразует ... аргументы в понятный массив
 		 *
-		 * @param array|null $args
+		 * @param    array|null    $args
 		 *
 		 * @return array
 		 */
@@ -386,14 +327,14 @@
 				}
 			}
 
-			return array_filter($returnArr, static function ($value) { return !is_null($value) && $value !== ''; });
+			return array_filter($returnArr, static function($value) { return !is_null($value) && $value !== ''; });
 		}
 
 		/**
 		 * Проверяет файл на верный тип и конвертирует его
 		 *
-		 * @param $value //  Значение
-		 * @param $type  //  Проверяемый тип файла
+		 * @param $value    //  Значение
+		 * @param $type     //  Проверяемый тип файла
 		 *
 		 * @return bool|float|int|string
 		 */
@@ -424,7 +365,7 @@
 		/**
 		 * Обрабатывает значение на сверяющие знаки и возвращает в нужном параметре обратно
 		 *
-		 * @param $value //  Значение со знаками сравнения в начале
+		 * @param $value    //  Значение со знаками сравнения в начале
 		 *
 		 * @return string
 		 */
@@ -465,7 +406,7 @@
 				$outSign = $checkSign;
 			} elseif ($checkSign === '%') {
 				$outSign = 'LIKE';
-				$value   = '%' . $value . '%';
+				$value   = '%'.$value.'%';
 			}
 
 			$value = self::defType($value, $type);
@@ -477,18 +418,18 @@
 		 * Получаем настройки модуля, если такие имеются.
 		 * Возвращает массив данных.
 		 *
-		 * @param string $codename     Название модуля, а так-же название конфигурации; без обозначений
-		 * @param string $path         Путь до конфигурации файла
-		 * @param string $confName     Если сохранилась конфигурация в папке /engine/data/, то указать название массива
-		 *                             без знака $
+		 * @param    string    $codename    Название модуля, а так-же название конфигурации; без обозначений
+		 * @param    string    $path        Путь до конфигурации файла
+		 * @param    string    $confName    Если сохранилась конфигурация в папке /engine/data/, то указать название массива
+		 *                                  без знака $
 		 *
 		 * @return array
 		 */
-		public static function getConfig($codename, $path = ENGINE_DIR . '/inc/maharder/_config', $confName = '') {
+		public static function getConfig($codename, $path = ENGINE_DIR.'/inc/maharder/_config', $confName = '') {
 			$settings = [];
 
-			if (is_file($path . DIRECTORY_SEPARATOR . $codename . '.json')) {
-				$settings = json_decode(file_get_contents($path . DIRECTORY_SEPARATOR . $codename . '.json'), true);
+			if (is_file($path.DIRECTORY_SEPARATOR.$codename.'.json')) {
+				$settings = json_decode(file_get_contents($path.DIRECTORY_SEPARATOR.$codename.'.json'), true);
 				foreach ($settings as $name => $value) {
 					if (!is_array($value)) {
 						$settings[$name] = htmlspecialchars_decode($value);
@@ -496,7 +437,7 @@
 				}
 			} else {
 				if (!empty($confName)) {
-					$oldConfig = ENGINE_DIR . '/data/' . $codename . '.php';
+					$oldConfig = ENGINE_DIR.'/data/'.$codename.'.php';
 					if (is_file($oldConfig)) {
 						$oldFile = file_get_contents(DLEPlugins::Check($oldConfig));
 						$oldFile = str_replace("\${$confName} = ", 'return ', $oldFile);
@@ -505,7 +446,7 @@
 						if (is_array($oldSettings)) {
 							$oldSettings = json_encode($oldSettings, JSON_UNESCAPED_UNICODE);
 						}
-						file_put_contents($path . DIRECTORY_SEPARATOR . $codename . '.json', $oldSettings);
+						file_put_contents($path.DIRECTORY_SEPARATOR.$codename.'.json', $oldSettings);
 						@unlink($oldConfig);
 
 						foreach (json_decode($oldSettings, true) as $set => $val) {

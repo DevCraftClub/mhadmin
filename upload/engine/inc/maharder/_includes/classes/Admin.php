@@ -156,6 +156,10 @@ class Admin {
 		LogGenerator::setTelegramBot($mh_settings["logs_telegram_api"]);
 		LogGenerator::setTelegramChannel($mh_settings["logs_telegram_channel"]);
 		LogGenerator::setTelegramSend(isset($mh_settings["logs_telegram"]));
+		LogGenerator::setConsoleLogger(isset($mh_settings["logs_console"]));
+		LogGenerator::setChromeLogger(isset($mh_settings["logs_chrome"]));
+		LogGenerator::setFirephp(isset($mh_settings["logs_firephp"]));
+		LogGenerator::setDbLogs(isset($mh_settings["logs_db"]));
 		if (file_exists(ENGINE_DIR . '/inc/maharder/admin/assets/css/dark.css')) {
 			if (isset($mh_settings['theme']) && $mh_settings['theme'] === 'dark') {
 				$this->setCss(URL . '/maharder/admin/assets/css/dark.css');

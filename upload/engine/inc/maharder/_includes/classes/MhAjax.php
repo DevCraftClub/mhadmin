@@ -15,5 +15,9 @@ class MhAjax {
 		LogGenerator::setTelegramBot($mh_settings["logs_telegram_api"]);
 		LogGenerator::setTelegramChannel($mh_settings["logs_telegram_channel"]);
 		LogGenerator::setTelegramSend(isset($mh_settings["logs_telegram"]));
+		LogGenerator::setConsoleLogger(isset($mh_settings["logs_console"]));
+		LogGenerator::setChromeLogger(isset($mh_settings["logs_chrome"]));
+		LogGenerator::setFirephp(isset($mh_settings["logs_firephp"]));
+		LogGenerator::setDbLogs(isset($mh_settings["logs_db"]));
 	}
 }

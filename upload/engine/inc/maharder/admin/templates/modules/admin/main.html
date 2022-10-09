@@ -1,6 +1,6 @@
 {% from "_macros/checkbox.twig" import checkbox %}
 {% from "_macros/input.twig" import input, number %}
-{% from "_macros/select.twig" import multi %}
+{% from "_macros/select.twig" import multi, select %}
 
 {% extends 'base.html' %} {% block content %}
 
@@ -18,34 +18,53 @@
 
 <form class="ui form segment">
 	<div class="ui bottom attached tab active" data-tab="main">
-		<h4 class="ui dividing header">Настройки</h4>
+		<h4 class="ui dividing header">{% trans %}Настройки{% endtrans %}</h4>
 		<div class="ui four column grid">
 			{% autoescape 'html' %}
 
 			{{ include('templateIncludes/segRow.html', {
 				id: 'list_count',
-				name: 'Количество объектов',
+				name: 'Количество объектов'|trans,
 				descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д.. Это глобальное
 				значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
-				отображаемых новостей на страницу" => ' ~ dle_config.news_number ~ '.',
+				отображаемых новостей на страницу" => ' ~ dle_config.news_number ~ '.'|trans,
 				type: 'number',
 				variable: settings
 			})
 			}}
 
+			{{ input('cache_path', 'Путь до кеша файлов'|trans, 'Укажите путь, где будут храниться файлы кеша.<br>По умолчанию: /engine/inc/maharder/_cache'|trans, settings ) }}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'cache_timer',
+					name: 'Время хранения кеша'|trans,
+					descr: 'Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.<br><b><i>По умолчанию: 60 минут</i></b>'|trans,
+					type: 'number',
+					variable: settings
+				})
+			}}
+
+			{{ select('language', 'Язык админки'|trans, 'Данная опция позволит использовать админпанель и модули на разных языках'|trans, settings, lang_data ) }}
+
+			{{ input('locales_path', 'Путь до файлов языков'|trans, 'Укажите путь, откуда будут браться языковые файлы.<br>По умолчанию: /engine/inc/maharder/_locales'|trans, settings ) }}
+
 			{{ include('templateIncludes/segRow.html', {
 				id: 'logs',
-				name: 'Включить логирование?',
-				descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/_logs</b>',
+				name: 'Включить логирование?'|trans,
+				descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/_logs</b>'|trans,
 				type: 'checkbox',
 				variable: settings
 			})
 			}}
 
-			{{ checkbox('logs_telegram', 'Отправлять логи в телеграм?', 'При включённом параметре и заполненных полях ниже - скрипт будет отправлять логи в ваш телеграм канал', settings) }}
-			{{ input('logs_telegram_api', 'API ключ бота', 'API ключ бота, который можно получить у <a href="https://t.me/BotFather" target="_blank">@BothFather</a>, более детальная информация <a href="https://readme.devcraft.club/latest/dev/telegramposting/bot/" target="_blank">здесь</a>.', settings) }}
-			{{ input('logs_telegram_channel', 'Канал телеграма', 'Как получить ID канала можно узнать <a href="https://readme.devcraft.club/latest/dev/telegramposting/bot/#_5" target="_blank">здесь</a>.', settings) }}
-			{{ multi('logs_telegram_type', 'Тип оповещений', 'Вариация оповещений в канал:<div class="ui bulleted list">
+			{{ checkbox('logs_db', 'Сохранять логи в базе данных?'|trans, 'При включённом параметре все логи будут сохраняться в базу данных'|trans, settings) }}
+			{{ checkbox('logs_chrome', 'Отображать логи через ChromeLogger?'|trans, 'При включённом параметре все логи будут через <a href="https://craig.is/writing/chrome-logger" target="_blank">ChromeLogger</a>.'|trans, settings) }}
+			{{ checkbox('logs_firephp', 'Отображать логи через FirePHP?'|trans, 'При включённом параметре все логи будут через <a href="http://www.firephp.org/" target="_blank">FirePHP</a>.'|trans, settings) }}
+			{{ checkbox('logs_console', 'Отображать логи через Браузер?'|trans, 'При включённом параметре все логи будут в браузере, либо в консоли.'|trans, settings) }}
+			{{ checkbox('logs_telegram', 'Отправлять логи в телеграм?'|trans, 'При включённом параметре и заполненных полях ниже - скрипт будет отправлять логи в ваш телеграм канал'|trans, settings) }}
+			{{ input('logs_telegram_api', 'API ключ бота'|trans, 'API ключ бота, который можно получить у <a href="https://t.me/BotFather" target="_blank">@BothFather</a>, более детальная информация <a href="https://readme.devcraft.club/latest/dev/telegramposting/bot/" target="_blank">здесь</a>.'|trans, settings) }}
+			{{ input('logs_telegram_channel', 'Канал телеграма'|trans, 'Как получить ID канала можно узнать <a href="https://readme.devcraft.club/latest/dev/telegramposting/bot/#_5" target="_blank">здесь</a>.'|trans, settings) }}
+			{{ multi('logs_telegram_type', 'Тип оповещений'|trans, 'Вариация оповещений в канал:<div class="ui bulleted list">
 			<div class="item"><b>Все</b> - Отправляет буквально все отчёты и логи в канал</div>
 			<div class="item"><b>Ошибки</b> - Отправляет только ошибки в канал</div>
 			<div class="item"><b>Информация</b> - Отправляет только информационные отчёты в канал</div>
@@ -54,12 +73,12 @@
 			<div class="item"><b>Критические ошибки</b> - Отправляет только критические ошибки в канал</div>
 			<div class="item"><b>Отладка</b> - Отправляет только информацию об отладке в канал</div>
 		</div><br>
-			Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.<br>Если выбрано "Все", то остальные выбранные параметры игнорируются', settings, {'all': "Все",'error': "Ошибки",'info': "Информация",'notice': "Уведомления",'warning': "Предупреждения",'critical': "Критические ошибки",'debug': "Отладка"}) }}
+			Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.<br>Если выбрано "Все", то остальные выбранные параметры игнорируются'|trans, settings, {'all': "Все"|trans,'error': "Ошибки"|trans,'info': "Информация"|trans,'notice': "Уведомления"|trans,'warning': "Предупреждения"|trans,'critical': "Критические ошибки"|trans,'debug': "Отладка"|trans}) }}
 
 			{{ include('templateIncludes/segRow.html', {
 				id: 'icons',
-				name: 'Заменять иконки?',
-				descr: 'При включении, в админпанеле DLE будут заменены старые иконки на обновлённые',
+				name: 'Заменять иконки?'|trans,
+				descr: 'При включении, в админпанеле DLE будут заменены старые иконки на обновлённые'|trans,
 				type: 'checkbox',
 				variable: settings
 			})
@@ -67,32 +86,23 @@
 
 			{{ include('templateIncludes/segRow.html', {
 				id: 'cache_icon',
-				name: 'Добавить кнопку с очищением кеша?',
+				name: 'Добавить кнопку с очищением кеша?'|trans,
 				descr: 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша
-				системы',
+				системы'|trans,
 				type: 'checkbox',
 				variable: settings
 			})
 			}}
 
 			{{ include('templateIncludes/segRow.html', {
-				id: 'cache_timer',
-				name: 'Время хранения кеша',
-				descr: 'Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.<br><b><i>По умолчанию: 60 минут</i></b>',
-				type: 'number',
-				variable: settings
-			})
-			}}
-
-			{{ include('templateIncludes/segRow.html', {
 				id: 'theme',
-				name: 'Тема оформления админки',
-				descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу',
+				name: 'Тема оформления админки'|trans,
+				descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу'|trans,
 				type: 'select',
 				variable: settings,
 				values: {
-					light: 'Светлая',
-					dark: 'Тёмная',
+					light: 'Светлая'|trans,
+					dark: 'Тёмная'|trans,
 				}
 			})
 			}}
@@ -102,19 +112,19 @@
 	</div>
 </form>
 <div class="ui segment">
-	<div class="ui button tiny save" tabindex="0">Сохранить</div>
+	<div class="ui button tiny save" tabindex="0">{% trans %}Сохранить{% endtrans %}</div>
 	<div class="ui labeled button" tabindex="0">
 		<div class="ui tiny button" data-action="check_assets">
-			<i class="sync icon"></i> Проверить обновления
+			<i class="sync icon"></i> {% trans %}Проверить обновления{% endtrans %}
 		</div>
 		<a class="ui left pointing label new_assets_count">
 			0
 		</a>
 	</div>
 	<div class="ui special popup">
-		<div class="header">Идёт загрузка...</div>
-		<br><b>Загружается:</b> <span id="file_loading"></span><br>
-		Загружено <span id="now_loading">0</span> из <span id="total_loading">0</span> ...
+		<div class="header">{% trans %}Идёт загрузка...{% endtrans %}</div>
+		<br><b>{% trans %}Загружается:{% endtrans %}</b> <span id="file_loading"></span><br>
+		{% trans %}Загружено{% endtrans %} <span id="now_loading">0</span> из <span id="total_loading">0</span> ...
 	</div>
 </div>
 {% endblock %}
@@ -168,7 +178,7 @@
         let name = 'mh_assets_check', cookies = getCookie(name);
         if (cookies === undefined || cookies != 1) {
             $('[data-action="check_assets"] .icon').addClass('loading');
-            startLoading('Проверка обновлений');
+            startLoading('{% trans %}Проверка обновлений{% endtrans %}');
             $.ajax({
                 url: 'engine/ajax/controller.php?mod=maharder',
                 data: {
@@ -203,7 +213,7 @@
     }
 
     function save_asset(file, data) {
-        startLoading(`Загружаем файл: <b>${file}</b>!<br>Результат находится в консоли браузера!`);
+        startLoading(`{% trans %}Загружаем файл: <b>${file}</b>!<br>Результат находится в консоли браузера!{% endtrans %}`);
         $.ajax({
             url: 'engine/ajax/controller.php?mod=maharder',
             data: {
@@ -266,8 +276,8 @@
                     if (data.local === data.on_server && data.missing_count === 0 && data.update_count === 0)
                         $('body').toast({
                             class: 'info',
-                            title: `Информация!`,
-                            message: `Обновлений нет`,
+                            title: `{% trans %}Информация!{% endtrans %}`,
+                            message: `{% trans %}Обновлений нет{% endtrans %}`,
                             showProgress: 'bottom'
                         });
                     else {
@@ -280,22 +290,22 @@
                             content: '<div class="ui middle aligned divided list">\n' +
                                 '  <div class="item">\n' +
                                 '    <div class="content">\n' +
-                                '      <a class="header">На сервере</a> \n' +
-                                '       <div class="description">' + data.on_server + ' файлов</div>' +
+                                '      <a class="header">{% trans %}На сервере</a> \n{% endtrans %}' +
+                                '       <div class="description">' + data.on_server + '{% trans %} файлов</div>{% endtrans %}' +
                                 '    </div>\n' +
                                 '  </div>\n' +
                                 '  <div class="item">\n' +
                                 '    <div class="content">\n' +
-                                '      <a class="header">Загружено на сайт</a> ' +
-                                '       <div class="description">' + data.local + ' файлов</div>\n' +
+                                '      <a class="header">{% trans %}Загружено на сайт</a> {% endtrans %}' +
+                                '       <div class="description">' + data.local + '{% trans %} файлов</div>\n{% endtrans %}' +
                                 '    </div>\n' +
                                 '  </div>\n' +
-                                generate_item(data.missing_count > 0, 'Требуют установки', '', {
+                                generate_item(data.missing_count > 0, '{% trans %}Требуют установки{% endtrans %}', '', {
                                     enable: true,
                                     id: 'assets_to_install',
                                     data: data.missing
                                 }) +
-                                generate_item(data.update_count > 0, 'Требуют обновления', '', {
+                                generate_item(data.update_count > 0, '{% trans %}Требуют обновления{% endtrans %}', '', {
                                     enable: true,
                                     id: 'assets_to_update',
                                     data: data.update
@@ -311,7 +321,7 @@
                             backgroundDismissAnimation: 'shake',
                             buttons: {
                                 installAll: {
-                                    text: 'Установить всё',
+                                    text: '{% trans %}Установить всё{% endtrans %}',
                                     btnClass: 'ui green button',
                                     action: function () {
                                         $('[data-action="check_assets"]').popup('toggle');
@@ -326,7 +336,7 @@
                                     }
                                 },
                                 onlyInstall: {
-                                    text: 'Установить недостающие',
+                                    text: '{% trans %}Установить недостающие{% endtrans %}',
                                     btnClass: 'ui blue button',
                                     action: function () {
                                         $('[data-action="check_assets"]').popup('toggle');
@@ -338,7 +348,7 @@
                                     }
                                 },
                                 onlyUpdate: {
-                                    text: 'Установить обновления',
+                                    text: '{% trans %}Установить обновления{% endtrans %}',
                                     btnClass: 'ui orange button',
                                     action: function () {
                                         $('[data-action="check_assets"]').popup('toggle');
@@ -371,8 +381,8 @@
                     hideLoading('');
                     $('body').toast({
                         class: 'success',
-                        title: `Всё отлично!`,
-                        message: `<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>`,
+                        title: `{% trans %}Всё отлично!{% endtrans %}`,
+                        message: `{% trans %}<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>{% endtrans %}`,
                         showProgress: 'bottom'
                     });
                     setTimeout(() => {

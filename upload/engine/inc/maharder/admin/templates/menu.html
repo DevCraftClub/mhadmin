@@ -15,6 +15,19 @@
 			{{ module_name|trans }}
 		</div>
 
+		<div class="ui dropdown search icon item firstLine">
+			<input type="hidden" name="lang_selector" id="lang_selector" value="{{selected_lang}}">
+			<i class="world icon"></i>
+			<span class="text"></span>
+			<div class="menu">
+				{% for l in languages %}
+					<div class="item" data-value="{{ l.tag }}">{{ l.name }}</div>
+				{% endfor %}
+			</div>
+
+		</div>
+
+
 		{{ items(links, site, 'yes', 'no', 'firstLine') }}
 	</div>
 </div>

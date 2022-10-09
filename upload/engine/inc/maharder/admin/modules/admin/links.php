@@ -25,7 +25,7 @@ $admin_links = [
 		'children' => []
 	],
 	[
-		'name'     => _('Новости'),
+		'name'     => __('mhadmin','Новости'),
 		'href'     => '',
 		'type'     => 'dropdown',
 		'children' => [
@@ -76,19 +76,19 @@ foreach ($options as $o => $a) {
 // Подссылки имеют тот же формат, что и сами ссылки
 $links = [
 	'dle'       => [
-		'name'     => _('Страницы DLE'),
+		'name'     => __('mhadmin','Страницы DLE'),
 		'href'     => '',
 		'type'     => 'dropdown',
 		'children' => $admin_links,
 	],
 	'index'     => [
-		'name'     => _('Главная'),
+		'name'     => __('mhadmin','Главная'),
 		'href'     => THIS_SELF . '?mod=' . $modInfo['module_code'],
 		'type'     => 'link',
 		'children' => [],
 	],
 	'changelog' => [
-		'name'     => _('История изменений'),
+		'name'     => __('mhadmin','История изменений'),
 		'href'     => THIS_SELF . '?mod=' . $modInfo['module_code'] . '&sites=changelog',
 		'type'     => 'link',
 		'children' => [],

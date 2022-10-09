@@ -27,6 +27,22 @@ if (!defined('DATALIFEENGINE')) {
 
 global $lang;
 
+if (!file_exists(ENGINE_DIR . '/inc/maharder/_includes/vendor/autoload.php')) {
+	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/classes/ComposerAction.php');
+	try {
+		try {
+			if ( ! file_exists(ENGINE_DIR.'/inc/maharder/admin/composer.lock')) {
+				ComposerAction::install();
+			}
+			ComposerAction::update();
+		} catch (Exception $e) {
+			ComposerAction::update();
+		}
+	} catch (Exception $e) {
+		ComposerAction::require();
+	}
+}
+
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 define('THIS_HOST', $_SERVER['HTTP_HOST']);
 define('THIS_SELF', $_SERVER['PHP_SELF']);
@@ -38,20 +54,6 @@ require_once DLEPlugins::Check(ENGINE_DIR . '/data/config.php');
 include_once DLEPlugins::Check(MH_ADMIN . '/modules/admin/links.php');
 
 $loader = new FilesystemLoader(MH_ADMIN . '/templates');
-
-$langCode = 'ru_RU';
-putenv("LC_ALL=$langCode.UTF-8");
-if (setlocale(LC_ALL, "$langCode.UTF-8", $langCode, 'ru') === false) {
-	LogGenerator::generate_log('MHAdmin', 'index.php', sprintf('Языковой код %s не найден', $langCode));
-}
-
-$localDir = MH_ADMIN . '/_locales';
-if (!mkdir($localDir . '/' . $langCode, 0777, true) && !is_dir($localDir)) {
-	LogGenerator::generate_log('MHAdmin', 'index.php', sprintf('Папка "%s" не могла быть создана', $localDir));
-}
-
-bindtextdomain("MHAdmin", $localDir);
-textdomain("MHAdmin");
 
 $debug = true;
 
@@ -105,4 +107,9 @@ $breadcrumbs = [
 		'url'  => $links['index']['href'],
 	],
 ];
+
+$mh = new Admin();
+$mh_config = DataLoader::getConfig('maharder');
+$mh->setVar('languages', MhTranslation::getFormattedLanguageList());
+$mh->setVar('selected_lang', $mh_config['language']);
 

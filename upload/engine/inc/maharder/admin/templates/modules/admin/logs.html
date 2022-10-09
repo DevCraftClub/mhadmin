@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% autoescape 'js' %}
+<script>
+	const logs_dat = JSON.parse('{{logs}}')
+	;
+</script>
+{% endblock %}

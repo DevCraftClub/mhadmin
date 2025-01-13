@@ -19,16 +19,16 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 
 // заполняем важную и нужную информацию о модуле
 $modInfo = [
-	'module_name' => 'MaHarder Assets',
-	'module_version' => '173.3.0',
+	'module_name'        => 'MaHarder Assets',
+	'module_version'     => '173.3.0',
 	'module_description' => __('mhadmin', 'Административная панель для моих разработок'),
-	'module_code' => 'maharder',
-	'module_id' => 4,
-	'module_icon' => 'fad fa-robot',
-	'site_link' => 'https://devcraft.club/downloads/maharder-assets.4/',
-	'docs_link' => 'https://readme.devcraft.club/latest/dev/mhadmin/install/',
-	'dle_config' => $config,
-	'crowdin_name' => 'mh-admin'
+	'module_code'        => 'maharder',
+	'module_id'          => 4,
+	'module_icon'        => 'fad fa-robot',
+	'site_link'          => 'https://devcraft.club/downloads/maharder-assets.4/',
+	'docs_link'          => 'https://readme.devcraft.club/latest/dev/mhadmin/install/',
+	'dle_config'         => $config,
+	'crowdin_name'       => 'mh-admin'
 ];
 
 // Подключаем классы, функции и основные переменные
@@ -39,19 +39,19 @@ include_once DLEPlugins::Check(__DIR__.'/maharder/admin/index.php');
 switch ($_GET['sites']) {
 	// Страница с выводом логов
 	case 'logs':
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/web/logs.php');
+		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/logs.php');
 		break;
 	// Страница с генератором модуля
 	case 'new_module':
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/web/new_module.php');
+		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/new_module.php');
 		break;
 	// Страница с логами изменений
 	case 'changelog':
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/web/changelog.php');
+		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/changelog.php');
 		break;
 	// Главная страница
 	default:
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/web/main.php');
+		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/main.php');
 		break;
 }
 
@@ -70,9 +70,9 @@ $links['logs'] =	[
 	];
 
 $xtraVariable = [
-	'links' => $links,
+	'links'       => $links,
 	'breadcrumbs' => $breadcrumbs,
-	'settings' => DataManager::getConfig($modInfo['module_code']),
+	'settings'    => DataManager::getConfig($modInfo['module_code']),
 ];
 
 $mh->setVars($modInfo);

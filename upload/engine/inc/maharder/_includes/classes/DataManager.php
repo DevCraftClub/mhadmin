@@ -186,24 +186,27 @@ abstract class DataManager {
 			return;
 		}
 
-		// Используем встроенную функциональность для обхода директории
-		$iterator = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
-			\RecursiveIteratorIterator::CHILD_FIRST
-		);
+		if (is_dir($path)) {
 
-		foreach ($iterator as $fileInfo) {
-			if ($fileInfo->isFile()) {
-				// Удаляем файл
-				@unlink($fileInfo->getPathname());
-			} else if ($fileInfo->isDir()) {
-				// Удаляем пустую директорию
-				@rmdir($fileInfo->getPathname());
+			// Используем встроенную функциональность для обхода директории
+			$iterator = new \RecursiveIteratorIterator(
+				new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+				\RecursiveIteratorIterator::CHILD_FIRST
+			);
+
+			foreach ($iterator as $fileInfo) {
+				if ($fileInfo->isFile()) {
+					// Удаляем файл
+					@unlink($fileInfo->getPathname());
+				} else if ($fileInfo->isDir()) {
+					// Удаляем пустую директорию
+					@rmdir($fileInfo->getPathname());
+				}
 			}
-		}
 
-		// Удаляем саму целевую директорию
-		@rmdir($path);
+			// Удаляем саму целевую директорию
+			@rmdir($path);
+		}
 	}
 
 	/**

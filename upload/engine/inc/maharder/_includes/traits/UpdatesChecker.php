@@ -2,80 +2,78 @@
 
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 
-use Curl\Curl;
-
-
 trait UpdatesChecker {
 
 	/**
 	 * @var string
 	 */
-	private $update_url = 'https://devcraft.club/api/resources/';
+	private string $update_url = 'https://devcraft.club/api/resources/';
 	/**
 	 * Гостевой ключ с доступом на просмотр информации ресурса на сайте
 	 *
 	 * @var string
 	 */
-	private $api_key = 'F1szgi4FegnDEHRM4COV17NQyZholz0n';
+	private string $api_key = '8uO1gW7Ge47co5Y0tTOEzZ1V0lclAvXy';
 	/**
 	 * @var int|null
 	 */
-	private $recource_id;
+	private ?int $recource_id;
 
 	/**
 	 * @return string
 	 */
-	public function getUpdateUrl(){
+	public function getUpdateUrl(): string {
 		return $this->update_url;
 	}
 
 	/**
 	 * @param string $update_url
 	 */
-	public function setUpdateUrl($update_url){
+	public function setUpdateUrl(string $update_url) : void {
 		$this->update_url = $update_url;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getApiKey(){
+	public function getApiKey(): string {
 		return $this->api_key;
 	}
 
 	/**
 	 * @param string $api_key
 	 */
-	public function setApiKey($api_key){
+	public function setApiKey(string $api_key) : void {
 		$this->api_key = $api_key;
 	}
 
 	/**
 	 * @return int|null
 	 */
-	public function getRecourceId() {
+	public function getRecourceId() : ?int {
 		return $this->recource_id;
 	}
 
 	/**
-	 * @param int|null $recource_id
+	 * @param    int    $recource_id
 	 */
-	public function setRecourceId($recource_id){
+	public function setRecourceId(int $recource_id) : void {
 		$this->recource_id = $recource_id;
 	}
 
 	/**
-	 * @throws \Monolog\Handler\MissingExtensionException
+	 * @param    int|null    $res
+	 *
 	 * @return array
 	 */
-	public function checkUpdate($res = null) {
+	public function checkUpdate(?int $res = null) : array {
 		$res_id = $res !== null ? $res : $this->getRecourceId();
-		if ($res_id === null) LogGenerator::generate_log('UpdatesChecker', 'checkUpdate', 'ID ресурса не было указано');
+		if ($res_id === null) LogGenerator::generateLog('UpdatesChecker', 'checkUpdate', 'ID ресурса не было указано');
 		$curl = new Curl();
 		$curl->setHeader('XF-Api-Key', $this->getApiKey());
 		$curl->get($this->getUpdateUrl() . $res_id . '/');
 
-		if($curl->error) LogGenerator::generate_log('UpdatesChecker', 'checkUpdate', 'Ошибка: ' . $curl->errorCode . ': ' . $curl->errorMessage);
+		if($curl->error) LogGenerator::generateLog('UpdatesChecker', 'checkUpdate', 'Ошибка: ' . $curl->errorCode . ': ' . $curl->errorMessage);
 
 		$res = $curl->response;
 		$curl->close();

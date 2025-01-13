@@ -1,0 +1,111 @@
+{% extends 'base.html' %} {% block content %}
+
+<form class="ui form segment">
+	<div class="ui bottom attached tab active" data-tab="main">
+		<h4 class="ui dividing header">{{title}}</h4>
+
+		<div class="ui cards">
+
+			<div class="card">
+				<div class="content">
+					<div class="header"><i class="fa-duotone fa-gears"></i> {{ links.settings.name }}</div>
+					<div class="description">
+						Настройка модуля
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.settings.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+			<div class="card">
+				<div class="content">
+					<div class="header"><i class="fa-duotone fa-newspaper"></i> {{ links.templates.name }}</div>
+					<div class="description">
+						Перечень шаблонов для отправки
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.templates.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+			<div class="card">
+				<div class="content">
+					<div class="header"><i class="fa-duotone fa-flag"></i> {{ links.countries.name }}</div>
+					<div class="description">
+						Настройка стран для парсера
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.countries.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+			<div class="card">
+				<div class="content">
+					<div class="header"><i class="fa-duotone fa-list-tree"></i> {{ links.categories.name }}</div>
+					<div class="description">
+						Настройка категорий для парсера
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.categories.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+			<div class="card">
+				<div class="content">
+					<div class="header"><i class="fa-duotone fa-calendar-arrow-down"></i> {{ links.parser.name }}</div>
+					<div class="description">
+						Настройка парсера
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.parser.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+			<div class="card">
+				<div class="content">
+					<div class="header"><i class="fa-duotone fa-robot"></i> {{ links.grabber.name }}</div>
+					<div class="description">
+						Настройка парсера
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.grabber.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+			<div class="card">
+				<div class="content">
+					<div class="header"><i class="fa-duotone fa-list-dropdown"></i> {{ links.epi_list.name }}</div>
+					<div class="description">
+						Настройка парсера серий и вывода серий
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.epi_list.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+		</div>
+
+	</div>
+</form>
+{% endblock %}

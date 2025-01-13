@@ -1,0 +1,172 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="ui segment" id="errors_list" style="display: none;">
+	<div class="ui message">
+		<div class="header"></div>
+		<ul class="list">
+		</ul>
+		<div class="content"></div>
+	</div>
+</div>
+
+<form class="ui form segment">
+	<div class="ui bottom attached tab active" data-tab="main">
+		<h4 class="ui dividing header">{{ title }}</h4>
+		<div class="ui four column grid">
+			{% autoescape 'html' %}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'active',
+					name: 'Включить сеть?',
+					descr: 'Добавляет сеть в список сервисных подключений. При отключении так-же отключает шаблон отправки в соц. сети.',
+					type: 'checkbox',
+					variable: settings
+				})
+			}}
+
+			{% if dle_config.only_ssl %}
+				{{ include('templateIncludes/segRow.html', {
+						id: 'tg_webhook',
+						name: 'Подключить Webhook?',
+						descr: 'Подключаем Webhook для рассылки сообщений. Подключаем домен сайта к боту.',
+						type: 'checkbox',
+						variable: config_data
+					})
+				}}
+			{% endif %}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'service',
+					name: 'Соц. сеть',
+					descr: 'Скрытая настройка',
+					type: 'hidden_input',
+					variable: settings
+				})
+			}}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'name',
+					name: 'Название сети',
+					descr: 'Для лучшего обозначения сети. Если оставить пустым, то будет браться название канала/группы',
+					type: 'input',
+					variable: settings
+				})
+			}}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'tg_bot',
+					name: 'Токен бота',
+					descr: 'ID бота, который будет отправлять сообщения в группу/канал. Как узнать токен бота - можно узнать <a href="https://devcraft.club/articles/comments/8/" target="_blank">тут</a>.',
+					type: 'input',
+					variable: config_data
+				})
+			}}
+
+			{{ include('templateIncludes/segRow.html', {
+					id: 'tg_chat_id',
+					name: 'ID канала/группы',
+					descr: 'ID канала или группы, куда будет отправляться сообщение. Как узнать ID - можно узнать <a href="https://devcraft.club/articles/comments/9/" target="_blank">тут</a>.',
+					type: 'input',
+					variable: config_data
+				})
+			}}
+
+			{% endautoescape %}
+		</div>
+	</div>
+</form>
+<div class="ui segment">
+	<div class="ui button save" tabindex="0">
+		{% if _g.action == 'create' %}Создать
+		{% else %}Сохранить{% endif %}
+	</div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+
+{% autoescape 'js' %}
+<script>
+	function message_callback(type, items, text = '') {
+		let element = '#errors_list',
+			messager = element + ' .message',
+			header = $(messager + ' .header'),
+			list = $(messager + ' .list'),
+			message = $(messager + ' .content')
+		;
+
+		$(header).html('');
+		$(messager).removeClass('success').removeClass('error');
+		$(list).html('');
+		$(message).html('');
+		$(element).hide();
+
+		if(type === 'error') {
+			$(header).html('Операция провалилась!');
+			$(messager).addClass('error');
+		}
+
+		if(type === 'success') {
+			$(header).html('Операция прошла успешно!');
+			$(messager).addClass('success');
+			$(message).html('Через 5 секунд вас перенаправят к списку сервисов');
+			setTimeout(() => {
+				window.location.replace('{{links.services.href}}');
+			}, 5000);
+		}
+
+		for(let i = 0, max = items.length; i < max; i++) {
+			let item = items[i];
+			$(list).append(`<li>${item}</li>`);
+		}
+
+		if (text !== '') $(message).append(text);
+
+		$(element).show();
+	}
+
+	$(() => {
+		$(document).on('click', '.save', function () {
+			startLoading();
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: '{{module_code}}',
+					file: 'master',
+					method: 'service',
+					service: 'telegram',
+					{% if _g.action == 'edit' %}
+						service_id: ParseInt({{ _g.id }}),
+					{% endif %}
+					data: $('.form').serialize()
+				},
+				type: 'POST',
+				success: function (data) {
+					hideLoading('');
+
+					try {
+						data = JSON.parse(data);
+					} catch (e) {}
+
+					let message = {
+						title: (data.status === 'success') ? 'Всё отлично!' : 'Операция не удалась!',
+						message: (data.status === 'success') ? 'Данные были сохранены!' : 'Данные не были обработаны!',
+					}
+
+					$('body').toast({
+						class: data.status,
+						title: message.title,
+						message: message.message,
+						showProgress: 'bottom'
+					});
+
+					message_callback(data.status, data.message);
+				}
+			});
+		});
+	});
+</script>
+{% endautoescape %}
+{% endblock %}

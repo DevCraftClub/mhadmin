@@ -1,0 +1,928 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file id="24" original="/main/upload/engine/inc/maharder/_locales/ru_RU/mhadmin.xliff" source-language="ru" target-language="uk" datatype="plaintext" project-id="537748" tool-id="crowdin">
+    <header>
+      <tool tool-id="crowdin" tool-name="Crowdin" tool-version="1.1"/>
+    </header>
+    <body>
+      <trans-unit id="378">
+        <source>[NEW] Добавлена мультиязычная поддержка, перевод можно осуществить при помощи сервиса Crowdin. Ссылка в подвале каждого модуля.</source>
+        <target state="translated">[NEW] Додана багатомовна підтримка, переклад можна зробити за допомогою сервісу Crowdin. Посилання в нижньому колонтитулі кожного модуля.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="380">
+        <source>[NEW] Добавлена возможность выводов логов на отдельной странице.</source>
+        <target state="translated">[NEW] Додана можливість виведення журналів на окрему сторінку.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="382">
+        <source>[UPDATE] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
+        <target state="translated">[UPDATE] Інсталятор спрощений. Залежності тепер завантажуються та встановлюються під час першого відкриття модуля [любого] . Це може зайняти кілька хвилин. Зараз монтажник мало важить.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="384">
+        <source>[UPDATE] Откат функций, которые использовали класс DLEFiles. Он не работает со сторонними разработками как надо.</source>
+        <target state="translated">[UPDATE] Функції відкату, які використовували клас DLEFiles. Він не працює зі сторонніми розробками як слід.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="386">
+        <source>[UPDATE] Решено было использовать стандартные классы DLE для работы с файлами</source>
+        <target state="translated">[UPDATE] Було вирішено використовувати стандартні класи DLE для роботи з файлами</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="388">
+        <source>[FIX] Исправлена ошибка: https://devcraft.club/tickets/http-error-500.6/</source>
+        <target state="translated">[FIX] виправлення помилок: https://devcraft.club/tickets/http-error-500.6/</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="390">
+        <source>[NEW] Добавлен функционал проверки обновления плагина</source>
+        <target state="translated">[NEW] Додана функціональність для перевірки наявності оновлень плагінів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="392">
+        <source>[UPDATE] Изменён подход к некоторым классам</source>
+        <target state="translated">[UPDATE] Змінив підхід до деяких класів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="394">
+        <source>[FIX] Вернул поддержку PHP 7.2</source>
+        <target state="translated">[FIX] Повернуто підтримку PHP 7.2</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="396">
+        <source>[FIX] Вернул поддержку PHP &amp;gt;= 8</source>
+        <target state="translated">[FIX] Повернуто &amp;gt;підтримки PHP = 8</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="398">
+        <source>[FIX] Удалены остаточные файлы (кеш, конфигурации, ...)</source>
+        <target state="translated">[FIX] Видалені залишкові файли (кеш, конфігурація, ...)</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="400">
+        <source>[FIX] Вернул нужные, но удалённые файлы</source>
+        <target state="translated">[FIX] Повернуто з редагування необхідні, але видалені файли</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="402">
+        <source>[NEW] Добавлена функция отправки логов в телеграм [БЕТА]</source>
+        <target state="translated">[NEW] Додана функція відправки журналів в telegram [БЕТА]</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="404">
+        <source>[FIX] Исправил ошибку работы логирования</source>
+        <target state="translated">[FIX] Виправлено помилку реєстрації</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="406">
+        <source>[FIX] Исправил работу моделей</source>
+        <target state="translated">[FIX] Виправлено моделі</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="408">
+        <source>[FIX] Исправил обработку кеша</source>
+        <target state="translated">[FIX] Фіксована обробка кешу</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="410">
+        <source>[FIX] Обновил файлы для генерации модуля</source>
+        <target state="translated">[FIX] Оновлені файли для генерації модуля</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="412">
+        <source>[NEW] Добавлена возможность пользователю самому решать использовать ли в админпанеле обновлённые иконки или нет</source>
+        <target state="translated">[NEW] Додана можливість для користувача самостійно вирішувати, чи варто використовувати оновлені значки в адмінці чи ні</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="414">
+        <source>[NEW] Добавлена возможность пользователю самому решать подключать в админке глобальную кнопку по очистке кеша или нет</source>
+        <target state="translated">[NEW] Додана можливість для користувача вирішувати, підключати глобальну кнопку очищення кеша в адмінці чи ні</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="416">
+        <source>[NEW] Дальнейшая работа с базой данных будет происходить только через созданные мною модели. Для этого будет использоваться функционал классов Model и Table</source>
+        <target state="translated">[NEW] Подальша робота з базою даних буде відбуватися тільки через створені мною моделі. Для цього ви будете використовувати функціонал класів Model і Table</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="418">
+        <source>[UPDATE] Логирование ошибок будет происходить в дальнейшем через &amp;lt;a href=&quot;https://seldaek.github.io/monolog/&quot; target=&quot;_blank&quot;&amp;gt;Monolog - Logging for PHP&amp;lt;/a&amp;gt;. При включённом функционале - библиотека будет отправлять уведомления в консоль браузера, а так-же сохранять файлов в папку логов</source>
+        <target state="translated">[UPDATE] Помилка реєстрації буде відбуватися в майбутньому через Monolog - Logging for PHP&amp;lt;/a&amp;gt;&amp;lt;a href=&quot;https://seldaek.github.io/monolog/&quot; target=&quot;_blank&quot;&amp;gt;. З включеним функціоналом - бібліотека буде відправляти повідомлення на консоль браузера, а також зберігати файли в папку журналу</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="420">
+        <source>[UPDATE] Обновление библиотек до последних версий с минимально возможной PHP версией &amp;lt;b&amp;gt;7.2.9&amp;lt;/b&amp;gt;</source>
+        <target state="translated">[UPDATE] Оновлення бібліотек до останніх версій з мінімально можливою версією PHP &amp;lt;b&amp;gt;7.2.9&amp;lt;/b&amp;gt;</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="422">
+        <source>[UPDATE] Подключены иконки FontAwesome 6.1.1 Pro, используется вариант light (о не достающих или пропавших иконок прошу сообщать)</source>
+        <target state="translated">[UPDATE] підключаються значки FontAwesome 6.1.1 Pro, використовується опція світла (будь ласка, повідомте про відсутність або відсутність значків)</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="424">
+        <source>[FIX] Путь до иконки модуля исправлен 🤦‍♂️</source>
+        <target state="translated">[FIX] Виправлено 🤦 ♂️ піктограму шляху до модуля</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="426">
+        <source>[FIX] Продокументировал классы с небольшими объяснениями, что делает какая функция и для чего используется та или иная переменная</source>
+        <target state="translated">[FIX] Задокументовані класи з невеликим поясненням того, що робить яку функцію і для чого використовується змінна.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="428">
+        <source>[DEL] Удалён кошелёк WMR</source>
+        <target state="translated">[DEL] гаманець WMR видалено</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="430">
+        <source>FIX: Добавлена иконка</source>
+        <target state="translated">FIX: Піктограма &quot;Додано&quot;</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="432">
+        <source>FIX: Исправлен файл AJAX</source>
+        <target state="translated">ВИПРАВЛЕНО: Виправлено файл AJAX</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="434">
+        <source>В связи с некоторыми обстоятельствами пришлось отказаться от i18n модуля. Возможно он выйдет отдельным модулем.</source>
+        <target state="translated">В силу деяких обставин довелося відмовитися від модуля i18n. Можливо, він буде випущений у вигляді окремого модуля.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="436">
+        <source>Обновление зависимостей до минимально требуемой версии PHP 7.4</source>
+        <target state="translated">Оновлення залежностей до мінімально необхідної версії PHP 7.4</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="438">
+        <source>Улучшена реструктуризация классов</source>
+        <target state="translated">Покращена реструктуризація класів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="440">
+        <source>Добавлена тёмная тема оформления</source>
+        <target state="translated">Додана темна тема</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="442">
+        <source>Для желающих создать модуль на основе моей админки была создана функция генерации путей и файлов</source>
+        <target state="translated">Для тих, хто хоче створити модуль на базі моєї адмінки, створена функція генерації шляхів і файлів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="444">
+        <source>Fontawesome были обновлены до 6ой версии</source>
+        <target state="translated">Fontawesome оновлено до версії 6</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="446">
+        <source>Добавлена проверка на целостность файлов и их обновления</source>
+        <target state="translated">Додана перевірка на цілісність файлів і їх оновлення</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="448">
+        <source>Полностью новая админпанель, которая не зависит от оформления и функционала самой DLE</source>
+        <target state="translated">Абсолютно нова адмінка, яка не залежить від дизайну і функціональності самої DLE</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="450">
+        <source>За основу панели был взят движок Twig, создавать свои шаблоны будет проще</source>
+        <target state="translated">Панель була заснована на движку Twig, простіше буде створювати власні шаблони</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="452">
+        <source>Очищать кеш в админке стало проще - кнопка была выведена в ряд с &quot;Добавить новость&quot; и &quot;Редактировать новости</source>
+        <target state="translated">Очистити кеш в адмінці стало простіше - в ряд з'явилася кнопка з &quot;Додати новини&quot; і &quot;Редагувати новини&quot;</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="454">
+        <source>Внедрён i18n в систему DLE, это даёт возможность создавать мультиязычные сайты (модуль отдельно продаваться или делаться не будет)</source>
+        <target state="translated">i18n реалізований в системі DLE, дає можливість створювати багатомовні сайти (модуль буде продаватися окремо або не буде зроблено)</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="456">
+        <source>i18n: не зависит от базы данных, все фразы хранятся в файлах json</source>
+        <target state="translated">i18n: незалежна від бази даних, всі фрази зберігаються у файлах json</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="458">
+        <source>i18n: в шаблонах достаточно использовать тег {trans text=&quot;сюда переводимый текст&quot;}, чтобы перевести фразу</source>
+        <target state="translated">i18n: в шаблонах досить використовувати тег {trans text=&quot;here translated text&quot;} для перекладу фрази</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="460">
+        <source>i18n: в скриптах PHP достаточно использовать функцию translate(&quot;сюда переводимый текст&quot;), чтобы перевести фразу</source>
+        <target state="translated">i18n: в PHP скриптах досить використовувати функцію перекладу для перекладу фрази</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="462">
+        <source>i18n: в скриптах JS достаточно использовать функцию translateJS(&quot;сюда переводимый текст&quot;), чтобы перевести фразу. Желательно подгружать фразы при загруженной странице, т.к. async не доработан</source>
+        <target state="translated">i18n: У скриптах JS досить використовувати функцію translateJS («ось перекладений текст»), щоб перекласти фразу. Бажано завантажувати фрази при завантаженні сторінки, тому що async не допрацьовується</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="464">
+        <source>а так-же вывод новостей и статических страниц на сайте</source>
+        <target state="translated">а також висновок новин і статичних сторінок на сайті</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="466">
+        <source>i18n: поддерживается машинный перевод через сервис RapidApi</source>
+        <target state="translated">i18n: Підтримується машинний переклад через службу RapidApi</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="468">
+        <source>i18n: динамичное использование, не требующее массивов данных - достаточно указать текст</source>
+        <target state="translated">i18n: динамічне використання, яке не вимагає масивів даних - просто вкажіть текст</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="470">
+        <source>небольшой фикс в языковом файле</source>
+        <target state="translated">невелике виправлення в мовному файлі</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="472">
+        <source>Обновление иконок от fontawesome глобально</source>
+        <target state="translated">Оновлення значків з фонтаузого в усьому світі</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="474">
+        <source>Обновление многих функций</source>
+        <target state="translated">Оновлення багатьох функцій</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="476">
+        <source>Добавление языковых файлов (в дальнейшем будет проще локализовать модули)</source>
+        <target state="translated">Додавання мовних файлів (в майбутньому буде простіше локалізувати модулі)</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="478">
+        <source>Добавлен немецкий язык к оболочке</source>
+        <target state="translated">Додано німецьку мову до оболонки</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="480">
+        <source>Фикс</source>
+        <target state="translated">Виправити</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="482">
+        <source>Новые модальные и всплывающие окна</source>
+        <target state="translated">Нові модальні та спливаючі вікна</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="484">
+        <source>Улучшены некоторые функции</source>
+        <target state="translated">Покращено деякі функції</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="486">
+        <source>Добавлен скрипт DateTimePicker</source>
+        <target state="translated">Доданий сценарій DateTimePicker</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="488">
+        <source>Добавлены несколько украшательств</source>
+        <target state="translated">Додано кілька прикрас</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="490">
+        <source>Вывод категорий</source>
+        <target state="translated">Виведення категорії</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="492">
+        <source>Автоматический вывод доп. полей в админке</source>
+        <target state="translated">Автоматичне виведення додаткових полів в адмінці</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="494">
+        <source>Автоматический вывод пользователей</source>
+        <target state="translated">Автоматичний вихід користувача</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="496">
+        <source>Исправлены баги в JS</source>
+        <target state="translated">Виправлені помилки в JS</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="498">
+        <source>Обновление до актуальных версий DLE</source>
+        <target state="translated">Оновлення до останніх версій DLE</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="500">
+        <source>Мелкие правки</source>
+        <target state="translated">Незначні правки</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="502">
+        <source>Основной релиз</source>
+        <target state="translated">Основний випуск</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="504">
+        <source>История изменений</source>
+        <target state="translated">Журнал змін</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="506">
+        <source>Новости</source>
+        <target state="translated">Новини</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="508">
+        <source>Страницы DLE</source>
+        <target state="translated">Сторінки DLE</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="510">
+        <source>Главная</source>
+        <target state="translated">Головна</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="512">
+        <source>Проверить на наличие новой версии</source>
+        <target state="translated">Перевірка нової версії</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="514">
+        <source>Подождите, идёт загрузка...</source>
+        <target state="translated">Завантаження. Зачекайте, будь ласка...</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="516">
+        <source>Модуль</source>
+        <target state="translated">Модуль</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="518">
+        <source>Доп. ссылки</source>
+        <target state="translated">Додаткові посилання</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="520">
+        <source>На сайте автора</source>
+        <target state="translated">На сайті автора</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="522">
+        <source>Документация</source>
+        <target state="translated">Документація</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="524">
+        <source>Пользовательское соглашение</source>
+        <target state="translated">Умови використання</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="526">
+        <source>Перевод:</source>
+        <target state="translated">Переклад:</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="528">
+        <source>Об авторе</source>
+        <target state="translated">Розробники</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="530">
+        <source>Финансовая поддержка (добровольная)</source>
+        <target state="translated">Фінансова підтримка (добровільна)</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="532">
+        <source>Настройки</source>
+        <target state="translated">Налаштування</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="534">
+        <source>Сохранить</source>
+        <target state="translated">Зберегти</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="536">
+        <source>Всё отлично!</source>
+        <target state="translated">Все відмінно!</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="538">
+        <source>Данные были сохранены!</source>
+        <target state="translated">Дані було збережено!</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="540">
+        <source>Открыть меню</source>
+        <target state="translated">Відкрити меню</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="542">
+        <source>Количество объектов</source>
+        <target state="translated">Кількість об'єктів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="544">
+        <source>.</source>
+        <target state="translated">.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="546">
+        <source>Путь до кеша файлов</source>
+        <target state="translated">Шлях до файлового кешу</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="548">
+        <source>Укажите путь, где будут храниться файлы кеша.&amp;lt;br&amp;gt;По умолчанию: /engine/inc/maharder/_cache</source>
+        <target state="translated">Вкажіть шлях, куди будуть зберігатися файли кешу.&amp;lt;br&amp;gt;За замовчуванням: /engine/inc/maharder/_cache</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="550">
+        <source>Время хранения кеша</source>
+        <target state="translated">Час зберігання кешу</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="552">
+        <source>Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.&amp;lt;br&amp;gt;&amp;lt;b&amp;gt;&amp;lt;i&amp;gt;По умолчанию: 60 минут&amp;lt;/i&amp;gt;&amp;lt;/b&amp;gt;</source>
+        <target state="translated">Введіть час в хвилинах, скільки кеш запитів повинен зберігатися на сервері. При запиті скрипт перевірить, коли був створений файл кешу і якщо він перевищить зазначений ліміт, кеш буде заново.&amp;lt;br&amp;gt;&amp;lt;b&amp;gt;&amp;lt;i&amp;gt;За замовчуванням: 60 хвилин&amp;lt;/i&amp;gt;&amp;lt;/b&amp;gt;</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="554">
+        <source>Язык админки</source>
+        <target state="translated">Мова адміністратора</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="556">
+        <source>Данная опция позволит использовать админпанель и модули на разных языках</source>
+        <target state="translated">Ця опція дозволить вам використовувати адмін-панель і модулі на різних мовах</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="558">
+        <source>Путь до файлов языков</source>
+        <target state="translated">Шлях до мовних файлів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="560">
+        <source>Укажите путь, откуда будут браться языковые файлы.&amp;lt;br&amp;gt;По умолчанию: /engine/inc/maharder/_locales</source>
+        <target state="translated">Вкажіть шлях, звідки будуть надходити мовні файли.&amp;lt;br&amp;gt;За замовчуванням: /engine/inc/maharder/_locales</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="562">
+        <source>Включить логирование?</source>
+        <target state="translated">Увімкнути журналювання?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="564">
+        <source>При включенном параметре будет создавать текстовые логи в папке &amp;lt;b&amp;gt;engine/inc/maharder/_logs&amp;lt;/b&amp;gt;</source>
+        <target state="translated">Якщо ввімкнено, текстові журнали будуть створюватися в &amp;lt;b&amp;gt;движку папок /inc/maharder/_logs&amp;lt;/b&amp;gt;</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="566">
+        <source>Сохранять логи в базе данных?</source>
+        <target state="translated">Збереження журналів у базі даних?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="568">
+        <source>При включённом параметре все логи будут сохраняться в базу данных</source>
+        <target state="translated">Якщо включити цей параметр, то всі журнали будуть збережені в базу даних</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="570">
+        <source>Отображать логи через ChromeLogger?</source>
+        <target state="translated">Відображати журнали через ChromeLogger?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="572">
+        <source>При включённом параметре все логи будут через &amp;lt;a href=&quot;https://craig.is/writing/chrome-logger&quot; target=&quot;_blank&quot;&amp;gt;ChromeLogger&amp;lt;/a&amp;gt;.</source>
+        <target state="translated">Коли цей параметр увімкнено, усі журнали відбуватимуться через &amp;lt;a href=&quot;https://craig.is/writing/chrome-logger&quot; target=&quot;_blank&quot;&amp;gt;&amp;lt;/a&amp;gt;ChromeLogger.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="574">
+        <source>Отображать логи через FirePHP?</source>
+        <target state="translated">Відображати журнали через FirePHP?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="576">
+        <source>При включённом параметре все логи будут через &amp;lt;a href=&quot;http://www.firephp.org/&quot; target=&quot;_blank&quot;&amp;gt;FirePHP&amp;lt;/a&amp;gt;.</source>
+        <target state="translated">При включеному параметрі всі журнали будуть проходити через &amp;lt;a href=&quot;http://www.firephp.org/&quot; target=&quot;_blank&quot;&amp;gt;&amp;lt;/a&amp;gt;FirePHP .</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="578">
+        <source>Отображать логи через Браузер?</source>
+        <target state="translated">Відображати журнали через браузер?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="580">
+        <source>При включённом параметре все логи будут в браузере, либо в консоли.</source>
+        <target state="translated">При включеній опції всі логи будуть знаходитися в браузері або в консолі.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="582">
+        <source>Отправлять логи в телеграм?</source>
+        <target state="translated">Відправити журнали в телеграму?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="584">
+        <source>При включённом параметре и заполненных полях ниже - скрипт будет отправлять логи в ваш телеграм канал</source>
+        <target state="translated">З включеним параметром і заповнені поля нижче - скрипт відправить логи на ваш телеграм-канал</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="586">
+        <source>API ключ бота</source>
+        <target state="translated">Ключ API-бота</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="588">
+        <source>API ключ бота, который можно получить у &amp;lt;a href=&quot;https://t.me/BotFather&quot; target=&quot;_blank&quot;&amp;gt;@BothFather&amp;lt;/a&amp;gt;, более детальная информация &amp;lt;a href=&quot;https://readme.devcraft.club/latest/dev/telegramposting/bot/&quot; target=&quot;_blank&quot;&amp;gt;здесь&amp;lt;/a&amp;gt;.</source>
+        <target state="translated">Ключ API бота, який можна отримати з &amp;lt;a href=&quot;https://t.me/BotFather&quot; target=&quot;_blank&quot;&amp;gt;@BothFather&amp;lt;/a&amp;gt;, більш детальна інформація &amp;lt;a href=&quot;https://readme.devcraft.club/latest/dev/telegramposting/bot/&quot; target=&quot;_blank&quot;&amp;gt;тут&amp;lt;/a&amp;gt;.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="590">
+        <source>Канал телеграма</source>
+        <target state="translated">Телеграм-канал</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="592">
+        <source>Как получить ID канала можно узнать &amp;lt;a href=&quot;https://readme.devcraft.club/latest/dev/telegramposting/bot/#_5&quot; target=&quot;_blank&quot;&amp;gt;здесь&amp;lt;/a&amp;gt;.</source>
+        <target state="translated">Як отримати ID каналу, можна дізнатися &amp;lt;a href=&quot;https://readme.devcraft.club/latest/dev/telegramposting/bot/#_5&quot; target=&quot;_blank&quot;&amp;gt;тут&amp;lt;/a&amp;gt;.</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="594">
+        <source>Тип оповещений</source>
+        <target state="translated">Тип оповіщення</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="596">
+        <source>Все</source>
+        <target state="translated">Увесь</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="598">
+        <source>Ошибки</source>
+        <target state="translated">Помилки</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="600">
+        <source>Информация</source>
+        <target state="translated">Інформація</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="602">
+        <source>Уведомления</source>
+        <target state="translated">Сповіщення</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="604">
+        <source>Предупреждения</source>
+        <target state="translated">Попередження</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="606">
+        <source>Критические ошибки</source>
+        <target state="translated">Критичні помилки</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="608">
+        <source>Отладка</source>
+        <target state="translated">Налагодження</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="610">
+        <source>Заменять иконки?</source>
+        <target state="translated">Замінити іконки?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="612">
+        <source>При включении, в админпанеле DLE будут заменены старые иконки на обновлённые</source>
+        <target state="translated">При включенні старі значки в адмінці DLE будуть замінені на оновлені</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="614">
+        <source>Добавить кнопку с очищением кеша?</source>
+        <target state="translated">Додати кнопку для очищення кешу?</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="616">
+        <source>Тема оформления админки</source>
+        <target state="translated">Тема панелі адміністратора</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="618">
+        <source>Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу</source>
+        <target state="translated">Поки що ви можете вибрати між світлим (стандартним) і темним. Збереження та оновлення сторінки</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="620">
+        <source>Светлая</source>
+        <target state="translated">Світлий</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="622">
+        <source>Тёмная</source>
+        <target state="translated">Темний</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="624">
+        <source>Проверить обновления</source>
+        <target state="translated">Перевірка наявності оновлень</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="626">
+        <source>Идёт загрузка...</source>
+        <target state="translated">Завантаження...</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="628">
+        <source>Загружается:</source>
+        <target state="translated">Завантажені:</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="630">
+        <source>Загружено</source>
+        <target state="translated">Завантажені</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="632">
+        <source>Проверка обновлений</source>
+        <target state="translated">Перевірка наявності оновлень</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="634">
+        <source>Информация!</source>
+        <target state="translated">Інформація!</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="636">
+        <source>Обновлений нет</source>
+        <target state="translated">Без оновлень</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="638">
+        <source>На сервере&amp;lt;/a&amp;gt; \n</source>
+        <target state="translated">На сервері&amp;lt;/a&amp;gt; \n</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="640">
+        <source> файлов&amp;lt;/div&amp;gt;</source>
+        <target state="translated"> &amp;lt;/div&amp;gt;файлів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="642">
+        <source>Загружено на сайт&amp;lt;/a&amp;gt; </source>
+        <target state="translated">Завантажено на веб-сайт&amp;lt;/a&amp;gt; </target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="644">
+        <source> файлов&amp;lt;/div&amp;gt;\n</source>
+        <target state="translated"> &amp;lt;/div&amp;gt;\nфайлів</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="646">
+        <source>Требуют установки</source>
+        <target state="translated">Необхідна установка</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="648">
+        <source>Требуют обновления</source>
+        <target state="translated">Потрібне оновлення</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="650">
+        <source>Установить всё</source>
+        <target state="translated">Встановити всі</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="652">
+        <source>Установить недостающие</source>
+        <target state="translated">Інсталяція відсутня</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="654">
+        <source>Установить обновления</source>
+        <target state="translated">Інсталяція оновлень</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="656">
+        <source>&amp;lt;p&amp;gt;Данные были сохранены!&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;Страница сейчас обновится!&amp;lt;/p&amp;gt;</source>
+        <target state="translated">&amp;lt;p&amp;gt;Дані збережено!&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;Сторінка оновлена!&amp;lt;/p&amp;gt;</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="658">
+        <source>Закрыть меню</source>
+        <target state="translated">Закрити меню</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="660">
+        <source>Поисковая фраза</source>
+        <target state="translated">Пошукова фраза</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="662">
+        <source>Искать</source>
+        <target state="translated">Шукати</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="664">
+        <source>Все типы ошибок</source>
+        <target state="translated">Всі типи помилок</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="666">
+        <source>Ошибка</source>
+        <target state="translated">Помилка</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="668">
+        <source>Уведомление / К справке</source>
+        <target state="translated">Повідомлення / Назад до допомоги</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="670">
+        <source>Предупреждение</source>
+        <target state="translated">Попередження</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="672">
+        <source>Критическая ошибка</source>
+        <target state="translated">Критичний</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="674">
+        <source>Требует срочного решения</source>
+        <target state="translated">Потребує термінового вирішення</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="676">
+        <source>Русский</source>
+        <target state="translated">Російська</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="678">
+        <source>Английский</source>
+        <target state="translated">Англійська</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="680">
+        <source>Немецкий</source>
+        <target state="translated">Німецька</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+      <trans-unit id="682">
+        <source>Украинский</source>
+        <target state="translated">Українська</target>
+        <note from="Crowdin" priority="2">mhadmin.ru_RU
+        </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -9,32 +9,33 @@ trait AssetsChecker {
 	 *
 	 * @var array
 	 */
-	private $assets_arr = [];
+	private array $assets_arr = [];
 
 	/**
 	 * Путь до всех вспомогательных файлов
 	 *
 	 * @var string
 	 */
-	private $assets_dir = ENGINE_DIR . '/inc/maharder/admin/assets';
+	private string $assets_dir = ENGINE_DIR . '/inc/maharder/admin/assets';
 
 	/**
 	 * Файл с информацией и хешами вспомогательных файлов
 	 *
 	 * @var string
 	 */
-	private $asset_file = ENGINE_DIR . '/inc/maharder/_includes/assets.json';
+	private string $asset_file = ENGINE_DIR . '/inc/maharder/_includes/assets.json';
 
 	/**
 	 * Инициализатор для парсинга вспомогательных файлов
 	 * Если файла с хешами не существует, то начнёт проверять все файлы
 	 * Если файл существует, то только при принудительной проверке будет перепроверять данные
 	 *
-	 * @param $parse // Принудительный парсинг при наличии файла с хешами
+	 * @param    bool    $parse    // Принудительный парсинг при наличии файла с хешами
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
-	public function parseAssets($parse = false) {
+	public function parseAssets(bool $parse = false) : void {
 		if (file_exists($this->asset_file)) {
 			if ($parse) {
 				$this->parse_assets();
@@ -48,18 +49,17 @@ trait AssetsChecker {
 	 * Проверяет целостность файлов на сайте и на сервере разработчика
 	 * Если существуют разницы в хеш суммах, о них сообщит в массиве информации
 	 *
-	 * @param $rewrite
+	 * @param    bool    $rewrite
 	 *
 	 * @return array
-	 * @throws JsonException
 	 */
-	public function checkAssets($rewrite = false) {
+	public function checkAssets(bool $rewrite = false) : array {
 		if (!is_file($this->asset_file) || $rewrite) {
-			$this->prepare_assets($this->dirToArray($this->assets_dir), $this->assets_dir);
+			$this->prepare_assets(DataManager::dirToArray($this->assets_dir), $this->assets_dir);
 			file_put_contents($this->asset_file, json_encode($this->assets_arr, JSON_UNESCAPED_UNICODE));
 		}
 		$assets = json_decode(file_get_contents('https://assets.devcraft.club/assets.json'), true);
-		$files = json_decode(file_get_contents($this->asset_file), true);
+		$files  = json_decode(file_get_contents($this->asset_file), true);
 
 		$info = [
 			'on_server'     => count($assets),
@@ -87,13 +87,14 @@ trait AssetsChecker {
 	}
 
 	/**
-	 * Парсер нехватающих и обновляемых данных
+	 * Парсер не хватающих и обновляемых данных
 	 *
+	 * @throws JsonException
 	 * @return void
 	 */
-	private function parse_assets() {
-		$this->prepare_assets($this->dirToArray($this->assets_dir), $this->assets_dir);
-		$files = $this->assets_arr;
+	private function parse_assets() : void {
+		$this->prepare_assets(DataManager::dirToArray($this->assets_dir), $this->assets_dir);
+		$files  = $this->assets_arr;
 		$assets = json_decode(file_get_contents('https://assets.devcraft.club/assets.json'), true);
 
 		foreach ($assets as $asset => $data) {
@@ -110,19 +111,19 @@ trait AssetsChecker {
 	}
 
 	/**
-	 * Сохраняет полученнай файл на сервер сайта и возвращает данные о файле
+	 * Сохраняет полученной файл на сервер сайта и возвращает данные о файле
 	 *
-	 * @param $data //  Массив данных о файле
-	 * @param $file //  Путь файла
+	 * @param $data    //  Массив данных о файле
+	 * @param $file    //  Путь файла
 	 *
 	 * @return array|false
 	 * @throws JsonException
 	 */
-	public function save_asset(array $data, string $file) {
+	public function save_asset(array $data, string $file) : bool|array {
 
 		if (!function_exists('format_bytes')) {
-			function format_bytes(int $size) {
-				$base = log($size, 1024);
+			function format_bytes(int $size) : string {
+				$base     = log($size, 1024);
 				$suffixes = [
 					'',
 					'KB',
@@ -141,14 +142,12 @@ trait AssetsChecker {
 		}
 		if ($asset_file) {
 			$file_path = ENGINE_DIR . '/inc/maharder/admin' . $file;
-			if (!mkdir($concurrentDirectory = dirname($file_path), 0777, true) && !is_dir($concurrentDirectory)) {
-				$this->generate_log('maharder/admin', 'save_asset', "Путь '{$concurrentDirectory}' не удалось создать");
-			}
-			if (!file_put_contents($file_path, $asset_file, FILE_USE_INCLUDE_PATH|LOCK_EX) || !is_writable($file_path)) {
-				$this->generate_log('maharder/admin', 'save_asset', "Файл '{$file}' не был сохранён!");
+			DataManager::createDir(service: 'AssetsChecker', module: 'save_asset', _path: $file_path);
+			if (!file_put_contents($file_path, $asset_file, FILE_USE_INCLUDE_PATH | LOCK_EX) || !is_writable($file_path)) {
+				LogGenerator::generateLog('maharder/admin', 'save_asset', __('mhadmin', "Файл '{$file}' не был сохранён!"));
 			}
 			$pathinfo = pathinfo($file_path);
-			$stat = stat($file_path);
+			$stat     = stat($file_path);
 			$this->checkAssets(true);
 
 			return [
@@ -170,23 +169,23 @@ trait AssetsChecker {
 	}
 
 	/**
-	 * Подгатавливает информацию о файле на локальном сервере и сохраняет в массиве с данными
+	 * Подготавливает информацию о файле на локальном сервере и сохраняет в массиве с данными
 	 *
-	 * @param        $arr //  Массив с файлами
-	 * @param string $dir //  Исходная папка для поиска
+	 * @param              $arr    //  Массив с файлами
+	 * @param    string    $dir    //  Исходная папка для поиска
 	 *
 	 * @return void
 	 */
-	private function prepare_assets(array $arr, string $dir = __DIR__) {
+	private function prepare_assets(array $arr, string $dir = __DIR__) : void {
 
 		foreach ($arr as $key => $value) {
 			if (is_array($value)) {
 				$this->prepare_assets($value, $dir . '/' . $key);
 			} else {
-				$file = $dir . '/' . $key;
+				$file      = $dir . '/' . $key;
 				$file_info = pathinfo($key);
 				if (empty($file_info['extension'])) $file = $dir . '/' . $value;
-				$dir_arr = str_replace(ENGINE_DIR . '/inc/maharder/admin', '', $file);
+				$dir_arr  = str_replace(ENGINE_DIR . '/inc/maharder/admin', '', $file);
 				$pathinfo = pathinfo($dir_arr);
 
 				$this->assets_arr[$dir_arr] = [

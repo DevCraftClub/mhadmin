@@ -1,0 +1,45 @@
+{% autoescape 'js' %}
+	<script>
+        $(() => {
+
+            $('[data-action]').on('click', function() {
+                let action = $(this).data('action');
+
+                switch (action) {
+                    case 'parse':
+                        getMyShowsCategories();
+                        break;
+                }
+            })
+
+            tableCheckbox('categories');
+        });
+
+        function getMyShowsCategories() {
+            startLoading();
+            $.ajax({
+                url: 'engine/ajax/controller.php?mod=maharder',
+                data: {
+                    user_hash: '{{ dle_login_hash }}',
+                    module: 'myshows',
+                    file: 'categories',
+                    action: 'parse_genres'
+                },
+                type: 'POST',
+                success: function (data) {
+                    console.log(data);
+                    hideLoading('');
+                    $('body').toast({
+                        displayTime: 'auto',
+                        showProgress: 'bottom',
+                        classProgress: 'blue',
+                        class: 'success',
+                        message: 'Жанры были добавлены, страница сейчас обновиться!'
+                    })
+                    ;
+                }
+            });
+        }
+
+	</script>
+{% endautoescape %}

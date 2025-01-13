@@ -9,7 +9,7 @@
 			{% endif %}
 		>
 		{% if value != '' %}
-			<br>Текущее значение:<input type="text" id="{{name}}" name="{{name}}" placeholder="Текущее значение" value="{{value}}" readonly>
+			<br>Текущее значение:<input type="text" id="{{name}}" name="{{name}}" placeholder="{%trans%}Текущее значение{%endtrans%}" value="{{value}}" readonly>
 			<br>
 			<div class='ui checkbox'>
 				{{ include('templateIncludes/addCheckbox.html', {name: name ~ '_replace', class: 'switch', selected: false, label: '"' ~ label ~ '" заменить?' }) }}

@@ -1,0 +1,28 @@
+{% import _self as macro %}
+
+{% macro url(page_name, page, order, sort) %}
+    {% autoescape 'html' %}
+        {{ _server.REQUEST_URI }}&{{ page_name }}={{ page }}&order={{ order }}&sort={{ sort }}
+    {% endautoescape %}
+{% endmacro %}
+
+{% macro tablesort(name, type, order, sort, pages_name) %}
+    {% set pg_name = pages_name|default('page') %}
+    {% set page = attribute(_get, pg_name) %}
+    {% if sort|lower  == 'asc'%}
+        {% set icon = '<i class="fa-light fa-circle-sort-up"></i>' %}
+        {% set new_sort = 'desc' %}
+    {% else %}
+        {% set icon = '<i class="fa-light fa-circle-sort-down"></i>' %}
+        {% set new_sort = 'asc' %}
+    {% endif %}
+
+    {% autoescape 'html' %}
+    {% if type == order %}
+        {{ name|trans }} <a href="{{ parse_url(_self.url(pg_name, page, order, new_sort )) }}">{{ icon|raw }}</a>
+    {% else %}
+        <a href="{{ parse_url(_self.url(pg_name, page, type, 'asc' )) }}">{{ name|trans }}</a>
+    {% endif %}
+    {% endautoescape %}
+
+{% endmacro %}

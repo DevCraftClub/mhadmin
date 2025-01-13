@@ -1,6 +1,6 @@
 
 {% macro urlMaker(page, page_name) %}
-	{{ plugin_url }}&{{ page_name|default('page') }}={{ page }}
+	{{ _server.REQUEST_URI }}&{{ page_name|default('page') }}={{ page }}
 {% endmacro %}
 
 {% macro page(page, page_name, content) %}

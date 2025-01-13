@@ -9,7 +9,7 @@ if ('' == $_REQUEST['user_hash'] or $_REQUEST['user_hash'] != $dle_login_hash) {
 }
 
 if (!function_exists('clearfilepath')) {
-	function clearfilepath($file, $ext = []) {
+	function clearfilepath($file, $ext = []) : string {
 
 		$file = trim(str_replace(chr(0), '', (string)$file));
 		$file = str_replace(['/', '\\'], '/', $file);
@@ -47,7 +47,7 @@ if (!function_exists('clearfilepath')) {
 }
 
 if (!function_exists('execute_query')) {
-	function execute_query($id, $query) {
+	function execute_query($id, $query) : void {
 		global $config, $db;
 
 		if (!$query) return;
@@ -67,12 +67,7 @@ if (!function_exists('execute_query')) {
 		if (count($db->query_errors_list)) {
 
 			foreach ($db->query_errors_list as $error) {
-				$db->query("INSERT INTO " . PREFIX . "_plugins_logs (plugin_id, area, error, type) values ('{$id}', '" . $db->safesql(htmlspecialchars($error['query'],
-				                                                                                                                                       ENT_QUOTES,
-				                                                                                                                                       $config['charset']),
-				                                                                                                                      false) . "', '" . $db->safesql(htmlspecialchars($error['error'],
-				                                                                                                                                                                      ENT_QUOTES,
-				                                                                                                                                                                      $config['charset'])) . "', 'mysql')");
+				$db->query("INSERT INTO " . PREFIX . "_plugins_logs (plugin_id, area, error, type) values ('{$id}', '" . $db->safesql(htmlspecialchars($error['query'],ENT_QUOTES, $config['charset'])) . "', '" . $db->safesql(htmlspecialchars($error['error'], ENT_QUOTES, $config['charset'])) . "', 'mysql')");
 			}
 
 		}

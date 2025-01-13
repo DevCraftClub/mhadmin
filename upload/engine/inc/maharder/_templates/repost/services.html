@@ -1,0 +1,269 @@
+{% extends 'base.html' %} {% block content %}
+
+<form class="ui form segment">
+	<div class="ui bottom attached tab active" data-tab="main">
+		<h4 class="ui dividing header">{{title}} ({{total_services}} {{ decline(total_services | default(0), ['сеть', 'сети', 'сетей']) }})</h4>
+		<div class="ui four column grid">
+			{% autoescape 'html' %}
+
+			<table class="ui very basic striped selectable tablet stackable table">
+				<thead>
+				<tr>
+					<th class="one wide">
+						<div class="ui checkbox">
+							<input type="checkbox" name="services_all" >
+						</div>
+					</th>
+					<th>Название</th>
+					<th>Сервис</th>
+					<th class="two wide center aligned">Включён?</th>
+					<th class="one wide"></th>
+				</tr>
+				</thead>
+				<tbody>
+					{% for s in service_entries %}
+						<tr id="service-{{ s.sid }}">
+							<td class="center aligned">
+								<div class="ui checkbox">
+									<input type="checkbox" name="services[]" value="{{ s.sid }}" >
+								</div>
+							</td>
+							<td>{{ s.name }}</td>
+							<td>{{ s.service }}</td>
+							<td class="center aligned">
+								{% if s.active %}
+									<span data-action="deactivate" data-id="{{ s.sid }}" class="ui success text fad fa-check-circle"></span>
+								{% else %}
+									<span data-action="activate" data-id="{{ s.sid }}" class="ui red text fad fa-times-circle"></span>
+								{% endif %}
+							</td>
+							<td class="center aligned">
+								<div class="ui icon top left pointing dropdown button">
+									<i class="settings icon"></i>
+									<div class="menu">
+										<div class="header">Выбор действия</div>
+                                        <a class="item" href="{{links.services.href}}&service={{s.service}}&action=edit&id={{s.sid}}">Изменить</a>
+                                        <a class="item" data-action="delete" data-id="{{ s.sid }}">Удалить</a>
+										{% if s.active %}
+											<div data-action="deactivate" data-id="{{ s.sid }}" class="item">Отключить</div>
+										{% else %}
+											<div data-action="activate" data-id="{{ s.sid }}" class="item">Включить</div>
+										{% endif %}
+									</div>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			{% endautoescape %}
+		</div>
+	</div>
+</form>
+<div class="ui segment">
+	<div class="ui stackable buttons">
+		<button class="ui mini green button" data-action="create">
+			<i class="fad fa-plus-circle"></i> Добавить
+		</button>
+		<button class="ui mini blue button" data-action="refresh">
+			<i class="fad fa-sync"></i> Обновить список
+		</button>
+	</div>
+</div>
+
+<div class="ui mini modal" id="create_modal">
+	<div class="header">Добавление новой сети</div>
+	<div class="content">
+		<div class="ui form">
+			<div class="field">
+				<label for="service_selector">Выбор сети</label>
+				<select id="service_selector" class="ui dropdown" >
+					{% for s in services %}
+						<option value="{{ s.name }}">{{ s.title }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui green create button">
+			<i class="fad fa-check-circle"></i>
+			Создать
+		</div>
+		<div class="ui red dismiss button">
+			<i class="fad fa-times-circle"></i>
+			Закрыть
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+
+{% autoescape 'js' %}
+<script>
+	$(() => {
+		$(document).on('click', '[data-action="create"]', function () {
+			startLoading();
+			$.confirm({
+				theme: 'material',
+				draggable: true,
+				backgroundDismiss: false,
+				backgroundDismissAnimation: 'shake',
+				title: 'Добавление новой сети',
+				content: `
+				<div class="ui form">
+\t\t\t<div class="field">
+\t\t\t\t<label for="service_selector">Выбор сети</label>
+\t\t\t\t<select id="service_selector" class="ui dropdown" >
+\t\t\t\t\t{% for s in services %}
+\t\t\t\t\t\t<option value="{{ s.name }}">{{ s.title }}</option>
+\t\t\t\t\t{% endfor %}
+\t\t\t\t</select>
+\t\t\t</div>
+\t\t</div>
+				`,
+				onOpenBefore: function () {
+					$('.ui.dropdown').dropdown();
+				},
+				closeIcon: true,
+				columnClass: 'four wide',
+				offsetBottom: 40,
+				useBootstrap: false,
+				buttons: {
+					confirm:{
+						text: '<i class="fad fa-check-circle"></i> Создать',
+						btnClass: 'ui green create button',
+						keys: ['enter',],
+						action: function(){
+							let service = $(this.$content).find('#service_selector').first().val();
+							window.location.replace('{{links.services.href}}&action=new&service=' + service);
+						}
+					},
+					cancel: {
+						text: '<i class="fad fa-times-circle"></i> Закрыть',
+						btnClass: 'ui red dismiss button',
+						keys: ['esc'],
+						action: function(){
+							$.alert('Something else?');
+						}
+					}
+				}
+			});
+			hideLoading();
+
+		});
+		$(document).on('click', '.dismiss.button', function () {
+			startLoading();
+			$('#create_modal')
+				.modal('hide');
+			hideLoading();
+		});
+		$(document).on('click', '[data-action="deactivate"]', function() {
+			$(document).find('span[data-action="deactivate"]')
+					.first()
+					.removeClass('success')
+					.removeClass('fa-check-circle')
+					.addClass('red')
+					.addClass('fa-times-circle')
+					.data('action', 'activate')
+					.attr('data-action', 'activate')
+			;
+			$(document).find('div[data-action="deactivate"]')
+					.first()
+					.html('Включить')
+					.data('action', 'activate')
+					.attr('data-action', 'activate')
+			;
+			startLoading();
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: '{{module_code}}',
+					file: 'master',
+					method: 'deactivate_service',
+					data: $.param({
+						id: $(this).data('id')
+					})
+				},
+				type: 'POST',
+					success: function (data) {
+					hideLoading('');
+
+					try {
+						data = JSON.parse(data);
+					} catch (e) {}
+
+					let message = {
+						title: (data.status === 'success') ? 'Всё отлично!' : 'Операция не удалась!',
+						message: (data.status === 'success') ? 'Данные были сохранены!' : 'Данные не были обработаны!',
+					}
+
+					$('body').toast({
+						class: data.status,
+						title: message.title,
+						message: message.message,
+						showProgress: 'bottom'
+					});
+				}
+			});
+		});
+		$(document).on('click', '[data-action="activate"]', function() {
+			$(document).find('span[data-action="activate"]')
+					.first()
+					.addClass('success')
+					.addClass('fa-check-circle')
+					.removeClass('red')
+					.removeClass('fa-times-circle')
+					.data('action', 'deactivate')
+					.attr('data-action', 'deactivate')
+			;
+			$(document).find('div[data-action="activate"]')
+					.first()
+					.html('Отключить')
+					.data('action', 'deactivate')
+					.attr('data-action', 'deactivate')
+			;
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: '{{module_code}}',
+					file: 'master',
+					method: 'activate_service',
+					data: $.param({
+						id: $(this).data('id')
+					})
+				},
+				type: 'POST',
+				success: function (data) {
+					hideLoading('');
+
+					try {
+						data = JSON.parse(data);
+					} catch (e) {}
+
+					console.log(data);
+
+					let message = {
+						title: (data.status === 'success') ? 'Всё отлично!' : 'Операция не удалась!',
+						message: (data.status === 'success') ? 'Данные были сохранены!' : 'Данные не были обработаны!',
+					}
+
+					$('body').toast({
+						class: data.status,
+						title: message.title,
+						message: message.message,
+						showProgress: 'bottom'
+					});
+				}
+			});
+
+		});
+	});
+</script>
+{% endautoescape %}
+{% endblock %}

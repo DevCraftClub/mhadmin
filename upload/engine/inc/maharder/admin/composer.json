@@ -10,23 +10,37 @@
 	],
 	"config": {
 		"platform": {
-			"php": "7.2.9"
+			"php": "8.1"
 		},
 		"vendor-dir": "../_includes/vendor"
 	},
 	"require": {
-		"ext-curl": "*",
-		"twig/twig": "^3.0",
-		"twig/markdown-extra": "*",
-		"twig/cache-extra": "*",
-		"twig/intl-extra": "*",
-		"twig/cssinliner-extra": "*",
-		"twig/string-extra": "*",
-		"twig/html-extra": "*",
-		"twig/inky-extra": "*",
-		"twig/extra-bundle": "*",
-		"jblond/twig-trans": "*",
-		"monolog/monolog": "*",
-		"php-curl-class/php-curl-class": "*"
+		"php": "^8.1",
+		"twig/twig": "^3.8",
+		"twig/markdown-extra": "^3.8",
+		"twig/cache-extra": "^3.8",
+		"twig/intl-extra": "^3.8",
+		"twig/cssinliner-extra": "^3.8",
+		"twig/string-extra": "^3.8",
+		"twig/html-extra": "^3.8",
+		"twig/inky-extra": "^3.8",
+		"twig/extra-bundle": "^3.8",
+		"analog/analog": "^1.0",
+		"php-curl-class/php-curl-class": "^9.19",
+		"symfony/translation": "^6.4",
+		"cycle/orm": "^2.7",
+		"cycle/annotated": "^4.1",
+		"cycle/database": "^2.8",
+		"cycle/migrations": "^4.2",
+		"cycle/schema-migrations-generator": "^2.3",
+		"cycle/entity-behavior": "^1.3",
+		"cycle/schema-builder": "^2.8",
+		"cycle/entity-behavior-uuid": "^1.2",
+		"ext-simplexml": "*",
+		"ext-libxml": "*",
+		"ext-intl": "*"
+	},
+	"conflict": {
+		"symfony/translation-contracts": ">=3.0"
 	}
 }

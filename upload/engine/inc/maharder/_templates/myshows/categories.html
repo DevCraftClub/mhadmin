@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% from "_macros/input.twig" import input %}
+{% from "_macros/select.twig" import select_only %}
+
+{% block content %}
+
+<form class="ui form attached segment" data-type="form">
+	<div class="ui bottom attached tab active" data-tab="main">
+		<h4 class="ui dividing header">{{title|trans}}</h4>
+
+		<div class="ui four column grid">
+			{% autoescape 'html' %}
+			<table class="ui very basic stackable selectable celled striped table">
+				<thead>
+				<tr>
+					<th class="collapsing">
+						<div class="ui checkbox" id="categories">
+							<input type="checkbox" tabindex="0" class="hidden">
+						</div>
+					</th>
+					<th class="collapsing">ID</th>
+					<th class="">{%trans%}Жанр{%endtrans%}</th>
+					<th class="">{%trans%}Своё название{%endtrans%}</th>
+					<th class="">{%trans%}Категория на сайте{%endtrans%}</th>
+					<th class="right aligned collapsing">{%trans%}Действие{%endtrans%}</th>
+				</tr>
+				</thead>
+				<tbody data-id="categories">
+				{% if genres|length > 0 %}
+					{% for c in genres %}
+					<tr id="c-{{c.id}}" data-id="{{c.id}}">
+						<td>
+							<div class="ui checkbox" data-checkbox="categories">
+								<input type="checkbox" name="cat[]" value="{{c.id}}" tabindex="0" class="hidden">
+							</div>
+							<input type="hidden" name="this_id" value="{{c.id}}" tabindex="0" class="hidden">
+						</td>
+						<td data-name="myshows_id">{{c.myshows_id}}</td>
+						<td data-name="name">
+							{{c.name}}
+						</td>
+						<td data-name="own_name">
+							<input type="text" name="own_name" value="{{c.own_name}}" placeholder="{% trans %}Своё название{% endtrans %}" style="margin-top: -16px;">
+						</td>
+						<td data-name="cat_id">
+							{{ select_only('cat_id_' ~ c.id, "Категория на сайте"|trans, categories, c.cat_id) }}
+						</td>
+						<td class="right aligned">
+							<div class="ui icon top left pointing dropdown button">
+								<i class="wrench icon"></i>
+								<div class="menu">
+									<a data-action='change' class='item act_btn' data-id='{{c.id}}'>
+										<i class="fa-duotone fa-pen-to-square"></i> {%trans%}Изменить{%endtrans%}
+									</a>
+									<a data-action='reset' class='item act_btn' data-id='{{c.id}}'>
+										<i class="fa-duotone fa-circle-xmark"></i> {%trans%}Очистить{%endtrans%}
+									</a>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+				{% else %}
+					<tr>
+						<td colspan="6" class="text-center">
+							<a href="#" role="button" class="ui button labeled icon act_btn" data-action='parse'>
+								<i class="cloud download alternate icon"></i>
+								{%trans%}Спарсить жанры{%endtrans%}
+							</a>
+						</td>
+
+					</tr>
+				{% endif %}
+				</tbody>
+				<tfoot>
+				<tr>
+					<th colspan="6">
+
+						{% if genres|length > 0 %}
+							<div class="ui massaction disabled dropdown">
+								<span class="text">{% trans %}Выбор действия{% endtrans %}</span>
+								<i class="dropdown icon"></i>
+								<div class="menu">
+									<div class="header">
+										<i class="wrench icon"></i>
+										{% trans %}Действие{% endtrans %}
+									</div>
+									<div class="ui divider"></div>
+									<div class="item act_btn" data-action='save_selected'>
+										<i class="save outline icon"></i>
+										{%trans%}Сохранить выбранное{%endtrans%}
+									</div>
+									<div class="item act_btn" data-action='reset_selected'>
+										<i class="history icon"></i>
+										{%trans%}Сбросить выбранное{%endtrans%}
+									</div>
+								</div>
+							</div>
+
+							<a href="#" role="button" class="ui right floated button labeled icon act_btn" data-action='parse'>
+								<i class="cloud download alternate icon"></i>
+								{%trans%}Спарсить жанры{%endtrans%}
+							</a>
+
+							<a href="#" role="button" class="ui right floated button labeled icon act_btn" data-action='add_categories'>
+								<i class="clipboard list icon"></i>
+								{%trans%}Перенять в систему{%endtrans%}
+							</a>
+						{% endif %}
+
+					</th>
+				</tr>
+				</tfoot>
+			</table>
+
+
+			{% endautoescape %}
+		</div>
+
+
+	</div>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+	{{ include('modules/myshows/scripts/categories.twig') }}
+
+{% endblock %}
+
+{% block styles %}
+	<style>
+		.ui.piled.segment:before, .ui.piled.segments:before {
+			-webkit-transform: rotate(-0.2deg) !important;
+			transform: rotate(-0.2deg) !important;
+		}
+		.ui.piled.segment:after, .ui.piled.segments:after {
+			-webkit-transform: rotate(0.2deg) !important;
+			transform: rotate(0.2deg) !important;
+		}
+	</style>
+
+{% endblock %}

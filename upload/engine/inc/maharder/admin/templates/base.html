@@ -25,7 +25,7 @@
 			<i class="{{module_icon}}" style="float: left;margin-right: 2rem;"></i>
 			<div class="content" style="padding: 0">
 				{{ module_name|trans }}
-				<div class="ui label update_checker" style="cursor:pointer;" data-id="{{module_id}}" data-version="{{module_version}}" data-position="bottom center" data-tooltip="Проверить на наличие новой версии">
+				<div class="ui label update_checker" style="cursor:pointer;" data-id="{{module_id}}" data-version="{{module_version}}" data-position="bottom center" data-tooltip="{% trans %}Проверить на наличие новой версии{% endtrans %}">
 					v{{ module_version }}
 					<i class="sync alternate icon"></i>
 				</div>

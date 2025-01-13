@@ -1,27 +1,33 @@
 <?php
-
-// File: Admin.php
-// Path: /engine/inc/maharder/admin/modules/Admin.php
-// ============================================================ =
-// Author: Maxim Harder <dev@devcraft.club> (c) 2020
-// Website: https://www.devcraft.club
-// Telegram: http://t.me/MaHarder
-// ============================================================ =
-// Do not change anything!
 //===============================================================
+// Файл: Admin.php                                              =
+// Путь: engine/inc/maharder/_includes/classes/Admin.php        =
+// Последнее изменение: 2024-03-14 15:47:43                     =
+// ==============================================================
+// Автор: Maxim Harder <dev@devcraft.club> © 2024               =
+// Сайт: https://devcraft.club                                  =
+// Телеграм: http://t.me/MaHarder                               =
+// ==============================================================
+// Менять на свой страх и риск!                                 =
+// Код распространяется по лицензии MIT                         =
+//===============================================================
+
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 
+/**
+ * @since 2.0.0
+ */
 class Admin {
 	use DataLoader;
 	use DleData;
 	use AssetsChecker;
 
-	private /**
+	/**
 	 * Массив со стилями
 	 *
-	 * @var array
+	 * @var array $cssArr
 	 */
-		$cssArr = [
+	private array $cssArr = [
 		URL . '/maharder/admin/assets/css/base.css',
 		URL . '/maharder/admin/assets/css/icons.css',
 		URL . '/maharder/admin/assets/css/tokens.css',
@@ -29,12 +35,13 @@ class Admin {
 		URL . '/maharder/admin/assets/css/jquery-confirm.min.css',
 		URL . '/maharder/admin/assets/css/theme.css',
 		URL . '/maharder/admin/assets/editor/themes/default.min.css',
-	], /**
+	];
+	/**
 	 * Массив со скриптами
 	 *
-	 * @var array
+	 * @var array $jsArr
 	 */
-		$jsArr = [
+	private array $jsArr = [
 		URL . '/maharder/admin/assets/js/jquery.js',
 		URL . '/maharder/admin/assets/js/base.js',
 		URL . '/maharder/admin/assets/js/autosize.min.js',
@@ -51,64 +58,97 @@ class Admin {
 		URL . '/maharder/admin/assets/editor/plugins/undo.js',
 		URL . '/maharder/admin/assets/editor/languages/ru.js',
 		URL . '/maharder/admin/assets/js/theme.js',
-	],
-
-		/**
-		 * Массив с различными переменными для шаблонизатора
-		 * css_dir - Папка со стилями
-		 * js_dir - Папка со скриптами
-		 * css - Массив со стилями
-		 * js - Массив со скриптами
-		 * url - Обычная ссылка для верного отображения стилей и скриптов на сайте
-		 * lic_link - Ссылка на пользовательское соглашение
-		 * author - Массив с информацией об авторе модуля
-		 * author.name - Имя пользователя
-		 * author.contacts - Массив с контактной информацией с автором
-		 * author.contacts.name - Название контактной информации, к приерму E-Mail
-		 * author.contacts.link - Ссылка для связи, к приерму mailto:dev@devcraft.club
-		 * author.donate - Массив с информацией по финансовой поддержке
-		 * author.donate.name - Название платёжной системы, к приерму PayPal
-		 * author.donate.value - Описание платёжной системы, к приерму paypal.me/MaximH
-		 * author.donate.link - Ссылка платёжной системы, к приерму https://paypal.me/MaximH
-		 * menu - Массив с ссылками для меню сайта
-		 * breadcrumbs - Массив с ссылками на хлебные крошки
-		 *
-		 * @var array
-		 */
-		$variables = [
+	];
+	/**
+	 * Массив с различными переменными для шаблонизатора
+	 * css_dir - Папка со стилями
+	 * js_dir - Папка со скриптами
+	 * css - Массив со стилями
+	 * js - Массив со скриптами
+	 * url - Обычная ссылка для верного отображения стилей и скриптов на сайте
+	 * lic_link - Ссылка на пользовательское соглашение
+	 * author - Массив с информацией об авторе модуля
+	 * author.name - Имя пользователя
+	 * author.contacts - Массив с контактной информацией с автором
+	 * author.contacts.name - Название контактной информации, к примеру E-Mail
+	 * author.contacts.link - Ссылка для связи, к примеру mailto:dev@devcraft.club
+	 * author.donate - Массив с информацией по финансовой поддержке
+	 * author.donate.name - Название платёжной системы, к примеру PayPal
+	 * author.donate.value - Описание платёжной системы, к примеру paypal.me/MaximH
+	 * author.donate.link - Ссылка платёжной системы, к примеру https://paypal.me/MaximH
+	 * menu - Массив со ссылками для меню сайта
+	 * breadcrumbs - Массив со ссылками на хлебные крошки
+	 *
+	 * @var array $variables
+	 */
+	private array $variables = [
 		'css_dir'     => '',
 		'js_dir'      => '',
 		'css'         => [],
 		'js'          => [],
 		'url'         => URL,
 		'lic_link'    => 'https://devcraft.club/pages/licence-agreement/',
-		'author'      => [
+		'author'      => [],
+		'menu'        => [],
+		'breadcrumbs' => [],
+	];
+
+	/**
+	 * Конструктор класса
+	 * Создаёт нужные параметры для изначального старта
+	 *
+	 * @version 170.2.10
+	 * @throws JsonException
+	 */
+	public function __construct() {
+		$this->setVar('css_dir', URL . '/maharder/admin/assets/css');
+		$this->setVar('js_dir', URL . '/maharder/admin/assets/js');
+		$this->setVar('css', $this->htmlStatic($this->cssArr));
+		$this->setVar('js', $this->htmlStatic($this->jsArr, 'html', 'js'));
+		$this->preSetMenu();
+
+		$mh_settings = DataManager::getConfig('maharder');
+
+		if (file_exists(ENGINE_DIR . '/inc/maharder/admin/assets/css/dark.css') && isset($mh_settings['theme']) && $mh_settings['theme'] === 'dark') {
+			$this->setCss(URL . '/maharder/admin/assets/css/dark.css');
+		}
+		$cache_folder = $this->getCacheFolder();
+		DataManager::createDir($cache_folder);
+
+		if (is_dir($cache_folder)) {
+			file_put_contents($cache_folder . DIRECTORY_SEPARATOR . '.htaccess', 'Order Deny,Allow
+Deny from all');
+			chmod($cache_folder . DIRECTORY_SEPARATOR . '.htaccess', 0666);
+		}
+
+		if ($mh_settings['theme'] === 'dark') {
+			$this->setCss(URL . '/maharder/admin/assets/editor/themes/dark.css');
+		}
+
+		$this->setAuthor();
+
+
+
+	}
+
+	private function setAuthor() : void {
+		$this->variables['author'] = [
 			'name'     => 'Maxim Harder',
 			'contacts' => [
 				[
-					'name' => 'E-Mail',
+					'name' => __('mhadmin', 'E-Mail'),
 					'link' => 'mailto:dev@devcraft.club',
 				],
 				[
-					'name' => 'Telegram',
+					'name' => __('mhadmin', 'Telegram'),
 					'link' => 'https://t.me/MaHarder',
 				],
 				[
-					'name' => 'Вебсайт',
+					'name' => __('mhadmin', 'Вебсайт'),
 					'link' => 'https://devcraft.club/misc/contact',
 				],
 			],
 			'donate'   => [
-				[
-					'name'  => 'WME (Webmoney (EU))',
-					'value' => 'E275336355586',
-					'link'  => '',
-				],
-				[
-					'name'  => 'WMZ (Webmoney (USD))',
-					'value' => 'Z139685140004',
-					'link'  => '',
-				],
 				[
 					'name'  => 'PayPal',
 					'value' => 'paypal.me/MaximH',
@@ -135,59 +175,24 @@ class Admin {
 					'link'  => 'https://www.donationalerts.com/r/maharder',
 				],
 			],
-		],
-		'menu'        => [],
-		'breadcrumbs' => [],
-	];
-
-	/**
-	 * Конструктор класса
-	 * Создаёт нужные параметры для изначального старта
-	 */
-	public function __construct() {
-		$this->setVar('css_dir', URL . '/maharder/admin/assets/css');
-		$this->setVar('js_dir', URL . '/maharder/admin/assets/js');
-		$this->setVar('css', $this->htmlStatic($this->cssArr));
-		$this->setVar('js', $this->htmlStatic($this->jsArr, 'html', 'js'));
-		$this->preSetMenu();
-		$mh_settings = self::getConfig('maharder');
-		LogGenerator::setLogs(isset($mh_settings['logs']));
-		LogGenerator::setTelegramType($mh_settings["logs_telegram_type"]);
-		LogGenerator::setTelegramBot($mh_settings["logs_telegram_api"]);
-		LogGenerator::setTelegramChannel($mh_settings["logs_telegram_channel"]);
-		LogGenerator::setTelegramSend(isset($mh_settings["logs_telegram"]));
-		if (file_exists(ENGINE_DIR . '/inc/maharder/admin/assets/css/dark.css')) {
-			if (isset($mh_settings['theme']) && $mh_settings['theme'] === 'dark') {
-				$this->setCss(URL . '/maharder/admin/assets/css/dark.css');
-			}
-		}
-		if (!mkdir($cache_folder = $this->getCacheFolder(), 0755, true) && !is_dir($cache_folder)) {
-			LogGenerator::generate_log('maharder', 'construct', sprintf('Directory "%s" was not created', $cache_folder));
-		}
-
-		if (is_dir($cache_folder)) {
-			file_put_contents($cache_folder . DIRECTORY_SEPARATOR . '.htaccess', 'Order Deny,Allow
-Deny from all');
-			chmod($cache_folder . DIRECTORY_SEPARATOR . '.htaccess', 0666);
-		}
-
-		if ($mh_settings['theme'] === 'dark') $this->setCss(URL . '/maharder/admin/assets/editor/themes/dark.css');
-
+		];
 	}
 
 
 	/**
 	 * Возвращает массив с данными о ссылке
 	 *
-	 * @param string      $name     //  Название ссылки
-	 * @param string      $href     //  Ссылка
-	 * @param string      $type     //  Тип ссылки: link - простая ссылка, divider - разделитель, dropdown - выпадающее меню, data - оформляет элемент как div со скрытым дополнительным параметром $data_val
-	 * @param array       $children //  Дочерние ссылки, если есть
-	 * @param string|null $data_val //  Дополнительный параметр для выпадающего меню
+	 * @param    string         $name        Название ссылки
+	 * @param    string         $href        Ссылка
+	 * @param    string         $type        Тип ссылки: link - простая ссылка, divider - разделитель, dropdown -
+	 *                                       выпадающее меню, data - оформляет элемент как div со скрытым
+	 *                                       дополнительным параметром $data_val
+	 * @param    array          $children    Дочерние ссылки, если есть
+	 * @param    string|null    $data_val    Дополнительный параметр для выпадающего меню
 	 *
 	 * @return array
 	 */
-	public static function generate_link(string $name, string $href, string $type = 'link', array $children = [], ?string $data_val = null): array {
+	public static function generate_link(string $name, string $href, string $type = 'link', array $children = [], ?string $data_val = null) : array {
 		return [
 			'name'     => $name,
 			'href'     => $href,
@@ -200,22 +205,22 @@ Deny from all');
 	/**
 	 * Добавляет ссылку в массив меню
 	 *
-	 * @param $link
+	 * @param    array    $link
 	 *
 	 * @return void
 	 */
-	public function setLink($link) {
+	public function setLink(array $link) : void {
 		$this->variables['menu'][] = $link;
 	}
 
 	/**
 	 * Добавляет несколько ссылок в массив меню
 	 *
-	 * @param $links
+	 * @param    array    $links
 	 *
 	 * @return void
 	 */
-	public function setLinks($links) {
+	public function setLinks(array $links) : void {
 		foreach ($links as $link) {
 			$this->setLink($link);
 		}
@@ -227,7 +232,7 @@ Deny from all');
 	 *
 	 * @return void
 	 */
-	private function preSetMenu() {
+	private function preSetMenu() : void {
 		global $lang;
 		require_once DLEPlugins::Check(ENGINE_DIR . '/skins/default.skin.php');
 		$dle_links_header = [
@@ -242,7 +247,7 @@ Deny from all');
 		$admin_links = [
 			self::generate_link($lang['header_all'], '?mod=options&action=options'),
 			self::generate_link('', '', 'divider'),
-			self::generate_link('Новости', '', 'dropdown', [
+			self::generate_link(__('mhadmin', 'Новости'), '', 'dropdown', [
 				self::generate_link($lang['add_news'], '?mod=addnews&action=addnews'),
 				self::generate_link($lang['edit_news'], '?mod=editnews&action=list'),
 			]),
@@ -251,11 +256,12 @@ Deny from all');
 
 		foreach ($options as $o => $a) {
 			$opt_children = [];
-			foreach ($a as $c) $opt_children[] = self::generate_link($c['name'], $c['url']);
+			foreach ($a as $c)
+				$opt_children[] = self::generate_link($c['name'], $c['url']);
 			$admin_links[] = self::generate_link($dle_links_header[$o], '', 'dropdown', $opt_children);
 		}
 
-		$this->setLink(self::generate_link('Страницы DLE', '', 'dropdown', $admin_links));
+		$this->setLink(self::generate_link(__('mhadmin', 'Страницы DLE'), '', 'dropdown', $admin_links));
 
 	}
 
@@ -264,25 +270,28 @@ Deny from all');
 	 *
 	 * @return array
 	 */
-	public function getVariables() {
+	public function getVariables() : array {
 		return $this->variables;
 	}
 
 	/*
 	 * Добавляет новые или обновляет старые переменные
+	 *
+	 * @param string $name
+	 * @param mixed $value
 	 */
-	public function setVar($name, $value) {
+	public function setVar(string $name, mixed $value) : void {
 		$this->variables[$name] = $value;
 	}
 
 	/**
-	 * Добавлает или обновляет несколько переменных
+	 * Добавляет или обновляет несколько переменных
 	 *
-	 * @param $arr //  Массив с данными
+	 * @param    array    $arr    Массив с данными
 	 *
 	 * @return void
 	 */
-	public function setVars($arr = []) {
+	public function setVars(array $arr = []) : void {
 		foreach ($arr as $name => $value) {
 			$this->setVar($name, $value);
 		}
@@ -291,59 +300,55 @@ Deny from all');
 	/**
 	 * Добавляет новый CSS-файл в массив
 	 *
-	 * @param $css //  Ссылка на файл
+	 * @param    array|string    $css    //  Ссылка на файл
 	 *
 	 * @return void
 	 */
-	public function setCss($css) {
-		if (is_array($css)) {
-			foreach ($css as $file) $this->cssArr[] = $file;
-		} else $this->cssArr[] = $css;
+	public function setCss(array|string $css) : void {
+		$this->cssArr = array_merge($this->cssArr, (array) $css);
 		$this->setVar('css', $this->htmlStatic($this->cssArr));
 	}
 
 	/**
 	 * Добавляет новый JS-файл в массив
 	 *
-	 * @param $js //  Ссылка на файл
+	 * @param    array|string    $js    //  Ссылка на файл
 	 *
 	 * @return void
 	 */
-	public function setJs($js) {
-		if (is_array($js)) {
-			foreach ($js as $file) $this->jsArr[] = $file;
-		} else $this->jsArr[] = $js;
+	public function setJs(array|string $js) : void {
+		$this->jsArr = array_merge($this->jsArr, (array) $js);
 		$this->setVar('js', $this->htmlStatic($this->jsArr, 'html', 'js'));
 	}
 
 	/**
 	 * Обрабатывает ссылки на статичные файлы в HTML формат, добавляет к ним нужные теги
 	 *
-	 * @param $data
-	 * @param $view
-	 * @param $type
+	 * @param    string|array    $data
+	 * @param    string          $view
+	 * @param    string          $type
 	 *
 	 * @return array
 	 */
-	public function htmlStatic($data, $view = 'html', $type = 'css') {
+	public function htmlStatic(string|array $data, string $view = 'html', string $type = 'css') : array {
 		$out = [];
-		if ('html' == $view) {
+		if ('html' === $view) {
 			if (is_array($data)) {
 				foreach ($data as $d) {
-					if ('css' == $type) {
+					if ('css' === $type) {
 						$out[] = "<link rel='stylesheet' type='text/css' href='{$d}'>";
-					} elseif ('js' == $type) {
+					} elseif ('js' === $type) {
 						$out[] = "<script src='{$d}'></script>";
 					}
 				}
 			} else {
-				if ('css' == $type) {
+				if ('css' === $type) {
 					$out[] = "<link rel='stylesheet' type='text/css' href='{$data}'>";
-				} elseif ('js' == $type) {
+				} elseif ('js' === $type) {
 					$out[] = "<script src='{$data}'></script>";
 				}
 			}
-		} elseif ('link' == $view) {
+		} elseif ('link' === $view) {
 			if (is_array($data)) {
 				foreach ($data as $d) {
 					$out[] = $d;
@@ -356,7 +361,11 @@ Deny from all');
 		return $out;
 	}
 
-	public function upload_file() {}
+	/**
+	 * TODO: доработать
+	 * @return void
+	 */
+	public function upload_file() { }
 
 
 }

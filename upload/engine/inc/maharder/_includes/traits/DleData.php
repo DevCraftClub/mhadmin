@@ -6,12 +6,12 @@ trait DleData {
 	/**
 	 * Возвращает массив с использованными доп. полями в новости
 	 *
-	 * @param        $id   // ID объекта
-	 * @param string $type // Тип объекта, post или user
-	 * @return array|false
-	 * @throws \JsonException
+	 * @param    int       $id      ID объекта
+	 * @param    string    $type    Тип объекта, post или user
+	 *
+	 * @return array|bool
 	 */
-	public function get_used_xfields($id, string $type = 'post') {
+	public function get_used_xfields(int $id, string $type = 'post') : bool|array {
 		if ('post' === $type) {
 			$post = $this->load_data("post", [
 				'selects' => ['xfields'],
@@ -38,10 +38,11 @@ trait DleData {
 	/**
 	 * Загружает все дополнительные поля для новостей и пользователей
 	 *
-	 * @param string $type
+	 * @param    string    $type
+	 *
 	 * @return array
 	 */
-	public function loadXfields(string $type = 'post'): array {
+	public function loadXfields(string $type = 'post') : array {
 		if ('post' === $type) {
 			$xf_file = file(ENGINE_DIR . '/data/xfields.txt');
 		} elseif ('user' === $type) {
@@ -50,7 +51,7 @@ trait DleData {
 
 		$xf_info = [];
 		foreach ($xf_file as $line) {
-			$info = explode('|', $line);
+			$info              = explode('|', $line);
 			$xf_info[$info[0]] = $info[1];
 		}
 
@@ -61,11 +62,10 @@ trait DleData {
 	 * Получаем список пользователей
 	 *
 	 * @return array
-	 * @throws \JsonException
 	 */
-	public function getUsers(): array {
+	public function getUsers() : array {
 
-		$users = $this->load_data("users", [
+		$users   = $this->load_data("users", [
 			'selects' => [
 				'user_id',
 				'name'
@@ -88,11 +88,10 @@ trait DleData {
 	 * в виде массива с данными ID и названием
 	 *
 	 * @return array
-	 * @throws \JsonException
 	 */
-	public function getCats(): array {
+	public function getCats() : array {
 
-		$cats = $this->load_data("category", [
+		$cats       = $this->load_data("category", [
 			'selects' => [
 				'id',
 				'name'

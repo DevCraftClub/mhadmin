@@ -1,0 +1,76 @@
+{% extends 'base.html' %} {% block content %}
+
+<form class="ui form segment">
+	<div class="ui bottom attached tab active" data-tab="main">
+		<h4 class="ui dividing header">{{title}}</h4>
+
+		<div class="ui cards">
+
+			<div class="card">
+				<div class="content">
+					<div class="header">{{ links.templates.name }}</div>
+					<div class="description">
+						Перечень, настройка и управление шаблонами
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.templates.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+			<div class="card">
+				<div class="content">
+					<div class="header">{{ links.services.name }}</div>
+					<div class="description">
+						Перечень, настройка и управление подключениями соц. сетей
+					</div>
+				</div>
+
+				<a role="button" href="{{ links.services.href }}" class="ui bottom attached button">
+					<i class="linkify icon"></i>
+					Перейти
+				</a>
+			</div>
+
+		</div>
+
+	</div>
+</form>
+{% endblock %}
+
+
+{% block scripts %}
+
+{% autoescape 'js' %}
+<script>
+	$(() => {
+		$(document).on('click', '.save', function () {
+			startLoading();
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: '{{module_code}}',
+					file: 'master',
+					method: 'settings',
+					data: $('.form').serializeArray()
+				},
+				type: 'POST',
+				success: function (data) {
+					hideLoading('');
+					$('body').toast({
+						class: 'success',
+						title: `Всё отлично!`,
+						message: `Данные были сохранены!`,
+						showProgress: 'bottom'
+					});
+
+				}
+			});
+		});
+	});
+</script>
+{% endautoescape %}
+{% endblock %}

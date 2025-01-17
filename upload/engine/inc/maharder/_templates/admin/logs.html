@@ -88,15 +88,15 @@
                     $(`[data-log-id="${id}"]`).remove();
                     $('body').toast({
                         class: 'success',
-                        title: `{% trans %}Всё отлично!{% endtrans %}`,
-                        message: `{% trans %}<p>Запись была удалена!</p>{% endtrans %}`,
+                        title: __(`Всё отлично!`),
+                        message: __(`<p>Запись была удалена!</p>`),
                         showProgress: 'bottom'
                     });
                 } else {
                     $('body').toast({
                         class: 'error',
-                        title: `{% trans %}ошибка{% endtrans %}`,
-                        message: `{% trans %}<p>${data.error}</p><p>${data.message}</p>{% endtrans %}`,
+                        title: __(`Ошибка`),
+                        message: `<p>${data.error}</p><p>${data.message}</p>`,
                         showProgress: 'bottom'
                     });
                 }

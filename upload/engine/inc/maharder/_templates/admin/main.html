@@ -27,7 +27,7 @@
 				name: 'Количество объектов'|trans|raw,
 				descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д. Это глобальное
 				значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
-				отображаемых новостей на страницу" => ' ~ dle_config.news_number ~ '.'|trans|html_entity_decode,
+				отображаемых новостей на страницу" => '|trans|html_entity_decode ~ dle_config.news_number ~ '.',
 				type: 'number',
 				variable: settings
 			})
@@ -188,7 +188,7 @@
         let name = 'mh_assets_check', cookies = getCookie(name);
         if (cookies === undefined || cookies != 1) {
             $('[data-action="check_assets"] .icon').addClass('loading');
-            startLoading('{% trans %}Проверка обновлений{% endtrans %}');
+            startLoading(__('Проверка обновлений'));
             $.ajax({
                 url: 'engine/ajax/controller.php?mod=maharder',
                 data: {
@@ -223,7 +223,7 @@
     }
 
     function save_asset(file, data) {
-        startLoading(`{% trans %}Загружаем файл: <b>${file}</b>!<br>Результат находится в консоли браузера!{% endtrans %}`);
+        startLoading(__(`Загружаем файл: <b>${file}</b>!<br>Результат находится в консоли браузера!`));
         $.ajax({
             url: 'engine/ajax/controller.php?mod=maharder',
             data: {
@@ -286,8 +286,8 @@
                     if (data.local === data.on_server && data.missing_count === 0 && data.update_count === 0)
                         $('body').toast({
                             class: 'info',
-                            title: `{% trans %}Информация!{% endtrans %}`,
-                            message: `{% trans %}Обновлений нет{% endtrans %}`,
+							title: __('Информация!'),
+							message: __('Обновлений нет'),
                             showProgress: 'bottom'
                         });
                     else {
@@ -296,26 +296,26 @@
                         }).popup('toggle');
                         $('.new_assets_count').html(Math.abs(data.missing_count + data.update_count)).addClass('red');
                         $.confirm({
-                            title: 'Обновлениям быть!',
+                            title: t('Обновлениям быть!'),
                             content: '<div class="ui middle aligned divided list">\n' +
                                 '  <div class="item">\n' +
                                 '    <div class="content">\n' +
-                                '      <a class="header">{% trans %}На сервере</a> \n{% endtrans %}' +
-                                '       <div class="description">' + data.on_server + '{% trans %} файлов{% endtrans %}</div>' +
+                                '      <a class="header">{% trans %}На сервере{% endtrans %}</a> \n' +
+                                '       <div class="description">' + data.on_server + ' {% trans %}файлов{% endtrans %}</div>' +
                                 '    </div>\n' +
                                 '  </div>\n' +
                                 '  <div class="item">\n' +
                                 '    <div class="content">\n' +
-                                '      <a class="header">{% trans %}Загружено на сайт</a> {% endtrans %}' +
-                                '       <div class="description">' + data.local + '{% trans %} файлов{% endtrans %}</div>\n' +
+                                '      <a class="header">{% trans %}Загружено на сайт{% endtrans %}</a> ' +
+                                '       <div class="description">' + data.local + ' {% trans %}файлов{% endtrans %}</div>\n' +
                                 '    </div>\n' +
                                 '  </div>\n' +
-                                generate_item(data.missing_count > 0, '{% trans %}Требуют установки{% endtrans %}', '', {
+                                generate_item(data.missing_count > 0, __('Требуют установки'), '', {
                                     enable: true,
                                     id: 'assets_to_install',
                                     data: data.missing
                                 }) +
-                                generate_item(data.update_count > 0, '{% trans %}Требуют обновления{% endtrans %}', '', {
+                                generate_item(data.update_count > 0, __('Требуют обновления'), '', {
                                     enable: true,
                                     id: 'assets_to_update',
                                     data: data.update
@@ -331,7 +331,7 @@
                             backgroundDismissAnimation: 'shake',
                             buttons: {
                                 installAll: {
-                                    text: '{% trans %}Установить всё{% endtrans %}',
+                                    text: __('Установить всё'),
                                     btnClass: 'ui green button',
                                     action: function () {
                                         $('[data-action="check_assets"]').popup('toggle');
@@ -346,7 +346,7 @@
                                     }
                                 },
                                 onlyInstall: {
-                                    text: '{% trans %}Установить недостающие{% endtrans %}',
+                                    text: __('Установить недостающие'),
                                     btnClass: 'ui blue button',
                                     action: function () {
                                         $('[data-action="check_assets"]').popup('toggle');
@@ -358,7 +358,7 @@
                                     }
                                 },
                                 onlyUpdate: {
-                                    text: '{% trans %}Установить обновления{% endtrans %}',
+                                    text: __('Установить обновления'),
                                     btnClass: 'ui orange button',
                                     action: function () {
                                         $('[data-action="check_assets"]').popup('toggle');
@@ -391,8 +391,8 @@
                     hideLoading('');
                     $('body').toast({
                         class: 'success',
-                        title: `{% trans %}Всё отлично!{% endtrans %}`,
-                        message: `{% trans %}<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>{% endtrans %}`,
+                        title: t__('Всё отлично!'),
+						message:  __('<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>'),
                         showProgress: 'bottom'
                     });
                     setTimeout(() => {

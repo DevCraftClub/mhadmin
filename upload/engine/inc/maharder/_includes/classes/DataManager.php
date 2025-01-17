@@ -12,18 +12,26 @@
 // Код распространяется по лицензии MIT                         =
 //===============================================================
 
-require_once(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
 
 abstract class DataManager {
 	/**
-	 * @var db|null
+	 * Статическое свойство для хранения экземпляра базы данных.
+	 *
+	 * @var db|null Экземпляр базы данных или null, если он не инициализирован.
 	 */
 	protected static ?db $db = null;
 
 	/**
-	 * Функция подключения к базе данных
+	 * Устанавливает подключение к базе данных, если оно еще не было установлено.
+	 *
+	 * Если глобальная переменная `DBHOST` не определена, подключение
+	 * к базе данных конфигурируется через файл `dbconfig.php` в папке ENGINE_DIR.
+	 * В противном случае используется глобальная переменная `$db`.
 	 *
 	 * @return void
+	 * @global db|null $db Глобальная переменная, представляющая объект базы данных.
+	 * @see self::setDb()
+	 * @see DBHOST
 	 */
 	public static function connect(): void {
 		if (is_null(self::$db)) {
@@ -38,7 +46,13 @@ abstract class DataManager {
 	}
 
 	/**
-	 * @return db
+	 * Возвращает объект подключения к базе данных.
+	 *
+	 * Если подключение еще не было установлено, метод инициирует его вызовом метода connect().
+	 *
+	 * @return db Объект подключения к базе данных.
+	 * @see self::connect() Для установления подключения к базе данных.
+	 * @see self::$db self::$db Глобальная переменная, содержащая текущий объект подключения.
 	 */
 	public static function getDb(): db {
 		if (is_null(self::$db)) {
@@ -49,7 +63,15 @@ abstract class DataManager {
 	}
 
 	/**
-	 * @param db|null $db
+	 * Устанавливает экземпляр базы данных.
+	 *
+	 * Метод задает объект базы данных, который будет использоваться в дальнейшем.
+	 *
+	 * @param db|null $db Экземпляр базы данных или null.
+	 *
+	 * @return void
+	 *
+	 * @see self::$db Глобальная переменная, которая хранит объект базы данных.
 	 */
 	public static function setDb(?db $db): void {
 		self::$db = $db;
@@ -88,13 +110,22 @@ abstract class DataManager {
 	}
 
 	/**
-	 * Возвращает указанный путь в виде массива со всеми папками и файлами в нём
+	 * Преобразует указанную директорию в массив, содержащий все папки и файлы из неё.
 	 *
-	 * @param             $dir //  Путь, который нужно просканировать
-	 * @param mixed       ...$_ext
+	 * Этот метод является обёрткой для функции `dirToArray` и вызывает её с переданными
+	 * параметрами. Используется для рекурсивного получения структуры директорий и файлов
+	 * в виде массива.
 	 *
-	 * @return array
 	 * @version 2.0.9
+	 *
+	 * @param mixed  ...$_ext Список расширений или других элементов, подлежащих исключению при сканировании.
+	 *
+	 * @param string $dir     Путь к директории, содержимое которой необходимо преобразовать в массив.
+	 *
+	 * @return array Ассоциативный массив, где ключами могут быть директории, а значения —
+	 *               содержимое этих директорий; файлы представлены в виде элементов массива.
+	 *
+	 * @see     dirToArray() Используемая глобальная функция для обработки директорий.
 	 */
 	public static function dirToArray(string $dir, ...$_ext): array {
 		return dirToArray($dir, $_ext);
@@ -115,8 +146,8 @@ abstract class DataManager {
 	 *
 	 * @return bool Возвращает `true`, если все директории успешно созданы, иначе `false`.
 	 *
-	 * @throws RuntimeException Бросается, если директория не может быть создана.
-	 * @throws JsonException    Может быть вызван, если ошибка логирования связана с кодировкой JSON.
+	 * @throws RuntimeException 		  Бросается, если директория не может быть создана.
+	 * @throws JsonException|Throwable    Может быть вызван, если ошибка логирования связана с кодировкой JSON.
 	 */
 	public static function createDir(string $service = 'DataManager', string $module = 'mhadmin', int $permission = 0755, string ...$paths): bool {
 		foreach ($paths as $path) {
@@ -151,16 +182,25 @@ abstract class DataManager {
 	 * Объединение происходит слева направо. Пустые значения игнорируются.
 	 * Возвращаемый путь нормализуется (лишние символы удаляются, контролируется корректность пути).
 	 *
-	 * @since   2.0.9
+	 * @version 173.3.0
 	 *
 	 * @param string ...$paths Список путей, которые нужно объединить. Каждый аргумент должен быть строкой.
 	 *
 	 * @return string Возвращает объединённый и нормализованный путь.
 	 *
 	 * @throws RuntimeException Если произошла ошибка при нормализации пути.
-	 * @version 173.3.0
+	 * @since   2.0.9
 	 *
 	 */
+	function joinPaths(string ...$paths): string {
+		// Фильтруем пустые значения
+		$filteredPaths = array_filter($paths, fn($path) => $path !== '');
+
+		// Объединяем пути
+		$joinedPath = implode(DIRECTORY_SEPARATOR, $filteredPaths);
+
+		return self::normalizePath($joinedPath);
+	}
 
 	/**
 	 * Полностью удаляет директорию и все её содержимое, включая файлы и вложенные директории.
@@ -169,7 +209,7 @@ abstract class DataManager {
 	 * а затем удаляет саму директорию. Игнорирует защищённую директорию,
 	 * путь к которой жёстко прописан в коде.
 	 *
-	 * @since   2.0.9
+	 * @version 173.3.0
 	 *
 	 * @param string $path Абсолютный путь к директории, которую необходимо удалить.
 	 *
@@ -177,7 +217,7 @@ abstract class DataManager {
 	 *
 	 * @throws \UnexpectedValueException В случае, если переданный путь не является директорией
 	 *                                   или не может быть прочитан.
-	 * @version 173.3.0
+	 * @since   2.0.9
 	 *
 	 */
 	public static function deleteDir(string $path): void {
@@ -287,7 +327,7 @@ abstract class DataManager {
 			'integer' => FILTER_VALIDATE_INT,
 			'int'     => FILTER_VALIDATE_INT,
 			'tinyint' => FILTER_VALIDATE_INT,
-			'string'  => FILTER_SANITIZE_STRING,
+			'string'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
 		];
 
 		// Получаем фильтр или возвращаем строковое представление значения, если тип неизвестен
@@ -376,8 +416,7 @@ abstract class DataManager {
 	 */
 	public static function getConfig(string $codename, ?string $path = null, ?string $confName = null): array {
 		// Используем Null-safe оператор и константу DIRECTORY_SEPARATOR для улучшения читаемости
-		$configPath =
-			$path ?? ENGINE_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'maharder' . DIRECTORY_SEPARATOR . '_config';
+		$configPath = $path ?? ENGINE_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'maharder' . DIRECTORY_SEPARATOR . '_config';
 
 		// Формируем путь к JSON-файлу
 		$jsonFilePath = $configPath . DIRECTORY_SEPARATOR . $codename . '.json';
@@ -388,9 +427,7 @@ abstract class DataManager {
 		}
 
 		// Если JSON-файл не найден, но есть старое имя конфигурации, занимаемся миграцией
-		return !empty($confName)
-			? self::migrateOldConfig($codename, $confName, $configPath)
-			: [];
+		return !empty($confName) ? self::migrateOldConfig($codename, $confName, $configPath) : [];
 	}
 
 	/**
@@ -425,9 +462,6 @@ abstract class DataManager {
 	 * удаляет старый файл. Если файл отсутствует или содержит некорректный формат данных,
 	 * выполняются соответствующие обработки ошибок и возвращается пустой массив.
 	 *
-	 * @see DLEPlugins::Check() Используется для проверки файлового пути.
-	 * @see LogGenerator::generateLog() Используется для записи логов в случае ошибок.
-	 *
 	 * @param string $configPath Путь к директории, в которой будет сохранен новый файл конфигурации.
 	 *
 	 * @param string $codename   Уникальный код или имя для конфигурации.
@@ -437,6 +471,10 @@ abstract class DataManager {
 	 *
 	 * @throws \JsonException Если возникают ошибки при кодировании JSON.
 	 * @throws \RuntimeException Если не удается записать файл или выполнить операции с файловой системой.
+	 * @throws Throwable
+	 *
+	 * @see DLEPlugins::Check() Используется для проверки файлового пути.
+	 * @see LogGenerator::generateLog() Используется для записи логов в случае ошибок.
 	 *
 	 */
 	private static function migrateOldConfig(string $codename, string $confName, string $configPath): array {
@@ -584,10 +622,6 @@ abstract class DataManager {
 	 * Функция упрощает создание URL-совместимых или SEO-оптимизированных строк из произвольных
 	 * текстовых данных.
 	 *
-	 * @since 173.3.0 Функция впервые была добавлена в этой версии.
-	 *
-	 * @see   totranslit() Используемая функция в случае, если Transliterator недоступен.
-	 *
 	 * @param string $input        Исходная строка для преобразования. Должна быть корректной строкой Unicode.
 	 *
 	 * @return string Отформатированная строка, приведенная к нижнему регистру, состоящая из
@@ -596,20 +630,22 @@ abstract class DataManager {
 	 * @throws RuntimeException Если ни один из механизмов транслитерации,
 	 *                          Transliterator или totranslit, недоступен или некорректен.
 	 *
+	 * @see   totranslit() Используемая функция в случае, если Transliterator недоступен.
+	 *
+	 * @since 173.3.0 Функция впервые была добавлена в этой версии.
+	 *
 	 * @global array $langtranslit Ассоциативный массив, используемый функцией `totranslit()` для
 	 *                             выполнения транслитерации. Должен быть заранее определён.
 	 *
 	 */
 	public static function toTranslit(string $input): string {
 		// Попробуем создать объект Transliterator
-		$transliterator = class_exists(\Transliterator::class)
-			? \Transliterator::create('Any-Latin; Latin-ASCII')
-			: null;
+		$transliterator = class_exists(\Transliterator::class) ? \Transliterator::create(
+			'Any-Latin; Latin-ASCII'
+		) : null;
 
 		// Выполняем транслитерацию
-		$transliterated = $transliterator
-			? $transliterator->transliterate($input)
-			: totranslit($input);
+		$transliterated = $transliterator ? $transliterator->transliterate($input) : totranslit($input);
 
 		// Удаляем все символы, кроме букв, цифр и пробелов
 		$filtered = preg_replace('/[^a-zA-Z0-9\s]/', '', $transliterated);
@@ -619,5 +655,104 @@ abstract class DataManager {
 
 		// Приводим текст к нижнему регистру
 		return strtolower($underscored ?? '');
+	}
+
+	/**
+	 * Очищает входные данные, массивы или значения, используя заданные флаги для фильтрации.
+	 *
+	 * Если входные данные являются массивом, рекурсивно применяется функция очистки ко всем элементам массива.
+	 * Если входные данные - одно значение, применяется очистка непосредственно к нему.
+	 *
+	 * @param mixed      $input Входные данные, которые необходимо очистить. Может быть массивом или единичным
+	 *                          значением.
+	 * @param array|null $flags Массив флагов для фильтрации значений (используются функции filter_var).
+	 *
+	 * @return mixed Очищенные данные. Если входные данные - массив, возвращается очищенный массив. Если данные не
+	 *               заданы, возвращается null.
+	 *
+	 * @since 173.3.0
+	 */
+	public static function sanitizeArrayInput(mixed $input = null, array $flags = null): mixed {
+
+		if (!$input) {
+			return null;
+		}
+
+		if (is_array($input)) {
+			$sanitizedInput =  array_filter(array_map(fn($value) => is_array($value) ? self::sanitizeArrayInput($value, $flags) : self::sanitizeInput($value, $flags), $input));
+		} else {
+			$sanitizedInput = self::sanitizeInput($input, $flags);
+		}
+
+		return $sanitizedInput;
+	}
+
+	/**
+	 * Обрабатывает и фильтрует входящее значение на основе заданных флагов.
+	 *
+	 * Эта функция принимает значение и массив флагов фильтрации, которые применяются
+	 * к значению последовательно, используя функцию `filter_var`.
+	 *
+	 * @param mixed|null $value Входное значение, которое требуется отфильтровать. Может быть любого типа.
+	 *                          По умолчанию — `null`.
+	 * @param array|null $flags Массив констант фильтрации (например, FILTER_SANITIZE_STRING, FILTER_VALIDATE_INT),
+	 *                          которые будут применяться к значению. По умолчанию — `null`, что означает отсутствие
+	 *                          фильтров.
+	 *
+	 * @return string|null Возвращает отфильтрованное значение в виде строки или `null` в случае, если
+	 *                     значение или фильтрация недействительны.
+	 *
+	 * @since 173.3.0
+	 */
+	public static function sanitizeInput(mixed $value = null, array $flags = null): ?string {
+		if ($flags) {
+			foreach ($flags as $flag) {
+				$value = filter_var($value, $flag);
+			}
+		}
+		return $value;
+	}
+
+	/**
+	 * @throws Throwable
+	 * @throws JsonException
+	 */
+	public static function createLockFile(string $path) {
+		global $_TIME;
+		if(!touch($path)) {
+			LogGenerator::generateLog(
+				'DataManager',
+				'createLockFile/touch',
+				__(
+					'mhadmin',
+					'Не удалось сохранить файл блокировки обновлений: {{path}}',
+					['{{path}}' => $path]
+				)
+			);
+		}
+
+		if(!chmod($path, 0666)) {
+			LogGenerator::generateLog(
+				'DataManager',
+				'createLockFile/chmod',
+				__(
+					'dle_faker',
+					'Не удалось выставить права на запись файла блокировки обновлений: {{path}}',
+					['{{path}}' => $path]
+				)
+			);
+		}
+
+		if (!file_put_contents($path, $_TIME, LOCK_EX)) {
+			LogGenerator::generateLog(
+				'DataManager',
+				'createLockFile/file_put_contents',
+				__(
+					'dle_faker',
+					'Не удалось обновить содержимое файла блокировки обновлений: {{path}}',
+					['{{path}}' => $path]
+				)
+			);
+		}
 	}
 }

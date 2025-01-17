@@ -43,6 +43,14 @@
 					}, 1000);
 				</script>
 			{% endautoescape %}
+		{% elseif type == 'date' or type == 'time' or type == 'datetime' %}
+			<div class="ui calendar" rel="{{ type }}" {% if type != 'datetime' %}data-type="{{type}}"{% endif %} data-date="{{value}}">
+				<div class="ui input left icon">
+					{% if type == 'time' %}<i class="time icon"></i>{% else %}<i class="calendar icon"></i>{% endif %}
+					<input type="text" id="{{name}}" name="{{name}}" placeholder="{{label}}" value="{{value}}" >
+				</div>
+			</div>
+
 		{% else %}
 			<input type="{{type}}" id="{{name}}" name="{{name}}" placeholder="{{label}}" value="{{value}}" >
 		{% endif %}

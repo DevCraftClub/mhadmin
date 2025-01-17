@@ -44,18 +44,49 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 		return self::getServerData()['DOCUMENT_ROOT'];
 	}
 
+	/**
+	 * Получает URL для статических ресурсов на основе данных текущего сервера.
+	 *
+	 * Метод формирует URL-адрес, используя протокол (`http` или `https`), исходя из значения
+	 * `HTTPS` в массиве данных сервера, а также хост (`HTTP_HOST`). Формируемый URL
+	 * ведет к каталогу `/engine/inc` приложения.
+	 *
+	 * @return string URL для статических ресурсов.
+	 * @see AdminUrlExtension::getServerData()
+	 * @see AdminUrlExtension::getThisHost()
+	 */
 	protected static function getAssetsUrl() : string {
 		return (isset(self::getServerData()['HTTPS']) && 'on' === self::getServerData()['HTTPS'] ? 'https' : 'http')
-			. '://' . self::getThisHost() . '/engine/inc';
+			. '://' . self::getThisHost() . '/engine/inc/maharder/admin/assets';
 	}
 
+	/**
+	 * Получает URL модуля, основываясь на данных сервера.
+	 *
+	 * Возвращает реферальный URL из `HTTP_REFERER`, если он установлен.
+	 * Если `HTTP_REFERER` отсутствует, возвращает `REQUEST_URI` или
+	 * текущий скрипт вместе с параметрами запроса (`QUERY_STRING`), если другие данные недоступны.
+	 *
+	 * @return string URL модуля.
+	 * @see AdminUrlExtension::getServerData()
+	 * @see AdminUrlExtension::getThisSelf()
+	 */
 	protected static function getModulesUrl() {
 		return (!empty(self::getServerData()['HTTP_REFERER']))
 			? self::getServerData()['HTTP_REFERER']
 			: ((!empty(self::getServerData()['REQUEST_URI'])) ? self::getServerData()['REQUEST_URI']
-				: self::getThisSelf() . "?{self::getServerData()['QUERY_STRING']}");
+				: self::getThisSelf() . "?" .self::getServerData()['QUERY_STRING']);
 	}
 
+	/**
+	 * Парсит и преобразует URL в стандартный формат.
+	 *
+	 * Преобразует символы в URL, удаляя лишние пробелы, табуляции и символы перевода строки,
+	 * и создаёт корректную строку URL с обновленными параметрами запроса.
+	 *
+	 * @param string $url Строка URL для обработки.
+	 * @return string Обработанный URL.
+	 */
 	public function parseUrl(string $url) : string {
 		$parts = parse_url(trim(str_replace(['&amp;', '\t', '\n'], ['&', '', ''], $url)));
 		parse_str($parts['query'], $_url_data);
@@ -82,6 +113,9 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 			'_server'        => self::getServerData(),
 			'_get'           => self::getGetParams(),
 			'_post'          => self::getPostParams(),
+			'languages'      => MhTranslation::getFormattedLanguageList(),
+			'selected_lang'  => MhTranslation::getLocale(),
+			'lang_data'      => MhTranslation::getLocaleData(MhTranslation::getLocale()),
 
 		];
 	}

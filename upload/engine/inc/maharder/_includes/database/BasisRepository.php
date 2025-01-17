@@ -26,4 +26,12 @@ class BasisRepository extends Repository implements RepositoryInterface {
 		return $this->select()->orderBy('created_at', 'DESC')->limit(1)->fetchOne();
 	}
 
+	public function limit(int $total, int $start = 0): array {
+		return $this->select()->limit($total)->offset($start)->fetchAll();
+	}
+
+	public function total(): int {
+		return $this->select()->count();
+	}
+
 }

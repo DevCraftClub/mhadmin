@@ -2,39 +2,45 @@
 {% from "_macros/pagination.twig" import pagination %}
 {% from "_macros/tablesort.twig" import tablesort %}
 
+{% block filter %}
+    {{ include('templateIncludes/filterArea.html', {filters: filters}) }}
+{% endblock %}
+
 {% block content %}
+
 <div class="ui segment">
 
     <table class="ui very basic  celled table striped sortable selectable">
         <thead class="full-width">
         <tr>
             <th>{{ tablesort('#', 'id', order, sort) }}</th>
-            <th>{{ tablesort('Тип', 'type', order, sort) }}</th>
-            <th>{{ tablesort('Плагин', 'plugin', order, sort) }}</th>
-            <th class="collapsing">{{ tablesort('Функция', 'fn_name', order, sort) }}</th>
-            <th class="collapsing">{{ tablesort('Время', 'time', order, sort) }}</th>
-            <th>{{ tablesort('Сообщение', 'message', order, sort) }}</th>
+            <th>{{ tablesort('Тип'|trans, 'type', order, sort) }}</th>
+            <th>{{ tablesort('Плагин'|trans, 'plugin', order, sort) }}</th>
+            <th class="collapsing">{{ tablesort('Функция'|trans, 'fn_name', order, sort) }}</th>
+            <th class="collapsing">{{ tablesort('Время'|trans, 'time', order, sort) }}</th>
+            <th>{{ tablesort('Сообщение'|trans, 'message', order, sort) }}</th>
             <th>{%trans%}Действие{%endtrans%}</th>
         </tr>
         </thead>
         <tbody>
 
         {% for log in logs %}
+
         <tr data-log-id="{{log.id}}">
             <th class="center aligned">{{log.id}}</th>
-            <td>{{log.type}}</td>
+            <td>{{log.getLogType}}</td>
             <td class="collapsing">
-                {{log.plugin}}
+                {{log.getPlugin}}
             </td>
-            <td class="collapsing">{{log.fn_name}}</td>
+            <td class="collapsing">{{log.getFnName}}</td>
             <td class="center aligned">
-                <div popover data-content="{{log.time}}">
+                <div data-popover data-content="{{log.getTime|from_dti}}">
                     <i class="history icon"></i>
                 </div>
             </td>
             <td>
-                <div popover data-content="{{log.message|raw}}">
-                    {{log.message|limit_text|raw}}
+                <div data-popover data-content="{{log.getMessage|raw}}">
+                    {{log.getMessage|limit_text|raw}}
                 </div>
             </td>
             <td>
@@ -59,7 +65,7 @@
 
 {% autoescape 'js' %}
 <script>
-    $('[popover]').popup();
+    $('[data-popover]').popup();
 
     $(document).on('click', '[data-action="delete"]', function () {
         let id = $(this).data('id');

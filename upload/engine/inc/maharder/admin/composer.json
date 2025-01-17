@@ -10,12 +10,12 @@
 	],
 	"config": {
 		"platform": {
-			"php": "8.1"
+			"php": "8.3"
 		},
 		"vendor-dir": "../_includes/vendor"
 	},
 	"require": {
-		"php": "^8.1",
+		"php": "^8.3",
 		"twig/twig": "^3.8",
 		"twig/markdown-extra": "^3.8",
 		"twig/cache-extra": "^3.8",
@@ -38,7 +38,12 @@
 		"cycle/entity-behavior-uuid": "^1.2",
 		"ext-simplexml": "*",
 		"ext-libxml": "*",
-		"ext-intl": "*"
+		"ext-intl": "*",
+		"james-heinrich/getid3": "*",
+		"ext-SimpleXML": "*",
+		"ext-sqlite3": "*",
+		"ext-curl": "*",
+		"fakerphp/faker": "*"
 	},
 	"conflict": {
 		"symfony/translation-contracts": ">=3.0"

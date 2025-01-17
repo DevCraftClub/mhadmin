@@ -23,7 +23,8 @@
 	//	Ничего не менять
 	//	===============================
 
-	if (!defined('DATALIFEENGINE')) {
+
+if (!defined('DATALIFEENGINE')) {
 		header('HTTP/1.1 403 Forbidden');
 		header('Location: ../../../../');
 		exit('Hacking attempt!');

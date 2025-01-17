@@ -19,9 +19,9 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 // заполняем важную и нужную информацию о модуле
 
 $modInfo = [
-	'module_name'        => '%name%'',
+	'module_name'        => '%name%',
     'module_version'     => '%version%',
-    'module_description' => __('%latin%', '%description%),
+    'module_description' => __('%latin%', '%description%'),
     'module_code'        => '%latin%',
     'module_id'          => 4,
     'module_icon'        => '%icon%',
@@ -43,6 +43,10 @@ switch ($_GET['sites']) {
 	default:
 		require_once DLEPlugins::Check(MH_ROOT.'/_modules/' . $modInfo['module_code'] . '/module/main.php');
 		break;
+
+    case 'changelog':
+        require_once DLEPlugins::Check(MH_ROOT.'/_modules/' . $modInfo['module_code'] . '/module/changelog.php');
+        break;
 }
 
 $xtraVariable = [

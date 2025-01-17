@@ -43,7 +43,7 @@ if (!file_exists(ENGINE_DIR . '/inc/maharder/_includes/vendor/autoload.php')) {
 	}
 }
 
-require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+
 define('THIS_HOST', $_SERVER['HTTP_HOST']);
 define('THIS_SELF', $_SERVER['PHP_SELF']);
 define('URL', $config['http_home_url'] . 'engine/inc');
@@ -51,14 +51,23 @@ define('URL', $config['http_home_url'] . 'engine/inc');
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php');
 require_once DLEPlugins::Check(ENGINE_DIR . '/skins/default.skin.php');
 require_once DLEPlugins::Check(ENGINE_DIR . '/data/config.php');
-$links = include DLEPlugins::Check(MH_ROOT . '/_modules/admin/web/links.php');
 
-$MHDB = new MhDB();
+if (!defined('MH_INIT')) {
+	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+}
+
+$links = include DLEPlugins::Check(MH_MODULES . '/admin/module/links.php');
+
+try {
+	MhTranslation::convertXliffToJs();
+} catch (JsonException|Throwable $e) {
+	LogGenerator::generateLog('Admin/index.php', 'convertXliffToJs', $e->getMessage(), 'critical');
+}
 
 $loader = new FilesystemLoader(
 	[
 		MH_ADMIN . '/templates', // Папка с шаблонами админки и дополнения к ним
-		MH_ROOT . '/_templates', // Папка с шаблонами дополнений
+		MH_TEMPLATES, // Папка с шаблонами дополнений
 	]
 );
 
@@ -69,7 +78,7 @@ $twigConfigDebug = [
 	'debug'       => true,
 	'auto_reload' => true
 ];
-$twigConfig      = ['cache' => MH_ADMIN . '/_cache'];
+$twigConfig      = ['cache' => MH_ROOT . '/_cache'];
 
 if ($debug) $twigConfig = array_merge($twigConfig, $twigConfigDebug);
 
@@ -89,6 +98,7 @@ $mh_template->addExtension(new StringExtension());
 $mh_template->addExtension(new HtmlExtension());
 $mh_template->addExtension(new InkyExtension());
 $mh_template->addExtension(new TextLimiter());
+$mh_template->addExtension(new DateTimeFormatter());
 if ($debug) $mh_template->addExtension(new DebugExtension());
 $mh_template->addRuntimeLoader(
 	new class implements RuntimeLoaderInterface {
@@ -119,6 +129,4 @@ $breadcrumbs = [
 
 $mh        = new Admin();
 $mh_config = DataManager::getConfig('maharder');
-$mh->setVar('languages', MhTranslation::getFormattedLanguageList());
-$mh->setVar('selected_lang', $mh_config['language']);
 

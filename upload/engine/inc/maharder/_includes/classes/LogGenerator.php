@@ -13,8 +13,10 @@
 // Код распространяется по лицензии MIT                         =
 //===============================================================
 
-if (!class_exists('Analog\Analog') || !class_exists('DataLoader') || !class_exists('Admin')) {
-	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+use JetBrains\PhpStorm\ExpectedValues;
+
+if (!class_exists('MhLog') || !class_exists('DataLoader')) {
+	require_once (DLEPlugins::Check(MH_INCLUDES . '/extras/paths.php'));
 }
 
 abstract class LogGenerator {
@@ -112,7 +114,12 @@ abstract class LogGenerator {
 	 *                                        при выполнении Telegram-лога).
 	 *
 	 */
-	public static function generateLog(string $service, string $functionName, mixed $message, string $type = 'error'): void {
+	public static function generateLog(
+		string $service,
+		string $functionName,
+		mixed $message,
+		#[ExpectedValues(values: ['info', 'notice', 'warn', 'warning', 'crit', 'critical', 'alert', 'urgent', 'emergency', 'debug' ])]
+		string $type = 'error'): void {
 		self::init();
 
 		if (!self::getLogs()) {
@@ -139,17 +146,14 @@ abstract class LogGenerator {
 
 		// Определение уровня логирования
 		$logLevel = match (strtolower($type)) {
-			'info'      => Analog::INFO,
-			'notice'    => Analog::NOTICE,
-			'warn',
-			'warning'   => Analog::WARNING,
-			'crit',
-			'critical'  => Analog::CRITICAL,
-			'alert'     => Analog::ALERT,
-			'urgent',
-			'emergency' => Analog::URGENT,
-			'debug'     => Analog::DEBUG,
-			default     => Analog::ERROR,
+			'info'                => Analog::INFO,
+			'notice'              => Analog::NOTICE,
+			'warn', 'warning'     => Analog::WARNING,
+			'crit', 'critical'    => Analog::CRITICAL,
+			'alert'               => Analog::ALERT,
+			'urgent', 'emergency' => Analog::URGENT,
+			'debug'               => Analog::DEBUG,
+			default               => Analog::ERROR,
 		};
 
 		// Логирование в разные каналы
@@ -337,7 +341,7 @@ abstract class LogGenerator {
 		$log->setLogType($type);
 		$log->setPlugin($message['plugin'] ?? 'unknown');
 		$log->setFnName($message['function_name'] ?? 'unknown');
-		$log->setTime($message['datetime'] ?? date('Y-m-d H:i:s'));
+		$log->setTime(DateTimeImmutable::createFromFormat('Y-m-d H:i', $message['datetime']) ?? date('Y-m-d H:i:s'));
 		$log->setMessage(br2nl(htmlspecialchars($formattedMessage)));
 
 		// Сохраняем в базу
@@ -425,7 +429,6 @@ abstract class LogGenerator {
 	 *
 	 */
 	public static function setLogs(bool|int $logs): void {
-		self::init();
 		self::$logs = (bool)$logs;
 	}
 

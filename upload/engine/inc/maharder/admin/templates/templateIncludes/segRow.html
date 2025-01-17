@@ -23,6 +23,15 @@
 					tags: true
 				})
 			}}
+		{% elseif type == 'datetime' or type == 'time'  or type == 'date' %}
+			{{ include('templateIncludes/addInput.html', {
+					type: type,
+					name: id,
+					label: name,
+					value: variable[id],
+					tags: false
+				})
+			}}
 		{% elseif type == 'number_input' or type == 'number' %}
 			{{ include('templateIncludes/addInput.html', {
 					type: 'number',

@@ -40,6 +40,7 @@
 		<div class="ui segment">
 			{% include 'breadcrumb.html' %}
 		</div>
+		{% block filter %}{% endblock %}
 		<div class="ui piled segments">
 			{% block content %}{% endblock %}
 		</div>
@@ -49,10 +50,12 @@
 	{% include 'footer.html' %}
 	{% autoescape 'html' %}
 		<script>
-			var is_mobile = {% if is_mobile() or is_tablet() %}true{% else %}false{% endif %};
-			var dle_login_hash = '{{dle_login_hash}}';
-			var module_code = '{{module_code}}';
+			const is_mobile = {% if is_mobile() or is_tablet() %}true{% else %}false{% endif %};
+			const dle_login_hash = '{{dle_login_hash}}';
+			const module_code = '{{module_code}}';
+			const lang_code = '{{selected_lang}}';
 		</script>
+		<script src="{{assets_url}}/js/i18n/translator.js"></script>
 		{% for script in js %}
 			{{ script|raw }}
 		{% endfor %}

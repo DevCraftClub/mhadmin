@@ -7,18 +7,14 @@
 spl_autoload_register(function ($class_name) {
 	global $mh_loader_paths;
 
-	$found = false;
-
 	foreach ($mh_loader_paths as $path) {
-		$dir_data = dirToArray($path);
-		foreach ($dir_data as $data) {
-			if ($class_name === str_replace('.php', '', $data)) {
-				include_once DLEPlugins::Check("{$path}/{$data}");
-				$found = true;
-				break;
-			}
+		$filePath = "{$path}/{$class_name}.php"; // Строим путь к файлу сразу
+		$checkedPath = DLEPlugins::Check($filePath);
+
+		if (file_exists($checkedPath)) { // Проверяем существование файла
+			include_once $checkedPath;
+			return; // Завершаем выполнение, если файл найден
 		}
-		if ($found) break;
 	}
 
 });

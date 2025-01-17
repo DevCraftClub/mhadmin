@@ -1,7 +1,5 @@
 <?php
 
-//namespace MaHarder\classes;
-
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -23,10 +21,18 @@ class DeclineExtension extends AbstractExtension {
 	 * @return mixed
 	 */
 	public function decline(int|float $number, array $titles) : mixed {
-		return $titles[($number % 10 === 1 && $number % 100 !== 11)
-			? 0
-			: ($number % 10 >= 2 && $number % 10 <= 4
-			&& ($number % 100 < 10
-				|| $number % 100 >= 20) ? 1 : 2)];
+		$lastDigit = $number % 10; // Последняя цифра числа
+		$lastTwoDigits = $number % 100; // Последние две цифры числа
+
+		// Условие для склонения
+		if ($lastDigit === 1 && $lastTwoDigits !== 11) {
+			return $titles[0]; // Единичное число (например, "яблоко")
+		}
+
+		if ($lastDigit >= 2 && $lastDigit <= 4 && ($lastTwoDigits < 10 || $lastTwoDigits >= 20)) {
+			return $titles[1]; // Склонения для 2, 3, 4 (например, "яблока")
+		}
+
+		return $titles[2]; // Всё остальное (например, "яблок")
 	}
 }

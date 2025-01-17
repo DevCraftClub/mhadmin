@@ -24,11 +24,12 @@ $modInfo = [
 	'module_description' => __('mhadmin', 'Административная панель для моих разработок'),
 	'module_code'        => 'maharder',
 	'module_id'          => 4,
-	'module_icon'        => 'fad fa-robot',
+	'module_icon'        => 'fa-duotone fa-solid fa-robot',
 	'site_link'          => 'https://devcraft.club/downloads/maharder-assets.4/',
 	'docs_link'          => 'https://readme.devcraft.club/latest/dev/mhadmin/install/',
 	'dle_config'         => $config,
-	'crowdin_name'       => 'mh-admin'
+	'crowdin_name'       => 'mhаdmin',
+	'get'				 => filter_input_array(INPUT_GET)
 ];
 
 // Подключаем классы, функции и основные переменные

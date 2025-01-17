@@ -4,931 +4,931 @@
     <body>
       <trans-unit id="1">
         <source>Тип</source>
-        <target state="needs-translation">Тип</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Тип</target>
       </trans-unit>
       <trans-unit id="2">
         <source>Плагин</source>
-        <target state="needs-translation">Плагин</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Плагін</target>
       </trans-unit>
       <trans-unit id="3">
         <source>Функция</source>
-        <target state="needs-translation">Функция</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Функція</target>
       </trans-unit>
       <trans-unit id="4">
         <source>Время</source>
-        <target state="needs-translation">Время</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Час</target>
       </trans-unit>
       <trans-unit id="5">
         <source>Сообщение</source>
-        <target state="needs-translation">Сообщение</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Повідомлення</target>
       </trans-unit>
       <trans-unit id="6">
         <source>Действие</source>
-        <target state="needs-translation">Действие</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Дія</target>
       </trans-unit>
       <trans-unit id="7">
         <source>Удалить</source>
-        <target state="needs-translation">Удалить</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Видалити</target>
       </trans-unit>
-      <trans-unit id="8">
+      <trans-unit id="8" approved="yes">
         <source>Всё отлично!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Все чудово!</target>
+        <target state="final">Все чудово!</target>
       </trans-unit>
       <trans-unit id="9">
         <source>&lt;p&gt;Запись была удалена!&lt;/p&gt;</source>
-        <target state="needs-translation">&lt;p&gt;Запись была удалена!&lt;/p&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&lt;p&gt;Запис було видалено!&lt;/p&gt;</target>
       </trans-unit>
       <trans-unit id="10">
         <source>ошибка</source>
-        <target state="needs-translation">ошибка</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">помилка</target>
       </trans-unit>
       <trans-unit id="11">
         <source>&lt;p&gt;${data.error}&lt;/p&gt;&lt;p&gt;${data.message}&lt;/p&gt;</source>
-        <target state="needs-translation">&lt;p&gt;${data.error}&lt;/p&gt;&lt;p&gt;${data.message}&lt;/p&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&lt;p&gt;${data.error}&lt;/p&gt;&lt;p&gt;${data.message}&lt;/p&gt;</target>
       </trans-unit>
-      <trans-unit id="12">
+      <trans-unit id="12" approved="yes">
         <source>Настройки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Налаштування</target>
+        <target state="final">Налаштування</target>
       </trans-unit>
-      <trans-unit id="13">
+      <trans-unit id="13" approved="yes">
         <source>Количество объектов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Кількість об'єктів</target>
+        <target state="final">Кількість об'єктів</target>
       </trans-unit>
-      <trans-unit id="14">
+      <trans-unit id="14" approved="yes">
         <source>.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">.</target>
+        <target state="final">.</target>
       </trans-unit>
-      <trans-unit id="15">
+      <trans-unit id="15" approved="yes">
         <source>Путь до кеша файлов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Шлях до кешу файлів</target>
+        <target state="final">Шлях до кешу файлів</target>
       </trans-unit>
-      <trans-unit id="16">
+      <trans-unit id="16" approved="yes">
         <source>Укажите путь, где будут храниться файлы кеша.&lt;br&gt;По умолчанию: /engine/inc/maharder/_cache</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Вкажіть шлях, де зберігатимуться файли кешу.&lt;br&gt;За замовчуванням: /engine/inc/maharder/_cache</target>
+        <target state="final">Вкажіть шлях, де зберігатимуться файли кешу.&lt;br&gt;За замовчуванням: /engine/inc/maharder/_cache</target>
       </trans-unit>
-      <trans-unit id="17">
+      <trans-unit id="17" approved="yes">
         <source>Время хранения кеша</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Час зберігання кешу</target>
+        <target state="final">Час зберігання кешу</target>
       </trans-unit>
-      <trans-unit id="18">
+      <trans-unit id="18" approved="yes">
         <source>Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.&lt;br&gt;&lt;b&gt;&lt;i&gt;По умолчанию: 60 минут&lt;/i&gt;&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Введіть час у хвилинах, скільки кеш запитів має бути збережено на сервері. Під час запиту скрипт перевірятиме, коли було створено файл кешу, і якщо він перевищуватиме заданий ліміт, то кеш буде перестворено.&lt;br&gt;&lt;b&gt;&lt;i&gt;За замовчуванням: 60 хвилин&lt;/i&gt;&lt;/b&gt;</target>
+        <target state="final">Введіть час у хвилинах, скільки кеш запитів має бути збережено на сервері. Під час запиту скрипт перевірятиме, коли було створено файл кешу, і якщо він перевищуватиме заданий ліміт, то кеш буде перестворено.&lt;br&gt;&lt;b&gt;&lt;i&gt;За замовчуванням: 60 хвилин&lt;/i&gt;&lt;/b&gt;</target>
       </trans-unit>
-      <trans-unit id="19">
+      <trans-unit id="19" approved="yes">
         <source>Язык админки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Мова адмінки</target>
+        <target state="final">Мова адмінки</target>
       </trans-unit>
-      <trans-unit id="20">
+      <trans-unit id="20" approved="yes">
         <source>Данная опция позволит использовать админпанель и модули на разных языках</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ця опція дасть змогу використовувати адмінпанель і модулі різними мовами</target>
+        <target state="final">Ця опція дасть змогу використовувати адмінпанель і модулі різними мовами</target>
       </trans-unit>
-      <trans-unit id="21">
+      <trans-unit id="21" approved="yes">
         <source>Путь до файлов языков</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Шлях до файлів мов</target>
+        <target state="final">Шлях до файлів мов</target>
       </trans-unit>
-      <trans-unit id="22">
+      <trans-unit id="22" approved="yes">
         <source>Укажите путь, откуда будут браться языковые файлы.&lt;br&gt;По умолчанию: /engine/inc/maharder/_locales</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Вкажіть шлях, звідки братимуться мовні файли.&lt;br&gt;За замовчуванням: /engine/inc/maharder/_locales</target>
+        <target state="final">Вкажіть шлях, звідки братимуться мовні файли.&lt;br&gt;За замовчуванням: /engine/inc/maharder/_locales</target>
       </trans-unit>
-      <trans-unit id="23">
+      <trans-unit id="23" approved="yes">
         <source>Включить логирование?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Увімкнути логування?</target>
+        <target state="final">Увімкнути логування?</target>
       </trans-unit>
-      <trans-unit id="24">
+      <trans-unit id="24" approved="yes">
         <source>При включенном параметре будет создавать текстовые логи в папке &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">У разі ввімкненого параметра створюватиме текстові логи в папці &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</target>
+        <target state="final">У разі ввімкненого параметра створюватиме текстові логи в папці &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</target>
       </trans-unit>
-      <trans-unit id="25">
+      <trans-unit id="25" approved="yes">
         <source>Сохранять логи в базе данных?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Зберігати логи в базі даних?</target>
+        <target state="final">Зберігати логи в базі даних?</target>
       </trans-unit>
-      <trans-unit id="26">
+      <trans-unit id="26" approved="yes">
         <source>При включённом параметре все логи будут сохраняться в базу данных</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">У разі ввімкненого параметра всі логи зберігатимуться в базу даних</target>
+        <target state="final">У разі ввімкненого параметра всі логи зберігатимуться в базу даних</target>
       </trans-unit>
-      <trans-unit id="27">
+      <trans-unit id="27" approved="yes">
         <source>Отправлять логи в телеграм?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Надсилати логи в телеграм?</target>
+        <target state="final">Надсилати логи в телеграм?</target>
       </trans-unit>
-      <trans-unit id="28">
+      <trans-unit id="28" approved="yes">
         <source>При включённом параметре и заполненных полях ниже - скрипт будет отправлять логи в ваш телеграм канал</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">У разі ввімкненого параметра і заповнених полів нижче - скрипт відправлятиме логи у ваш телеграм-канал</target>
+        <target state="final">У разі ввімкненого параметра і заповнених полів нижче - скрипт відправлятиме логи у ваш телеграм-канал</target>
       </trans-unit>
-      <trans-unit id="29">
+      <trans-unit id="29" approved="yes">
         <source>API ключ бота</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">API ключ бота</target>
+        <target state="final">API ключ бота</target>
       </trans-unit>
       <trans-unit id="30">
         <source>&gt;здесь&lt;/a&gt;.</source>
-        <target state="needs-translation">&gt;здесь&lt;/a&gt;.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;тут&lt;/a&gt;.</target>
       </trans-unit>
-      <trans-unit id="31">
+      <trans-unit id="31" approved="yes">
         <source>Канал телеграма</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Канал телеграму</target>
+        <target state="final">Канал телеграму</target>
       </trans-unit>
-      <trans-unit id="32">
+      <trans-unit id="32" approved="yes">
         <source>Тип оповещений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Тип сповіщень</target>
+        <target state="final">Тип сповіщень</target>
       </trans-unit>
       <trans-unit id="33">
         <source>Вариация оповещений в канал:</source>
-        <target state="needs-translation">Вариация оповещений в канал:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Варіація сповіщень у канал:</target>
       </trans-unit>
       <trans-unit id="34">
         <source>&gt;&lt;b&gt;Все&lt;/b&gt; - Отправляет буквально все отчёты и логи в канал&lt;/div&gt;</source>
-        <target state="needs-translation">&gt;&lt;b&gt;Все&lt;/b&gt; - Отправляет буквально все отчёты и логи в канал&lt;/div&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;&lt;b&gt;Все&lt;/b&gt; - Відправляє буквально всі звіти і логи в канал&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="35">
         <source>&gt;&lt;b&gt;Ошибки&lt;/b&gt; - Отправляет только ошибки в канал&lt;/div&gt;</source>
-        <target state="needs-translation">&gt;&lt;b&gt;Ошибки&lt;/b&gt; - Отправляет только ошибки в канал&lt;/div&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;&lt;b&gt;Помилки&lt;/b&gt; - Відправляє тільки помилки в канал&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="36">
         <source>&gt;&lt;b&gt;Информация&lt;/b&gt; - Отправляет только информационные отчёты в канал&lt;/div&gt;</source>
-        <target state="needs-translation">&gt;&lt;b&gt;Информация&lt;/b&gt; - Отправляет только информационные отчёты в канал&lt;/div&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;&lt;b&gt;Інформація&lt;/b&gt; - Відправляє тільки інформаційні звіти в канал&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="37">
         <source>&gt;&lt;b&gt;Уведомления&lt;/b&gt; - Отправляет только уведомления в канал&lt;/div&gt;</source>
-        <target state="needs-translation">&gt;&lt;b&gt;Уведомления&lt;/b&gt; - Отправляет только уведомления в канал&lt;/div&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;&lt;b&gt;Повідомлення&lt;/b&gt; - Відправляє тільки повідомлення в канал&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="38">
         <source>&gt;&lt;b&gt;Предупреждения&lt;/b&gt; - Отправляет только предупреждения в канал&lt;/div&gt;</source>
-        <target state="needs-translation">&gt;&lt;b&gt;Предупреждения&lt;/b&gt; - Отправляет только предупреждения в канал&lt;/div&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;&lt;b&gt;Попередження&lt;/b&gt; - Відправляє тільки попередження в канал&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="39">
         <source>&gt;&lt;b&gt;Критические ошибки&lt;/b&gt; - Отправляет только критические ошибки в канал&lt;/div&gt;</source>
-        <target state="needs-translation">&gt;&lt;b&gt;Критические ошибки&lt;/b&gt; - Отправляет только критические ошибки в канал&lt;/div&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;&lt;b&gt;Критичні помилки&lt;/b&gt; - Відправляє тільки критичні помилки в канал&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="40">
         <source>&gt;&lt;b&gt;Отладка&lt;/b&gt; - Отправляет только информацию об отладке в канал&lt;/div&gt;</source>
-        <target state="needs-translation">&gt;&lt;b&gt;Отладка&lt;/b&gt; - Отправляет только информацию об отладке в канал&lt;/div&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&gt;&lt;b&gt;Налагодження&lt;/b&gt; - Надсилає тільки інформацію про налагодження в канал&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="41">
         <source>, то остальные выбранные параметры игнорируются</source>
-        <target state="needs-translation">, то остальные выбранные параметры игнорируются</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">то інші вибрані параметри ігноруються</target>
       </trans-unit>
-      <trans-unit id="42">
+      <trans-unit id="42" approved="yes">
         <source>Все</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Все</target>
+        <target state="final">Все</target>
       </trans-unit>
-      <trans-unit id="43">
+      <trans-unit id="43" approved="yes">
         <source>Ошибки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Помилки</target>
+        <target state="final">Помилки</target>
       </trans-unit>
-      <trans-unit id="44">
+      <trans-unit id="44" approved="yes">
         <source>Информация</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Інформація</target>
+        <target state="final">Інформація</target>
       </trans-unit>
-      <trans-unit id="45">
+      <trans-unit id="45" approved="yes">
         <source>Уведомления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Повідомлення</target>
+        <target state="final">Повідомлення</target>
       </trans-unit>
-      <trans-unit id="46">
+      <trans-unit id="46" approved="yes">
         <source>Предупреждения</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Попередження</target>
+        <target state="final">Попередження</target>
       </trans-unit>
-      <trans-unit id="47">
+      <trans-unit id="47" approved="yes">
         <source>Критические ошибки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Критичні помилки</target>
+        <target state="final">Критичні помилки</target>
       </trans-unit>
-      <trans-unit id="48">
+      <trans-unit id="48" approved="yes">
         <source>Отладка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Налагодження</target>
+        <target state="final">Налагодження</target>
       </trans-unit>
-      <trans-unit id="49">
+      <trans-unit id="49" approved="yes">
         <source>Заменять иконки?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Замінювати іконки?</target>
+        <target state="final">Замінювати іконки?</target>
       </trans-unit>
-      <trans-unit id="50">
+      <trans-unit id="50" approved="yes">
         <source>При включении, в админпанеле DLE будут заменены старые иконки на обновлённые</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Під час увімкнення, в адмінпанелі DLE буде замінено старі іконки на оновлені</target>
+        <target state="final">Під час увімкнення, в адмінпанелі DLE буде замінено старі іконки на оновлені</target>
       </trans-unit>
-      <trans-unit id="51">
+      <trans-unit id="51" approved="yes">
         <source>Добавить кнопку с очищением кеша?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Додати кнопку з очищенням кешу?</target>
+        <target state="final">Додати кнопку з очищенням кешу?</target>
       </trans-unit>
-      <trans-unit id="52">
+      <trans-unit id="52" approved="yes">
         <source>Тема оформления админки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Тема оформлення адмінки</target>
+        <target state="final">Тема оформлення адмінки</target>
       </trans-unit>
-      <trans-unit id="53">
+      <trans-unit id="53" approved="yes">
         <source>Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Поки що можна вибирати між світлим (стандартним) і темним. Збережіть і оновіть сторінку</target>
+        <target state="final">Поки що можна вибирати між світлим (стандартним) і темним. Збережіть і оновіть сторінку</target>
       </trans-unit>
-      <trans-unit id="54">
+      <trans-unit id="54" approved="yes">
         <source>Светлая</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Світла</target>
+        <target state="final">Світла</target>
       </trans-unit>
-      <trans-unit id="55">
+      <trans-unit id="55" approved="yes">
         <source>Тёмная</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Темна</target>
+        <target state="final">Темна</target>
       </trans-unit>
-      <trans-unit id="56">
+      <trans-unit id="56" approved="yes">
         <source>Сохранить</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Зберегти</target>
+        <target state="final">Зберегти</target>
       </trans-unit>
-      <trans-unit id="57">
+      <trans-unit id="57" approved="yes">
         <source>Проверить обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Перевірити оновлення</target>
+        <target state="final">Перевірити оновлення</target>
       </trans-unit>
-      <trans-unit id="58">
+      <trans-unit id="58" approved="yes">
         <source>Идёт загрузка...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Йде завантаження...</target>
+        <target state="final">Йде завантаження...</target>
       </trans-unit>
-      <trans-unit id="59">
+      <trans-unit id="59" approved="yes">
         <source>Загружается:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Завантажується:</target>
+        <target state="final">Завантажується:</target>
       </trans-unit>
-      <trans-unit id="60">
+      <trans-unit id="60" approved="yes">
         <source>Загружено</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Завантажено</target>
+        <target state="final">Завантажено</target>
       </trans-unit>
-      <trans-unit id="61">
+      <trans-unit id="61" approved="yes">
         <source>Проверка обновлений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Перевірка оновлень</target>
+        <target state="final">Перевірка оновлень</target>
       </trans-unit>
       <trans-unit id="62">
         <source>Загружаем файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
-        <target state="needs-translation">Загружаем файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Завантажуємо файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат знаходиться в консолі браузера!</target>
       </trans-unit>
-      <trans-unit id="63">
+      <trans-unit id="63" approved="yes">
         <source>Информация!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Інформація!</target>
+        <target state="final">Інформація!</target>
       </trans-unit>
-      <trans-unit id="64">
+      <trans-unit id="64" approved="yes">
         <source>Обновлений нет</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Оновлень немає</target>
+        <target state="final">Оновлень немає</target>
       </trans-unit>
-      <trans-unit id="65">
+      <trans-unit id="65" approved="yes">
         <source>На сервере&lt;/a&gt; \n</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">На сервері&lt;/a&gt; \n</target>
+        <target state="final">На сервері&lt;/a&gt; \n</target>
       </trans-unit>
       <trans-unit id="66">
         <source>файлов</source>
-        <target state="needs-translation">файлов</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">файлів</target>
       </trans-unit>
       <trans-unit id="67">
         <source>Загружено на сайт&lt;/a&gt;</source>
-        <target state="needs-translation">Загружено на сайт&lt;/a&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Завантажено на сайт&lt;/a&gt;</target>
       </trans-unit>
-      <trans-unit id="68">
+      <trans-unit id="68" approved="yes">
         <source>Требуют установки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Потребують встановлення</target>
+        <target state="final">Потребують встановлення</target>
       </trans-unit>
-      <trans-unit id="69">
+      <trans-unit id="69" approved="yes">
         <source>Требуют обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Потребують оновлення</target>
+        <target state="final">Потребують оновлення</target>
       </trans-unit>
-      <trans-unit id="70">
+      <trans-unit id="70" approved="yes">
         <source>Установить всё</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Встановити все</target>
+        <target state="final">Встановити все</target>
       </trans-unit>
-      <trans-unit id="71">
+      <trans-unit id="71" approved="yes">
         <source>Установить недостающие</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Встановити відсутні</target>
+        <target state="final">Встановити відсутні</target>
       </trans-unit>
-      <trans-unit id="72">
+      <trans-unit id="72" approved="yes">
         <source>Установить обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Встановити оновлення</target>
+        <target state="final">Встановити оновлення</target>
       </trans-unit>
-      <trans-unit id="73">
+      <trans-unit id="73" approved="yes">
         <source>&lt;p&gt;Данные были сохранены!&lt;/p&gt;&lt;p&gt;Страница сейчас обновится!&lt;/p&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">&lt;p&gt;Дані було збережено!&lt;/p&gt;&lt;p&gt;Сторінка зараз оновиться!&lt;/p&gt;</target>
+        <target state="final">&lt;p&gt;Дані було збережено!&lt;/p&gt;&lt;p&gt;Сторінка зараз оновиться!&lt;/p&gt;</target>
       </trans-unit>
-      <trans-unit id="74">
+      <trans-unit id="74" approved="yes">
         <source>Модуль</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Модуль</target>
+        <target state="final">Модуль</target>
       </trans-unit>
-      <trans-unit id="75">
+      <trans-unit id="75" approved="yes">
         <source>Доп. ссылки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Доп. посилання</target>
+        <target state="final">Доп. посилання</target>
       </trans-unit>
-      <trans-unit id="76">
+      <trans-unit id="76" approved="yes">
         <source>На сайте автора</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">На сайті автора</target>
+        <target state="final">На сайті автора</target>
       </trans-unit>
-      <trans-unit id="77">
+      <trans-unit id="77" approved="yes">
         <source>Документация</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Документація</target>
+        <target state="final">Документація</target>
       </trans-unit>
-      <trans-unit id="78">
+      <trans-unit id="78" approved="yes">
         <source>Пользовательское соглашение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Угода користувача</target>
+        <target state="final">Угода користувача</target>
       </trans-unit>
       <trans-unit id="79">
         <source>Перевод</source>
-        <target state="needs-translation">Перевод</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Переклад</target>
       </trans-unit>
-      <trans-unit id="80">
+      <trans-unit id="80" approved="yes">
         <source>Об авторе</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Про автора</target>
+        <target state="final">Про автора</target>
       </trans-unit>
-      <trans-unit id="81">
+      <trans-unit id="81" approved="yes">
         <source>Финансовая поддержка (добровольная)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Фінансова підтримка (добровільна)</target>
+        <target state="final">Фінансова підтримка (добровільна)</target>
       </trans-unit>
       <trans-unit id="82">
         <source>,</source>
-        <target state="needs-translation">,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">,</target>
       </trans-unit>
       <trans-unit id="83">
         <source>Текущее значение</source>
-        <target state="needs-translation">Текущее значение</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Поточне значення</target>
       </trans-unit>
-      <trans-unit id="84">
+      <trans-unit id="84" approved="yes">
         <source>Данные были сохранены!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Дані було збережено!</target>
+        <target state="final">Дані було збережено!</target>
       </trans-unit>
       <trans-unit id="85">
         <source>page</source>
-        <target state="needs-translation">page</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">сторінка</target>
       </trans-unit>
-      <trans-unit id="86">
+      <trans-unit id="86" approved="yes">
         <source>Поисковая фраза</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Пошукова фраза</target>
+        <target state="final">Пошукова фраза</target>
       </trans-unit>
-      <trans-unit id="87">
+      <trans-unit id="87" approved="yes">
         <source>Искать</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Шукати</target>
+        <target state="final">Шукати</target>
       </trans-unit>
       <trans-unit id="88">
         <source>Поиск</source>
-        <target state="needs-translation">Поиск</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Пошук</target>
       </trans-unit>
       <trans-unit id="89">
         <source>yes</source>
-        <target state="needs-translation">yes</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">так</target>
       </trans-unit>
       <trans-unit id="90">
         <source>no</source>
-        <target state="needs-translation">no</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ні</target>
       </trans-unit>
       <trans-unit id="91">
         <source>index</source>
-        <target state="needs-translation">index</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">індекс</target>
       </trans-unit>
-      <trans-unit id="92">
+      <trans-unit id="92" approved="yes">
         <source>Закрыть меню</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Закрити меню</target>
+        <target state="final">Закрити меню</target>
       </trans-unit>
-      <trans-unit id="93">
+      <trans-unit id="93" approved="yes">
         <source>Проверить на наличие новой версии</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Перевірити на наявність нової версії</target>
+        <target state="final">Перевірити на наявність нової версії</target>
       </trans-unit>
-      <trans-unit id="94">
+      <trans-unit id="94" approved="yes">
         <source>Подождите, идёт загрузка...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Зачекайте, йде завантаження...</target>
+        <target state="final">Зачекайте, йде завантаження...</target>
       </trans-unit>
-      <trans-unit id="95">
+      <trans-unit id="95" approved="yes">
         <source>Открыть меню</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Відкрити меню</target>
+        <target state="final">Відкрити меню</target>
       </trans-unit>
       <trans-unit id="96">
         <source>Hacking attempt!</source>
-        <target state="needs-translation">Hacking attempt!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Спроба злому!</target>
       </trans-unit>
       <trans-unit id="97">
         <source>error</source>
-        <target state="needs-translation">error</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">помилка</target>
       </trans-unit>
       <trans-unit id="98">
         <source>disable_functions</source>
-        <target state="needs-translation">disable_functions</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">disable_functions</target>
       </trans-unit>
       <trans-unit id="99">
         <source>variables_order</source>
-        <target state="needs-translation">variables_order</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">порядок_змінних</target>
       </trans-unit>
       <trans-unit id="100">
         <source>uopz.disable</source>
-        <target state="needs-translation">uopz.disable</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">uopz.disable</target>
       </trans-unit>
       <trans-unit id="101">
         <source>xdebug.mode</source>
-        <target state="needs-translation">xdebug.mode</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">xdebug.mode</target>
       </trans-unit>
       <trans-unit id="102">
         <source>openssl.cafile</source>
-        <target state="needs-translation">openssl.cafile</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">openssl.cafile</target>
       </trans-unit>
       <trans-unit id="103">
         <source>openssl.capath</source>
-        <target state="needs-translation">openssl.capath</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">openssl.capath</target>
       </trans-unit>
       <trans-unit id="104">
         <source>apc.enabled</source>
-        <target state="needs-translation">apc.enabled</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">apc.enabled</target>
       </trans-unit>
       <trans-unit id="105">
         <source>open_basedir</source>
-        <target state="needs-translation">open_basedir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">open_basedir</target>
       </trans-unit>
       <trans-unit id="106">
         <source>foo</source>
-        <target state="needs-translation">foo</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">foo</target>
       </trans-unit>
       <trans-unit id="107">
         <source>bar</source>
-        <target state="needs-translation">bar</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">бар</target>
       </trans-unit>
       <trans-unit id="108">
         <source>baz</source>
-        <target state="needs-translation">baz</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">baz</target>
       </trans-unit>
       <trans-unit id="109">
         <source>command</source>
-        <target state="needs-translation">command</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">команда</target>
       </trans-unit>
       <trans-unit id="110">
         <source>help</source>
-        <target state="needs-translation">help</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">допомога</target>
       </trans-unit>
       <trans-unit id="111">
         <source>&lt;info&gt;%s&lt;/info&gt;</source>
-        <target state="needs-translation">&lt;info&gt;%s&lt;/info&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&lt;info&gt;%s&lt;/info&gt;</target>
       </trans-unit>
       <trans-unit id="112">
         <source>definition</source>
-        <target state="needs-translation">definition</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">визначення</target>
       </trans-unit>
       <trans-unit id="113">
         <source>arguments</source>
-        <target state="needs-translation">arguments</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">аргументи</target>
       </trans-unit>
       <trans-unit id="114">
         <source>options</source>
-        <target state="needs-translation">options</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">варіанти</target>
       </trans-unit>
       <trans-unit id="115">
         <source>usages</source>
-        <target state="needs-translation">usages</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">звичаї</target>
       </trans-unit>
       <trans-unit id="116">
         <source>description</source>
-        <target state="needs-translation">description</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">опис</target>
       </trans-unit>
       <trans-unit id="117">
         <source>symfony</source>
-        <target state="needs-translation">symfony</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">symfony</target>
       </trans-unit>
       <trans-unit id="118">
         <source>commands</source>
-        <target state="needs-translation">commands</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">команди</target>
       </trans-unit>
       <trans-unit id="119">
         <source>namespaces</source>
-        <target state="needs-translation">namespaces</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">простори імен</target>
       </trans-unit>
       <trans-unit id="120">
         <source>namespace</source>
-        <target state="needs-translation">namespace</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">простір імен</target>
       </trans-unit>
       <trans-unit id="121">
         <source>argument</source>
-        <target state="needs-translation">argument</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">аргумент</target>
       </trans-unit>
       <trans-unit id="122">
         <source>defaults</source>
-        <target state="needs-translation">defaults</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">дефолти</target>
       </trans-unit>
       <trans-unit id="123">
         <source>default</source>
-        <target state="needs-translation">default</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">за замовчуванням</target>
       </trans-unit>
       <trans-unit id="124">
         <source>option</source>
-        <target state="needs-translation">option</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">варіант</target>
       </trans-unit>
       <trans-unit id="125">
         <source>\n</source>
-        <target state="needs-translation">\n</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">\n</target>
       </trans-unit>
       <trans-unit id="126">
         <source>\n\n</source>
-        <target state="needs-translation">\n\n</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">\n\n</target>
       </trans-unit>
       <trans-unit id="127">
         <source>command_name</source>
-        <target state="needs-translation">command_name</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ім'я_команди</target>
       </trans-unit>
       <trans-unit id="128">
         <source>shell</source>
-        <target state="needs-translation">shell</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">оболонка</target>
       </trans-unit>
       <trans-unit id="129">
         <source>formatter</source>
-        <target state="needs-translation">formatter</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">форматер</target>
       </trans-unit>
       <trans-unit id="130">
         <source>oem</source>
-        <target state="needs-translation">oem</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">оем</target>
       </trans-unit>
       <trans-unit id="131">
         <source>debug_formatter</source>
-        <target state="needs-translation">debug_formatter</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">debug_formatter</target>
       </trans-unit>
       <trans-unit id="132">
         <source>%s</source>
-        <target state="needs-translation">%s</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">%s</target>
       </trans-unit>
       <trans-unit id="133">
         <source>U</source>
-        <target state="needs-translation">U</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">U</target>
       </trans-unit>
       <trans-unit id="134">
         <source>mbstring.func_overload</source>
-        <target state="needs-translation">mbstring.func_overload</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">mbstring.func_overload</target>
       </trans-unit>
       <trans-unit id="135">
         <source>FILTER_FLAG_EMAIL_UNICODE</source>
-        <target state="needs-translation">FILTER_FLAG_EMAIL_UNICODE</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">FILTER_FLAG_EMAIL_UNICODE</target>
       </trans-unit>
       <trans-unit id="136">
         <source>memory_limit</source>
-        <target state="needs-translation">memory_limit</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">memory_limit</target>
       </trans-unit>
       <trans-unit id="137">
         <source>lock</source>
-        <target state="needs-translation">lock</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">замок</target>
       </trans-unit>
       <trans-unit id="138">
         <source>notify-on-install</source>
-        <target state="needs-translation">notify-on-install</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">notify-on-install</target>
       </trans-unit>
       <trans-unit id="139">
         <source>platform</source>
-        <target state="needs-translation">platform</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">платформа</target>
       </trans-unit>
       <trans-unit id="140">
         <source>vendor-dir</source>
-        <target state="needs-translation">vendor-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">vendor-dir</target>
       </trans-unit>
       <trans-unit id="141">
         <source>bitbucket-oauth</source>
-        <target state="needs-translation">bitbucket-oauth</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">bitbucket-oauth</target>
       </trans-unit>
       <trans-unit id="142">
         <source>github-oauth</source>
-        <target state="needs-translation">github-oauth</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">github-oauth</target>
       </trans-unit>
       <trans-unit id="143">
         <source>gitlab-oauth</source>
-        <target state="needs-translation">gitlab-oauth</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">gitlab-oauth</target>
       </trans-unit>
       <trans-unit id="144">
         <source>gitlab-token</source>
-        <target state="needs-translation">gitlab-token</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">gitlab-token</target>
       </trans-unit>
       <trans-unit id="145">
         <source>http-basic</source>
-        <target state="needs-translation">http-basic</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">http-basic</target>
       </trans-unit>
       <trans-unit id="146">
         <source>bearer</source>
-        <target state="needs-translation">bearer</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">носій</target>
       </trans-unit>
       <trans-unit id="147">
         <source>process-timeout</source>
-        <target state="needs-translation">process-timeout</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">process-timeout</target>
       </trans-unit>
       <trans-unit id="148">
         <source>question</source>
-        <target state="needs-translation">question</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">питання</target>
       </trans-unit>
       <trans-unit id="149">
         <source>discard-changes</source>
-        <target state="needs-translation">discard-changes</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">discard-changes</target>
       </trans-unit>
       <trans-unit id="150">
         <source>cache-vcs-dir</source>
-        <target state="needs-translation">cache-vcs-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">cache-vcs-dir</target>
       </trans-unit>
       <trans-unit id="151">
         <source>github-protocols</source>
-        <target state="needs-translation">github-protocols</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">github-protocols</target>
       </trans-unit>
       <trans-unit id="152">
         <source>cache-files-ttl</source>
-        <target state="needs-translation">cache-files-ttl</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">cache-files-ttl</target>
       </trans-unit>
       <trans-unit id="153">
         <source>cache-files-maxsize</source>
-        <target state="needs-translation">cache-files-maxsize</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">cache-files-maxsize</target>
       </trans-unit>
       <trans-unit id="154">
         <source>home</source>
-        <target state="needs-translation">home</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">дім</target>
       </trans-unit>
       <trans-unit id="155">
         <source>use-parent-dir</source>
-        <target state="needs-translation">use-parent-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">use-parent-dir</target>
       </trans-unit>
       <trans-unit id="156">
         <source>allow_url_fopen</source>
-        <target state="needs-translation">allow_url_fopen</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">allow_url_fopen</target>
       </trans-unit>
       <trans-unit id="157">
         <source>gitlab-domains</source>
-        <target state="needs-translation">gitlab-domains</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">gitlab-домени</target>
       </trans-unit>
       <trans-unit id="158">
         <source>default_socket_timeout</source>
-        <target state="needs-translation">default_socket_timeout</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">default_socket_timeout</target>
       </trans-unit>
       <trans-unit id="159">
         <source>github-domains</source>
-        <target state="needs-translation">github-domains</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">github-домени</target>
       </trans-unit>
       <trans-unit id="160">
         <source>store-auths</source>
-        <target state="needs-translation">store-auths</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">store-auths</target>
       </trans-unit>
       <trans-unit id="161">
         <source>github-expose-hostname</source>
-        <target state="needs-translation">github-expose-hostname</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">github-expose-hostname</target>
       </trans-unit>
       <trans-unit id="162">
         <source>xdebug.scream</source>
-        <target state="needs-translation">xdebug.scream</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">xdebug.scream</target>
       </trans-unit>
       <trans-unit id="163">
         <source>disable-tls</source>
-        <target state="needs-translation">disable-tls</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">disable-tls</target>
       </trans-unit>
       <trans-unit id="164">
         <source>htaccess-protect</source>
-        <target state="needs-translation">htaccess-protect</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">htaccess-protect</target>
       </trans-unit>
       <trans-unit id="165">
         <source>cache-dir</source>
-        <target state="needs-translation">cache-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">cache-dir</target>
       </trans-unit>
       <trans-unit id="166">
         <source>data-dir</source>
-        <target state="needs-translation">data-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">data-dir</target>
       </trans-unit>
       <trans-unit id="167">
         <source>cache-files-dir</source>
-        <target state="needs-translation">cache-files-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">cache-files-dir</target>
       </trans-unit>
       <trans-unit id="168">
         <source>cache-read-only</source>
-        <target state="needs-translation">cache-read-only</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">кеш-пам'ять тільки для читання</target>
       </trans-unit>
       <trans-unit id="169">
         <source>preferred-install</source>
-        <target state="needs-translation">preferred-install</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">preferred-install</target>
       </trans-unit>
       <trans-unit id="170">
         <source>bin-dir</source>
-        <target state="needs-translation">bin-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">bin-dir</target>
       </trans-unit>
       <trans-unit id="171">
         <source>bin-compat</source>
-        <target state="needs-translation">bin-compat</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">bin-compat</target>
       </trans-unit>
       <trans-unit id="172">
         <source>cafile</source>
-        <target state="needs-translation">cafile</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">кафіле</target>
       </trans-unit>
       <trans-unit id="173">
         <source>capath</source>
-        <target state="needs-translation">capath</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">капат</target>
       </trans-unit>
       <trans-unit id="174">
         <source>optimize-autoloader</source>
-        <target state="needs-translation">optimize-autoloader</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">оптимізувати-автозавантажувач</target>
       </trans-unit>
       <trans-unit id="175">
         <source>classmap-authoritative</source>
-        <target state="needs-translation">classmap-authoritative</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">classmap-authoritative</target>
       </trans-unit>
       <trans-unit id="176">
         <source>apcu-autoloader</source>
-        <target state="needs-translation">apcu-autoloader</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">apcu-autoloader</target>
       </trans-unit>
       <trans-unit id="177">
         <source>cache-repo-dir</source>
-        <target state="needs-translation">cache-repo-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">cache-repo-dir</target>
       </trans-unit>
       <trans-unit id="178">
         <source>cache-ttl</source>
-        <target state="needs-translation">cache-ttl</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">cache-tttl</target>
       </trans-unit>
       <trans-unit id="179">
         <source>packages</source>
-        <target state="needs-translation">packages</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">пакети</target>
       </trans-unit>
       <trans-unit id="180">
         <source>sort-packages</source>
-        <target state="needs-translation">sort-packages</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">sort-packages</target>
       </trans-unit>
       <trans-unit id="181">
         <source>allow-plugins</source>
-        <target state="needs-translation">allow-plugins</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">allow-plugins</target>
       </trans-unit>
       <trans-unit id="182">
         <source>archive-format</source>
-        <target state="needs-translation">archive-format</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">архівний формат</target>
       </trans-unit>
       <trans-unit id="183">
         <source>archive-dir</source>
-        <target state="needs-translation">archive-dir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">archive-dir</target>
       </trans-unit>
       <trans-unit id="184">
         <source>package</source>
-        <target state="needs-translation">package</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">пакет</target>
       </trans-unit>
       <trans-unit id="185">
         <source>version</source>
-        <target state="needs-translation">version</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">версія</target>
       </trans-unit>
       <trans-unit id="186">
         <source>command-name</source>
-        <target state="needs-translation">command-name</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">command-name</target>
       </trans-unit>
       <trans-unit id="187">
         <source>http://example.org</source>
-        <target state="needs-translation">http://example.org</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">http://example.org</target>
       </trans-unit>
       <trans-unit id="188">
         <source>github.com</source>
-        <target state="needs-translation">github.com</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">github.com</target>
       </trans-unit>
       <trans-unit id="189">
         <source>apc.enable_cli</source>
-        <target state="needs-translation">apc.enable_cli</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">apc.enable_cli</target>
       </trans-unit>
       <trans-unit id="190">
         <source>xdebug.profiler_enabled</source>
-        <target state="needs-translation">xdebug.profiler_enabled</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">xdebug.profiler_enabled</target>
       </trans-unit>
       <trans-unit id="191">
         <source>script</source>
-        <target state="needs-translation">script</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">сценарій</target>
       </trans-unit>
       <trans-unit id="192">
         <source>args</source>
-        <target state="needs-translation">args</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">аргументи</target>
       </trans-unit>
       <trans-unit id="193">
         <source>directory</source>
-        <target state="needs-translation">directory</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">довідник</target>
       </trans-unit>
       <trans-unit id="194">
         <source>tokens</source>
-        <target state="needs-translation">tokens</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">жетони</target>
       </trans-unit>
       <trans-unit id="195">
         <source>dev</source>
-        <target state="needs-translation">dev</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">дідько</target>
       </trans-unit>
       <trans-unit id="196">
         <source>stable</source>
-        <target state="needs-translation">stable</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">стабільний</target>
       </trans-unit>
       <trans-unit id="197">
         <source>preview</source>
-        <target state="needs-translation">preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">попередній перегляд</target>
       </trans-unit>
       <trans-unit id="198">
         <source>phar.readonly</source>
-        <target state="needs-translation">phar.readonly</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">phar.readonly</target>
       </trans-unit>
       <trans-unit id="199">
         <source>Shell.Application</source>
-        <target state="needs-translation">Shell.Application</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Shell.Application</target>
       </trans-unit>
       <trans-unit id="200">
         <source>setting-key</source>
-        <target state="needs-translation">setting-key</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">клавіша налаштування</target>
       </trans-unit>
       <trans-unit id="201">
         <source>setting-value</source>
-        <target state="needs-translation">setting-value</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">налаштування-значення</target>
       </trans-unit>
       <trans-unit id="202">
         <source>file</source>
-        <target state="needs-translation">file</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">файл</target>
       </trans-unit>
       <trans-unit id="203">
         <source>binary</source>
-        <target state="needs-translation">binary</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">двійковий</target>
       </trans-unit>
       <trans-unit id="204">
         <source>secure-http</source>
-        <target state="needs-translation">secure-http</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">secure-http</target>
       </trans-unit>
       <trans-unit id="205">
         <source>secure-svn-domains</source>
-        <target state="needs-translation">secure-svn-domains</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">secure-svn-домени</target>
       </trans-unit>
       <trans-unit id="206">
         <source>use-github-api</source>
-        <target state="needs-translation">use-github-api</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">use-github-api</target>
       </trans-unit>
       <trans-unit id="207">
         <source>gitlab-protocol</source>
-        <target state="needs-translation">gitlab-protocol</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">gitlab-protocol</target>
       </trans-unit>
       <trans-unit id="208">
         <source>PHP_VERSION</source>
-        <target state="needs-translation">PHP_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">PHP_VERSION</target>
       </trans-unit>
       <trans-unit id="209">
         <source>PHP_DEBUG</source>
-        <target state="needs-translation">PHP_DEBUG</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">PHP_DEBUG</target>
       </trans-unit>
       <trans-unit id="210">
         <source>PHP_ZTS</source>
-        <target state="needs-translation">PHP_ZTS</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">PHP_ZTS</target>
       </trans-unit>
       <trans-unit id="211">
         <source>PHP_INT_SIZE</source>
-        <target state="needs-translation">PHP_INT_SIZE</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">PHP_INT_SIZE</target>
       </trans-unit>
       <trans-unit id="212">
         <source>AF_INET6</source>
-        <target state="needs-translation">AF_INET6</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">AF_INET6</target>
       </trans-unit>
       <trans-unit id="213">
         <source>GD_VERSION</source>
-        <target state="needs-translation">GD_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">GD_VERSION</target>
       </trans-unit>
       <trans-unit id="214">
         <source>GMP_VERSION</source>
-        <target state="needs-translation">GMP_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">GMP_VERSION</target>
       </trans-unit>
       <trans-unit id="215">
         <source>ICONV_VERSION</source>
-        <target state="needs-translation">ICONV_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ICONV_VERSION</target>
       </trans-unit>
       <trans-unit id="216">
         <source>INTL_ICU_VERSION</source>
-        <target state="needs-translation">INTL_ICU_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">INTL_ICU_VERSION</target>
       </trans-unit>
       <trans-unit id="217">
         <source>Version</source>
-        <target state="needs-translation">Version</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Версія</target>
       </trans-unit>
       <trans-unit id="218">
         <source>Imagick</source>
-        <target state="needs-translation">Imagick</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Imagick</target>
       </trans-unit>
       <trans-unit id="219">
         <source>LIBXML_DOTTED_VERSION</source>
-        <target state="needs-translation">LIBXML_DOTTED_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">LIBXML_DOTTED_VERSION</target>
       </trans-unit>
       <trans-unit id="220">
         <source>MB_ONIGURUMA_VERSION</source>
-        <target state="needs-translation">MB_ONIGURUMA_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">MB_ONIGURUMA_VERSION</target>
       </trans-unit>
       <trans-unit id="221">
         <source>OPENSSL_VERSION_TEXT</source>
-        <target state="needs-translation">OPENSSL_VERSION_TEXT</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">OPENSSL_VERSION_TEXT</target>
       </trans-unit>
       <trans-unit id="222">
         <source>PCRE_VERSION</source>
-        <target state="needs-translation">PCRE_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">PCRE_VERSION</target>
       </trans-unit>
       <trans-unit id="223">
         <source>SODIUM_LIBRARY_VERSION</source>
-        <target state="needs-translation">SODIUM_LIBRARY_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">SODIUM_LIBRARY_VERSION</target>
       </trans-unit>
       <trans-unit id="224">
         <source>LIBXSLT_DOTTED_VERSION</source>
-        <target state="needs-translation">LIBXSLT_DOTTED_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">LIBXSLT_DOTTED_VERSION</target>
       </trans-unit>
       <trans-unit id="225">
         <source>ZLIB_VERSION</source>
-        <target state="needs-translation">ZLIB_VERSION</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ZLIB_VERSION</target>
       </trans-unit>
       <trans-unit id="226">
         <source>use-include-path</source>
-        <target state="needs-translation">use-include-path</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">use-include-path</target>
       </trans-unit>
       <trans-unit id="227">
         <source>prepend-autoloader</source>
-        <target state="needs-translation">prepend-autoloader</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">prepend-autoloader</target>
       </trans-unit>
       <trans-unit id="228">
         <source>autoloader-suffix</source>
-        <target state="needs-translation">autoloader-suffix</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">autoloader-suffix</target>
       </trans-unit>
       <trans-unit id="229">
         <source>platform-check</source>
-        <target state="needs-translation">platform-check</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">platform-check</target>
       </trans-unit>
       <trans-unit id="230">
         <source>display_errors</source>
-        <target state="needs-translation">display_errors</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">display_errors</target>
       </trans-unit>
       <trans-unit id="231">
         <source>Y-m-d H:i:s</source>
-        <target state="needs-translation">Y-m-d H:i:s</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Y-m-d H:i:s</target>
       </trans-unit>
       <trans-unit id="232">
         <source>Y-m-d H:i</source>
-        <target state="needs-translation">Y-m-d H:i</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Y-m-d H:i</target>
       </trans-unit>
     </body>
   </file>

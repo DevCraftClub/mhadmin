@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="mhadmin.ru_RU" datatype="plaintext" source-language="ru" target-language="de">
+    <body>
+      <trans-unit id="1">
+        <source>Тип</source>
+        <target state="needs-translation">Тип</target>
+      </trans-unit>
+      <trans-unit id="2">
+        <source>Плагин</source>
+        <target state="needs-translation">Плагин</target>
+      </trans-unit>
+      <trans-unit id="3">
+        <source>Функция</source>
+        <target state="needs-translation">Функция</target>
+      </trans-unit>
+      <trans-unit id="4">
+        <source>Время</source>
+        <target state="needs-translation">Время</target>
+      </trans-unit>
+      <trans-unit id="5">
+        <source>Сообщение</source>
+        <target state="needs-translation">Сообщение</target>
+      </trans-unit>
+      <trans-unit id="6">
+        <source>Действие</source>
+        <target state="needs-translation">Действие</target>
+      </trans-unit>
+      <trans-unit id="7">
+        <source>Удалить</source>
+        <target state="needs-translation">Удалить</target>
+      </trans-unit>
+      <trans-unit id="8">
+        <source>Всё отлично!</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alles ist großartig!</target>
+      </trans-unit>
+      <trans-unit id="9">
+        <source>&lt;p&gt;Запись была удалена!&lt;/p&gt;</source>
+        <target state="needs-translation">&lt;p&gt;Запись была удалена!&lt;/p&gt;</target>
+      </trans-unit>
+      <trans-unit id="10">
+        <source>ошибка</source>
+        <target state="needs-translation">ошибка</target>
+      </trans-unit>
+      <trans-unit id="11">
+        <source>&lt;p&gt;${data.error}&lt;/p&gt;&lt;p&gt;${data.message}&lt;/p&gt;</source>
+        <target state="needs-translation">&lt;p&gt;${data.error}&lt;/p&gt;&lt;p&gt;${data.message}&lt;/p&gt;</target>
+      </trans-unit>
+      <trans-unit id="12">
+        <source>Настройки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="13">
+        <source>Количество объектов</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Anzahl der Objekte</target>
+      </trans-unit>
+      <trans-unit id="14">
+        <source>.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">.</target>
+      </trans-unit>
+      <trans-unit id="15">
+        <source>Путь до кеша файлов</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Datei-Cache-Pfad</target>
+      </trans-unit>
+      <trans-unit id="16">
+        <source>Укажите путь, где будут храниться файлы кеша.&lt;br&gt;По умолчанию: /engine/inc/maharder/_cache</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geben Sie den Pfad an, in dem die Cachedateien gespeichert werden sollen.&lt;&gt;br Standard: /engine/inc/maharder/_cache</target>
+      </trans-unit>
+      <trans-unit id="17">
+        <source>Время хранения кеша</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Cache-Speicherzeit</target>
+      </trans-unit>
+      <trans-unit id="18">
+        <source>Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.&lt;br&gt;&lt;b&gt;&lt;i&gt;По умолчанию: 60 минут&lt;/i&gt;&lt;/b&gt;</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geben Sie die Zeit in Minuten an, wie viel vom Anfrage-Cache auf dem Server gespeichert werden soll. Wenn eine Anfrage gestellt wird, prüft das Skript, wann die Cachedatei erstellt wurde, und wenn sie das angegebene Limit überschreitet, wird der Cache neu erstellt.&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;br b i Standardwert: 60 Minuten /i /b</target>
+      </trans-unit>
+      <trans-unit id="19">
+        <source>Язык админки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Admin-Sprache</target>
+      </trans-unit>
+      <trans-unit id="20">
+        <source>Данная опция позволит использовать админпанель и модули на разных языках</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Mit dieser Option können Sie das Admin-Panel und die Module in verschiedenen Sprachen verwenden</target>
+      </trans-unit>
+      <trans-unit id="21">
+        <source>Путь до файлов языков</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pfad zu den Sprachdateien</target>
+      </trans-unit>
+      <trans-unit id="22">
+        <source>Укажите путь, откуда будут браться языковые файлы.&lt;br&gt;По умолчанию: /engine/inc/maharder/_locales</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geben Sie den Pfad an, aus dem die Sprachdateien entnommen werden sollen.&lt;&gt;br Standard: /engine/inc/maharder/_locales</target>
+      </trans-unit>
+      <trans-unit id="23">
+        <source>Включить логирование?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Protokollierung einschalten?</target>
+      </trans-unit>
+      <trans-unit id="24">
+        <source>При включенном параметре будет создавать текстовые логи в папке &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&lt;&gt;&lt;&gt;Wenn aktiviert, werden Textprotokolle im Ordner b engine/inc/maharder/_logs /b erstellt.</target>
+      </trans-unit>
+      <trans-unit id="25">
+        <source>Сохранять логи в базе данных?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Speichern Sie die Protokolle in einer Datenbank?</target>
+      </trans-unit>
+      <trans-unit id="26">
+        <source>При включённом параметре все логи будут сохраняться в базу данных</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Falls aktiviert, werden alle Protokolle in der Datenbank gespeichert.</target>
+      </trans-unit>
+      <trans-unit id="27">
+        <source>Отправлять логи в телеграм?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Protokolle an Telegram senden?</target>
+      </trans-unit>
+      <trans-unit id="28">
+        <source>При включённом параметре и заполненных полях ниже - скрипт будет отправлять логи в ваш телеграм канал</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Wenn aktiviert und die unten stehenden Felder ausgefüllt sind, sendet das Skript Protokolle an Ihren Telegram-Kanal</target>
+      </trans-unit>
+      <trans-unit id="29">
+        <source>API ключ бота</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">API-Bot-Schlüssel</target>
+      </trans-unit>
+      <trans-unit id="30">
+        <source>&gt;здесь&lt;/a&gt;.</source>
+        <target state="needs-translation">&gt;здесь&lt;/a&gt;.</target>
+      </trans-unit>
+      <trans-unit id="31">
+        <source>Канал телеграма</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Telegramm-Kanal</target>
+      </trans-unit>
+      <trans-unit id="32">
+        <source>Тип оповещений</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Art der Ausschreibungen</target>
+      </trans-unit>
+      <trans-unit id="33">
+        <source>Вариация оповещений в канал:</source>
+        <target state="needs-translation">Вариация оповещений в канал:</target>
+      </trans-unit>
+      <trans-unit id="34">
+        <source>&gt;&lt;b&gt;Все&lt;/b&gt; - Отправляет буквально все отчёты и логи в канал&lt;/div&gt;</source>
+        <target state="needs-translation">&gt;&lt;b&gt;Все&lt;/b&gt; - Отправляет буквально все отчёты и логи в канал&lt;/div&gt;</target>
+      </trans-unit>
+      <trans-unit id="35">
+        <source>&gt;&lt;b&gt;Ошибки&lt;/b&gt; - Отправляет только ошибки в канал&lt;/div&gt;</source>
+        <target state="needs-translation">&gt;&lt;b&gt;Ошибки&lt;/b&gt; - Отправляет только ошибки в канал&lt;/div&gt;</target>
+      </trans-unit>
+      <trans-unit id="36">
+        <source>&gt;&lt;b&gt;Информация&lt;/b&gt; - Отправляет только информационные отчёты в канал&lt;/div&gt;</source>
+        <target state="needs-translation">&gt;&lt;b&gt;Информация&lt;/b&gt; - Отправляет только информационные отчёты в канал&lt;/div&gt;</target>
+      </trans-unit>
+      <trans-unit id="37">
+        <source>&gt;&lt;b&gt;Уведомления&lt;/b&gt; - Отправляет только уведомления в канал&lt;/div&gt;</source>
+        <target state="needs-translation">&gt;&lt;b&gt;Уведомления&lt;/b&gt; - Отправляет только уведомления в канал&lt;/div&gt;</target>
+      </trans-unit>
+      <trans-unit id="38">
+        <source>&gt;&lt;b&gt;Предупреждения&lt;/b&gt; - Отправляет только предупреждения в канал&lt;/div&gt;</source>
+        <target state="needs-translation">&gt;&lt;b&gt;Предупреждения&lt;/b&gt; - Отправляет только предупреждения в канал&lt;/div&gt;</target>
+      </trans-unit>
+      <trans-unit id="39">
+        <source>&gt;&lt;b&gt;Критические ошибки&lt;/b&gt; - Отправляет только критические ошибки в канал&lt;/div&gt;</source>
+        <target state="needs-translation">&gt;&lt;b&gt;Критические ошибки&lt;/b&gt; - Отправляет только критические ошибки в канал&lt;/div&gt;</target>
+      </trans-unit>
+      <trans-unit id="40">
+        <source>&gt;&lt;b&gt;Отладка&lt;/b&gt; - Отправляет только информацию об отладке в канал&lt;/div&gt;</source>
+        <target state="needs-translation">&gt;&lt;b&gt;Отладка&lt;/b&gt; - Отправляет только информацию об отладке в канал&lt;/div&gt;</target>
+      </trans-unit>
+      <trans-unit id="41">
+        <source>, то остальные выбранные параметры игнорируются</source>
+        <target state="needs-translation">, то остальные выбранные параметры игнорируются</target>
+      </trans-unit>
+      <trans-unit id="42">
+        <source>Все</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle von ihnen</target>
+      </trans-unit>
+      <trans-unit id="43">
+        <source>Ошибки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Irrtümer</target>
+      </trans-unit>
+      <trans-unit id="44">
+        <source>Информация</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Informationen</target>
+      </trans-unit>
+      <trans-unit id="45">
+        <source>Уведомления</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Notizen</target>
+      </trans-unit>
+      <trans-unit id="46">
+        <source>Предупреждения</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Warnungen</target>
+      </trans-unit>
+      <trans-unit id="47">
+        <source>Критические ошибки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kritische Fehler</target>
+      </trans-unit>
+      <trans-unit id="48">
+        <source>Отладка</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fehlersuche</target>
+      </trans-unit>
+      <trans-unit id="49">
+        <source>Заменять иконки?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Icons ersetzen?</target>
+      </trans-unit>
+      <trans-unit id="50">
+        <source>При включении, в админпанеле DLE будут заменены старые иконки на обновлённые</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Wenn diese Option aktiviert ist, werden die alten Symbole durch aktualisierte Symbole im DLE-Verwaltungsbereich ersetzt.</target>
+      </trans-unit>
+      <trans-unit id="51">
+        <source>Добавить кнопку с очищением кеша?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eine Schaltfläche mit Cache-Löschung hinzufügen?</target>
+      </trans-unit>
+      <trans-unit id="52">
+        <source>Тема оформления админки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Thema Verwaltungsbereich</target>
+      </trans-unit>
+      <trans-unit id="53">
+        <source>Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Sie können vorerst zwischen hell (Standard) und dunkel wählen. Speichern und aktualisieren Sie die Seite</target>
+      </trans-unit>
+      <trans-unit id="54">
+        <source>Светлая</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Leuchtend</target>
+      </trans-unit>
+      <trans-unit id="55">
+        <source>Тёмная</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dunkelheit</target>
+      </trans-unit>
+      <trans-unit id="56">
+        <source>Сохранить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Speichern Sie</target>
+      </trans-unit>
+      <trans-unit id="57">
+        <source>Проверить обновления</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nach Updates suchen</target>
+      </trans-unit>
+      <trans-unit id="58">
+        <source>Идёт загрузка...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Laden...</target>
+      </trans-unit>
+      <trans-unit id="59">
+        <source>Загружается:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es wird geladen:</target>
+      </trans-unit>
+      <trans-unit id="60">
+        <source>Загружено</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hochgeladen von</target>
+      </trans-unit>
+      <trans-unit id="61">
+        <source>Проверка обновлений</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Prüfen auf Updates</target>
+      </trans-unit>
+      <trans-unit id="62">
+        <source>Загружаем файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
+        <target state="needs-translation">Загружаем файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</target>
+      </trans-unit>
+      <trans-unit id="63">
+        <source>Информация!</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Informationen!</target>
+      </trans-unit>
+      <trans-unit id="64">
+        <source>Обновлений нет</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es gibt keine Updates</target>
+      </trans-unit>
+      <trans-unit id="65">
+        <source>На сервере&lt;/a&gt; \n</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&lt;&gt; \nAuf dem Server /a</target>
+      </trans-unit>
+      <trans-unit id="66">
+        <source>файлов</source>
+        <target state="needs-translation">файлов</target>
+      </trans-unit>
+      <trans-unit id="67">
+        <source>Загружено на сайт&lt;/a&gt;</source>
+        <target state="needs-translation">Загружено на сайт&lt;/a&gt;</target>
+      </trans-unit>
+      <trans-unit id="68">
+        <source>Требуют установки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Erfordert Installation</target>
+      </trans-unit>
+      <trans-unit id="69">
+        <source>Требуют обновления</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Muss aktualisiert werden</target>
+      </trans-unit>
+      <trans-unit id="70">
+        <source>Установить всё</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alles installieren</target>
+      </trans-unit>
+      <trans-unit id="71">
+        <source>Установить недостающие</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Stellen Sie die fehlenden</target>
+      </trans-unit>
+      <trans-unit id="72">
+        <source>Установить обновления</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Updates installieren</target>
+      </trans-unit>
+      <trans-unit id="73">
+        <source>&lt;p&gt;Данные были сохранены!&lt;/p&gt;&lt;p&gt;Страница сейчас обновится!&lt;/p&gt;</source>
+        <target state="needs-translation">&lt;p&gt;Данные были сохранены!&lt;/p&gt;&lt;p&gt;Страница сейчас обновится!&lt;/p&gt;</target>
+      </trans-unit>
+      <trans-unit id="74">
+        <source>Модуль</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Modul</target>
+      </trans-unit>
+      <trans-unit id="75">
+        <source>Доп. ссылки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zusätzliche Links</target>
+      </trans-unit>
+      <trans-unit id="76">
+        <source>На сайте автора</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Auf der Website des Autors</target>
+      </trans-unit>
+      <trans-unit id="77">
+        <source>Документация</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dokumentation</target>
+      </trans-unit>
+      <trans-unit id="78">
+        <source>Пользовательское соглашение</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Benutzervereinbarung</target>
+      </trans-unit>
+      <trans-unit id="79">
+        <source>Перевод</source>
+        <target state="needs-translation">Перевод</target>
+      </trans-unit>
+      <trans-unit id="80">
+        <source>Об авторе</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Über den Autor</target>
+      </trans-unit>
+      <trans-unit id="81">
+        <source>Финансовая поддержка (добровольная)</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Finanzielle Unterstützung (freiwillig)</target>
+      </trans-unit>
+      <trans-unit id="82">
+        <source>,</source>
+        <target state="needs-translation">,</target>
+      </trans-unit>
+      <trans-unit id="83">
+        <source>Текущее значение</source>
+        <target state="needs-translation">Текущее значение</target>
+      </trans-unit>
+      <trans-unit id="84">
+        <source>Данные были сохранены!</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Daten wurden gespeichert!</target>
+      </trans-unit>
+      <trans-unit id="85">
+        <source>page</source>
+        <target state="needs-translation">page</target>
+      </trans-unit>
+      <trans-unit id="86">
+        <source>Поисковая фраза</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Suchbegriff</target>
+      </trans-unit>
+      <trans-unit id="87">
+        <source>Искать</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Suchen Sie</target>
+      </trans-unit>
+      <trans-unit id="88">
+        <source>Поиск</source>
+        <target state="needs-translation">Поиск</target>
+      </trans-unit>
+      <trans-unit id="89">
+        <source>yes</source>
+        <target state="needs-translation">yes</target>
+      </trans-unit>
+      <trans-unit id="90">
+        <source>no</source>
+        <target state="needs-translation">no</target>
+      </trans-unit>
+      <trans-unit id="91">
+        <source>index</source>
+        <target state="needs-translation">index</target>
+      </trans-unit>
+      <trans-unit id="92">
+        <source>Закрыть меню</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Menü schließen</target>
+      </trans-unit>
+      <trans-unit id="93">
+        <source>Проверить на наличие новой версии</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nach einer neuen Version suchen</target>
+      </trans-unit>
+      <trans-unit id="94">
+        <source>Подождите, идёт загрузка...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Warten Sie, es wird geladen...</target>
+      </trans-unit>
+      <trans-unit id="95">
+        <source>Открыть меню</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Menü öffnen</target>
+      </trans-unit>
+      <trans-unit id="96">
+        <source>Hacking attempt!</source>
+        <target state="needs-translation">Hacking attempt!</target>
+      </trans-unit>
+      <trans-unit id="97">
+        <source>error</source>
+        <target state="needs-translation">error</target>
+      </trans-unit>
+      <trans-unit id="98">
+        <source>disable_functions</source>
+        <target state="needs-translation">disable_functions</target>
+      </trans-unit>
+      <trans-unit id="99">
+        <source>variables_order</source>
+        <target state="needs-translation">variables_order</target>
+      </trans-unit>
+      <trans-unit id="100">
+        <source>uopz.disable</source>
+        <target state="needs-translation">uopz.disable</target>
+      </trans-unit>
+      <trans-unit id="101">
+        <source>xdebug.mode</source>
+        <target state="needs-translation">xdebug.mode</target>
+      </trans-unit>
+      <trans-unit id="102">
+        <source>openssl.cafile</source>
+        <target state="needs-translation">openssl.cafile</target>
+      </trans-unit>
+      <trans-unit id="103">
+        <source>openssl.capath</source>
+        <target state="needs-translation">openssl.capath</target>
+      </trans-unit>
+      <trans-unit id="104">
+        <source>apc.enabled</source>
+        <target state="needs-translation">apc.enabled</target>
+      </trans-unit>
+      <trans-unit id="105">
+        <source>open_basedir</source>
+        <target state="needs-translation">open_basedir</target>
+      </trans-unit>
+      <trans-unit id="106">
+        <source>foo</source>
+        <target state="needs-translation">foo</target>
+      </trans-unit>
+      <trans-unit id="107">
+        <source>bar</source>
+        <target state="needs-translation">bar</target>
+      </trans-unit>
+      <trans-unit id="108">
+        <source>baz</source>
+        <target state="needs-translation">baz</target>
+      </trans-unit>
+      <trans-unit id="109">
+        <source>command</source>
+        <target state="needs-translation">command</target>
+      </trans-unit>
+      <trans-unit id="110">
+        <source>help</source>
+        <target state="needs-translation">help</target>
+      </trans-unit>
+      <trans-unit id="111">
+        <source>&lt;info&gt;%s&lt;/info&gt;</source>
+        <target state="needs-translation">&lt;info&gt;%s&lt;/info&gt;</target>
+      </trans-unit>
+      <trans-unit id="112">
+        <source>definition</source>
+        <target state="needs-translation">definition</target>
+      </trans-unit>
+      <trans-unit id="113">
+        <source>arguments</source>
+        <target state="needs-translation">arguments</target>
+      </trans-unit>
+      <trans-unit id="114">
+        <source>options</source>
+        <target state="needs-translation">options</target>
+      </trans-unit>
+      <trans-unit id="115">
+        <source>usages</source>
+        <target state="needs-translation">usages</target>
+      </trans-unit>
+      <trans-unit id="116">
+        <source>description</source>
+        <target state="needs-translation">description</target>
+      </trans-unit>
+      <trans-unit id="117">
+        <source>symfony</source>
+        <target state="needs-translation">symfony</target>
+      </trans-unit>
+      <trans-unit id="118">
+        <source>commands</source>
+        <target state="needs-translation">commands</target>
+      </trans-unit>
+      <trans-unit id="119">
+        <source>namespaces</source>
+        <target state="needs-translation">namespaces</target>
+      </trans-unit>
+      <trans-unit id="120">
+        <source>namespace</source>
+        <target state="needs-translation">namespace</target>
+      </trans-unit>
+      <trans-unit id="121">
+        <source>argument</source>
+        <target state="needs-translation">argument</target>
+      </trans-unit>
+      <trans-unit id="122">
+        <source>defaults</source>
+        <target state="needs-translation">defaults</target>
+      </trans-unit>
+      <trans-unit id="123">
+        <source>default</source>
+        <target state="needs-translation">default</target>
+      </trans-unit>
+      <trans-unit id="124">
+        <source>option</source>
+        <target state="needs-translation">option</target>
+      </trans-unit>
+      <trans-unit id="125">
+        <source>\n</source>
+        <target state="needs-translation">\n</target>
+      </trans-unit>
+      <trans-unit id="126">
+        <source>\n\n</source>
+        <target state="needs-translation">\n\n</target>
+      </trans-unit>
+      <trans-unit id="127">
+        <source>command_name</source>
+        <target state="needs-translation">command_name</target>
+      </trans-unit>
+      <trans-unit id="128">
+        <source>shell</source>
+        <target state="needs-translation">shell</target>
+      </trans-unit>
+      <trans-unit id="129">
+        <source>formatter</source>
+        <target state="needs-translation">formatter</target>
+      </trans-unit>
+      <trans-unit id="130">
+        <source>oem</source>
+        <target state="needs-translation">oem</target>
+      </trans-unit>
+      <trans-unit id="131">
+        <source>debug_formatter</source>
+        <target state="needs-translation">debug_formatter</target>
+      </trans-unit>
+      <trans-unit id="132">
+        <source>%s</source>
+        <target state="needs-translation">%s</target>
+      </trans-unit>
+      <trans-unit id="133">
+        <source>U</source>
+        <target state="needs-translation">U</target>
+      </trans-unit>
+      <trans-unit id="134">
+        <source>mbstring.func_overload</source>
+        <target state="needs-translation">mbstring.func_overload</target>
+      </trans-unit>
+      <trans-unit id="135">
+        <source>FILTER_FLAG_EMAIL_UNICODE</source>
+        <target state="needs-translation">FILTER_FLAG_EMAIL_UNICODE</target>
+      </trans-unit>
+      <trans-unit id="136">
+        <source>memory_limit</source>
+        <target state="needs-translation">memory_limit</target>
+      </trans-unit>
+      <trans-unit id="137">
+        <source>lock</source>
+        <target state="needs-translation">lock</target>
+      </trans-unit>
+      <trans-unit id="138">
+        <source>notify-on-install</source>
+        <target state="needs-translation">notify-on-install</target>
+      </trans-unit>
+      <trans-unit id="139">
+        <source>platform</source>
+        <target state="needs-translation">platform</target>
+      </trans-unit>
+      <trans-unit id="140">
+        <source>vendor-dir</source>
+        <target state="needs-translation">vendor-dir</target>
+      </trans-unit>
+      <trans-unit id="141">
+        <source>bitbucket-oauth</source>
+        <target state="needs-translation">bitbucket-oauth</target>
+      </trans-unit>
+      <trans-unit id="142">
+        <source>github-oauth</source>
+        <target state="needs-translation">github-oauth</target>
+      </trans-unit>
+      <trans-unit id="143">
+        <source>gitlab-oauth</source>
+        <target state="needs-translation">gitlab-oauth</target>
+      </trans-unit>
+      <trans-unit id="144">
+        <source>gitlab-token</source>
+        <target state="needs-translation">gitlab-token</target>
+      </trans-unit>
+      <trans-unit id="145">
+        <source>http-basic</source>
+        <target state="needs-translation">http-basic</target>
+      </trans-unit>
+      <trans-unit id="146">
+        <source>bearer</source>
+        <target state="needs-translation">bearer</target>
+      </trans-unit>
+      <trans-unit id="147">
+        <source>process-timeout</source>
+        <target state="needs-translation">process-timeout</target>
+      </trans-unit>
+      <trans-unit id="148">
+        <source>question</source>
+        <target state="needs-translation">question</target>
+      </trans-unit>
+      <trans-unit id="149">
+        <source>discard-changes</source>
+        <target state="needs-translation">discard-changes</target>
+      </trans-unit>
+      <trans-unit id="150">
+        <source>cache-vcs-dir</source>
+        <target state="needs-translation">cache-vcs-dir</target>
+      </trans-unit>
+      <trans-unit id="151">
+        <source>github-protocols</source>
+        <target state="needs-translation">github-protocols</target>
+      </trans-unit>
+      <trans-unit id="152">
+        <source>cache-files-ttl</source>
+        <target state="needs-translation">cache-files-ttl</target>
+      </trans-unit>
+      <trans-unit id="153">
+        <source>cache-files-maxsize</source>
+        <target state="needs-translation">cache-files-maxsize</target>
+      </trans-unit>
+      <trans-unit id="154">
+        <source>home</source>
+        <target state="needs-translation">home</target>
+      </trans-unit>
+      <trans-unit id="155">
+        <source>use-parent-dir</source>
+        <target state="needs-translation">use-parent-dir</target>
+      </trans-unit>
+      <trans-unit id="156">
+        <source>allow_url_fopen</source>
+        <target state="needs-translation">allow_url_fopen</target>
+      </trans-unit>
+      <trans-unit id="157">
+        <source>gitlab-domains</source>
+        <target state="needs-translation">gitlab-domains</target>
+      </trans-unit>
+      <trans-unit id="158">
+        <source>default_socket_timeout</source>
+        <target state="needs-translation">default_socket_timeout</target>
+      </trans-unit>
+      <trans-unit id="159">
+        <source>github-domains</source>
+        <target state="needs-translation">github-domains</target>
+      </trans-unit>
+      <trans-unit id="160">
+        <source>store-auths</source>
+        <target state="needs-translation">store-auths</target>
+      </trans-unit>
+      <trans-unit id="161">
+        <source>github-expose-hostname</source>
+        <target state="needs-translation">github-expose-hostname</target>
+      </trans-unit>
+      <trans-unit id="162">
+        <source>xdebug.scream</source>
+        <target state="needs-translation">xdebug.scream</target>
+      </trans-unit>
+      <trans-unit id="163">
+        <source>disable-tls</source>
+        <target state="needs-translation">disable-tls</target>
+      </trans-unit>
+      <trans-unit id="164">
+        <source>htaccess-protect</source>
+        <target state="needs-translation">htaccess-protect</target>
+      </trans-unit>
+      <trans-unit id="165">
+        <source>cache-dir</source>
+        <target state="needs-translation">cache-dir</target>
+      </trans-unit>
+      <trans-unit id="166">
+        <source>data-dir</source>
+        <target state="needs-translation">data-dir</target>
+      </trans-unit>
+      <trans-unit id="167">
+        <source>cache-files-dir</source>
+        <target state="needs-translation">cache-files-dir</target>
+      </trans-unit>
+      <trans-unit id="168">
+        <source>cache-read-only</source>
+        <target state="needs-translation">cache-read-only</target>
+      </trans-unit>
+      <trans-unit id="169">
+        <source>preferred-install</source>
+        <target state="needs-translation">preferred-install</target>
+      </trans-unit>
+      <trans-unit id="170">
+        <source>bin-dir</source>
+        <target state="needs-translation">bin-dir</target>
+      </trans-unit>
+      <trans-unit id="171">
+        <source>bin-compat</source>
+        <target state="needs-translation">bin-compat</target>
+      </trans-unit>
+      <trans-unit id="172">
+        <source>cafile</source>
+        <target state="needs-translation">cafile</target>
+      </trans-unit>
+      <trans-unit id="173">
+        <source>capath</source>
+        <target state="needs-translation">capath</target>
+      </trans-unit>
+      <trans-unit id="174">
+        <source>optimize-autoloader</source>
+        <target state="needs-translation">optimize-autoloader</target>
+      </trans-unit>
+      <trans-unit id="175">
+        <source>classmap-authoritative</source>
+        <target state="needs-translation">classmap-authoritative</target>
+      </trans-unit>
+      <trans-unit id="176">
+        <source>apcu-autoloader</source>
+        <target state="needs-translation">apcu-autoloader</target>
+      </trans-unit>
+      <trans-unit id="177">
+        <source>cache-repo-dir</source>
+        <target state="needs-translation">cache-repo-dir</target>
+      </trans-unit>
+      <trans-unit id="178">
+        <source>cache-ttl</source>
+        <target state="needs-translation">cache-ttl</target>
+      </trans-unit>
+      <trans-unit id="179">
+        <source>packages</source>
+        <target state="needs-translation">packages</target>
+      </trans-unit>
+      <trans-unit id="180">
+        <source>sort-packages</source>
+        <target state="needs-translation">sort-packages</target>
+      </trans-unit>
+      <trans-unit id="181">
+        <source>allow-plugins</source>
+        <target state="needs-translation">allow-plugins</target>
+      </trans-unit>
+      <trans-unit id="182">
+        <source>archive-format</source>
+        <target state="needs-translation">archive-format</target>
+      </trans-unit>
+      <trans-unit id="183">
+        <source>archive-dir</source>
+        <target state="needs-translation">archive-dir</target>
+      </trans-unit>
+      <trans-unit id="184">
+        <source>package</source>
+        <target state="needs-translation">package</target>
+      </trans-unit>
+      <trans-unit id="185">
+        <source>version</source>
+        <target state="needs-translation">version</target>
+      </trans-unit>
+      <trans-unit id="186">
+        <source>command-name</source>
+        <target state="needs-translation">command-name</target>
+      </trans-unit>
+      <trans-unit id="187">
+        <source>http://example.org</source>
+        <target state="needs-translation">http://example.org</target>
+      </trans-unit>
+      <trans-unit id="188">
+        <source>github.com</source>
+        <target state="needs-translation">github.com</target>
+      </trans-unit>
+      <trans-unit id="189">
+        <source>apc.enable_cli</source>
+        <target state="needs-translation">apc.enable_cli</target>
+      </trans-unit>
+      <trans-unit id="190">
+        <source>xdebug.profiler_enabled</source>
+        <target state="needs-translation">xdebug.profiler_enabled</target>
+      </trans-unit>
+      <trans-unit id="191">
+        <source>script</source>
+        <target state="needs-translation">script</target>
+      </trans-unit>
+      <trans-unit id="192">
+        <source>args</source>
+        <target state="needs-translation">args</target>
+      </trans-unit>
+      <trans-unit id="193">
+        <source>directory</source>
+        <target state="needs-translation">directory</target>
+      </trans-unit>
+      <trans-unit id="194">
+        <source>tokens</source>
+        <target state="needs-translation">tokens</target>
+      </trans-unit>
+      <trans-unit id="195">
+        <source>dev</source>
+        <target state="needs-translation">dev</target>
+      </trans-unit>
+      <trans-unit id="196">
+        <source>stable</source>
+        <target state="needs-translation">stable</target>
+      </trans-unit>
+      <trans-unit id="197">
+        <source>preview</source>
+        <target state="needs-translation">preview</target>
+      </trans-unit>
+      <trans-unit id="198">
+        <source>phar.readonly</source>
+        <target state="needs-translation">phar.readonly</target>
+      </trans-unit>
+      <trans-unit id="199">
+        <source>Shell.Application</source>
+        <target state="needs-translation">Shell.Application</target>
+      </trans-unit>
+      <trans-unit id="200">
+        <source>setting-key</source>
+        <target state="needs-translation">setting-key</target>
+      </trans-unit>
+      <trans-unit id="201">
+        <source>setting-value</source>
+        <target state="needs-translation">setting-value</target>
+      </trans-unit>
+      <trans-unit id="202">
+        <source>file</source>
+        <target state="needs-translation">file</target>
+      </trans-unit>
+      <trans-unit id="203">
+        <source>binary</source>
+        <target state="needs-translation">binary</target>
+      </trans-unit>
+      <trans-unit id="204">
+        <source>secure-http</source>
+        <target state="needs-translation">secure-http</target>
+      </trans-unit>
+      <trans-unit id="205">
+        <source>secure-svn-domains</source>
+        <target state="needs-translation">secure-svn-domains</target>
+      </trans-unit>
+      <trans-unit id="206">
+        <source>use-github-api</source>
+        <target state="needs-translation">use-github-api</target>
+      </trans-unit>
+      <trans-unit id="207">
+        <source>gitlab-protocol</source>
+        <target state="needs-translation">gitlab-protocol</target>
+      </trans-unit>
+      <trans-unit id="208">
+        <source>PHP_VERSION</source>
+        <target state="needs-translation">PHP_VERSION</target>
+      </trans-unit>
+      <trans-unit id="209">
+        <source>PHP_DEBUG</source>
+        <target state="needs-translation">PHP_DEBUG</target>
+      </trans-unit>
+      <trans-unit id="210">
+        <source>PHP_ZTS</source>
+        <target state="needs-translation">PHP_ZTS</target>
+      </trans-unit>
+      <trans-unit id="211">
+        <source>PHP_INT_SIZE</source>
+        <target state="needs-translation">PHP_INT_SIZE</target>
+      </trans-unit>
+      <trans-unit id="212">
+        <source>AF_INET6</source>
+        <target state="needs-translation">AF_INET6</target>
+      </trans-unit>
+      <trans-unit id="213">
+        <source>GD_VERSION</source>
+        <target state="needs-translation">GD_VERSION</target>
+      </trans-unit>
+      <trans-unit id="214">
+        <source>GMP_VERSION</source>
+        <target state="needs-translation">GMP_VERSION</target>
+      </trans-unit>
+      <trans-unit id="215">
+        <source>ICONV_VERSION</source>
+        <target state="needs-translation">ICONV_VERSION</target>
+      </trans-unit>
+      <trans-unit id="216">
+        <source>INTL_ICU_VERSION</source>
+        <target state="needs-translation">INTL_ICU_VERSION</target>
+      </trans-unit>
+      <trans-unit id="217">
+        <source>Version</source>
+        <target state="needs-translation">Version</target>
+      </trans-unit>
+      <trans-unit id="218">
+        <source>Imagick</source>
+        <target state="needs-translation">Imagick</target>
+      </trans-unit>
+      <trans-unit id="219">
+        <source>LIBXML_DOTTED_VERSION</source>
+        <target state="needs-translation">LIBXML_DOTTED_VERSION</target>
+      </trans-unit>
+      <trans-unit id="220">
+        <source>MB_ONIGURUMA_VERSION</source>
+        <target state="needs-translation">MB_ONIGURUMA_VERSION</target>
+      </trans-unit>
+      <trans-unit id="221">
+        <source>OPENSSL_VERSION_TEXT</source>
+        <target state="needs-translation">OPENSSL_VERSION_TEXT</target>
+      </trans-unit>
+      <trans-unit id="222">
+        <source>PCRE_VERSION</source>
+        <target state="needs-translation">PCRE_VERSION</target>
+      </trans-unit>
+      <trans-unit id="223">
+        <source>SODIUM_LIBRARY_VERSION</source>
+        <target state="needs-translation">SODIUM_LIBRARY_VERSION</target>
+      </trans-unit>
+      <trans-unit id="224">
+        <source>LIBXSLT_DOTTED_VERSION</source>
+        <target state="needs-translation">LIBXSLT_DOTTED_VERSION</target>
+      </trans-unit>
+      <trans-unit id="225">
+        <source>ZLIB_VERSION</source>
+        <target state="needs-translation">ZLIB_VERSION</target>
+      </trans-unit>
+      <trans-unit id="226">
+        <source>use-include-path</source>
+        <target state="needs-translation">use-include-path</target>
+      </trans-unit>
+      <trans-unit id="227">
+        <source>prepend-autoloader</source>
+        <target state="needs-translation">prepend-autoloader</target>
+      </trans-unit>
+      <trans-unit id="228">
+        <source>autoloader-suffix</source>
+        <target state="needs-translation">autoloader-suffix</target>
+      </trans-unit>
+      <trans-unit id="229">
+        <source>platform-check</source>
+        <target state="needs-translation">platform-check</target>
+      </trans-unit>
+      <trans-unit id="230">
+        <source>display_errors</source>
+        <target state="needs-translation">display_errors</target>
+      </trans-unit>
+      <trans-unit id="231">
+        <source>Y-m-d H:i:s</source>
+        <target state="needs-translation">Y-m-d H:i:s</target>
+      </trans-unit>
+      <trans-unit id="232">
+        <source>Y-m-d H:i</source>
+        <target state="needs-translation">Y-m-d H:i</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,64 @@
+{% macro search_and_filter(filters, action, currentParams) %}
+    {% autoescape 'html' %}
+        <form action="{{ action }}" method="get" class="">
+            <div class="ui equal width wrapping menu">
+                <div class="item "><i class="fa-duotone fa-solid fa-filter-list"></i></div>
+                <div class="item">
+                    <button type="submit" class="ui primary button">{{ 'Поиск'|trans }}</button>
+                </div>
+                {% for name, options in filters %}
+                    <div class="item">
+                        {% if options.type == 'text' %}
+                            <div class="ui input">
+                                <input type="text" id="filter_{{ name }}" name="filter_{{ name }}"
+                                       placeholder="{{ options.label|trans }}"
+                                       value="{{ attribute(currentParams, name) }}"/>
+                            </div>
+                        {% elseif options.type == 'tags' %}
+                            <div class="inline fields">
+                                <div class="field">
+                                    <label for="filter_{{ name }}">{{ options.label|trans }}</label>
+                                    <select id="filter_{{ name }}" name="filter_{{ name }}[]"
+                                            class="ui fluid search multiple selection dropdown clearable" multiple>
+                                        {% for key, value in options.choices %}
+                                            <option value="{{ key }}"
+                                                    {% if attribute(currentParams, 'filter_' ~ name)|default([]) is iterable and key in attribute(currentParams, 'filter_' ~ name) %}selected{% endif %}>
+                                                {{ value|trans }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        {% elseif options.type == 'select' %}
+                            <div class="inline fields">
+                                <div class="field">
+                                    <label for="filter_{{ name }}">{{ options.label|trans }}</label>
+                                    <select id="filter_{{ name }}" name="filter_{{ name }}"
+                                            class="ui fluid search selection dropdown clearable" >
+                                        {% for key, value in options.choices %}
+                                            <option value="{{ key }}"
+                                                    {% if attribute(currentParams, 'filter_' ~ name) == key %}selected{% endif %}>
+                                                {{ value|trans }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        {% elseif options.type == 'checkbox' %}
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="filter_{{ name }}" name="filter_{{ name }}" value="1"
+                                       {% if attribute(currentParams, 'filter_' ~ name) %}checked{% endif %}>
+                                <label for="filter_{{ name }}">{{ options.label|trans }}</label>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% for name, value in currentParams %}
+                {% if not (name starts with 'filter_' and name in filters) and value != 'Array' and value is not iterable %}
+                    <input type="hidden" name="{{ name }}" value="{{ value }}">
+                {% endif %}
+            {% endfor %}
+        </form>
+    {% endautoescape %}
+{% endmacro %}

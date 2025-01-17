@@ -6,16 +6,16 @@
 		setTimeout(() => {
 			sceditor.create(texteditor_{{ name }}, {
 				format: 'bbcode',
-				style: '{{assets_url}}/maharder/admin/assets/editor/themes/content/default.min.css',
+				style: '{{assets_url}}/editor/themes/content/default.min.css',
 				emoticonsEnabled: true,
-				emoticonsRoot: '{{assets_url}}/maharder/admin/assets/editor/',
+				emoticonsRoot: '{{assets_url}}/editor/',
 				icons: 'material',
 				dateFormat: 'day.month.year',
 				autoExpand: true,
 				autoUpdate: true,
 				plugins: 'autosave,autoyoutube,undo',
 				toolbar: 'bold,italic,underline,strike,subscript,superscript|left,center,right,justify|font,size,color,removeformat|bulletlist,orderedlist,table|code,quote,horizontalrule,image,link,unlink,emoticon,youtube|maximize,source',
-				locale: 'ru'
+				locale: '{{ lang_data['iso2'] }}'
 			});
 		}, 1000);
 	</script>

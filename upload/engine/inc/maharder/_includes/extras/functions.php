@@ -17,15 +17,33 @@
 
 if (!function_exists('translate')) {
 	/**
+	 * Переводит заданную фразу с использованием модуля перевода.
+	 *
+	 * Если язык и путь для локалей не установлены в конфигурации, возвращает исходную фразу.
+	 * В зависимости от переданных параметров, поддерживает как обрабатываемый,
+	 * так и базовый перевод с использованием модулей `MhTranslation`.
+	 * При возникновении ошибки логирует её и возвращает исходную фразу.
+	 *
 	 * @since   2.0.9
 	 *
-	 * @param string $module
-	 * @param string $phrase
-	 * @param array  $params
-	 * @param int    $count
+	 * @param string $module Модуль, связанный с переводом.
+	 * @param string $phrase Фраза для перевода.
+	 * @param array  $params Параметры для подстановки в строку перевода (опционально).
+	 * @param int    $count  Количество для выбора формы множественного числа (опционально).
 	 *
-	 * @return string
+	 * @return string Переведённая строка.
+	 *
+	 * @throws Exception|Throwable Если возникает ошибка при работе с переводом.
+	 *
 	 * @version 2.0.9
+	 *
+	 * @see DataManager::getConfig() Используется для получения конфигурации.
+	 * @see MhTranslation::setTranslator() Устанавливает текущий модуль для перевода.
+	 * @see MhTranslation::getTranslation() Получает простой перевод фразы.
+	 * @see MhTranslation::getTranslationWithParameters() Получает перевод с параметрами.
+	 * @see MhTranslation::getTranslationPlural() Получает множественную форму перевода.
+	 * @see MhTranslation::getTranslationPluralWithParameters() Получает множественный перевод с параметрами.
+	 * @see LogGenerator::generateLog() Логирует ошибки при работе функции.
 	 */
 	function translate(string $module, string $phrase, array $params = [], int $count = 0): string {
 		$mh = DataManager::getConfig('maharder');
@@ -64,18 +82,23 @@ if (!function_exists('translate')) {
 
 if (!function_exists('__')) {
 	/**
-	 * Synonym to translate fn above
-	 * Для упрощённого использования
+	 * Синоним функции перевода translate для упрощённого использования.
 	 *
-	 * @since   2.0.9
+	 * Служит для вызова функции перевода текстовых строк с возможностью передачи параметров и обработки множественного числа.
 	 *
-	 * @param string $module
-	 * @param string $phrase
-	 * @param array  $params
-	 * @param int    $count
-	 *
-	 * @return string
 	 * @version 2.0.9
+	 *
+	 * @param string $module Модуль, связанный с переводом.
+	 * @param string $phrase Переводимая строка.
+	 * @param array  $params Ассоциативный массив параметров для подстановки в строку.
+	 * @param int    $count  Количество для обработки множественного числа (опционально).
+	 *
+	 * @return string Переведённая строка.
+	 *
+	 * @throws Throwable
+	 * @since   2.0.9
+	 * @see     translate()
+	 * @see     DataManager::getConfig()
 	 */
 	function __(string $module, string $phrase, array $params = [], int $count = 0): string {
 		return translate($module, $phrase, $params, $count);
@@ -98,35 +121,39 @@ if (!function_exists('dirToArray')) {
 	 * @throws RuntimeException Если `scandir` не удается получить содержимое директории.
 	 */
 	function dirToArray(string $dir, array $ignoredExtensions = []): array {
+		// Общий список игнорируемых файлов
 		$defaultIgnored = ['.', '..', '.htaccess'];
-		$ext            = array_merge($defaultIgnored, $ignoredExtensions);
+		$ignoredItems = array_merge($defaultIgnored, $ignoredExtensions);
 
 		// Приведение путей к стандартному формату
 		$resolvedDir = str_replace(ENGINE_DIR, ROOT . DIRECTORY_SEPARATOR . 'engine', $dir);
-
 		if (!is_dir($resolvedDir)) {
-			return []; // Если директории не существует, возвращаем пустой массив.
+			return []; // Если директория не существует, возвращаем пустой массив
 		}
 
+		// Читаем содержимое директории
 		$filesAndDirs = scandir($resolvedDir, SCANDIR_SORT_NONE);
 		if ($filesAndDirs === false) {
-			return []; // Если `scandir` не удалось, возвращаем пустой массив.
+			return []; // Ошибка чтения директории
 		}
 
-		// Результирующий массив
+		// Переменная результата
 		$result = [];
+
 		foreach ($filesAndDirs as $item) {
-			if (in_array($item, $ext, true)) {
-				continue; // Пропускаем файлы, которые попали в список исключений.
+			if (in_array($item, $ignoredItems, true)) {
+				// Пропускаем элементы, указанные в игнорируемом списке
+				continue;
 			}
 
 			$itemPath = $resolvedDir . DIRECTORY_SEPARATOR . $item;
 
 			if (is_dir($itemPath)) {
-				// Рекурсивно добавляем содержимое вложенной директории.
+				// Рекурсивно вызываем функцию для вложенных папок
 				$result[$item] = dirToArray($itemPath, $ignoredExtensions);
 			} else {
-				$result[] = $item; // Добавляем файл в массив.
+				// Добавляем только имя файла в результирующий массив
+				$result[] = $item;
 			}
 		}
 

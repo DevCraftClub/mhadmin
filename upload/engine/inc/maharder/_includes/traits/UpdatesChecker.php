@@ -1,6 +1,6 @@
 <?php
 
-require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+
 
 trait UpdatesChecker {
 
@@ -62,9 +62,17 @@ trait UpdatesChecker {
 	}
 
 	/**
-	 * @param    int|null    $res
+	 * Проверяет наличие и обновления ресурса, используя указанный или текущий идентификатор ресурса.
 	 *
-	 * @return array
+	 * @param int|null $res Идентификатор ресурса. Если не указан, используется идентификатор, полученный методом {@see getRecourceId()}.
+	 *
+	 * @return array Возвращает массив с данными об обновлении ресурса или список ошибок.
+	 *
+	 * @see Curl Для выполнения HTTP-запросов.
+	 * @see LogGenerator::generateLog() Для генерации логов при ошибках.
+	 *
+	 * @throws JsonException|Throwable        Исключение, связанное с ошибками в JSON-конверсии (может быть выброшено
+	 *                                        при выполнении Telegram-лога).
 	 */
 	public function checkUpdate(?int $res = null) : array {
 		$res_id = $res !== null ? $res : $this->getRecourceId();

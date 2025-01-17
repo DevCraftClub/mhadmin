@@ -1,7 +1,5 @@
 <?php
 
-require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
-
 trait DataLoader {
 	/**
 	 * @var string|null
@@ -18,43 +16,49 @@ trait DataLoader {
 	/**
 	 * @return string
 	 */
-	public function getCacheFolder() : string {
+	public function getCacheFolder(): string {
 		return $this->cache_folder;
 	}
 
 	/**
-	 * @param    string    $cache_folder
+	 * @param string $cache_folder
 	 */
-	public function setCacheFolder(string $cache_folder) : void {
+	public function setCacheFolder(string $cache_folder): void {
 		$this->cache_folder = $cache_folder;
 	}
 
 	/**
-	 * Функция создания кеша запросов,
-	 * чтобы сократить кол-во обращений к базе данных
+	 * Метод загружает данные из базы данных с использованием механизма кеширования.
+	 * Если данные уже закешированы, то они возвращаются из кеша, иначе выполняется запрос
+	 * к базе данных, формируется кеш и результат сохраняется на диск.
 	 *
 	 * @version 2.0.9
 	 *
-	 * @param    mixed     ...$_vars    - table - Название таблицы, в противном случае будет браться переменная $name
-	 *                                  - sql - Запрос полностью, если он заполнен, то будет исполняться именно он,
-	 *                                  другие значения игнорируются
-	 *                                  - where - Массив выборки запроса, прописывается в название файла кеша.
-	 *                                  Заполняется так: 'поле' => 'значение', 'news_id' => '1'
-	 *                                  - selects - Массив вывод значений, если он пуст, то будут возвращены все
-	 *                                  значения таблицы. Заполняется так: ['Ячейка 1', 'Ячейка 2', ...]. Прописывается
-	 *                                  в названии файла кеша
-	 *                                  - order - Массив сортировки вывода, прописывается в название файла кеша.
-	 *                                  Заполняется так: 'поле' => 'Порядок сортировки', 'news_id' => 'ASC'
-	 *                                  - limit - Ограничение вывода запросов, возможно указывать следующие значения: n
-	 *                                  -> просто максимальное кол-во данных n,x  ->  ограничение вывода, n - с какого
-	 *                                  захода начать сбор данных, x - до какого значения делать сбор данных
+	 * @param string $name         Название кеша, используемого для хранения результата выборки.
+	 * @param mixed  ...$_vars     Параметры запроса и настройки кеширования:
+	 *                             - `table`   (string|null): Название таблицы. Если не указано, используется $name.
+	 *                             - `sql`     (string|null): Полный SQL-запрос. Если указан, игнорируются остальные
+	 *                             параметры.
+	 *                             - `where`   (array): Условия выборки в формате ['поле' => 'значение'], например,
+	 *                             ['news_id' => '1'].
+	 *                             - `selects` (array): Поля, выводимые в результате выборки. Например, ['Ячейка 1',
+	 *                             'Ячейка 2']. Если массив пуст, возвращаются все столбцы ('*').
+	 *                             - `order`   (array): Условия сортировки в формате ['поле' => 'Порядок'], например,
+	 *                             ['news_id' => 'ASC'].
+	 *                             - `limit`   (string|int|null): Ограничение по количеству возвращаемых строк.
+	 *                             Может быть указано как:
+	 *                             - `n`   — максимальное количество строк;
+	 *                             - `n,x` — с какого индекса начать и до какого ограничить выборку.
 	 *
-	 * @param    string    $name        Переменная для названия кеша
+	 * @return array Результат выборки из базы данных, либо из кеша.
+	 * @throws JsonException В случае JSON-ошибок при работе с кешем.
 	 *
-	 * @throws JsonException
-	 * @return array
+	 * @see     DataManager::getDb() Метод для получения экземпляра базы данных.
+	 * @see     DataManager::nameArgs() Метод для обработки аргументов.
+	 * @see     DataManager::getComparer() Метод для получения оператора сравнения.
+	 * @see     DataManager::getConfig() Метод для получения конфигурации.
 	 */
-	public function load_data(string $name, mixed ...$_vars) : array {
+	public function load_data(string $name, mixed ...$_vars): array {
 		$db = DataManager::getDb();
 
 		$vars  = [
@@ -158,8 +162,7 @@ trait DataLoader {
 			}
 
 			$db->query($sql);
-			while (
-			$row = $db->get_row()) {
+			while ($row = $db->get_row()) {
 				$data[] = $row;
 			}
 
@@ -172,43 +175,76 @@ trait DataLoader {
 	}
 
 	/**
-	 * Очищаем кеш
+	 * Очищает кеш указанного типа.
+	 *
+	 * Метод позволяет очистить кеш для переданного типа или полностью, если тип "all".
+	 * Использует внутренний метод CacheControl::clearCache для выполнения операции очистки.
 	 *
 	 * @version 2.0.9
 	 *
-	 * @param    string    $type
+	 * @param string $type Тип кеша для очистки. По умолчанию — "all" (очистка всех данных кеша).
+	 *
+	 * @return void
+	 * @see     CacheControl::clearCache()
+	 *
 	 */
-	public function clear_cache(string $type = 'all') : void {
+	public function clear_cache(string $type = 'all'): void {
 		CacheControl::clearCache($type);
 	}
 
 	/**
-	 * Получаем кеш
+	 * Получает кешированные данные для заданного типа и имени.
 	 *
-	 * @param    string    $type
-	 * @param    string    $name
+	 * Метод использует статический метод `CacheControl::getCache()`, чтобы получить данные из файловой системы.
 	 *
-	 * @return array|false
+	 * @param string $type Тип данных, используемый для построения пути к файлу кеша.
+	 * @param string $name Имя данных, используемое для построения пути к файлу кеша.
+	 *
+	 * @return array|false Возвращает массив декодированных данных, если файл кеша успешно найден и данные корректны,
+	 *                     или `false`, если произошла ошибка (например, файл не найден или данные некорректны).
+	 *
+	 * @throws JsonException
+	 * @see DataManager::toTranslit() Для преобразования строки в транслит.
+	 * @see DataManager::normalizePath() Для нормализации пути к файлу.
+	 * @global CacheControl Взаимодействие с кешем через файловую систему.
+	 * @global LogGenerator Логирование ошибок при работе с кешем.
+	 * @see CacheControl::getCache() Для получения кешированных данных.
 	 */
-	public function get_cache(string $type, string $name) : false|array {
+	public function get_cache(string $type, string $name): false|array {
 		return CacheControl::getCache($type, $name);
 	}
 
 	/**
-	 * Сохраняем в кеш
+	 * Сохраняет данные в кеш.
 	 *
-	 * @param    string    $type
-	 * @param    string    $name
-	 * @param    mixed     $data
+	 * Метод записывает данные в кеш, используя указанный тип и имя.
+	 * Для сохранения данных вызывается метод `CacheControl::setCache`, который
+	 * обрабатывает директорию и имя файла, записывает данные в формате JSON
+	 * и устанавливает необходимые права доступа к файлу.
+	 *
+	 * @param string $type Тип данных для кеширования (используется для генерации пути директории).
+	 * @param string $name Имя, под которым данные будут сохранены (используется для имени файла).
+	 * @param mixed  $data Данные, которые будут сохранены в кеш.
+	 *
+	 * @throws JsonException
+	 * @see CacheControl::setCache() Используемый метод для сохранения данных в файловой системе.
 	 */
-	private function set_cache(string $type, string $name, mixed $data) : void {
+	private function set_cache(string $type, string $name, mixed $data): void {
 		CacheControl::setCache($type, $name, $data);
 	}
 
 	/**
-	 * @return string
+	 * Возвращает префикс для использования в SQL-запросах.
+	 *
+	 * Метод проверяет, установлен ли префикс. Если префикс не задан, он вызывает метод `setPrefix()`,
+	 * чтобы установить его значение. Затем возвращает установившийся префикс.
+	 *
+	 * @return string Префикс, используемый для построения SQL-запросов.
+	 *
+	 * @see DataLoader::$prefix
+	 * @see DataLoader::setPrefix()
 	 */
-	public function getPrefix() : string {
+	public function getPrefix(): string {
 		if ($this->prefix === null) {
 			$this->setPrefix();
 		}
@@ -217,13 +253,19 @@ trait DataLoader {
 	}
 
 	/**
+	 * Устанавливает префикс для использования в загрузке данных.
+	 *
+	 * Если переданное имя соответствует значениям "users" или "usergroup",
+	 * то префикс устанавливается в значение константы `USERPREFIX`.
+	 * В противном случае используется значение по умолчанию из константы `PREFIX`.
+	 *
+	 * @param string|null $name Имя для определения необходимого префикса.
+	 * @return void
+	 * @global string|null $prefix Глобальная переменная для хранения текущего префикса.
 	 */
-	public function setPrefix(string $name = null) : void {
+	public function setPrefix(string $name = null): void {
 		$prefix = PREFIX;
-		if (in_array($name, [
-			'users',
-			'usergroup',
-		])) {
+		if (in_array($name, ['users', 'usergroup'])) {
 			$prefix = USERPREFIX;
 		}
 		$this->prefix = $prefix;

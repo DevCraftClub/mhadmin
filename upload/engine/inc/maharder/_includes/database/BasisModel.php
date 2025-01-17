@@ -14,40 +14,32 @@
 
 use Cycle\Annotated\Annotation\Column;
 use Cycle\ORM\Entity\Behavior;
+use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Table\Index;
 
-require_once(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
-
-
-#[Behavior\CreatedAt(
-	field: 'createdAt',
-	column: 'created_at'
-)]
-#[Behavior\UpdatedAt(
-	field: 'updatedAt',
-	column: 'updated_at'
-)]
-class BasisModel {
+#[Index(columns: ['created_at'])]
+abstract class BasisModel {
 	#[Column(type: 'bigPrimary', primary: true, autoincrement: true)]
 	protected int $id;
 
-	#[Column(type: 'datetime')]
+	#[Column(type: 'datetime', default: 'CURRENT_TIMESTAMP')]
 	protected \DateTimeImmutable $createdAt;
 
-	#[Column(type: 'datetime', nullable: true)]
+	#[Column(type: 'datetime', nullable: true, default: 'CURRENT_TIMESTAMP')]
 	protected ?\DateTimeImmutable $updatedAt = null;
 
-	public function getId() : int {
+	public function getId(): int {
 		return $this->id;
 	}
 
-	public function getCreatedAt() : DateTimeImmutable {
+	public function getCreatedAt(): DateTimeImmutable {
 		return $this->createdAt;
 	}
 
-	public function getUpdatedAt() : ?DateTimeImmutable {
+	public function getUpdatedAt(): ?DateTimeImmutable {
 		return $this->updatedAt;
 	}
 
-
+	abstract public function getColumnVal(string $name): mixed;
 
 }

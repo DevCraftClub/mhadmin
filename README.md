@@ -1,6 +1,13 @@
 # MHAdmin
 
-![Текуящая версия](https://img.shields.io/github/manifest-json/v/Gokujo/mhadmin?filename=manifest.json&style=for-the-badge)![DLE Version](https://img.shields.io/github/manifest-json/dle/Gokujo/mhadmin?label=DLE&style=for-the-badge&color=blue)![PHP Version](https://img.shields.io/github/manifest-json/php/Gokujo/mhadmin?label=PHP&style=for-the-badge&color=red)![Twig](https://img.shields.io/badge/Twig-3.x-green?style=for-the-badge)![Fomantic UI](https://img.shields.io/badge/Fomantic-2.8-blue?style=for-the-badge)
+![Текущая версия](https://img.shields.io/badge/version-173.3.0-green?style=for-the-badge)![Статус](https://img.shields.io/badge/status-dev-orange?style=for-the-badge)![DLE Version](https://img.shields.io/badge/DLE-17.x-blue?style=for-the-badge)![PHP Version](https://img.shields.io/badge/PHP-8.3-red?style=for-the-badge)
+
+![Название](https://img.shields.io/badge/Название-MaHarder%20Assets-yellowgreen?style=for-the-badge)
+
+![Описание](https://img.shields.io/badge/Описание-Административная%20панель%20для%20DLE-lightgrey?style=for-the-badge)
+
+![Twig](https://img.shields.io/badge/Twig-3.x-green?style=for-the-badge)![Fomantic UI](https://img.shields.io/badge/Fomantic-2.8-blue?style=for-the-badge)
+
 
 
 [![GitHub issues](https://img.shields.io/github/issues/Gokujo/mhadmin.svg?style=flat-square)](https://github.com/Gokujo/mhadmin/issues)[![GitHub forks](https://img.shields.io/github/forks/Gokujo/mhadmin.svg?style=flat-square)](https://github.com/Gokujo/mhadmin/network)[![GitHub license](https://img.shields.io/github/license/Gokujo/mhadmin.svg?style=flat-square)](https://github.com/Gokujo/mhadmin/blob/master/LICENSE)

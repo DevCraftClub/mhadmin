@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% from "_macros/pagination.twig" import pagination %}
+{% from "_macros/tablesort.twig" import tablesort %}
+
+{% block filter %}
+    {{ include('templateIncludes/filterArea.html', {filters: filters}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="ui segment">
+
+    <table class="ui very basic  celled table striped sortable selectable">
+        <thead class="full-width">
+        <tr>
+            <th>{{ tablesort('#', 'id', order, sort) }}</th>
+            <th>{{ tablesort('Тип'|trans, 'type', order, sort) }}</th>
+            <th>{{ tablesort('Плагин'|trans, 'plugin', order, sort) }}</th>
+            <th class="collapsing">{{ tablesort('Функция'|trans, 'fn_name', order, sort) }}</th>
+            <th class="collapsing">{{ tablesort('Время'|trans, 'time', order, sort) }}</th>
+            <th>{{ tablesort('Сообщение'|trans, 'message', order, sort) }}</th>
+            <th>{%trans%}Действие{%endtrans%}</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for log in logs %}
+
+        <tr data-log-id="{{log.id}}">
+            <th class="center aligned">{{log.id}}</th>
+            <td>{{log.getLogType}}</td>
+            <td class="collapsing">
+                {{log.getPlugin}}
+            </td>
+            <td class="collapsing">{{log.getFnName}}</td>
+            <td class="center aligned">
+                <div data-popover data-content="{{log.getTime|from_dti}}">
+                    <i class="history icon"></i>
+                </div>
+            </td>
+            <td>
+                <div data-popover data-content="{{log.getMessage|raw}}">
+                    {{log.getMessage|limit_text|raw}}
+                </div>
+            </td>
+            <td>
+                <div class="circular ui top left pointing dropdown button">
+                    <i class="icon settings" style="margin-right: 1px;margin-left: 0.2px;"></i>
+                    <div class="menu">
+                        <div class="item" data-action="delete" data-id="{{log.id}}"><i class="delete icon"></i> {%trans%}Удалить{%endtrans%}</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{{ pagination(total_pages, page) }}
+
+{% endblock %}
+
+{% block scripts %}
+
+{% autoescape 'js' %}
+<script>
+    $('[data-popover]').popup();
+
+    $(document).on('click', '[data-action="delete"]', function () {
+        let id = $(this).data('id');
+        startLoading();
+        $.ajax({
+            url: 'engine/ajax/controller.php?mod=maharder',
+            data: {
+                user_hash: '{{dle_login_hash}}',
+                module: '{{module_code}}',
+                file: 'master',
+                method: 'delete_log',
+                id: id
+            },
+            type: 'POST',
+            success: function (data) {
+                try {
+                    data = JSON.parse(data);
+                } catch (err) {}
+                if (data.success) {
+                    $(`[data-log-id="${id}"]`).remove();
+                    $('body').toast({
+                        class: 'success',
+                        title: `{% trans %}Всё отлично!{% endtrans %}`,
+                        message: `{% trans %}<p>Запись была удалена!</p>{% endtrans %}`,
+                        showProgress: 'bottom'
+                    });
+                } else {
+                    $('body').toast({
+                        class: 'error',
+                        title: `{% trans %}ошибка{% endtrans %}`,
+                        message: `{% trans %}<p>${data.error}</p><p>${data.message}</p>{% endtrans %}`,
+                        showProgress: 'bottom'
+                    });
+                }
+                hideLoading('');
+            }
+        });
+    });
+</script>
+{% endautoescape %}
+
+{% endblock %}

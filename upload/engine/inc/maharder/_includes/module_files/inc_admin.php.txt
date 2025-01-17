@@ -12,16 +12,23 @@
 // Do not change anything!
 //===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===
 
-// заполняем важную и нужную инофрмацию о модуле
+global $breadcrumbs, $mh, $modVars, $mh_template, $htmlTemplate, $config;
+
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+
+// заполняем важную и нужную информацию о модуле
 
 $modInfo = [
-	'module_name' => '%name%',
-	'module_version' => '%version%',
-	'module_description' => '%description%',
-	'module_code' => '%latin%',
-	'module_icon' => '%icon%',
-	'site_link' => '%link%',
-	'docs_link' => '%docs%'
+	'module_name'        => '%name%',
+    'module_version'     => '%version%',
+    'module_description' => __('%latin%', '%description%'),
+    'module_code'        => '%latin%',
+    'module_id'          => 4,
+    'module_icon'        => '%icon%',
+    'site_link'          => '%link%',
+    'docs_link'          => '%docs%',
+    'dle_config'         => $config,
+    'crowdin_name'       => '%latin%'
 ];
 
 // Подключаем классы, функции и основные переменные
@@ -34,20 +41,26 @@ $mh = new Admin();
 switch ($_GET['sites']) {
 	// Главная страница
 	default:
-		require_once DLEPlugins::Check(MH_ADMIN.'/modules/' . $modInfo['module_code'] . '/main.php');
+		require_once DLEPlugins::Check(MH_ROOT.'/_modules/' . $modInfo['module_code'] . '/module/main.php');
 		break;
+
+    case 'changelog':
+        require_once DLEPlugins::Check(MH_ROOT.'/_modules/' . $modInfo['module_code'] . '/module/changelog.php');
+        break;
 }
 
 $xtraVariable = [
-	'links' => $links,
+	'links'       => $links,
 	'breadcrumbs' => $breadcrumbs,
-	'settings' => $mh->getConfig($modInfo['module_code']),
+	'settings'    => DataManager::getConfig($modInfo['module_code']),
 ];
 
 $mh->setVars($modInfo);
 $mh->setLinks($links);
 $mh->setVars($xtraVariable);
 $mh->setVars($modVars);
+
+$mh_template->addExtension(new TranslationExtension(MhTranslation::getTranslator('%latin%')));
 
 // Загружаем шаблон
 $template = $mh_template->load($htmlTemplate);

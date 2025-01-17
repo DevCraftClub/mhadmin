@@ -12,6 +12,10 @@ async function loadTranslations(langCode) {
 const translations = loadTranslations(lang_code).then((translations) => translations);
 
 
-function t(phrase) {
+function translate(phrase) {
 	return translations[phrase] || phrase;
+}
+
+function __(phrase) {
+	return translate(phrase);
 }

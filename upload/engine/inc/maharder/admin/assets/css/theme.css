@@ -149,3 +149,12 @@ kbd {
 .text-center {
 	text-align : center !important;
 }
+
+.ui.menu .item > i[class^="fa-"],
+.ui.menu .item.icon > i[class^="fa-"] {
+	width: auto;
+	margin: 0 auto;
+	opacity: .9;
+	float: none;
+	margin-right: .35714286em;
+}

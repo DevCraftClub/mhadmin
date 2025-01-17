@@ -1,7 +1,7 @@
-Order allow,deny
-Deny from all
-
-<FilesMatch "\.(css|js|eot|svg|png|ttf|woff|woff2)$|^$">
+<IfModule mod_authz_core.c>
+    Require all granted
+</IfModule>
+<IfModule !mod_authz_core.c>
    Order deny,allow
    Allow from all
-</FilesMatch>
+</IfModule>

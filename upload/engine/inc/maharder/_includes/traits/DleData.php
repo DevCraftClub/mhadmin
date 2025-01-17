@@ -1,17 +1,30 @@
 <?php
 
-require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
+use JetBrains\PhpStorm\ExpectedValues;
 
 trait DleData {
 	/**
-	 * Возвращает массив с использованными доп. полями в новости
+	 * Возвращает массив с дополнительными полями, использованными в объекте, либо `false`, если данные отсутствуют.
 	 *
-	 * @param        $id   // ID объекта
-	 * @param string $type // Тип объекта, post или user
-	 * @return array|false
-	 * @throws \JsonException
+	 * Метод извлекает данные из базы данных для указанного объекта (поста или пользователя)
+	 * и преобразует строку с дополнительными полями в массив с ключами и их значениями.
+	 *
+	 * @param int    $id   Идентификатор объекта, для которого нужно получить данные.
+	 * @param string $type Тип объекта, например, "post" для постов или "user" для пользователей.
+	 *                     По умолчанию "post".
+	 *
+	 * @return array|bool Возвращает массив дополнительных полей объекта в формате
+	 *                    ключ => значение, либо `false`, если данные отсутствуют.
+	 *
+	 * @throws JsonException Исключение выбрасывается, если произошла ошибка при работе с JSON.
+	 *
+	 * @see load_data() Метод используется для загрузки данных из базы данных.
 	 */
-	public function get_used_xfields($id, string $type = 'post') {
+	public function get_used_xfields(
+		int $id,
+		#[ExpectedValues(values: ['post', 'user'])]
+		string $type = 'post'
+	) : bool|array {
 		if ('post' === $type) {
 			$post = $this->load_data("post", [
 				'selects' => ['xfields'],
@@ -36,12 +49,28 @@ trait DleData {
 	}
 
 	/**
-	 * Загружает все дополнительные поля для новостей и пользователей
+	 * Загружает дополнительные поля для новостей или профилей пользователей.
 	 *
-	 * @param string $type
-	 * @return array
+	 * Метод считывает данные из файла конфигурации и возвращает ассоциативный массив, где ключами являются
+	 * названия дополнительных полей, а значениями - их параметры.
+	 *
+	 * В зависимости от переданного параметра `$type`, данные могут быть загружены либо для новостей, либо
+	 * для пользователей:
+	 * - При значении `'post'`, данные загружаются из файла `xfields.txt`.
+	 * - При значении `'user'`, данные загружаются из файла `xprofile.txt`.
+	 *
+	 * @param string $type Тип данных для загрузки, по умолчанию `'post'`. Возможные значения: `'post'` или `'user'`.
+	 *
+	 * @return array Ассоциативный массив дополнительных полей. Ключ - название поля, значение - параметр поля.
+	 *
+	 * @global string ENGINE_DIR Директория, откуда считываются файлы конфигурации дополнительных полей.
+	 *
+	 * @see file() Используется для чтения содержимого файла.
 	 */
-	public function loadXfields(string $type = 'post'): array {
+	public function loadXfields(
+		#[ExpectedValues(values: ['post', 'user'])]
+		string $type = 'post'
+	) : array {
 		if ('post' === $type) {
 			$xf_file = file(ENGINE_DIR . '/data/xfields.txt');
 		} elseif ('user' === $type) {
@@ -50,7 +79,7 @@ trait DleData {
 
 		$xf_info = [];
 		foreach ($xf_file as $line) {
-			$info = explode('|', $line);
+			$info              = explode('|', $line);
 			$xf_info[$info[0]] = $info[1];
 		}
 
@@ -58,14 +87,20 @@ trait DleData {
 	}
 
 	/**
-	 * Получаем список пользователей
+	 * Возвращает список пользователей из базы данных.
 	 *
-	 * @return array
-	 * @throws \JsonException
+	 * Метод загружает данные о пользователях, используя метод `load_data`,
+	 * и возвращает массив, где ключами являются идентификаторы пользователей,
+	 * а значениями — их имена, отсортированные в алфавитном порядке.
+	 *
+	 * @return array Ассоциативный массив пользователей, где ключи — идентификаторы пользователей (user_id), а значения
+	 *               — их имена.
+	 * @throws JsonException
+	 * @see load_data() Для загрузки данных из источника.
 	 */
-	public function getUsers(): array {
+	public function getUsers() : array {
 
-		$users = $this->load_data("users", [
+		$users   = $this->load_data("users", [
 			'selects' => [
 				'user_id',
 				'name'
@@ -84,15 +119,20 @@ trait DleData {
 	}
 
 	/**
-	 * Получаем простой список категорий на сайте
-	 * в виде массива с данными ID и названием
+	 * Возвращает список категорий в виде ассоциативного массива, где ключом является ID категории, а значением — её
+	 * название.
 	 *
-	 * @return array
-	 * @throws \JsonException
+	 * Метод загружает данные из базы данных, используя метод `load_data`, и сортирует их по названию категории в
+	 * алфавитном порядке. В результате возвращается массив с ID категорий в качестве ключей и названиями категорий в
+	 * качестве значений.
+	 *
+	 * @return array Ассоциативный массив категорий, где ключ — ID категории, а значение — её название.
+	 * @throws JsonException
+	 * @see load_data() Для загрузки данных из базы данных
 	 */
-	public function getCats(): array {
+	public function getCats() : array {
 
-		$cats = $this->load_data("category", [
+		$cats       = $this->load_data("category", [
 			'selects' => [
 				'id',
 				'name'

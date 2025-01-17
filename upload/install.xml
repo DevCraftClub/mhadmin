@@ -3,8 +3,8 @@
 	<name>MH Admin</name>
 	<description>Универсальная административная панель для модификаций от MaHarder</description>
 	<icon></icon>
-	<version>2.0.8</version>
-	<dleversion>13</dleversion>
+	<version>171.3.0</version>
+	<dleversion>17</dleversion>
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
 	<filedelete>1</filedelete>
@@ -31,13 +31,16 @@ ON DUPLICATE KEY UPDATE title = 'MH Admin v2.0.8';]]></mysqlenable>
 	<notice><![CDATA[]]></notice>
 	<file name="engine/inc/include/functions.inc.php">
 		<operation action="replace">
-			<searchcode><![CDATA['engine/skins/fonts/fontawesome/styles.min.css',]]></searchcode>
+			<searchcode><![CDATA["engine/skins/fonts/fontawesome/styles.min.css",]]></searchcode>
+			<replacecode><![CDATA[// "engine/skins/fonts/fontawesome/styles.min.css",]]></replacecode>
 			<searchcount>1</searchcount>
 			<enabled>1</enabled>
 		</operation>
 		<operation action="before">
 			<searchcode><![CDATA[$css_array = array();]]></searchcode>
-			<replacecode><![CDATA[$default_array = array_merge($default_array, $icons_replace);]]></replacecode>
+			<replacecode><![CDATA[// MH Admin
+$default_array = array_filter(array_merge($default_array, $icons_replace));
+// MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 		<operation action="after">
@@ -49,27 +52,30 @@ ON DUPLICATE KEY UPDATE title = 'MH Admin v2.0.8';]]></mysqlenable>
 		<operation action="after">
 			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
 			<replacecode><![CDATA[
-
-	$mh_ajax = new MhAjax();
-	$data = !$cache_areas ? 'all' : $cache_areas;
-	$mh_ajax->clear_cache($data);]]></replacecode>
+	// MH Admin
+	if (!defined('MH_INIT')) {
+	  $data = !$cache_areas ? 'all' : $cache_areas;
+	  CacheControl::clearCache($data);
+	}
+	// MH Admin]]></replacecode>
 			<searchcount>1</searchcount>
 			<enabled>1</enabled>
 		</operation>
 		<operation action="after">
 			<searchcode><![CDATA[listdir( ENGINE_DIR . '/cache/system/plugins' );]]></searchcode>
-			<replacecode><![CDATA[
-	listdir( ENGINE_DIR . '/inc/maharder/_cache' );]]></replacecode>
+			<replacecode><![CDATA[	// MH Admin
+	listdir( ENGINE_DIR . '/inc/maharder/_cache' );
+	// MH Admin]]></replacecode>
 			<searchcount>1</searchcount>
 			<enabled>1</enabled>
 		</operation>
-		<operation action="after">
-			<searchcode><![CDATA[if( !defined( 'DATALIFEENGINE' ) ) {
-	header( "HTTP/1.1 403 Forbidden" );
-	header ( 'Location: ../../../' );
-	die( "Hacking attempt!" );
-}]]></searchcode>
-			<replacecode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));]]></replacecode>
+		<operation action="before">
+			<searchcode><![CDATA[if ( isset($config['auth_domain']) AND $config['auth_domain'] ) {]]></searchcode>
+			<replacecode><![CDATA[	// MH Admin
+	if (!defined('MH_INIT')) {
+		require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
+	}
+	// MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>
@@ -98,7 +104,8 @@ global $clear_cache, $clear_cache_script;]]></replacecode>
 	<file name="engine/inc/include/init.php">
 		<operation action="before">
 			<searchcode><![CDATA[if ($is_loged_in AND isset($_SESSION['timeout_session']) AND $_SESSION['timeout_session'])]]></searchcode>
-			<replacecode><![CDATA[$mh_config = [
+			<replacecode><![CDATA[// MH Admin
+$mh_config = [
 	'icons' => false,
 	'cache_icon' => false
 ];
@@ -111,54 +118,56 @@ $icons_replace = [
 if(is_file(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json'))) {
 	$mh_config = json_decode(file_get_contents(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json')), true);
 
-  
-  	if($mh_config['cache_icon']) {
-        $clear_cache = <<<HTML
-                                    <a rel="button" class="btn btn-link btn-float text-size-small has-text clear_cache">
-                                        <i class="fa fa-trash text-danger-600"></i> 
-                                        <span class="text-danger-600">{$lang['btn_clearcache']}</span>
-                                    </a>
+
+	  if($mh_config['cache_icon']) {
+		$clear_cache = <<<HTML
+									<a rel="button" class="btn btn-link btn-float text-size-small has-text clear_cache">
+										<i class="fa fa-trash text-danger-600"></i>
+										<span class="text-danger-600">{$lang['btn_clearcache']}</span>
+									</a>
 HTML;
-        $clear_cache_script = <<<JS
-    <script>
-            $(function(){
+		$clear_cache_script = <<<JS
+	<script>
+			$(function(){
 
-                $('.clear_cache').click(function() {
-                    ShowLoading();
+				$('.clear_cache').click(function() {
+					ShowLoading();
 
-                    $.get("engine/ajax/controller.php?mod=adminfunction&action=clearcache&user_hash={$dle_login_hash}", function( data ){
+					$.get("engine/ajax/controller.php?mod=adminfunction&action=clearcache&user_hash={$dle_login_hash}", function( data ){
 
-                        Growl.info({
-                            title: '{$lang['p_info']}',
-                            text: data
-                        });
-                        HideLoading();
+						Growl.info({
+							title: '{$lang['p_info']}',
+							text: data
+						});
+						HideLoading();
 
-                    });
-                    return false;
-                });
-            });
-    </script>
+					});
+					return false;
+				});
+			});
+	</script>
 
 JS;
 
-    }
-  	
-  	if($mh_config['icons']) {
-        $icons_replace = [
-            'engine/inc/maharder/admin/assets/css/fa_fix.css',
-            'engine/inc/maharder/admin/assets/css/fa_old.css',
-            'engine/inc/maharder/admin/assets/css/icons.css',
-        ];
-    }
+	}
+
+	  if($mh_config['icons']) {
+		$icons_replace = [
+			'engine/inc/maharder/admin/assets/css/fa_fix.css',
+			'engine/inc/maharder/admin/assets/css/fa_old.css',
+			'engine/inc/maharder/admin/assets/css/icons.css',
+		];
+	}
 
 }
-]]></replacecode>
+// MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 		<operation action="before">
 			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php'));]]></searchcode>
-			<replacecode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));]]></replacecode>
+			<replacecode><![CDATA[// MH Admin
+require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
+// MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>
@@ -167,25 +176,30 @@ JS;
 			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
 			<replacecode><![CDATA[
 
-	$mh_ajax = new MhAjax();
 	$data = !$cache_areas ? 'all' : $cache_areas;
-	$mh_ajax->clear_cache($data);]]></replacecode>
+	// MH Admin
+	if (!defined('MH_INIT')) {
+		CacheControl::clearCache($data);
+	}
+	// MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 		<operation action="before">
 			<searchcode><![CDATA[if ( isset($config['auth_domain']) AND $config['auth_domain'] ) {]]></searchcode>
-			<replacecode><![CDATA[
-	require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
-]]></replacecode>
+			<replacecode><![CDATA[	// MH Admin
+	if (!defined('MH_INIT')) {
+		require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
+	}
+	// MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>
 	<file name="engine/init.php">
 		<operation action="before">
 			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));]]></searchcode>
-			<replacecode><![CDATA[
+			<replacecode><![CDATA[	// MH Admin
 	require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
-]]></replacecode>
+	// MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>

@@ -1,4 +1,17 @@
 <?php
+//===============================================================
+// Файл: master.php                                             =
+// Путь: engine/ajax/maharder/maharder/master.php               =
+// Дата создания: 2024-03-19 13:40:12                           =
+// Последнее изменение: 2024-03-19 13:40:11                     =
+// ==============================================================
+// Автор: Maxim Harder <dev@devcraft.club> © 2024               =
+// Сайт: https://devcraft.club                                  =
+// Телеграм: http://t.me/MaHarder                               =
+// ==============================================================
+// Менять на свой страх и риск!                                 =
+// Код распространяется по лицензии MIT                         =
+//===============================================================
 
 	//	===============================
 	//	Настройки модуля | сохраняем
@@ -10,7 +23,8 @@
 	//	Ничего не менять
 	//	===============================
 
-	if (!defined('DATALIFEENGINE')) {
+
+if (!defined('DATALIFEENGINE')) {
 		header('HTTP/1.1 403 Forbidden');
 		header('Location: ../../../../');
 		exit('Hacking attempt!');
@@ -31,13 +45,16 @@
 	if (!$method) {
 		exit();
 	}
-	$save_con = filter_var_array($_POST['data']);
 
-	foreach ($save_con as $id => $d) {
-		$name = $d['name'];
-		$value = $d['value'];
-		$value = htmlspecialchars($value);
-		$save_con[$name] = $value;
+	$save_con = [];
+
+	if (isset($data['data'])) {
+		foreach (filter_var_array($data['data']) as $id => $d) {
+			$name            = $d['name'];
+			$value           = $d['value'];
+			$value           = htmlspecialchars($value);
+			$save_con[$name] = $value;
+		}
 	}
 
 	switch ($method) {
@@ -55,7 +72,7 @@
 			try {
 				echo json_encode($mh_admin->checkAssets(),  JSON_UNESCAPED_UNICODE);
 			} catch (\Exception $e) {
-				LogGenerator::generate_log('maharder', 'check_assets', $e->getMessage());
+				LogGenerator::generateLog('mhadmin', 'check_assets', $e->getMessage());
 				echo json_encode([]);
 			}
 
@@ -65,9 +82,9 @@
 		case 'save_asset':
 
 			try {
-				echo json_encode($mh_admin->save_asset($_POST['data']['data'], $_POST['data']['file']), JSON_UNESCAPED_UNICODE);
+				echo json_encode($mh_admin->save_asset($data['data'], $data['file']), JSON_UNESCAPED_UNICODE);
 			} catch (\Exception $e) {
-				LogGenerator::generate_log('maharder', 'save_asset', $e->getMessage());
+				LogGenerator::generateLog('mhadmin', 'save_asset', $e->getMessage());
 				echo json_encode([]);
 			}
 			sleep(0.5);
@@ -79,8 +96,21 @@
 				$mh_admin->setRecourceId($data['resource_id']);
 				echo json_encode($mh_admin->checkUpdate(), JSON_UNESCAPED_UNICODE);
 			} catch (Exception $e) {
-				LogGenerator::generate_log('maharder', 'check_update', $e->getMessage());
+				LogGenerator::generateLog('mhadmin', 'check_update', $e->getMessage());
 				echo json_encode([]);
+			}
+
+			break;
+
+		case 'delete_log':
+
+			try {
+				$log = new MhDB(MhLog::class);
+				echo json_encode($log->delete($data['id']), JSON_UNESCAPED_UNICODE);
+			} catch (Exception $e) {
+				LogGenerator::generateLog('mhadmin', 'delete_log', $e->getMessage());
+				echo '';
+			} catch (Throwable $e) {
 			}
 
 			break;

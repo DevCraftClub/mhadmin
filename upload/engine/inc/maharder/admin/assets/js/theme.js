@@ -1,11 +1,41 @@
-const topMenu = '.top_menu',
-	tp_menu = topMenu + ' .container',
-	sideMenu = '.sidemenu',
-	tm_ch = $(tp_menu).children('.firstLine');
-let iw = 0,
-	tm_ch_width = 0,
+const topMenu  = '.top_menu',
+	  tp_menu  = topMenu + ' .container',
+	  sideMenu = '.sidemenu',
+	  tm_ch    = $(tp_menu).children('.firstLine');
+let iw            = 0,
+	tm_ch_width   = 0,
 	tm_items_stop = 0,
-	tm_width = $(topMenu).outerWidth();
+	tm_width      = $(topMenu).outerWidth();
+let calendarSettings = (type = 'date') => {
+
+	let settings = {
+		formatter       : {
+			datetime          : 'YYYY-MM-DD H:mm:ss',
+			date              : 'YYYY-MM-DD',
+			time              : 'H:mm:ss',
+			cellTime          : 'H:mm',
+			selectAdjacentDays: true
+		},
+		initialDate	   : new Date(),
+		text           : {
+			days         : [t('В'), t('П'), t('В'), t('С'), t('Ч'), t('П'), t('С')],
+			dayNamesShort: [t('Вск'), t('Пнд'), t('Втр'), t('Срд'), t('Чтв'), t('Птн'), t('Сбт')],
+			dayNames     : [t('Воскресенье'), t('Понедельник'), t('Вторник'), t('Среда'), t('Четверг'), t('Пятница'), t('Суббота')],
+			months       : [t('Январь'), t('Февраль'), t('Март'), t('Апрель'), t('Май'), t('Июнь'), t('Июль'), t('Август'), t('Сентябрь'), t('Октябрь'), t('Ноябрь'), t('Декабрь')],
+			monthsShort  : [t('Янв'), t('Фев'), t('Мар'), t('Апр'), t('Май'), t('Июн'), t('Июл'), t('Авг'), t('Сен'), t('Окт'), t('Ноя'), t('Дек')],
+			today        : t('Сегодня'),
+			now          : t('Сейчас'),
+			am           : t('AM'),
+			pm           : t('PM'),
+			weekNo       : t('Неделя')
+		}
+
+	}
+
+	if (type !== 'datetime') settings['type'] = type;
+
+	return settings;
+}
 
 $(document).ready(() => {
 
@@ -15,6 +45,9 @@ $(document).ready(() => {
 	$('.ui.dropdown').dropdown();
 	$('.no.label.ui.dropdown').dropdown({useLabels: false});
 	$('.ui.accordion').accordion();
+	$('[rel="time"]').calendar(calendarSettings('time'));
+	$('[rel="date"]').calendar(calendarSettings());
+	$('[rel="datetime"]').calendar(calendarSettings('datetime'));
 
 	$('.menuToggler').on('click', () => {
 		menuToggler();
@@ -25,8 +58,7 @@ $(document).ready(() => {
 		type: 'fixed',
 	});
 	$('.overlay').visibility({
-		type: 'fixed',
-		offset: 80,
+		type: 'fixed', offset: 80,
 	});
 	$(topMenu + ' .ui.dropdown').dropdown({
 		on: 'hover',
@@ -45,7 +77,7 @@ $(document).ready(() => {
 		$('#box-navi .item').tab();
 	}
 
-	$(document).on('click', '#box-navi.dropdown .item', function() {
+	$(document).on('click', '#box-navi.dropdown .item', function () {
 		$.tab('change tab', $(this).data('tab'));
 	});
 
@@ -66,7 +98,7 @@ $(document).ready(() => {
 		});
 	});
 
-	$(document).on('click', '.update_checker', function() {
+	$(document).on('click', '.update_checker', function () {
 
 		let data = $(this).data();
 		checkUpdate(data.id, data.version);
@@ -81,26 +113,26 @@ function startLoading(text = '') {
 		scrollTop: $('#top').offset().top,
 	}, {
 		duration: 370,   // по умолчанию «400»
-		easing: 'linear', // по умолчанию «swing»
+		easing  : 'linear', // по умолчанию «swing»
 	});
 
 	if (text !== '') {
 		$('.ui.dimmer .text').html(text);
 	} else {
-		$('.ui.dimmer .text').
-			html(
-				'Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
+		$('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
 	}
 	$('.ui.dimmer').addClass('active');
+
+	$(document).find('.field.error, .field.success').each(function () {
+		$(this).removeClass('error').removeClass('success');
+	})
 }
 
 function statusLoading(text = '') {
 	if (text !== '') {
 		$('.ui.dimmer .text').html(text);
 	} else {
-		$('.ui.dimmer .text').
-			html(
-				'Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
+		$('.ui.dimmer .text').html('Подождите, страница загружается <i class="fad fa-spinner fa-pulse"></i>');
 	}
 }
 
@@ -120,27 +152,20 @@ function setTabs(tab) {
 			select = 'class';
 		}
 		if (select == 'id') {
-			html +=
-				'<div class="ui floating dropdown labeled icon button attached" id=\'' +
-				selector.replace('#', '') +
-				'\'>';
+			html += '<div class="ui floating dropdown labeled icon button attached" id=\'' + selector.replace('#', '') + '\'>';
 		} else if (select == 'class') {
-			html +=
-				'<div class="ui floating dropdown labeled icon button attached ' +
-				selector.replace('.', '') + '">';
+			html += '<div class="ui floating dropdown labeled icon button attached ' + selector.replace('.', '') + '">';
 		}
 
-		$(elements).find('.item').each(function() {
+		$(elements).find('.item').each(function () {
 			if ($(this).hasClass('active')) {
-				html += '<span class="text">' + $(this).html() +
-				        '</span><div class="menu">';
+				html += '<span class="text">' + $(this).html() + '</span><div class="menu">';
 			}
 			temp += '<div class="item';
 			if ($(this).hasClass('active')) {
 				temp += ' active selected';
 			}
-			temp += '" data-tab=\'' + $(this).data('tab') + '\'>' +
-			        $(this).html() + '</div>';
+			temp += '" data-tab=\'' + $(this).data('tab') + '\'>' + $(this).html() + '</div>';
 		});
 		html += temp;
 		html += '</div></div>';
@@ -157,20 +182,17 @@ function setTabs(tab) {
 			select = 'class';
 		}
 		if (select == 'id') {
-			html += '<div class="ui top attached tabular menu" id=\'' +
-			        selector.replace('#', '') + '\'>';
+			html += '<div class="ui top attached tabular menu" id=\'' + selector.replace('#', '') + '\'>';
 		} else if (select == 'class') {
-			html += '<div class="ui top attached tabular menu ' +
-			        selector.replace('.', '') + '">';
+			html += '<div class="ui top attached tabular menu ' + selector.replace('.', '') + '">';
 		}
 
-		$(elements).find('.item').each(function() {
+		$(elements).find('.item').each(function () {
 			temp += '<a href=\'#\' class="item';
 			if ($(this).hasClass('active')) {
 				temp += ' active';
 			}
-			temp += '" data-tab=\'' + $(this).data('tab') + '\'>' +
-			        $(this).html() + '</a>';
+			temp += '" data-tab=\'' + $(this).data('tab') + '\'>' + $(this).html() + '</a>';
 		});
 		html += temp;
 		html += '</div>';
@@ -193,7 +215,7 @@ function setTabs(tab) {
 
 	function changeWidths(selector) {
 		if (iw == 0) {
-			$(selector).find('.item').each(function() {
+			$(selector).find('.item').each(function () {
 				let temp = $(this).outerWidth();
 				iw = Math.abs(iw + temp);
 			});
@@ -201,11 +223,11 @@ function setTabs(tab) {
 		thisWidth = $(selector).outerWidth();
 	}
 
-	$(document).find(tab).each(function() {
+	$(document).find(tab).each(function () {
 		$(tab + ' .item').tab();
 
 		changeWidths(tab);
-		$(window).resize(function() {
+		$(window).resize(function () {
 			changeWidths(tab);
 		});
 
@@ -235,7 +257,7 @@ function itemWidth() {
 	tm_ch_width = 0;
 	tm_width = $('#content').outerWidth();
 	let stop_set = false;
-	$(tp_menu).find('.firstLine').each(function(i, e) {
+	$(tp_menu).find('.firstLine').each(function (i, e) {
 		if (tm_width > tm_ch_width) {
 			tm_items_stop = i;
 		}
@@ -335,7 +357,7 @@ function unserialize(data) {
 	// unserialize('O:8:"stdClass":1:{s:3:"foo";b:1;}') returns 5: { foo: true
 	// }
 
-	var utf8Overhead = function(str) {
+	var utf8Overhead = function (str) {
 		var s = str.length;
 		for (var i = str.length - 1; i >= 0; i--) {
 			var code = str.charCodeAt(i);
@@ -351,7 +373,7 @@ function unserialize(data) {
 		}
 		return s - 1;
 	};
-	var readUntil = function(data, offset, stopchr) {
+	var readUntil = function (data, offset, stopchr) {
 		var i = 2;
 		var buf = [];
 		var chr = data.slice(offset, offset + 1);
@@ -366,7 +388,7 @@ function unserialize(data) {
 		}
 		return [buf.length, buf.join('')];
 	};
-	var readChrs = function(data, offset, length) {
+	var readChrs = function (data, offset, length) {
 		var i, chr, buf;
 
 		buf = [];
@@ -399,7 +421,7 @@ function unserialize(data) {
 		var vchrs;
 		var value;
 		var chrs = 0;
-		var typeconvert = function(x) {
+		var typeconvert = function (x) {
 			return x;
 		};
 
@@ -412,7 +434,7 @@ function unserialize(data) {
 
 		switch (dtype) {
 			case 'i':
-				typeconvert = function(x) {
+				typeconvert = function (x) {
 					return parseInt(x, 10);
 				};
 				readData = readUntil(data, dataoffset, ';');
@@ -421,7 +443,7 @@ function unserialize(data) {
 				dataoffset += chrs + 1;
 				break;
 			case 'b':
-				typeconvert = function(x) {
+				typeconvert = function (x) {
 					const value = parseInt(x, 10);
 
 					switch (value) {
@@ -439,7 +461,7 @@ function unserialize(data) {
 				dataoffset += chrs + 1;
 				break;
 			case 'd':
-				typeconvert = function(x) {
+				typeconvert = function (x) {
 					return parseFloat(x);
 				};
 				readData = readUntil(data, dataoffset, ';');
@@ -456,14 +478,11 @@ function unserialize(data) {
 				stringlength = ccount[1];
 				dataoffset += chrs + 2;
 
-				readData = readChrs(data, dataoffset + 1,
-					parseInt(stringlength, 10),
-				);
+				readData = readChrs(data, dataoffset + 1, parseInt(stringlength, 10),);
 				chrs = readData[0];
 				readdata = readData[1];
 				dataoffset += chrs + 2;
-				if (chrs !== parseInt(stringlength, 10) && chrs !==
-				    readdata.length) {
+				if (chrs !== parseInt(stringlength, 10) && chrs !== readdata.length) {
 					throw SyntaxError('String length mismatch');
 				}
 				break;
@@ -589,11 +608,11 @@ function serialize(mixedValue) {
 	var vals = '';
 	var count = 0;
 
-	var _utf8Size = function(str) {
+	var _utf8Size = function (str) {
 		return ~-encodeURI(str).split(/%..|./).length;
 	};
 
-	var _getType = function(inp) {
+	var _getType = function (inp) {
 		var match;
 		var key;
 		var cons;
@@ -634,8 +653,7 @@ function serialize(mixedValue) {
 			val = 'b:' + (mixedValue ? '1' : '0');
 			break;
 		case 'number':
-			val = (Math.round(mixedValue) === mixedValue ? 'i' : 'd') + ':' +
-			      mixedValue;
+			val = (Math.round(mixedValue) === mixedValue ? 'i' : 'd') + ':' + mixedValue;
 			break;
 		case 'string':
 			val = 's:' + _utf8Size(mixedValue) + ':"' + mixedValue + '"';
@@ -684,10 +702,7 @@ function serialize(mixedValue) {
 }
 
 function getCookie(name) {
-	let matches = document.cookie.match(new RegExp(
-		'(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
-		'=([^;]*)',
-	));
+	let matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)',));
 	return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
@@ -697,9 +712,7 @@ function setCookie(name, value, options = {}) {
 	date = date.toUTCString();
 
 	options = {
-		path: '/',
-		expires: date,
-		// при необходимости добавьте другие значения по умолчанию
+		path: '/', expires: date, // при необходимости добавьте другие значения по умолчанию
 		...options,
 	};
 
@@ -707,8 +720,7 @@ function setCookie(name, value, options = {}) {
 		options.expires = options.expires.toUTCString();
 	}
 
-	let updatedCookie = encodeURIComponent(name) + '=' +
-	                    encodeURIComponent(value);
+	let updatedCookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
 
 	for (let optionKey in options) {
 		updatedCookie += '; ' + optionKey;
@@ -730,16 +742,9 @@ function deleteCookie(name) {
 function checkUpdate(id, version) {
 	startLoading();
 	$.ajax({
-		url: 'engine/ajax/controller.php?mod=maharder',
-		data: {
-			user_hash: dle_login_hash,
-			module: 'maharder',
-			file: 'master',
-			method: 'check_update',
-			resource_id: id
-		},
-		type: 'POST',
-		success: function(data) {
+		url    : 'engine/ajax/controller.php?mod=maharder', data: {
+			user_hash: dle_login_hash, module: 'maharder', file: 'master', method: 'check_update', resource_id: id
+		}, type: 'POST', success: function (data) {
 			try {
 				data = JSON.parse(data);
 			} catch (e) {
@@ -747,27 +752,27 @@ function checkUpdate(id, version) {
 			hideLoading('');
 			if (data.errors !== undefined) {
 				$('body').toast({
-					class: 'error',
-					title: `Произошла ошибка!`,
-					message: `Посмотрите в консоль браузера! F12 -> Консоль`,
+					class       : 'error',
+					title       : `Произошла ошибка!`,
+					message     : `Посмотрите в консоль браузера! F12 -> Консоль`,
 					showProgress: 'bottom',
 				});
-				$.each(data.data, function(i, e) {
+				$.each(data.data, function (i, e) {
 					console.table(e);
 				});
 			} else {
 				if (version_compare(version, data.version, '>=')) {
 					$('body').toast({
-						class: 'info',
-						title: `Информация`,
-						message: `Обновлений нет!`,
-						showProgress: 'bottom',
+						class: 'info', title: `Информация`, message: `Обновлений нет!`, showProgress: 'bottom',
 					});
 				} else {
-					$('.update_checker').addClass('red').data('tooltip', 'Доступна новая версия!').attr('data-tooltip', 'Доступна новая версия!');
+					$('.update_checker')
+						.addClass('red')
+						.data('tooltip', 'Доступна новая версия!')
+						.attr('data-tooltip', 'Доступна новая версия!');
 					$.confirm({
-						title: 'Появилась новая версия!',
-						content: `
+						title                     : 'Появилась новая версия!',
+						content                   : `
 <div class="ui fluid card">
     <div class="content">
         <div class="right floated meta">${jQuery.timeago(new Date(data.last_update * 1000))}</div>
@@ -782,38 +787,28 @@ function checkUpdate(id, version) {
 	    ${data.update_count} обновлений
     </div>
 </div>`,
-						closeIcon: true,
-						columnClass: 'four wide',
-						offsetBottom: 40,
-						useBootstrap: false,
-						theme: 'material',
-						draggable: true,
-						backgroundDismiss: false,
+						closeIcon                 : true,
+						columnClass               : 'four wide',
+						offsetBottom              : 40,
+						useBootstrap              : false,
+						theme                     : 'material',
+						draggable                 : true,
+						backgroundDismiss         : false,
 						backgroundDismissAnimation: 'shake',
-						buttons: {
-							download: {
-								text: 'Скачать',
-								btnClass: 'ui blue button',
-								keys: ['enter'],
-								action: function() {
-									window.open(data.download_link, '_blank').
-										focus();
+						buttons                   : {
+							download   : {
+								text: 'Скачать', btnClass: 'ui blue button', keys: ['enter'], action: function () {
+									window.open(data.download_link, '_blank').focus();
 								},
-							},
-							opensite: {
-								text: 'Открыть на сайте',
+							}, opensite: {
+								text    : 'Открыть на сайте',
 								btnClass: 'ui olive button',
-								keys: ['space'],
-								action: function() {
-									window.open(data.site_link, '_blank').
-										focus();
+								keys    : ['space'],
+								action  : function () {
+									window.open(data.site_link, '_blank').focus();
 								},
-							},
-							close: {
-								text: 'Отмена',
-								btnClass: 'ui red button',
-								keys: ['esc'],
-								action: function() {
+							}, close   : {
+								text: 'Отмена', btnClass: 'ui red button', keys: ['esc'], action: function () {
 								},
 							},
 						},
@@ -826,8 +821,7 @@ function checkUpdate(id, version) {
 }
 
 function statusUpdate() {
-	let data = $(document).find('.update_checker').first().data(),
-		update = getCookie(`update_check_${module_code}`);
+	let data = $(document).find('.update_checker').first().data(), update = getCookie(`update_check_${module_code}`);
 
 	if (update === undefined) {
 		checkUpdate(data.id, data.version);
@@ -837,15 +831,14 @@ function statusUpdate() {
 
 function tableCheckbox(name) {
 	$(`#${name}`).checkbox({
-		onChecked: function () {
+		onChecked     : function () {
 			var $parentCheckBox = $(`#${name}`),
-				$childCheckbox = $parentCheckBox.parents('table').find('tbody').first().find('.checkbox');
+				$childCheckbox  = $parentCheckBox.parents('table').find('tbody').first().find('.checkbox');
 			$childCheckbox.checkbox('check');
 			$('.massaction').removeClass('disabled');
-		},
-		onUnchecked: function () {
+		}, onUnchecked: function () {
 			var $parentCheckBox = $(`#${name}`),
-				$childCheckbox = $parentCheckBox.parents('table').find('tbody').first().find('.checkbox');
+				$childCheckbox  = $parentCheckBox.parents('table').find('tbody').first().find('.checkbox');
 			$childCheckbox.checkbox('uncheck');
 			$('.massaction').addClass('disabled');
 
@@ -853,15 +846,10 @@ function tableCheckbox(name) {
 	});
 
 	$(`[data-checkbox="${name}"]`).checkbox({
-		fireOnInit: true,
-		onChange: function () {
-			var $listGroup = $(this).closest(`[data-id="${name}"]`),
-				$parentCheckbox = $(`#${name}`),
-				$checkbox = $listGroup.find('.checkbox'),
-				allChecked = true,
-				allUnchecked = true
-			;
-			$checkbox.each(function () {
+		fireOnInit: true, onChange: function () {
+			var $listGroup                                                           = $(this).closest(`[data-id="${name}"]`), $parentCheckbox = $(`#${name}`),
+				$checkbox                                                            = $listGroup.find('.checkbox'), allChecked                 = true,
+				allUnchecked                                                         = true;$checkbox.each(function () {
 				if ($(this).checkbox('is checked')) {
 					allUnchecked = false;
 				} else {
@@ -890,23 +878,23 @@ function tableCheckbox(name) {
  * @url https://locutus.io/php/info/version_compare/
  * @returns {null|boolean|number}
  */
-function version_compare (v1, v2, operator) { // eslint-disable-line camelcase
-                                              //       discuss at: https://locutus.io/php/version_compare/
-                                              //      original by: Philippe Jausions (https://pear.php.net/user/jausions)
-                                              //      original by: Aidan Lister (https://aidanlister.com/)
-                                              // reimplemented by: Kankrelune (https://www.webfaktory.info/)
-                                              //      improved by: Brett Zamir (https://brett-zamir.me)
-                                              //      improved by: Scott Baker
-                                              //      improved by: Theriault (https://github.com/Theriault)
-                                              //        example 1: version_compare('8.2.5rc', '8.2.5a')
-                                              //        returns 1: 1
-                                              //        example 2: version_compare('8.2.50', '8.2.52', '<')
-                                              //        returns 2: true
-                                              //        example 3: version_compare('5.3.0-dev', '5.3.0')
-                                              //        returns 3: -1
-                                              //        example 4: version_compare('4.1.0.52','4.01.0.51')
-                                              //        returns 4: 1
-                                              // Important: compare must be initialized at 0.
+function version_compare(v1, v2, operator) { // eslint-disable-line camelcase
+	//       discuss at: https://locutus.io/php/version_compare/
+	//      original by: Philippe Jausions (https://pear.php.net/user/jausions)
+	//      original by: Aidan Lister (https://aidanlister.com/)
+	// reimplemented by: Kankrelune (https://www.webfaktory.info/)
+	//      improved by: Brett Zamir (https://brett-zamir.me)
+	//      improved by: Scott Baker
+	//      improved by: Theriault (https://github.com/Theriault)
+	//        example 1: version_compare('8.2.5rc', '8.2.5a')
+	//        returns 1: 1
+	//        example 2: version_compare('8.2.50', '8.2.52', '<')
+	//        returns 2: true
+	//        example 3: version_compare('5.3.0-dev', '5.3.0')
+	//        returns 3: -1
+	//        example 4: version_compare('4.1.0.52','4.01.0.51')
+	//        returns 4: 1
+	// Important: compare must be initialized at 0.
 	let i
 	let x
 	let compare = 0
@@ -918,16 +906,7 @@ function version_compare (v1, v2, operator) { // eslint-disable-line camelcase
 	// If a non-numerical value can't be mapped to this table, it receives
 	// -7 as its value.
 	const vm = {
-		dev: -6,
-		alpha: -5,
-		a: -5,
-		beta: -4,
-		b: -4,
-		RC: -3,
-		rc: -3,
-		'#': -2,
-		p: 1,
-		pl: 1
+		dev: -6, alpha: -5, a: -5, beta: -4, b: -4, RC: -3, rc: -3, '#': -2, p: 1, pl: 1
 	}
 	// This function will be called to prepare each version argument.
 	// It replaces every _, -, and + with a dot.
@@ -998,4 +977,14 @@ function version_compare (v1, v2, operator) { // eslint-disable-line camelcase
 		default:
 			return null
 	}
+}
+
+function validateForm(fields, status = 'error', context = '.form') {
+	const className = status === 'error' ? 'error' : 'success'; // Определяем итоговый класс один раз
+	const formFields = $(document).find(context).first(); // Кэшируем выбор документа
+
+	fields.forEach((field) => {
+		const fieldElement = formFields.find(`[name="${field}"]`).first(); // Находим один раз
+		fieldElement.parent('.field').addClass(className); // Добавляем нужный класс
+	});
 }

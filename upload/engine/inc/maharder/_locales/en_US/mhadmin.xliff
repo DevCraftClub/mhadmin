@@ -2,433 +2,433 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="mhadmin.ru_RU" datatype="plaintext" source-language="ru" target-language="en">
     <body>
-      <trans-unit id="1" approved="yes">
+      <trans-unit id="1">
         <source>Административная панель для моих разработок</source>
-        <target state="final">Type</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Administration panel for my developments</target>
       </trans-unit>
-      <trans-unit id="2" approved="yes">
+      <trans-unit id="2">
         <source>Генератор модулей</source>
-        <target state="final">Plugin</target>
+        <target state="translated">Module generator</target>
       </trans-unit>
-      <trans-unit id="3" approved="yes">
+      <trans-unit id="3">
         <source>Вывод логов</source>
-        <target state="final">Function</target>
+        <target state="translated">Log output</target>
       </trans-unit>
-      <trans-unit id="4" approved="yes">
+      <trans-unit id="4">
         <source>Тип</source>
-        <target state="final">Time</target>
+        <target state="translated">Type</target>
       </trans-unit>
-      <trans-unit id="5" approved="yes">
+      <trans-unit id="5">
         <source>Плагин</source>
-        <target state="final">Message</target>
+        <target state="translated">Plugin</target>
       </trans-unit>
-      <trans-unit id="6" approved="yes">
+      <trans-unit id="6">
         <source>Функция</source>
-        <target state="final">Action</target>
+        <target state="translated">Function</target>
       </trans-unit>
-      <trans-unit id="7" approved="yes">
+      <trans-unit id="7">
         <source>Время</source>
-        <target state="final">Delete</target>
+        <target state="translated">Time</target>
       </trans-unit>
-      <trans-unit id="8" approved="yes">
+      <trans-unit id="8">
         <source>Сообщение</source>
-        <target state="final">Everything's great!</target>
+        <target state="translated">Message</target>
       </trans-unit>
-      <trans-unit id="9" approved="yes">
+      <trans-unit id="9">
         <source>Действие</source>
-        <target state="final">&lt;p&gt;This entry has been deleted!&lt;/p&gt;</target>
+        <target state="translated">Action</target>
       </trans-unit>
-      <trans-unit id="10" approved="yes">
+      <trans-unit id="10">
         <source>Удалить</source>
-        <target state="final">mistake</target>
+        <target state="translated">Delete</target>
       </trans-unit>
-      <trans-unit id="11" approved="yes">
+      <trans-unit id="11">
         <source>Всё отлично!</source>
-        <target state="final">&lt;p&gt;${data.error}&lt;/p&gt;&lt;p&gt;${data.message}&lt;/p&gt;</target>
+        <target state="translated">Everything's great!</target>
       </trans-unit>
-      <trans-unit id="12" approved="yes">
+      <trans-unit id="12">
         <source>&lt;p&gt;Запись была удалена!&lt;/p&gt;</source>
-        <target state="final">Settings</target>
+        <target state="translated">&lt;p&gt;Entry has been deleted!&lt;/p&gt;</target>
       </trans-unit>
-      <trans-unit id="13" approved="yes">
+      <trans-unit id="13">
         <source>Ошибка</source>
-        <target state="final">Number of objects</target>
+        <target state="translated">Error</target>
       </trans-unit>
-      <trans-unit id="14" approved="yes">
+      <trans-unit id="14">
         <source>Настройки</source>
-        <target state="final">.</target>
+        <target state="translated">Settings</target>
       </trans-unit>
-      <trans-unit id="15" approved="yes">
+      <trans-unit id="15">
         <source>Количество объектов</source>
-        <target state="final">File cache path</target>
+        <target state="translated">Number of objects</target>
       </trans-unit>
-      <trans-unit id="16" approved="yes">
+      <trans-unit id="16">
         <source>Путь до кеша файлов</source>
-        <target state="final">Specify the path where the cache files will be stored.&lt;br&gt;Default: /engine/inc/maharder/_cache</target>
+        <target state="translated">File cache path</target>
       </trans-unit>
-      <trans-unit id="17" approved="yes">
+      <trans-unit id="17">
         <source>Время хранения кеша</source>
-        <target state="final">Cache retention time</target>
+        <target state="translated">Cache retention time</target>
       </trans-unit>
-      <trans-unit id="18" approved="yes">
+      <trans-unit id="18">
         <source>Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.&lt;br&gt;&lt;b&gt;&lt;i&gt;По умолчанию: 60 минут&lt;/i&gt;&lt;/b&gt;</source>
-        <target state="final">Enter the time, in minutes, how long the request cache should be stored on the server. When a request is made, the script will check when the cache file was created and if it exceeds the specified limit, the cache will be recreated.&lt;br&gt;&lt;b&gt;&lt;i&gt;Default: 60 minutes&lt;/i&gt;&lt;/b&gt;</target>
+        <target state="translated">Enter the time in minutes, how many cache requests should be saved on the server. When a request is made, the script will check when the cache file was created and if it exceeds the specified limit, the cache will be recreated.&lt;br&gt;&lt;b&gt;&lt;i&gt;Default: 60 minutes&lt;/i&gt;&lt;/b&gt;</target>
       </trans-unit>
-      <trans-unit id="19" approved="yes">
+      <trans-unit id="19">
         <source>Язык админки</source>
-        <target state="final">Admin language</target>
+        <target state="translated">Admin language</target>
       </trans-unit>
-      <trans-unit id="20" approved="yes">
+      <trans-unit id="20">
         <source>Путь до файлов языков</source>
-        <target state="final">This option will allow you to use admin panel and modules in different languages</target>
+        <target state="translated">Path to language files</target>
       </trans-unit>
-      <trans-unit id="21" approved="yes">
+      <trans-unit id="21">
         <source>Включить логирование?</source>
-        <target state="final">Path to language files</target>
+        <target state="translated">Enable logging?</target>
       </trans-unit>
-      <trans-unit id="22" approved="yes">
+      <trans-unit id="22">
         <source>При включенном параметре будет создавать текстовые логи в папке &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</source>
-        <target state="final">Specify the path where the language files will be taken from.&lt;br&gt;Default: /engine/inc/maharder/_locales</target>
+        <target state="translated">If enabled, it will create text logs in &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;.</target>
       </trans-unit>
-      <trans-unit id="23" approved="yes">
+      <trans-unit id="23">
         <source>Сохранять логи в базе данных?</source>
-        <target state="final">Enable logging?</target>
+        <target state="translated">Save the logs in a database?</target>
       </trans-unit>
-      <trans-unit id="24" approved="yes">
+      <trans-unit id="24">
         <source>Отправлять логи в телеграм?</source>
-        <target state="final">If enabled, will create text logs in the folder &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</target>
+        <target state="translated">Send logs to telegram?</target>
       </trans-unit>
-      <trans-unit id="25" approved="yes">
+      <trans-unit id="25">
         <source>API ключ бота</source>
-        <target state="final">Save the logs in a database?</target>
+        <target state="translated">API bot key</target>
       </trans-unit>
-      <trans-unit id="26" approved="yes">
+      <trans-unit id="26">
         <source>Канал телеграма</source>
-        <target state="final">If enabled, all logs will be saved to the database</target>
+        <target state="translated">Telegram channel</target>
       </trans-unit>
-      <trans-unit id="27" approved="yes">
+      <trans-unit id="27">
         <source>Тип оповещений</source>
-        <target state="final">Send logs to telegram?</target>
+        <target state="translated">Type of alerts</target>
       </trans-unit>
-      <trans-unit id="28" approved="yes">
+      <trans-unit id="28">
         <source>&lt;div class=&quot;item&quot;&gt;&lt;b&gt;Все&lt;/b&gt; - Отправляет буквально все отчёты и логи в канал&lt;/div&gt;</source>
-        <target state="final">If this option is enabled and the fields below are filled in - the script will send logs to your Telegram channel</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;All&lt;/b&gt; - Sends literally all reports and logs to the channel&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="29" approved="yes">
+      <trans-unit id="29">
         <source>&lt;div class=&quot;item&quot;&gt;&lt;b&gt;Ошибки&lt;/b&gt; - Отправляет только ошибки в канал&lt;/div&gt;</source>
-        <target state="final">API bot key</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Errors&lt;/b&gt; - Sends only errors to channel&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="30" approved="yes">
+      <trans-unit id="30">
         <source>&lt;div class=&quot;item&quot;&gt;&lt;b&gt;Информация&lt;/b&gt; - Отправляет только информационные отчёты в канал&lt;/div&gt;</source>
-        <target state="final">&gt;here&lt;/a&gt;.</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Information&lt;/b&gt; - Sends only informational reports to the channel&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="31" approved="yes">
+      <trans-unit id="31">
         <source>&lt;div class=&quot;item&quot;&gt;&lt;b&gt;Уведомления&lt;/b&gt; - Отправляет только уведомления в канал&lt;/div&gt;</source>
-        <target state="final">Telegram channel</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Notifications&lt;/b&gt; - Sends only notifications to the channel&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="32" approved="yes">
+      <trans-unit id="32">
         <source>&lt;div class=&quot;item&quot;&gt;&lt;b&gt;Предупреждения&lt;/b&gt; - Отправляет только предупреждения в канал&lt;/div&gt;</source>
-        <target state="final">Type of alerts</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Warnings&lt;/b&gt; - Sends only warnings to the channel&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="33" approved="yes">
+      <trans-unit id="33">
         <source>&lt;div class=&quot;item&quot;&gt;&lt;b&gt;Критические ошибки&lt;/b&gt; - Отправляет только критические ошибки в канал&lt;/div&gt;</source>
-        <target state="final">Variation of alerts per channel:</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Critical errors&lt;/b&gt; - Sends only critical errors to the channel&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="34" approved="yes">
+      <trans-unit id="34">
         <source>&lt;div class=&quot;item&quot;&gt;&lt;b&gt;Отладка&lt;/b&gt; - Отправляет только информацию об отладке в канал&lt;/div&gt;</source>
-        <target state="final">&gt;&lt;b&gt;All&lt;/b&gt; - Sends literally all reports and logs to the channel&lt;/div&gt;</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Debugging&lt;/b&gt; - Sends only debugging information to channel&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="35" approved="yes">
+      <trans-unit id="35">
         <source>Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.&lt;br&gt;Если выбрано &quot;Все&quot;, то остальные выбранные параметры игнорируются</source>
-        <target state="final">&gt;&lt;b&gt;Errors&lt;/b&gt; - Sends only errors to channel&lt;/div&gt;</target>
+        <target state="translated">If logging is not set in the plugin, then messages of this kind will not be sent either.&lt;br&gt;If "All" is selected, the other selected parameters are ignored.</target>
       </trans-unit>
-      <trans-unit id="36" approved="yes">
+      <trans-unit id="36">
         <source>Все</source>
-        <target state="final">&gt;&lt;b&gt;Information&lt;/b&gt; - Sends only information reports to the channel&lt;/div&gt;</target>
+        <target state="translated">All of them</target>
       </trans-unit>
-      <trans-unit id="37" approved="yes">
+      <trans-unit id="37">
         <source>Ошибки</source>
-        <target state="final">&gt;&lt;b&gt;Notifications&lt;/b&gt; - Sends only notifications to the channel&lt;/div&gt;</target>
+        <target state="translated">Errors</target>
       </trans-unit>
-      <trans-unit id="38" approved="yes">
+      <trans-unit id="38">
         <source>Информация</source>
-        <target state="final">&gt;&lt;b&gt;Alerts&lt;/b&gt; - Sends only alerts to channel&lt;/div&gt;</target>
+        <target state="translated">Information</target>
       </trans-unit>
-      <trans-unit id="39" approved="yes">
+      <trans-unit id="39">
         <source>Уведомления</source>
-        <target state="final">&gt;&lt;b&gt;Critical errors&lt;/b&gt; - Sends only critical errors to the channel&lt;/div&gt;</target>
+        <target state="translated">Notifications</target>
       </trans-unit>
-      <trans-unit id="40" approved="yes">
+      <trans-unit id="40">
         <source>Предупреждения</source>
-        <target state="final">&gt;&lt;b&gt;Debugging&lt;/b&gt; - Sends only debugging information to channel&lt;/div&gt;</target>
+        <target state="translated">Warnings</target>
       </trans-unit>
-      <trans-unit id="41" approved="yes">
+      <trans-unit id="41">
         <source>Критические ошибки</source>
-        <target state="final">then the other selected parameters are ignored</target>
+        <target state="translated">Critical errors</target>
       </trans-unit>
-      <trans-unit id="42" approved="yes">
+      <trans-unit id="42">
         <source>Отладка</source>
-        <target state="final">All of them</target>
+        <target state="translated">Debugging information</target>
       </trans-unit>
-      <trans-unit id="43" approved="yes">
+      <trans-unit id="43">
         <source>Заменять иконки?</source>
-        <target state="final">Mistakes</target>
+        <target state="translated">Replace icons?</target>
       </trans-unit>
-      <trans-unit id="44" approved="yes">
+      <trans-unit id="44">
         <source>При включении, в админпанеле DLE будут заменены старые иконки на обновлённые</source>
-        <target state="final">Information</target>
+        <target state="translated">When enabled, the old icons will be replaced by updated icons in the DLE admin panel</target>
       </trans-unit>
-      <trans-unit id="45" approved="yes">
+      <trans-unit id="45">
         <source>Добавить кнопку с очищением кеша?</source>
-        <target state="final">Notifications</target>
+        <target state="translated">Add a button with cache clearing?</target>
       </trans-unit>
-      <trans-unit id="46" approved="yes">
+      <trans-unit id="46">
         <source>Тема оформления админки</source>
-        <target state="final">Warnings</target>
+        <target state="translated">Admin area theme</target>
       </trans-unit>
-      <trans-unit id="47" approved="yes">
+      <trans-unit id="47">
         <source>Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу</source>
-        <target state="final">Critical errors</target>
+        <target state="translated">You can choose between light (standard) and dark for now. Save and refresh the page</target>
       </trans-unit>
-      <trans-unit id="48" approved="yes">
+      <trans-unit id="48">
         <source>Светлая</source>
-        <target state="final">Debugging</target>
+        <target state="translated">Light</target>
       </trans-unit>
-      <trans-unit id="49" approved="yes">
+      <trans-unit id="49">
         <source>Тёмная</source>
-        <target state="final">Replace icons?</target>
+        <target state="translated">Dark</target>
       </trans-unit>
-      <trans-unit id="50" approved="yes">
+      <trans-unit id="50">
         <source>Сохранить</source>
-        <target state="final">When enabled, the old icons will be replaced by updated icons in the DLE admin panel</target>
+        <target state="translated">Save</target>
       </trans-unit>
-      <trans-unit id="51" approved="yes">
+      <trans-unit id="51">
         <source>Проверить обновления</source>
-        <target state="final">Add a button with cache clearing?</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Check for updates</target>
       </trans-unit>
-      <trans-unit id="52" approved="yes">
+      <trans-unit id="52">
         <source>Идёт загрузка...</source>
-        <target state="final">Admin area theme</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Loading...</target>
       </trans-unit>
-      <trans-unit id="53" approved="yes">
+      <trans-unit id="53">
         <source>Загружается:</source>
-        <target state="final">You can choose between light (standard) and dark for now. Save and refresh the page</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">It's loading:</target>
       </trans-unit>
-      <trans-unit id="54" approved="yes">
+      <trans-unit id="54">
         <source>Загружено</source>
-        <target state="final">Bright</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Uploaded by.</target>
       </trans-unit>
-      <trans-unit id="55" approved="yes">
+      <trans-unit id="55">
         <source>Проверка обновлений</source>
-        <target state="final">Dark</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Checking for updates</target>
       </trans-unit>
-      <trans-unit id="56" approved="yes">
+      <trans-unit id="56">
         <source>Загружаем файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
-        <target state="final">Save</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Download the file: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;The result is in the browser console!</target>
       </trans-unit>
-      <trans-unit id="57" approved="yes">
+      <trans-unit id="57">
         <source>Информация!</source>
-        <target state="final">Check for updates</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Information!</target>
       </trans-unit>
-      <trans-unit id="58" approved="yes">
+      <trans-unit id="58">
         <source>Обновлений нет</source>
-        <target state="final">Loading...</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">There are no updates</target>
       </trans-unit>
-      <trans-unit id="59" approved="yes">
+      <trans-unit id="59">
         <source>На сервере</source>
-        <target state="final">It's loading:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">On the server</target>
       </trans-unit>
-      <trans-unit id="60" approved="yes">
+      <trans-unit id="60">
         <source>файлов</source>
-        <target state="final">Uploaded by.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">files</target>
       </trans-unit>
-      <trans-unit id="61" approved="yes">
+      <trans-unit id="61">
         <source>Загружено на сайт</source>
-        <target state="final">Checking for updates</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Uploaded to site</target>
       </trans-unit>
-      <trans-unit id="62" approved="yes">
+      <trans-unit id="62">
         <source>Требуют установки</source>
-        <target state="final">Download the file: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;The result is in the browser console!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Requires installation</target>
       </trans-unit>
-      <trans-unit id="63" approved="yes">
+      <trans-unit id="63">
         <source>Требуют обновления</source>
-        <target state="final">Information!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Needs to be updated</target>
       </trans-unit>
-      <trans-unit id="64" approved="yes">
+      <trans-unit id="64">
         <source>Установить всё</source>
-        <target state="final">There are no updates</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Install everything</target>
       </trans-unit>
-      <trans-unit id="65" approved="yes">
+      <trans-unit id="65">
         <source>Установить недостающие</source>
-        <target state="final">On the server&lt;/a&gt; \n</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Establish the missing</target>
       </trans-unit>
-      <trans-unit id="66" approved="yes">
+      <trans-unit id="66">
         <source>Установить обновления</source>
-        <target state="final">files</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Install updates</target>
       </trans-unit>
-      <trans-unit id="67" approved="yes">
+      <trans-unit id="67">
         <source>&lt;p&gt;Данные были сохранены!&lt;/p&gt;&lt;p&gt;Страница сейчас обновится!&lt;/p&gt;</source>
-        <target state="final">Downloaded from&lt;/a&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">&lt;p&gt;The data has been saved!&lt;/p&gt;&lt;p&gt;Page is about to refresh!&lt;/p&gt;</target>
       </trans-unit>
-      <trans-unit id="68" approved="yes">
+      <trans-unit id="68">
         <source>Настройки модуля</source>
-        <target state="final">Requires installation</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Module settings</target>
       </trans-unit>
-      <trans-unit id="69" approved="yes">
+      <trans-unit id="69">
         <source>[UPDATE] Минимальная версия PHP 8.3</source>
-        <target state="final">Needs to be updated</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Minimum PHP version 8.3</target>
       </trans-unit>
-      <trans-unit id="70" approved="yes">
+      <trans-unit id="70">
         <source>[UPDATE] Функционал обновлён до версий DLE 17.3</source>
-        <target state="final">Install everything</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Functionality updated to DLE 17.3 versions</target>
       </trans-unit>
-      <trans-unit id="71" approved="yes">
+      <trans-unit id="71">
         <source>[NEW] Добавлена поддержка Doctrine MhDB. Дальнейшие модели для базы данных будут работать через эту систему.</source>
-        <target state="final">Establish the missing</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Added support for Doctrine MhDB. Further models for the database will work through this system.</target>
       </trans-unit>
-      <trans-unit id="72" approved="yes">
+      <trans-unit id="72">
         <source>[UPDATE] Функционал обновлён до версий DLE 17.0</source>
-        <target state="final">Install updates</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Functionality updated to DLE 17.0 versions</target>
       </trans-unit>
-      <trans-unit id="73" approved="yes">
+      <trans-unit id="73">
         <source>[NEW] Добавлена мультиязычная поддержка, перевод можно осуществить при помощи сервиса Crowdin. Ссылка в подвале каждого модуля.</source>
-        <target state="final">&lt;p&gt;The data has been saved!&lt;/p&gt;&lt;p&gt;Page is about to refresh!&lt;/p&gt;</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Added multi-language support, translation can be done using Crowdin service. Link in the footer of each module.</target>
       </trans-unit>
-      <trans-unit id="74" approved="yes">
+      <trans-unit id="74">
         <source>[NEW] Добавлена возможность выводов логов на отдельной странице.</source>
-        <target state="final">Module</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Added ability to output logs on a separate page.</target>
       </trans-unit>
-      <trans-unit id="75" approved="yes">
+      <trans-unit id="75">
         <source>[UPDATE] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
-        <target state="final">Additional links</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] The installer has been simplified. Dependencies are now loaded and installed the first time you open [any] module. May take a few minutes. The installer now weighs very little.</target>
       </trans-unit>
-      <trans-unit id="76" approved="yes">
+      <trans-unit id="76">
         <source>[UPDATE] Откат функций, которые использовали класс DLEFiles. Он не работает со сторонними разработками как надо. Либо работает, но документации к нему то нет.</source>
-        <target state="final">On the author's website</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Rollback functions that used the DLEFiles class. It does not work with third-party developments as it should. Or it works, but there is no documentation for it.</target>
       </trans-unit>
-      <trans-unit id="77" approved="yes">
+      <trans-unit id="77">
         <source>[UPDATE] Функционал обновлён до версий PHP 8.1</source>
-        <target state="final">Documentation</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Functionality updated to PHP 8.1.</target>
       </trans-unit>
-      <trans-unit id="78" approved="yes">
+      <trans-unit id="78">
         <source>[UPDATE] Функционал обновлён до версий DLE 16.0</source>
-        <target state="final">User Agreement</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Functionality updated to DLE 16.0 versions</target>
       </trans-unit>
-      <trans-unit id="79" approved="yes">
+      <trans-unit id="79">
         <source>[UPDATE] Решено было использовать стандартные классы DLE для работы с файлами</source>
-        <target state="final">Translation</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] It was decided to use standard DLE classes to work with files</target>
       </trans-unit>
-      <trans-unit id="80" approved="yes">
+      <trans-unit id="80">
         <source>[FIX] Исправлена ошибка: https://devcraft.club/tickets/http-error-500.6/</source>
-        <target state="final">About the author</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Fixed bug: https://devcraft.club/tickets/http-error-500.6/</target>
       </trans-unit>
-      <trans-unit id="81" approved="yes">
+      <trans-unit id="81">
         <source>[NEW] Добавлен функционал проверки обновления плагина</source>
-        <target state="final">Financial support (voluntary)</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Added functionality to check for plugin updates</target>
       </trans-unit>
-      <trans-unit id="82" approved="yes">
+      <trans-unit id="82">
         <source>[UPDATE] Изменён подход к некоторым классам</source>
-        <target state="final">,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Changed the approach to some classes</target>
       </trans-unit>
-      <trans-unit id="83" approved="yes">
+      <trans-unit id="83">
         <source>[FIX] Вернул поддержку PHP 7.2</source>
-        <target state="final">Current value</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] PHP 7.2 support has been restored</target>
       </trans-unit>
-      <trans-unit id="84" approved="yes">
+      <trans-unit id="84">
         <source>[FIX] Вернул поддержку PHP &gt;= 8</source>
-        <target state="final">The data has been saved!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Returned PHP support to &gt;= 8</target>
       </trans-unit>
-      <trans-unit id="85" approved="yes">
+      <trans-unit id="85">
         <source>[FIX] Удалены остаточные файлы (кеш, конфигурации, ...)</source>
-        <target state="final">page</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Deleted residual files (cache, configurations, ...)</target>
       </trans-unit>
-      <trans-unit id="86" approved="yes">
+      <trans-unit id="86">
         <source>[FIX] Вернул нужные, но удалённые файлы</source>
-        <target state="final">Search phrase</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] I got back needed but deleted files</target>
       </trans-unit>
-      <trans-unit id="87" approved="yes">
+      <trans-unit id="87">
         <source>[NEW] Добавлена функция отправки логов в телеграм [БЕТА]</source>
-        <target state="final">Seeking</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Added function to send logs to telegram [BETA]</target>
       </trans-unit>
-      <trans-unit id="88" approved="yes">
+      <trans-unit id="88">
         <source>[FIX] Исправил ошибку работы логирования</source>
-        <target state="final">Search</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Fixed logging error</target>
       </trans-unit>
-      <trans-unit id="89" approved="yes">
+      <trans-unit id="89">
         <source>[FIX] Исправил работу моделей</source>
-        <target state="final">yes</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Fixed models</target>
       </trans-unit>
-      <trans-unit id="90" approved="yes">
+      <trans-unit id="90">
         <source>[FIX] Исправил обработку кеша</source>
-        <target state="final">no</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Fixed cache handling</target>
       </trans-unit>
-      <trans-unit id="91" approved="yes">
+      <trans-unit id="91">
         <source>[FIX] Обновил файлы для генерации модуля</source>
-        <target state="final">index</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Updated files for module generation</target>
       </trans-unit>
-      <trans-unit id="92" approved="yes">
+      <trans-unit id="92">
         <source>[NEW] Добавлена возможность пользователю самому решать использовать ли в админпанели обновлённые иконки или нет</source>
-        <target state="final">Close menu</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Added ability for user to decide whether to use updated icons in admin panel or not</target>
       </trans-unit>
-      <trans-unit id="93" approved="yes">
+      <trans-unit id="93">
         <source>[NEW] Добавлена возможность пользователю самому решать подключать в админке глобальную кнопку по очистке кеша или нет</source>
-        <target state="final">Check for a new version</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Added the ability for the user to decide whether or not to enable the global cache clearing button in the admin area</target>
       </trans-unit>
-      <trans-unit id="94" approved="yes">
+      <trans-unit id="94">
         <source>[NEW] Дальнейшая работа с базой данных будет происходить только через созданные мною модели. Для этого будет использоваться функционал классов Model и Table</source>
-        <target state="final">Wait, it's loading...</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEW] Further work with the database will be done only through the models I created. The functionality of Model and Table classes will be used for this purpose</target>
       </trans-unit>
-      <trans-unit id="95" approved="yes">
+      <trans-unit id="95">
         <source>[UPDATE] Логирование ошибок будет происходить в дальнейшем через &lt;a href=&quot;https://seldaek.github.io/monolog/&quot; target=&quot;_blank&quot;&gt;Monolog - Logging for PHP&lt;/a&gt;. При включённом функционале - библиотека будет отправлять уведомления в консоль браузера, а так-же сохранять файлов в папку логов</source>
-        <target state="final">Open menu</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Logging errors will be logged further via &lt;a href="https://seldaek.github.io/monolog/" target="_blank"&gt;Monolog - Logging for PHP&lt;/a&gt;. When enabled - the library will send notifications to the browser console, as well as save files to the logs folder.</target>
       </trans-unit>
-      <trans-unit id="96" approved="yes">
+      <trans-unit id="96">
         <source>[UPDATE] Обновление библиотек до последних версий с минимально возможной PHP версией &lt;b&gt;7.2.9&lt;/b&gt;</source>
-        <target state="final">Hacking attempt!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] Update libraries to the latest versions with the lowest possible PHP version &lt;b&gt;7.2.9&lt;/b&gt;</target>
       </trans-unit>
-      <trans-unit id="97" approved="yes">
+      <trans-unit id="97">
         <source>[UPDATE] Подключены иконки FontAwesome 6.1.1 Pro, используется вариант light (о не достающих или пропавших иконок прошу сообщать)</source>
-        <target state="final">error</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[UPDATE] FontAwesome 6.1.1 Pro icons are connected, light variant is used (please report missing or missing icons).</target>
       </trans-unit>
-      <trans-unit id="98" approved="yes">
+      <trans-unit id="98">
         <source>[FIX] Путь до иконки модуля исправлен 🤦‍♂️</source>
-        <target state="final">disable_functions</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Path to module icon fixed 🤦‍♂️</target>
       </trans-unit>
-      <trans-unit id="99" approved="yes">
+      <trans-unit id="99">
         <source>[FIX] Продокументировал классы с небольшими объяснениями, что делает какая функция и для чего используется та или иная переменная</source>
-        <target state="final">variables_order</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[FIX] Documented the classes with small explanations of what a function does and what a variable is used for</target>
       </trans-unit>
-      <trans-unit id="100" approved="yes">
+      <trans-unit id="100">
         <source>[DEL] Удалён кошелёк WMR</source>
-        <target state="final">uopz.disable</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[DEL] Deleted WMR wallet</target>
       </trans-unit>
       <trans-unit id="101" approved="yes">
         <source>FIX: Добавлена иконка</source>
         <target state="final">xdebug.mode</target>
       </trans-unit>
-      <trans-unit id="102" approved="yes">
+      <trans-unit id="102">
         <source>FIX: Исправлен файл AJAX</source>
-        <target state="final">openssl.cafile</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">FIX: Fixed AJAX file</target>
       </trans-unit>
-      <trans-unit id="103" approved="yes">
+      <trans-unit id="103">
         <source>В связи с некоторыми обстоятельствами пришлось отказаться от i18n модуля. Возможно он выйдет отдельным модулем.</source>
-        <target state="final">openssl.capath</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Due to some circumstances i18n module had to be discontinued. Perhaps it will be released as a separate module.</target>
       </trans-unit>
-      <trans-unit id="104" approved="yes">
+      <trans-unit id="104">
         <source>Обновление зависимостей до минимально требуемой версии PHP 7.4</source>
-        <target state="final">apc.enabled</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Updating dependencies to the minimum required PHP 7.4 version</target>
       </trans-unit>
-      <trans-unit id="105" approved="yes">
+      <trans-unit id="105">
         <source>Улучшена реструктуризация классов</source>
-        <target state="final">open_basedir</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Improved class restructuring</target>
       </trans-unit>
-      <trans-unit id="106" approved="yes">
+      <trans-unit id="106">
         <source>Добавлена тёмная тема оформления</source>
-        <target state="final">foo</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Added a dark design theme</target>
       </trans-unit>
-      <trans-unit id="107" approved="yes">
+      <trans-unit id="107">
         <source>Для желающих создать модуль на основе моей админки была создана функция генерации путей и файлов</source>
-        <target state="final">bar</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">For those wishing to create a module based on my admin, a function to generate paths and files has been created</target>
       </trans-unit>
       <trans-unit id="108" approved="yes">
         <source>Fontawesome были обновлены до 6ой версии</source>
@@ -602,129 +602,129 @@
         <source>Финансовая поддержка (добровольная)</source>
         <target state="final">cache-vcs-dir</target>
       </trans-unit>
-      <trans-unit id="151" approved="yes">
+      <trans-unit id="151">
         <source>Текущее значение</source>
-        <target state="final">github-protocols</target>
+        <target state="translated">Current value</target>
       </trans-unit>
-      <trans-unit id="152" approved="yes">
+      <trans-unit id="152">
         <source>Данные были сохранены!</source>
-        <target state="final">cache-files-ttl</target>
+        <target state="translated">Everything's great!</target>
       </trans-unit>
-      <trans-unit id="153" approved="yes">
+      <trans-unit id="153">
         <source>Поисковая фраза</source>
-        <target state="final">cache-files-maxsize</target>
+        <target state="translated">Search phrase</target>
       </trans-unit>
-      <trans-unit id="154" approved="yes">
+      <trans-unit id="154">
         <source>Искать</source>
-        <target state="final">home</target>
+        <target state="translated">Seeking</target>
       </trans-unit>
-      <trans-unit id="155" approved="yes">
+      <trans-unit id="155">
         <source>Поиск</source>
-        <target state="final">use-parent-dir</target>
+        <target state="translated">Search</target>
       </trans-unit>
-      <trans-unit id="156" approved="yes">
+      <trans-unit id="156">
         <source>Закрыть меню</source>
-        <target state="final">allow_url_fopen</target>
+        <target state="translated">Close menu</target>
       </trans-unit>
-      <trans-unit id="157" approved="yes">
+      <trans-unit id="157">
         <source>Проверить на наличие новой версии</source>
-        <target state="final">gitlab-domains</target>
+        <target state="translated">Check for a new version</target>
       </trans-unit>
-      <trans-unit id="158" approved="yes">
+      <trans-unit id="158">
         <source>Подождите, идёт загрузка...</source>
-        <target state="final">default_socket_timeout</target>
+        <target state="translated">Wait, it's loading...</target>
       </trans-unit>
-      <trans-unit id="159" approved="yes">
+      <trans-unit id="159">
         <source>Открыть меню</source>
-        <target state="final">github-domains</target>
+        <target state="translated">Open menu</target>
       </trans-unit>
-      <trans-unit id="160" approved="yes">
+      <trans-unit id="160">
         <source>Ошибка при обработке данных!</source>
-        <target state="final">store-auths</target>
+        <target state="translated">Error processing data!</target>
       </trans-unit>
-      <trans-unit id="161" approved="yes">
+      <trans-unit id="161">
         <source>Успех!</source>
-        <target state="final">github-expose-hostname</target>
+        <target state="translated">Success!</target>
       </trans-unit>
-      <trans-unit id="162" approved="yes">
+      <trans-unit id="162">
         <source>Уведомление</source>
-        <target state="final">xdebug.scream</target>
+        <target state="translated">Notification</target>
       </trans-unit>
-      <trans-unit id="163" approved="yes">
+      <trans-unit id="163">
         <source>Дата и время</source>
-        <target state="final">disable-tls</target>
+        <target state="translated">Date and time</target>
       </trans-unit>
-      <trans-unit id="164" approved="yes">
+      <trans-unit id="164">
         <source>Описание</source>
-        <target state="final">htaccess-protect</target>
+        <target state="translated">Description</target>
       </trans-unit>
-      <trans-unit id="165" approved="yes">
+      <trans-unit id="165">
         <source>Все типы ошибок</source>
-        <target state="final">cache-dir</target>
+        <target state="translated">All types of errors</target>
       </trans-unit>
-      <trans-unit id="166" approved="yes">
+      <trans-unit id="166">
         <source>Уведомление / К справке</source>
-        <target state="final">data-dir</target>
+        <target state="translated">Notification / Help</target>
       </trans-unit>
-      <trans-unit id="167" approved="yes">
+      <trans-unit id="167">
         <source>Предупреждение</source>
-        <target state="final">cache-files-dir</target>
+        <target state="translated">Warning</target>
       </trans-unit>
-      <trans-unit id="168" approved="yes">
+      <trans-unit id="168">
         <source>Критическая ошибка</source>
-        <target state="final">cache-read-only</target>
+        <target state="translated">Critical error</target>
       </trans-unit>
-      <trans-unit id="169" approved="yes">
+      <trans-unit id="169">
         <source>Требует срочного решения</source>
-        <target state="final">prefer-install</target>
+        <target state="translated">Requires immediate resolution</target>
       </trans-unit>
-      <trans-unit id="170" approved="yes">
+      <trans-unit id="170">
         <source>E-Mail</source>
-        <target state="final">bin-dir</target>
+        <target state="translated">E-Mail</target>
       </trans-unit>
-      <trans-unit id="171" approved="yes">
+      <trans-unit id="171">
         <source>Telegram</source>
-        <target state="final">bin-compat</target>
+        <target state="translated">Telegram</target>
       </trans-unit>
-      <trans-unit id="172" approved="yes">
+      <trans-unit id="172">
         <source>Вебсайт</source>
-        <target state="final">cafile</target>
+        <target state="translated">Website</target>
       </trans-unit>
-      <trans-unit id="173" approved="yes">
+      <trans-unit id="173">
         <source>Русский</source>
-        <target state="final">capath</target>
+        <target state="translated">Russian</target>
       </trans-unit>
-      <trans-unit id="174" approved="yes">
+      <trans-unit id="174">
         <source>Английский</source>
-        <target state="final">optimize-autoloader</target>
+        <target state="translated">English</target>
       </trans-unit>
-      <trans-unit id="175" approved="yes">
+      <trans-unit id="175">
         <source>Немецкий</source>
-        <target state="final">classmap-authoritative</target>
+        <target state="translated">German</target>
       </trans-unit>
-      <trans-unit id="176" approved="yes">
+      <trans-unit id="176">
         <source>Украинский</source>
-        <target state="final">apcu-autoloader</target>
+        <target state="translated">Ukrainian</target>
       </trans-unit>
-      <trans-unit id="177" approved="yes">
+      <trans-unit id="177">
         <source>Нужные данные не были заполнены</source>
-        <target state="final">cache-repo-dir</target>
+        <target state="translated">The required data was not filled in</target>
       </trans-unit>
-      <trans-unit id="178" approved="yes">
+      <trans-unit id="178">
         <source>Ошибка во время создания папки</source>
-        <target state="final">cache-ttl</target>
+        <target state="translated">Error during folder creation</target>
       </trans-unit>
-      <trans-unit id="179" approved="yes">
+      <trans-unit id="179">
         <source>Такая папка уже существует</source>
-        <target state="final">packages</target>
+        <target state="translated">Such a folder already exists</target>
       </trans-unit>
-      <trans-unit id="180" approved="yes">
+      <trans-unit id="180">
         <source>Данный файл уже существует.</source>
-        <target state="final">sort-packages</target>
+        <target state="translated">This file already exists.</target>
       </trans-unit>
-      <trans-unit id="181" approved="yes">
+      <trans-unit id="181">
         <source>Плагин уже существует</source>
-        <target state="final">allow-plugins</target>
+        <target state="translated">Plugin already exists</target>
       </trans-unit>
     </body>
   </file>

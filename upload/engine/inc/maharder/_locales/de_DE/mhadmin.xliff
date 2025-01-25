@@ -60,11 +60,11 @@
       </trans-unit>
       <trans-unit id="15" approved="yes">
         <source>Количество объектов</source>
-        <target state="final">Datei-Cache-Pfad</target>
+        <target state="final">Anzahl der Objekte</target>
       </trans-unit>
       <trans-unit id="16" approved="yes">
         <source>Путь до кеша файлов</source>
-        <target state="final">Geben Sie den Pfad an, in dem die Cachedateien gespeichert werden sollen.&lt;&gt;br Standard: /engine/inc/maharder/_cache</target>
+        <target state="final">Datei-Cache-Pfad</target>
       </trans-unit>
       <trans-unit id="17" approved="yes">
         <source>Время хранения кеша</source>
@@ -80,15 +80,15 @@
       </trans-unit>
       <trans-unit id="20" approved="yes">
         <source>Путь до файлов языков</source>
-        <target state="final">Mit dieser Option können Sie das Admin-Panel und die Module in verschiedenen Sprachen verwenden</target>
+        <target state="final">Pfad zu den Sprachdateien</target>
       </trans-unit>
       <trans-unit id="21" approved="yes">
         <source>Включить логирование?</source>
-        <target state="final">Pfad zu den Sprachdateien</target>
+        <target state="final">Protokollierung einschalten?</target>
       </trans-unit>
       <trans-unit id="22" approved="yes">
         <source>При включенном параметре будет создавать текстовые логи в папке &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</source>
-        <target state="final">Geben Sie den Pfad an, aus dem die Sprachdateien entnommen werden sollen.&lt;&gt;br Standard: /engine/inc/maharder/_locales</target>
+        <target state="final">&lt;&gt;&lt;&gt;Wenn aktiviert, werden Textprotokolle im Ordner b engine/inc/maharder/_logs /b erstellt.</target>
       </trans-unit>
       <trans-unit id="23" approved="yes">
         <source>Сохранять логи в базе данных?</source>
@@ -96,11 +96,11 @@
       </trans-unit>
       <trans-unit id="24" approved="yes">
         <source>Отправлять логи в телеграм?</source>
-        <target state="final">&lt;&gt;&lt;&gt;Wenn aktiviert, werden Textprotokolle im Ordner b engine/inc/maharder/_logs /b erstellt.</target>
+        <target state="final">Protokolle an Telegram senden?</target>
       </trans-unit>
       <trans-unit id="25" approved="yes">
         <source>API ключ бота</source>
-        <target state="final">Speichern Sie die Protokolle in einer Datenbank?</target>
+        <target state="final">API-Bot-Schlüssel</target>
       </trans-unit>
       <trans-unit id="26" approved="yes">
         <source>Канал телеграма</source>
@@ -180,15 +180,15 @@
       </trans-unit>
       <trans-unit id="45" approved="yes">
         <source>Добавить кнопку с очищением кеша?</source>
-        <target state="final">Notizen</target>
+        <target state="final">Eine Schaltfläche mit Cache-Löschung hinzufügen?</target>
       </trans-unit>
       <trans-unit id="46" approved="yes">
         <source>Тема оформления админки</source>
-        <target state="final">Warnungen</target>
+        <target state="final">Thema Verwaltungsbereich</target>
       </trans-unit>
       <trans-unit id="47" approved="yes">
         <source>Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу</source>
-        <target state="final">Kritische Fehler</target>
+        <target state="final">Sie können vorerst zwischen hell (Standard) und dunkel wählen. Speichern und aktualisieren Sie die Seite</target>
       </trans-unit>
       <trans-unit id="48" approved="yes">
         <source>Светлая</source>

@@ -14,12 +14,12 @@
 
 $logs = [
     '%version%' => [
-        __('mhadmin', 'Основной релиз'),
+        __('Основной релиз'),
     ],
 ];
 
 $modVars = [
-    'title' => __('mhadmin', 'История изменений'),
+    'title' => __('Журнал изменений'),
     'module_icon' => 'fad fa-robot',
     'logs' => $logs,
 ];

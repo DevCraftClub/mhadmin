@@ -22,7 +22,7 @@ class SuccessResponseAjax extends AjaxAbstractResponse {
 	 */
 	public function __construct(int $status = 200) {
 		$this->status  = $status;
-		$this->message = __('mhadmin', 'Успех!');
+		$this->message = __('Успех!');
 		$this->success = true;
 	}
 }

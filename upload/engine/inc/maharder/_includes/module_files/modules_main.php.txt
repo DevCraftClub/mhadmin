@@ -31,7 +31,7 @@
 // $variables['js'] = htmlStatic( $newJssArray, 'js' );
 
 $modVars = [
-	'title' => __('mhadmin', 'Настройки модуля'),
+	'title' => __('Настройки модуля'),
 ];
 
 $htmlTemplate = '%latin%/main.html';

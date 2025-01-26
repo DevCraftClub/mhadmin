@@ -58,28 +58,23 @@ $paginator   = new Paginator($mh_config['list_count']);
 $paginator->withPage($cur_page)->paginate($mh_logs);
 
 $modVars = [
-	'title'       => __('mhadmin', 'Вывод логов'),
+	'title'       => __('Вывод логов'),
 	'logs'        => $mh_logs->fetchAll(),
 	'total_pages' => $total_pages,
 	'page'        => $cur_page,
 	'order'       => $order,
 	'sort'        => $sort,
 	'filters'     => array_merge(
-		$twigFilter->createFilter('plugin', 'tags', __('mhadmin', 'Плагин')),
-		$twigFilter->createFilter('type', 'tags', __('mhadmin', 'Тип'), 'log_type'),
-		$twigFilter->createFilter('fn', 'tags', __('mhadmin', 'Функция'), 'fn_name'),
+		$twigFilter->createFilter('plugin', 'tags', __('Плагин')),
+		$twigFilter->createFilter('type', 'tags', __('Тип'), 'log_type'),
+		$twigFilter->createFilter('fn', 'tags', __('Функция'), 'fn_name'),
 	)
 ];
 
-$breadcrumbs[] = [
-	'name' => $modVars['title'],
-	'url'  => THIS_SELF . '?' . http_build_query($GET_DATA)
-];
+$mh->setBreadcrumb(new BreadCrumb($modVars['title'], THIS_SELF . '?' . http_build_query($GET_DATA)));
+
 if ($cur_page > 1) {
-	$breadcrumbs[] = [
-		'name' => __('mhadmin', 'Страница %page%', ['%page%' => $cur_page]),
-		'url'  => THIS_SELF . '?' . http_build_query($GET_DATA),
-	];
+	$mh->setBreadcrumb(new BreadCrumb(__('mhadmin', 'Страница %page%', ['%page%' => $cur_page]), THIS_SELF . '?' . http_build_query($GET_DATA)));
 }
 
 $htmlTemplate = 'admin/logs.html';

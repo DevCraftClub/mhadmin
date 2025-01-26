@@ -6,30 +6,30 @@
 	{% set site = _site|default('index') %}
 
 	{% for type, link in items %}
-		{% if link.type == 'dropdown' %}
+		{% if link.getType == 'dropdown' %}
 			<div class="{% if child == 'no' %}ui {% endif %}dropdown item{%if first == 'yes' %} {{ first_class }}{% endif %}{% if site == type %} active{% endif %}" tabindex="0">
 				{%if first == 'yes' %}
 					<input type="hidden" name="{{ type }}" id="{{ type }}">
 					<div class="text">
 				{% endif %}
-						{{link.name|trans}}
+						{{link.getName|trans}}
 				{%if first == 'yes' %}
 					</div>
 				{% endif %}
 				<i class="dropdown icon"></i>
 				<div class="menu" tabindex="0">
-					{{ macro.item(link.children, '', 'no', 'yes') }}
+					{{ macro.item(link.getChildren, '', 'no', 'yes') }}
 				</div>
 			</div>
-		{% elseif link.type == 'divider' %}
+		{% elseif link.getType == 'divider' %}
 			<div class="divider"></div>
-		{% elseif link.type == 'data' %}
-			<div class="item" data-value="{{ link.data }}">
-				<span class="description">{{ link.data }}</span>
-				{{link.name|trans}}
+		{% elseif link.getType == 'data' %}
+			<div class="item" data-value="{{ link.getExtra }}">
+				<span class="description">{{ link.getExtra }}</span>
+				{{link.getName|trans}}
 			</div>
 		{% else %}
-			<a href="{{ link.href }}" class="item {%if first == 'yes' %} {{ first_class }}{% endif %}{% if site == type %} active{% endif %}">{{ link.name|trans }}</a>
+			<a href="{{ link.getLink }}" class="item {%if first == 'yes' %} {{ first_class }}{% endif %}{% if site == type %} active{% endif %}">{{ link.getName|trans }}</a>
 		{% endif %}
 
 	{% endfor %}

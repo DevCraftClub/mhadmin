@@ -69,7 +69,7 @@ class TwigFilter {
 	 */
 	public function createFilterChoices($name, $select): array {
 		$filter = [
-			'' => __('mhadmin', 'Все')
+			'' => __('Все')
 		];
 
 		$filteredData = array_column(

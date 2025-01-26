@@ -24,7 +24,7 @@ abstract class LogGenerator {
 	/**
 	 * Проверяет, сформирован класс или нет
 	 *
-	 * @since 2.0.9
+	 * @since 173.3.0
 	 * @var bool
 	 */
 	protected static bool $initialized = false;
@@ -72,7 +72,7 @@ abstract class LogGenerator {
 	 * логов и другие параметры, используя данные конфигурации. Флаг `initialized` предотвращает повторную
 	 * инициализацию.
 	 *
-	 * @since   2.0.9
+	 * @since   173.3.0
 	 * @return void
 	 * @throws JsonException Исключение выбрасывается, если манипуляции с JSON в процессе получения данных конфигурации
 	 * или установки параметров окажутся некорректными.
@@ -199,11 +199,11 @@ abstract class LogGenerator {
 	 */
 	private static function getErrorNotification(string $service, string $functionName, string $type, string $dateTime, mixed $message): string {
 		$fields = [
-			__('mhdamin', 'Уведомление') => $type,
-			__('mhdamin', 'Модуль') => $service,
-			__('mhdamin', 'Функция') => $functionName,
-			__('mhdamin', 'Дата и время') => $dateTime,
-			__('mhdamin', 'Ошибка') => $message
+			__('Уведомление') => $type,
+			__('Модуль') => $service,
+			__('Функция') => $functionName,
+			__('Дата и время') => $dateTime,
+			__('Ошибка') => $message
 		];
 
 		return implode('<br>', array_map(
@@ -273,11 +273,11 @@ abstract class LogGenerator {
 		// Формируем сообщение
 		$typeDescription = self::getAllowedType($type);
 		$tgMessage       = [
-			"<b>" . __('mhdamin', 'Тип') . "</b>: $typeDescription",
-			"<b>" . __('mhdamin', 'Время') . "</b>: {$message['datetime']}",
-			"<b>" . __('mhdamin', 'Плагин') . "</b>: {$message['plugin']}",
-			"<b>" . __('mhdamin', 'Функция') . "</b>: {$message['function_name']}",
-			"<b>" . __('mhdamin', 'Описание') . "</b>: <code>{$message['message']}</code>",
+			"<b>" . __('Тип') . "</b>: $typeDescription",
+			"<b>" . __('Время') . "</b>: {$message['datetime']}",
+			"<b>" . __('Плагин') . "</b>: {$message['plugin']}",
+			"<b>" . __('Функция') . "</b>: {$message['function_name']}",
+			"<b>" . __('Описание') . "</b>: <code>{$message['message']}</code>",
 		];
 
 		// Собираем текст и кодируем
@@ -559,7 +559,7 @@ abstract class LogGenerator {
 	 * "emergency".
 	 * Локализация осуществляется с использованием функции `__`.
 	 *
-	 * @since   2.0.9
+	 * @since   173.3.0
 	 *
 	 * @return array Ассоциативный массив, где ключи — идентификаторы типов сообщений, а значения — локализованные
 	 *               описания.
@@ -567,14 +567,14 @@ abstract class LogGenerator {
 	public static function getAllowedTypes(): array {
 
 		$baseTypes = [
-			'all'      => __('mhadmin', 'Все типы ошибок'),
-			'error'    => __('mhadmin', 'Ошибка'),
-			'info'     => __('mhadmin', 'Информация'),
-			'notice'   => __('mhadmin', 'Уведомление / К справке'),
-			'warning'  => __('mhadmin', 'Предупреждение'),
-			'critical' => __('mhadmin', 'Критическая ошибка'),
-			'debug'    => __('mhadmin', 'Отладка'),
-			'urgent'   => __('mhadmin', 'Требует срочного решения'),
+			'all'      => __('Все типы ошибок'),
+			'error'    => __('Ошибка'),
+			'info'     => __('Информация'),
+			'notice'   => __('Уведомление / К справке'),
+			'warning'  => __('Предупреждение'),
+			'critical' => __('Критическая ошибка'),
+			'debug'    => __('Отладка'),
+			'urgent'   => __('Требует срочного решения'),
 		];
 
 		$baseTypes['warn']      = $baseTypes['warning'];
@@ -590,7 +590,7 @@ abstract class LogGenerator {
 	 * задается методом `getAllowedTypes()`. Если указанный ключ `$type`
 	 * отсутствует в списке, будет сгенерирована ошибка типа PHP `undefined index`.
 	 *
-	 * @since 2.0.9
+	 * @since 173.3.0
 	 *
 	 * @param string $type Ключ типа ошибки, значение должно быть одним из ключей возвращаемых `getAllowedTypes()`.
 	 *

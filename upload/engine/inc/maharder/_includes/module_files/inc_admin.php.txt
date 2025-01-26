@@ -21,14 +21,16 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 $modInfo = [
 	'module_name'        => '%name%',
     'module_version'     => '%version%',
-    'module_description' => __('%latin%', '%description%'),
+    'module_description' => __('%description%'),
     'module_code'        => '%latin%',
     'module_id'          => 4,
     'module_icon'        => '%icon%',
     'site_link'          => '%link%',
     'docs_link'          => '%docs%',
     'dle_config'         => $config,
-    'crowdin_name'       => '%latin%'
+    'crowdin_name'       => '%latin%',
+    'crowdin_stat_id'    => '%crowdin_stat_id%',
+
 ];
 
 // Подключаем классы, функции и основные переменные
@@ -60,7 +62,7 @@ $mh->setLinks($links);
 $mh->setVars($xtraVariable);
 $mh->setVars($modVars);
 
-$mh_template->addExtension(new TranslationExtension(MhTranslation::getTranslator('%latin%')));
+$mh_template->addExtension(new TranslationExtension(MhTranslation::getTranslator()));
 
 // Загружаем шаблон
 $template = $mh_template->load($htmlTemplate);

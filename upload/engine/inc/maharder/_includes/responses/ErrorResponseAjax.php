@@ -30,7 +30,7 @@ class ErrorResponseAjax extends AjaxAbstractResponse {
 	 */
 	public function __construct(int $status = 400) {
 		$this->status  = $status;
-		$this->message = __('mhadmin', 'Ошибка при обработке данных!');
+		$this->message = __('Ошибка при обработке данных!');
 		$this->success = true;
 	}
 

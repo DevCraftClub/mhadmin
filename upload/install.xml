@@ -2,7 +2,7 @@
 <dleplugin>
 	<name>MH Admin</name>
 	<description>Универсальная административная панель для модификаций от MaHarder</description>
-	<icon></icon>
+	<icon>engine/inc/maharder/_modules/admin/assets/icon.jpg</icon>
 	<version>171.3.0</version>
 	<dleversion>17</dleversion>
 	<versioncompare>greater</versioncompare>
@@ -12,43 +12,20 @@
 	<mnotice>0</mnotice>
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MH Admin v173.3.0', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MH Admin v173.3.0';]]></mysqlupgrade>
+VALUES('maharder', 'MH Admin v171.3.0', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MH Admin v171.3.0;]]></mysqlupgrade>
 	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MH Admin v173.3.0', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MH Admin v173.30';]]></mysqlenable>
+VALUES('maharder', 'MH Admin v171.3.0', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MH Admin v171.3.0';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
 	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
-	<phpinstall><![CDATA[@unlink(ENGINE_DIR . '/inc/maharder/_includes/traits/LogGenerator.php');
-@unlink(ENGINE_DIR . '/inc/maharder/_includes/classes/Ajax.php');
-@unlink(ENGINE_DIR . '/inc/maharder/_includes/extras/loader.php');]]></phpinstall>
-	<phpupgrade><![CDATA[@unlink(ENGINE_DIR . '/inc/maharder/_includes/traits/LogGenerator.php');
-@unlink(ENGINE_DIR . '/inc/maharder/_includes/classes/Ajax.php');
-@unlink(ENGINE_DIR . '/inc/maharder/_includes/extras/loader.php');]]></phpupgrade>
+	<phpinstall><![CDATA[]]></phpinstall>
+	<phpupgrade><![CDATA[]]></phpupgrade>
 	<phpenable><![CDATA[]]></phpenable>
 	<phpdisable><![CDATA[]]></phpdisable>
 	<phpdelete><![CDATA[]]></phpdelete>
 	<notice><![CDATA[]]></notice>
 	<file name="engine/inc/include/functions.inc.php">
-		<operation action="replace">
-			<searchcode><![CDATA["engine/skins/fonts/fontawesome/styles.min.css",]]></searchcode>
-			<replacecode><![CDATA[// "engine/skins/fonts/fontawesome/styles.min.css",]]></replacecode>
-			<searchcount>1</searchcount>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="before">
-			<searchcode><![CDATA[$css_array = array();]]></searchcode>
-			<replacecode><![CDATA[// MH Admin
-$default_array = array_filter(array_merge($default_array, $icons_replace));
-// MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="after">
-			<searchcode><![CDATA[function build_css($css) {
-	global $config]]></searchcode>
-			<replacecode><![CDATA[, $icons_replace]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
 		<operation action="after">
 			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
 			<replacecode><![CDATA[
@@ -106,14 +83,10 @@ global $clear_cache, $clear_cache_script;]]></replacecode>
 			<searchcode><![CDATA[if ($is_loged_in AND isset($_SESSION['timeout_session']) AND $_SESSION['timeout_session'])]]></searchcode>
 			<replacecode><![CDATA[// MH Admin
 $mh_config = [
-	'icons' => false,
 	'cache_icon' => false
 ];
 $clear_cache = '';
 $clear_cache_script = '';
-$icons_replace = [
-	'engine/skins/fonts/fontawesome/styles.min.css',
-];
 
 if(is_file(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json'))) {
 	$mh_config = json_decode(file_get_contents(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json')), true);
@@ -151,13 +124,6 @@ JS;
 
 	}
 
-	  if($mh_config['icons']) {
-		$icons_replace = [
-			'engine/inc/maharder/admin/assets/css/fa_fix.css',
-			'engine/inc/maharder/admin/assets/css/fa_old.css',
-			'engine/inc/maharder/admin/assets/css/icons.css',
-		];
-	}
 
 }
 // MH Admin]]></replacecode>

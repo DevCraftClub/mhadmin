@@ -6,33 +6,33 @@
         <source>Административная панель для моих разработок</source>
         <target state="final">Verwaltungspanel für meine Entwicklungen</target>
       </trans-unit>
-      <trans-unit id="2">
+      <trans-unit id="2" approved="yes">
         <source>Генератор модулей</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Modul-Generator</target>
+        <target state="final">Modul-Generator</target>
       </trans-unit>
-      <trans-unit id="3">
+      <trans-unit id="3" approved="yes">
         <source>Вывод логов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Log-Ausgabe</target>
+        <target state="final">Log-Ausgabe</target>
       </trans-unit>
-      <trans-unit id="4">
+      <trans-unit id="4" approved="yes">
         <source>Тип</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Typ</target>
+        <target state="final">Typ</target>
       </trans-unit>
-      <trans-unit id="5">
+      <trans-unit id="5" approved="yes">
         <source>Плагин</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Plug-in</target>
+        <target state="final">Plug-in</target>
       </trans-unit>
-      <trans-unit id="6">
+      <trans-unit id="6" approved="yes">
         <source>Функция</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Funktion</target>
+        <target state="final">Funktion</target>
       </trans-unit>
-      <trans-unit id="7">
+      <trans-unit id="7" approved="yes">
         <source>Время</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zeit</target>
+        <target state="final">Zeit</target>
       </trans-unit>
-      <trans-unit id="8">
+      <trans-unit id="8" approved="yes">
         <source>Сообщение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nachricht</target>
+        <target state="final">Nachricht</target>
       </trans-unit>
       <trans-unit id="9" approved="yes">
         <source>Действие</source>
@@ -290,9 +290,9 @@
         <source>[UPDATE] Функционал обновлён до версий DLE 17.0</source>
         <target state="final">Updates installieren</target>
       </trans-unit>
-      <trans-unit id="73">
+      <trans-unit id="73" approved="yes">
         <source>[NEW] Добавлена мультиязычная поддержка, перевод можно осуществить при помощи сервиса Crowdin. Ссылка в подвале каждого модуля.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">[NEU] Unterstützung für mehrere Sprachen hinzugefügt, die Übersetzung kann über den Crowdin-Dienst erfolgen. Link in der Fußzeile eines jeden Moduls.</target>
+        <target state="final">[NEU] Unterstützung für mehrere Sprachen hinzugefügt, die Übersetzung kann über den Crowdin-Dienst erfolgen. Link in der Fußzeile eines jeden Moduls.</target>
       </trans-unit>
       <trans-unit id="74" approved="yes">
         <source>[NEW] Добавлена возможность выводов логов на отдельной странице.</source>

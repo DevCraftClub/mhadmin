@@ -36,7 +36,7 @@
 	}
 
 	$modVars = [
-		'title' => __('mhadmin', 'Настройки модуля'),
+		'title' => __('Настройки модуля'),
 		'lang_data' => $langs_data
 	];
 

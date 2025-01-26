@@ -1,5 +1,5 @@
 {
-	"name": "mh/admin",
+	"name": "maharder/admin",
 	"description": "MaHarder AdminPanel",
 	"type": "project",
 	"authors": [
@@ -43,7 +43,8 @@
 		"ext-SimpleXML": "*",
 		"ext-sqlite3": "*",
 		"ext-curl": "*",
-		"fakerphp/faker": "*"
+		"fakerphp/faker": "*",
+		"ext-fileinfo": "*"
 	},
 	"conflict": {
 		"symfony/translation-contracts": ">=3.0"

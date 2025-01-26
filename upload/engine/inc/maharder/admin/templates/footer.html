@@ -5,7 +5,7 @@
 				<h4 class="ui inverted header">{% trans %}Модуль{% endtrans %}</h4>
 				<div class="ui inverted link list">
 					{% for l in links %}
-						{% if( l.href != '#' or l.href != '') and l.type == 'link' %}<a href="{{l.href}}" class="item">{{l.name|trans}}</a>{% endif %}
+						{% if( l.getLink != '#' or l.getLink != '') and l.getType == 'link' %}<a href="{{l.getLink}}" class="item">{{l.getName|trans}}</a>{% endif %}
 					{% endfor %}
 					{% block modullinks %} {% endblock %}
 				</div>
@@ -16,7 +16,9 @@
 					<a href="{{site_link}}" target="_blank" class="item">{% trans %}На сайте автора{% endtrans %}</a>
 					<a href="{{docs_link}}" target="_blank" class="item">{% trans %}Документация{% endtrans %}</a>
 					<a href="{{lic_link}}" target="_blank" class="item">{% trans %}Пользовательское соглашение{% endtrans %}</a>
-					<a href="https://crowdin.com/project/{{crowdin_name}}" target="_blank" class="item" title="{% trans %}Перевод{% endtrans %}" data-title="{% trans %}Перевод{% endtrans %}"><img src="https://badges.crowdin.net/{{crowdin_name}}/localized.svg"></a>
+					<a href="https://crowdin.com/project/{{crowdin_name}}" target="_blank" class="item" title="{% trans %}Перевод{% endtrans %}" data-title="{% trans %}Перевод{% endtrans %}">
+						<img alt="{% trans %}Перевод{% endtrans %}" src="https://img.shields.io/badge/dynamic/json?color=blue&label={{lang_data.iso2|upper}}&style=flat&logo=crowdin&query=%24.progress.0.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-{{crowdin_stat_id}}.json" />
+					</a>
 					{% block extralinks %}{% endblock %}
 				</div>
 			</div>
@@ -24,9 +26,9 @@
 				<h4 class="ui inverted header">{% trans %}Об авторе{% endtrans %}</h4>
 				<div class="ui inverted list">
 					<div class="item">
-						<div class="header">{{ author.name }}</div>
+						<div class="header">{{ author.getName }}</div>
 						<div class="ui horizontal inverted divided list">
-							{% for c in author.contacts %}
+							{% for c in author.getContacts %}
 							<div class="item">
 								<div class="content">
 									<a href="{{c.link}}" target="_blank" title="{{c.name|trans}}">{{c.name|trans}}</a>
@@ -38,7 +40,7 @@
 					<div class="item">
 						<div class="header">{% trans %}Финансовая поддержка (добровольная){% endtrans %}</div>
 						<div class="ui horizontal inverted divided list">
-							{% for d in author.donate %}
+							{% for d in author.getDonations %}
 							<div class="item">
 								<div class="content">
 									{% if d.link != '' %}

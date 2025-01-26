@@ -75,8 +75,8 @@ trait UpdatesChecker {
 	 *                                        при выполнении Telegram-лога).
 	 */
 	public function checkUpdate(?int $res = null) : array {
-		$res_id = $res !== null ? $res : $this->getRecourceId();
-		if ($res_id === null) LogGenerator::generateLog('UpdatesChecker', 'checkUpdate', 'ID ресурса не было указано');
+		$res_id = $res ?? $this->getRecourceId();
+		if ($res_id === null) LogGenerator::generateLog('UpdatesChecker', 'checkUpdate', __('ID ресурса не было указано'));
 		$curl = new Curl();
 		$curl->setHeader('XF-Api-Key', $this->getApiKey());
 		$curl->get($this->getUpdateUrl() . $res_id . '/');

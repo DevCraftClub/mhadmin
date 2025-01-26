@@ -8,7 +8,7 @@
 		exit('error');
 	}
 	$concurrentDirectory = ENGINE_DIR . '/inc/maharder/_config';
-	;
+
 	if (!DataManager::createDir(service : 'maharder', module : 'save_setting', _path : $concurrentDirectory)) {
 		LogGenerator::setLogs(1);
 	}

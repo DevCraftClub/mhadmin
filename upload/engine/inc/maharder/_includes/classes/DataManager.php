@@ -116,7 +116,7 @@ abstract class DataManager {
 	 * параметрами. Используется для рекурсивного получения структуры директорий и файлов
 	 * в виде массива.
 	 *
-	 * @version 2.0.9
+	 * @version 173.3.0
 	 *
 	 * @param mixed  ...$_ext Список расширений или других элементов, подлежащих исключению при сканировании.
 	 *
@@ -189,7 +189,7 @@ abstract class DataManager {
 	 * @return string Возвращает объединённый и нормализованный путь.
 	 *
 	 * @throws RuntimeException Если произошла ошибка при нормализации пути.
-	 * @since   2.0.9
+	 * @since   173.3.0
 	 *
 	 */
 	function joinPaths(string ...$paths): string {
@@ -217,7 +217,7 @@ abstract class DataManager {
 	 *
 	 * @throws \UnexpectedValueException В случае, если переданный путь не является директорией
 	 *                                   или не может быть прочитан.
-	 * @since   2.0.9
+	 * @since   173.3.0
 	 *
 	 */
 	public static function deleteDir(string $path): void {
@@ -638,23 +638,30 @@ abstract class DataManager {
 	 *                             выполнения транслитерации. Должен быть заранее определён.
 	 *
 	 */
-	public static function toTranslit(string $input): string {
+	public static function toTranslit(string $input, bool $lowercase = true): string {
 		// Попробуем создать объект Transliterator
 		$transliterator = class_exists(\Transliterator::class) ? \Transliterator::create(
 			'Any-Latin; Latin-ASCII'
 		) : null;
 
+		$input = filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
 		// Выполняем транслитерацию
 		$transliterated = $transliterator ? $transliterator->transliterate($input) : totranslit($input);
 
 		// Удаляем все символы, кроме букв, цифр и пробелов
-		$filtered = preg_replace('/[^a-zA-Z0-9\s]/', '', $transliterated);
+		$filtered = preg_replace('/[^a-zA-Z0-9\.\+\s]/', '', $transliterated);
 
 		// Заменяем пробелы на нижнее подчеркивание
 		$underscored = preg_replace('/\s+/', '_', $filtered);
 
-		// Приводим текст к нижнему регистру
-		return strtolower($underscored ?? '');
+		if ($lowercase) {
+			// Приводим текст к нижнему регистру
+			$underscored = strtolower($underscored);
+		}
+
+
+		return $underscored ?? '';
 	}
 
 	/**
@@ -754,5 +761,47 @@ abstract class DataManager {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Нормализует указанный URL, добавляя дополнительные параметры запроса при необходимости.
+	 *
+	 * Если URL содержит схему или начинается с двойного слэша, возвращается исходный URL без изменений.
+	 * Если URL не содержит схему, добавляется базовый URL, который формируется на основе конфигурации `$config`.
+	 * Если путь в URL является относительным, он также дополняется базовым URL.
+	 *
+	 * @param string $url             URL для нормализации.
+	 * @param array  $additionalQuery Ассоциативный массив дополнительных параметров запроса для добавления в URL.
+	 *
+	 * @return string Нормализованный URL.
+	 * @global array $config          Глобальная конфигурация приложения, используется для определения базового URL.
+	 * @see str_starts_with() Используется для проверки, начинается ли строка с заданного префикса.
+	 */
+	public static function normalizeUrl(string $url, array $additionalQuery = []): string {
+		global $config;
+
+		// Обрезка пробелов и разбор URL
+		$url = trim($url);
+		$urlInfo = parse_url($url);
+
+		// Если URL уже содержит схему или начинается с "//", возвращаем его как есть
+		if (isset($urlInfo['scheme']) || str_starts_with($url, '//')) {
+			return $url;
+		}
+
+		$baseUrl = isset($urlInfo['path']) || !$urlInfo['host']
+			? $config['http_home_url'] . $config['admin_path']
+			: "{$urlInfo['scheme']}://{$urlInfo['host']}";
+
+		// Обрабатываем строку запроса
+		$query = [];
+		if($urlInfo['query']) parse_str($urlInfo['query'], $query);
+
+		// Конечный объединённый массив параметров
+		$mergedQuery = array_filter(array_merge($query, $additionalQuery));
+
+
+		// Если путь относительный, добавить базовый URL
+		return $baseUrl . '?' . http_build_query($mergedQuery);
 	}
 }

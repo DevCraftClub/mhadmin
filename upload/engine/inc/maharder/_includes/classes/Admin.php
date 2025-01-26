@@ -11,6 +11,7 @@
 // Менять на свой страх и риск!                                 =
 // Код распространяется по лицензии MIT                         =
 //===============================================================
+
 use JetBrains\PhpStorm\ExpectedValues;
 
 /**
@@ -37,8 +38,6 @@ class Admin {
 	private array $cssArr
 		= [
 			URL . '/maharder/admin/assets/css/base.css',
-			URL . '/maharder/admin/assets/css/fa_fix.css',
-			URL . '/maharder/admin/assets/css/v5-font-face.min.css',
 			URL . '/maharder/admin/assets/css/icons.css',
 			URL . '/maharder/admin/assets/css/tokens.css',
 			URL . '/maharder/admin/assets/css/prettify.css',
@@ -68,13 +67,13 @@ class Admin {
 			URL . '/maharder/admin/assets/js/jquery.timeago.js',
 			URL . '/maharder/admin/assets/js/timeago/jquery.timeago.ru.js',
 			URL . '/maharder/admin/assets/js/jquery-confirm.min.js',
+			URL . '/maharder/admin/assets/js/clipboard.js',
 			URL . '/maharder/admin/assets/editor/sceditor.min.js',
 			URL . '/maharder/admin/assets/editor/formats/bbcode.js',
 			URL . '/maharder/admin/assets/editor/icons/material.js',
 			URL . '/maharder/admin/assets/editor/plugins/autosave.js',
 			URL . '/maharder/admin/assets/editor/plugins/autoyoutube.js',
 			URL . '/maharder/admin/assets/editor/plugins/undo.js',
-			URL . '/maharder/admin/assets/editor/languages/ru.js',
 			URL . '/maharder/admin/assets/js/theme.js',
 		];
 	/**
@@ -106,7 +105,7 @@ class Admin {
 	 * @see Admin::setVar() Для установки/обновления одного или нескольких значений.
 	 * @see Admin::getVariables() Для получения массива переменных.
 	 * @see Admin::preSetMenu() Для предварительной настройки параметров меню.
-	 * @see Admin::setAuthor() Для настройки информации об авторе.
+	 * @see Admin::setDefaultAuthor() Для настройки информации об авторе.
 	 * @see Admin::setLinks() Для присвоения ссылок (например, для меню или хлебных крошек).
 	 */
 	private array $variables
@@ -123,6 +122,16 @@ class Admin {
 		];
 
 	/**
+	 * Хранит данные для построения хлебных крошек в административной панели.
+	 *
+	 * @var array
+	 * @see Admin::setBreadcrumb() Используется для установки значений хлебных крошек.
+	 * @see Admin::getBreadcrumb() Используется для получения текущих значений хлебных крошек.
+	 */
+	private array $breadcrumb = [];
+	private array $links = [];
+
+	/**
 	 * Конструктор класса.
 	 * Инициализирует параметры для начальной загрузки системы,
 	 * включая настройки файлов CSS и JS, меню, темы и создание
@@ -130,7 +139,7 @@ class Admin {
 	 *
 	 * @version 170.2.10
 	 *
-	 * @throws JsonException Генерируется при ошибках обработки JSON, связанных с конфигурацией.
+	 * @throws JsonException|Throwable Генерируется при ошибках обработки JSON, связанных с конфигурацией.
 	 * @see     setVar() Используется для установки значений в массив переменных.
 	 * @see     htmlStatic() Используется для генерации HTML-кода подключения CSS и JS.
 	 * @see     preSetMenu() Устанавливает базовые настройки меню.
@@ -142,7 +151,6 @@ class Admin {
 		$this->setVar('js_dir', URL . '/maharder/admin/assets/js');
 		$this->setVar('css', $this->htmlStatic($this->cssArr));
 		$this->setVar('js', $this->htmlStatic($this->jsArr, 'html', 'js'));
-		$this->preSetMenu();
 
 		$mh_settings = DataManager::getConfig('maharder');
 
@@ -167,75 +175,55 @@ Deny from all'
 			$this->setCss(URL . '/maharder/admin/assets/editor/themes/dark.css');
 		}
 
-		$this->setAuthor();
+		$this->setDefaultAuthor();
+		$this->setJs(URL . '/maharder/admin/assets/editor/languages/' . MhTranslation::getLocaleData(MhTranslation::getLocale())['iso2'] . '.js'
+		);
 
 	}
 
 	/**
-	 * Устанавливает информацию об авторе и сохраняет её в массиве переменных.
+	 * Устанавливает информацию об авторе и сохраняет её в массиве глобальных переменных.
 	 *
 	 * Информация об авторе включает:
 	 * - Имя автора;
-	 * - Контактные данные (E-Mail, Telegram, Вебсайт);
-	 * - Опции для пожертвований, такие как PayPal, Ko-Fi, Yandex.Money и DonationAlerts.
+	 * - Контактные данные (например, E-Mail, Telegram, Вебсайт);
+	 * - Данные о пожертвованиях (например, PayPal, Ko-Fi, Yandex.Money, DonationAlerts).
 	 *
-	 * Для локализации контактных данных используется функция __().
+	 * Контактные данные локализуются с использованием функции `__()`.
 	 *
 	 * @return void
-	 * @see __ Функция локализации строк.
-	 * @global array $variables Глобальный массив, в который добавляется информация об авторе.
+	 * @throws Throwable В случае ошибок при добавлении информации или работе с объектом Author.
 	 *
-	 * @see variables Содержит структуру $variables, где сохраняются данные об авторе.
+	 * @see variables Глобальный массив, где сохраняется информация об авторе.
+	 * @see __ Функция локализации строк.
+	 * @see Author Класс для работы с информацией об авторе.
 	 */
-	private function setAuthor(): void {
-		$this->variables['author'] = [
-			'name'     => 'Maxim Harder',
-			'contacts' => [
-				[
-					'name' => __('mhadmin', 'E-Mail'),
-					'link' => 'mailto:dev@devcraft.club',
-				],
-				[
-					'name' => __('mhadmin', 'Telegram'),
-					'link' => 'https://t.me/MaHarder',
-				],
-				[
-					'name' => __('mhadmin', 'Вебсайт'),
-					'link' => 'https://devcraft.club/misc/contact',
-				],
-			],
-			'donate'   => [
-				[
-					'name'  => 'PayPal',
-					'value' => 'paypal.me/MaximH',
-					'link'  => 'https://paypal.me/MaximH',
-				],
-				[
-					'name'  => 'Ko-Fi',
-					'value' => 'ko-fi.com/devcraft',
-					'link'  => 'https://ko-fi.com/J3J118N1C',
-				],
-				[
-					'name'  => 'Yandex.Money (Sobe.ru)',
-					'value' => '41001454367103',
-					'link'  => 'https://sobe.ru/na/devcraftclub',
-				],
-				[
-					'name'  => 'Yandex.Money (YooMoney)',
-					'value' => '41001454367103',
-					'link'  => 'https://yoomoney.ru/to/41001454367103',
-				],
-				[
-					'name'  => 'DonationAlerts',
-					'value' => '/r/maharder',
-					'link'  => 'https://www.donationalerts.com/r/maharder',
-				],
-			],
-		];
+	private function setDefaultAuthor(): void {
+		$this->variables['author'] = (new Author('Maxim Harder'))->addContact(__('E-Mail'), 'mailto:dev@devcraft.club')
+																 ->addContact(__('Telegram'), 'https://t.me/MaHarder')
+																 ->addContact(__('Вебсайт'), 'https://devcraft.club/misc/contact')
+																 ->addDonation(__('PayPal'), 'paypal.me/MaximH', 'https://paypal.me/MaximH')
+																 ->addDonation(__('Ko-Fi'), 'ko-fi.com/devcraft', 'https://ko-fi.com/J3J118N1C')
+																 ->addDonation(__('YooMoney'), '41001454367103', 'https://yoomoney.ru/to/41001454367103')
+																 ->addDonation(__('DonationAlerts'), '/r/maharder', 'https://www.donationalerts.com/r/maharder');
+
 	}
 
 	/**
-	 * Генерирует массив, содержащий данные о ссылке, включая её параметры и вложенные элементы.
+	 * Устанавливает объект автора в массив переменных.
+	 *
+	 * @param Author $autor Объект автора, содержащий информацию об имени, контактах и пожертвованиях.
+	 *
+	 * @see Author
+	 * @global array $variables
+	 */
+	public function setAuthor(Author $autor): void {
+		$this->variables['author'] = $autor;
+
+	}
+
+	/**
+	 * Создаёт экземпляр класса AdminLink с данными о ссылке.
 	 *
 	 * @param string      $name       Название ссылки.
 	 * @param string      $href       URL-адрес ссылки.
@@ -247,41 +235,80 @@ Deny from all'
 	 * @param array       $children   Массив дочерних ссылок, если имеются.
 	 * @param string|null $data_val   Дополнительный скрытый параметр, используемый для типа data.
 	 *
-	 * @return array Массив с данными о ссылке, который включает:
-	 *               - name: название ссылки;
-	 *               - href: URL-адрес;
-	 *               - type: тип ссылки;
-	 *               - children: дочерние элементы;
-	 *               - data: дополнительный параметр (если указан).
+	 * @return AdminLink Объект класса AdminLink с заданными параметрами.
+	 *
+	 * @see AdminLink
 	 */
-	public static function generate_link(string $name, string $href, string $type = 'link', array $children = [], ?string $data_val = null): array {
-		return [
-			'name'     => $name,
-			'href'     => $href,
-			'type'     => $type,
-			'children' => $children,
-			'data'     => $data_val
-		];
+	public static function generate_link(string $name, string $href, string $type = 'link', array $children = [], ?string $data_val = null): AdminLink {
+		return new AdminLink(name: $name, link: $href, type: $type, extra: $data_val, children: $children);
 	}
 
 	/**
-	 * Добавляет ссылку в массив меню.
+	 * Возвращает информацию о ссылке из меню.
 	 *
-	 * Ссылка передается в виде массива данных и добавляется в массив `menu`,
-	 * который содержится в переменной `$variables`. Эта переменная используется
-	 * для хранения параметров и структуры меню.
+	 * @param string $name Имя ссылки в меню.
+	 * @return bool|AdminLink Объект AdminLink, если ссылка найдена, или false, если ссылка отсутствует.
+	 */
+	public function getLinkInfo(string $name): bool|AdminLink {
+		return $this->variables['menu'][$name] ?? false;
+	}
+
+	/**
+	 * Возвращает имя ссылки на основе предоставленного имени.
 	 *
-	 * @param array $link Массив, представляющий ссылку. Как правило, ссылка
-	 *                    должна содержать такие ключи, как 'name', 'href', 'type', 'children'
-	 *                    и необязательный 'data', что соответствует формату массива,
-	 *                    создаваемого методом {@see self::generate_link()}.
+	 * Метод извлекает информацию о ссылке с помощью метода getLinkInfo().
+	 * Если информация найдена, возвращается имя ссылки через метод getName().
+	 * В противном случае возвращается false.
+	 *
+	 * @param string $name Имя, по которому производится поиск информации о ссылке.
+	 * @return string|false Имя ссылки или false, если информация не найдена.
+	 *
+	 * @see getLinkInfo()
+	 * @see AdminLink::getName()
+	 */
+	public function getLinkName(string $name): string|false {
+		$info = $this->getLinkInfo($name);
+		return $info ? $info->getName() : false;
+	}
+
+	/**
+	 * Возвращает URL ссылки по указанному имени.
+	 *
+	 * Метод извлекает информацию о ссылке с помощью метода getLinkInfo().
+	 * Если информация найдена, возвращается URL ссылки.
+	 * Если информация отсутствует, возвращается false.
+	 *
+	 * @param string $name Имя ссылки для поиска.
+	 * @return string|false URL ссылки, если информация доступна, или false, если ссылка не найдена.
+	 *
+	 * @see self::getLinkInfo() Используется для получения информации о ссылке.
+	 * @see AdminLink::getLink() Используется для получения URL из объекта ссылки.
+	 */
+	public function getLinkUrl(string $name): string|false {
+		$info = $this->getLinkInfo($name);
+		return $info ? $info->getLink() : false;
+	}
+
+	/**
+	 * Устанавливает ссылку в массив меню для указанного родительского элемента.
+	 *
+	 * Этот метод добавляет объект `AdminLink` в массив `menu`, вложенный в
+	 * переменную `variables`, обеспечивая возможность хранения структуры меню
+	 * с учетом родительских элементов. Основное назначение метода — организовать
+	 * меню по принципу вложенности.
+	 *
+	 * @param AdminLink $link Объект, представляющий ссылку.
+	 *                        Объект содержит данные о названии, адресе,
+	 *                        типе и вложенных элементах.
+	 * @param string $parent Идентификатор родительского элемента,
+	 *                       к которому будет добавлена ссылка.
 	 *
 	 * @return void
 	 * @see self::$variables
 	 * @see self::generate_link()
 	 */
-	public function setLink(array $link): void {
-		$this->variables['menu'][] = $link;
+	public function setLink(AdminLink $link, string $parent): void {
+		$this->variables['menu'][$parent] = $link;
 	}
 
 	/**
@@ -304,65 +331,20 @@ Deny from all'
 	}
 
 	/**
-	 * Подготавливает меню для административной панели.
+	 * Получает массив переменных, связанных с модулем.
 	 *
-	 * Функция формирует структуру меню для административной панели системы.
-	 * Списки меню строятся на основании доступных ссылок, предоставляемых частью DLE
-	 * (DataLife Engine). Также используется языковой файл для получения локализованных
-	 * названий пунктов меню.
+	 * Метод возвращает ассоциативный массив с переменными, используемыми в модуле,
+	 * такими как параметры путей (CSS, JS), массивы подключаемых файлов, дополнительные ссылки, меню
+	 * и настройки. Если передано название переменной, метод возвращает только значение данной переменной.
 	 *
-	 * @return void
-	 *
-	 * @global array $lang Массив локализации, содержащий переводы интерфейса.
-	 *
-	 * @see DLEPlugins::Check() Подключение необходимых файлов через плагин.
+	 * @param string|null $name Название переменной для выборки. Если не указано, возвращаются все переменные.
+	 * @return array Ассоциативный массив переменных модуля или значение конкретной переменной.
+	 * @see Admin::$variables Переменные модуля, содержат информацию для работы и настроек.
+	 * @see Admin::setVars() Устанавливает значения переменных модуля.
+	 * @see Admin::setLinks() Добавляет ссылки в переменные модуля.
 	 */
-	private function preSetMenu(): void {
-		global $lang;
-		require_once DLEPlugins::Check(ENGINE_DIR . '/skins/default.skin.php');
-		$dle_links_header = [
-			'config'         => $lang['opt_hopt'],
-			'user'           => $lang['opt_s_acc'],
-			'templates'      => $lang['opt_s_tem'],
-			'filter'         => $lang['opt_s_fil'],
-			'others'         => $lang['opt_s_oth'],
-			'admin_sections' => $lang['admin_other_section'],
-		];
-
-		$admin_links = [
-			self::generate_link($lang['header_all'], '?mod=options&action=options'),
-			self::generate_link('', '', 'divider'),
-			self::generate_link(__('mhadmin', 'Новости'), '', 'dropdown', [
-				self::generate_link($lang['add_news'], '?mod=addnews&action=addnews'),
-				self::generate_link($lang['edit_news'], '?mod=editnews&action=list'),
-			]),
-			self::generate_link('', '', 'divider')
-		];
-
-		foreach ($options as $o => $a) {
-			$opt_children = [];
-			foreach ($a as $c) $opt_children[] = self::generate_link($c['name'], $c['url']);
-			$admin_links[] = self::generate_link($dle_links_header[$o], '', 'dropdown', $opt_children);
-		}
-
-		$this->setLink(self::generate_link(__('mhadmin', 'Страницы DLE'), '', 'dropdown', $admin_links));
-
-	}
-
-	/**
-	 * Возвращает массив переменных, используемых в модуле.
-	 *
-	 * Метод возвращает список переменных, включающий пути к ресурсам,
-	 * массивы с подключаемыми CSS и JavaScript файлами, а также дополнительную
-	 * информацию, необходимую для работы модуля, такую как настройки, ссылки и
-	 * меню.
-	 *
-	 * @return array Ассоциативный массив параметров модуля.
-	 * @see Admin::setVars() Метод для установки содержимого переменной $variables.
-	 * @see Admin::setLinks() Метод для добавления ссылок в переменные.
-	 */
-	public function getVariables(): array {
-		return $this->variables;
+	public function getVariables(?string $name = null): array {
+		return $name ? $this->variables[$name] : $this->variables;
 	}
 
 	/**
@@ -504,6 +486,33 @@ Deny from all'
 
 		return $out;
 	}
+
+	/**
+	 * Возвращает текущий массив данных хлебных крошек.
+	 *
+	 * @return array Массив хлебных крошек.
+	 * @see Admin::$breadcrumb
+	 */
+	public function getBreadcrumb(): array {
+		return $this->breadcrumb;
+	}
+
+	/**
+	 * Добавляет объект хлебной крошки в массив крошек
+	 *
+	 * @param BreadCrumb $crumb      Объект хлебной крошки для установки.
+	 *
+	 * @return void
+	 *
+	 * @see BreadCrumb
+	 * @global array     $breadcrumb Список всех хлебных крошек.
+	 */
+	public function setBreadcrumb(BreadCrumb $crumb): void {
+		$this->breadcrumb[] = $crumb;
+
+	}
+
+
 
 	/**
 	 * TODO: доработать

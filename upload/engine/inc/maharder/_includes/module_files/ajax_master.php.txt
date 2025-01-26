@@ -45,8 +45,7 @@
 				&& !is_dir(
 					$concurrentDirectory
 				)) {
-				LogGenerator::generateLog('%latin%', 'save_setting', __('mhadmin', 'Папка ":path" не была создана',
-																				[':path' =>$concurrentDirectory]));
+				LogGenerator::generateLog('%latin%', 'save_setting', __('Папка ":path" не была создана', [':path' =>$concurrentDirectory]));
 			}
 			$file = $concurrentDirectory.'/'.$_POST['module'].'.json';
 

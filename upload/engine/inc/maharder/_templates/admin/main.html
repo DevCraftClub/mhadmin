@@ -86,15 +86,6 @@
 			}) }}
 
 			{{ include('templateIncludes/segRow.html', {
-				id: 'icons',
-				name: 'Заменять иконки?'|trans,
-				descr: 'При включении, в админпанеле DLE будут заменены старые иконки на обновлённые'|trans,
-				type: 'checkbox',
-				variable: settings
-			})
-			}}
-
-			{{ include('templateIncludes/segRow.html', {
 				id: 'cache_icon',
 				name: 'Добавить кнопку с очищением кеша?'|trans,
 				descr: 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша
@@ -223,7 +214,7 @@
     }
 
     function save_asset(file, data) {
-        startLoading(__(`Загружаем файл: <b>${file}</b>!<br>Результат находится в консоли браузера!`));
+        startLoading(__('Загружаем файл: <b>:file:</b>!<br>Результат находится в консоли браузера!', {file: file}));
         $.ajax({
             url: 'engine/ajax/controller.php?mod=maharder',
             data: {
@@ -391,7 +382,7 @@
                     hideLoading('');
                     $('body').toast({
                         class: 'success',
-                        title: t__('Всё отлично!'),
+                        title: __('Всё отлично!'),
 						message:  __('<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>'),
                         showProgress: 'bottom'
                     });

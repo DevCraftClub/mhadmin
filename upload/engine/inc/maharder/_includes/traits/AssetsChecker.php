@@ -51,13 +51,14 @@ trait AssetsChecker {
 
 	/**
 	 * Проверяет целостность файлов между локальным хранилищем и сервером разработчика.
-	 *
 	 * Если файлы отсутствуют или имеют различия в хеш-суммах, информация об этих расхождениях
 	 * возвращается в виде массива. При необходимости может быть выполнена перезапись
 	 * локального файла с данными о ресурсах.
 	 *
-	 * @param bool $rewrite Если true, выполняется перезапись локального файла списка ресурсов
-	 *                      с актуальными данными из указанной директории.
+	 * @global string $asset_file Путь к локальному JSON-файлу с данными о ресурсах.
+	 *
+	 * @param bool    $rewrite    Если true, выполняется перезапись локального файла списка ресурсов
+	 *                            с актуальными данными из указанной директории.
 	 *
 	 * @return array Ассоциативный массив с информацией о проверке файлов:
 	 *               - `on_server` (int): Количество файлов, находящихся на сервере разработчика.
@@ -66,19 +67,18 @@ trait AssetsChecker {
 	 *               - `update_count` (int): Количество файлов, требующих обновления.
 	 *               - `missing` (array): Массив с данными о недостающих файлах.
 	 *               - `update` (array): Массив с данными о файлах, требующих обновления.
-	 *
+	 * @throws \JsonException
 	 * @see DataManager::dirToArray() Метод для получения структуры указанной директории.
 	 * @see self::prepare_assets() Метод для подготовки массива данных о локальных файлах.
-	 *
-	 * @global string $asset_file Путь к локальному JSON-файлу с данными о ресурсах.
 	 */
 	public function checkAssets(bool $rewrite = false) : array {
 		if (!is_file($this->asset_file) || $rewrite) {
 			$this->prepare_assets(DataManager::dirToArray($this->assets_dir), $this->assets_dir);
 			file_put_contents($this->asset_file, json_encode($this->assets_arr, JSON_UNESCAPED_UNICODE));
 		}
-		$assets = json_decode(file_get_contents('https://assets.devcraft.club/assets.json'), true);
-		$files  = json_decode(file_get_contents($this->asset_file), true);
+		$assets =
+			json_decode(file_get_contents('https://assets.devcraft.club/assets.json'), true, 512, JSON_THROW_ON_ERROR);
+		$files  = json_decode(file_get_contents($this->asset_file), true, 512, JSON_THROW_ON_ERROR);
 
 		$info = [
 			'on_server'     => count($assets),
@@ -117,7 +117,7 @@ trait AssetsChecker {
 	 * 5. Запись актуализированных данных в локальный JSON-файл.
 	 *
 	 * @return void
-	 * @throws JsonException Исключение выбрасывается в случае ошибки при работе с JSON.
+	 * @throws JsonException|\Throwable Исключение выбрасывается в случае ошибки при работе с JSON.
 	 *
 	 * @see self::save_asset() Для сохранения конкретного ресурса.
 	 * @see self::prepare_assets() Для создания массива данных локальных файлов.
@@ -129,7 +129,8 @@ trait AssetsChecker {
 	private function parse_assets() : void {
 		$this->prepare_assets(DataManager::dirToArray($this->assets_dir), $this->assets_dir);
 		$files  = $this->assets_arr;
-		$assets = json_decode(file_get_contents('https://assets.devcraft.club/assets.json'), true);
+		$assets =
+			json_decode(file_get_contents('https://assets.devcraft.club/assets.json'), true, 512, JSON_THROW_ON_ERROR);
 
 		foreach ($assets as $asset => $data) {
 			if (isset($files[$asset])) {
@@ -252,7 +253,7 @@ trait AssetsChecker {
 			LogGenerator::generateLog(
 				'maharder/admin',
 				'save_asset',
-				__('mhadmin', "Файл '{$file}' не был сохранён!")
+				__("Файл '{file}' не был сохранён!", ['{file}' => $file])
 			);
 			return false;
 		}

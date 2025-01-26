@@ -17,7 +17,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 			'success' => [],
 			'failed'  => [],
 			'data'    => $mod_data,
-			'message' => __('mhadmin', 'Нужные данные не были заполнены'),
+			'message' => __('Нужные данные не были заполнены'),
 		],
 		JSON_UNESCAPED_UNICODE
 	);
@@ -88,17 +88,17 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 			LogGenerator::generateLog(
 				'maharder',
 				'new_module',
-				__('mhadmin', 'Путь "%s" не был создан', ["%s" => $dir])
+				__('Путь "%s" не был создан', ["%s" => $dir])
 			);
 			$fails['dirs'][] = [
 				'dir'     => $dir,
-				'message' => __('mhadmin', 'Ошибка во время создания папки'),
+				'message' => __('Ошибка во время создания папки'),
 			];
 			continue;
 		} else if (is_dir($dir)) {
 			$fails['dirs'][] = [
 				'dir'     => $dir,
-				'message' => __('mhadmin', 'Такая папка уже существует'),
+				'message' => __('Такая папка уже существует'),
 			];
 			continue;
 		}
@@ -109,7 +109,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 		if (file_exists($file[0]) && ((int)$mod_data['override'] !== 1 || $mod_data['override'] !== 'on')) {
 			$fails['files'][] = [
 				'file'    => $file[0],
-				'message' => __('mhadmin', 'Данный файл уже существует.'),
+				'message' => __('Данный файл уже существует.'),
 			];
 			continue;
 		}
@@ -119,6 +119,8 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 			$file_data = file_get_contents($file[1]);
 			$file_data = preg_replace('/%latin%/', $mod_data['translit'], $file_data);
 			$file_data = preg_replace('/%name%/', $mod_data['name'], $file_data);
+			$file_data = preg_replace('/%crowdin_name%/', $mod_data['crowdin_name'] ?? $mod_data['translit'], $file_data);
+			$file_data = preg_replace('/%crowdin_state_id%/', $mod_data['crowdin_state_id'] , $file_data);
 			$file_data = preg_replace('/%version%/', $mod_data['version'], $file_data);
 			$file_data = preg_replace('/%description%/', $mod_data['description'], $file_data);
 			$file_data = preg_replace('/%icon%/', $mod_data['icon'], $file_data);
@@ -155,7 +157,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 		if(file_exists($localePath) && ((int)$mod_data['override'] !== 1 || $mod_data['override'] !== 'on')) {
 			$fails['files'][] = [
 				'file'    => $localePath,
-				'message' => __('mhadmin', 'Данный файл уже существует.'),
+				'message' => __('Данный файл уже существует.'),
 			];
 			continue;
 		}
@@ -248,7 +250,7 @@ SQL;
 				];
 			} else {
 				$fails['plugin'][] = [
-					'message' => __('mhadmin', 'Плагин уже существует'),
+					'message' => __('Плагин уже существует'),
 				];
 			}
 		} catch (Exception $e) {

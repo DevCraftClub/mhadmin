@@ -1,3 +1,7 @@
+{% if type == 'hidden' %}
+	<input type="hidden" id="{{name}}" name="{{name}}" value="{{value}}">
+{% else %}
+
 <div class="field">
 	{% if type == 'file' %}
 		<input type="{{type}}" id="{{name}}_file" name="{{name}}_file{% if extra.multiple !='' %}[]{% endif %}" placeholder="{{label}}"
@@ -57,3 +61,4 @@
 	{% endif %}
 
 </div>
+{% endif %}

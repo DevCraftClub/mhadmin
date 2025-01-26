@@ -21,7 +21,7 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 $modInfo = [
 	'module_name'        => 'MaHarder Assets',
 	'module_version'     => '173.3.0',
-	'module_description' => __('mhadmin', 'Административная панель для моих разработок'),
+	'module_description' => __('Административная панель для моих разработок'),
 	'module_code'        => 'maharder',
 	'module_id'          => 4,
 	'module_icon'        => 'fa-duotone fa-solid fa-robot',
@@ -29,11 +29,15 @@ $modInfo = [
 	'docs_link'          => 'https://readme.devcraft.club/latest/dev/mhadmin/install/',
 	'dle_config'         => $config,
 	'crowdin_name'       => 'mhаdmin',
-	'get'				 => filter_input_array(INPUT_GET)
+	'crowdin_stat_id'    => '16830581-755131',
 ];
 
 // Подключаем классы, функции и основные переменные
 include_once DLEPlugins::Check(__DIR__.'/maharder/admin/index.php');
+
+
+$mh->setLink(new AdminLink('new_module', __('Генератор модулей'), '?mod='.$modInfo['module_code'].'&sites=new_module'), 'new_module');
+$mh->setLink(new AdminLink('logs', __('Вывод логов'), '?mod='.$modInfo['module_code'].'&sites=logs'), 'logs');
 
 // Подключаем переменные модуля и его функционал
 // Используем переменную sites для навигации в модуле
@@ -56,33 +60,18 @@ switch ($_GET['sites']) {
 		break;
 }
 
-$links['new_module'] =	[
-		'name' => __('mhadmin', 'Генератор модулей'),
-		'href' => THIS_SELF.'?mod='.$modInfo['module_code'].'&sites=new_module',
-		'type' => 'link',
-		'children' => [],
-	];
-
-$links['logs'] =	[
-		'name' => __('mhadmin', 'Вывод логов'),
-		'href' => THIS_SELF.'?mod='.$modInfo['module_code'].'&sites=logs',
-		'type' => 'link',
-		'children' => [],
-	];
-
 $xtraVariable = [
-	'links'       => $links,
-	'breadcrumbs' => $breadcrumbs,
+	'breadcrumbs' => $mh->getBreadcrumb(),
 	'settings'    => DataManager::getConfig($modInfo['module_code']),
+	'links'       => $mh->getVariables('menu')
 ];
 
 $mh->setVars($modInfo);
-$mh->setLinks($links);
 $mh->setVars($xtraVariable);
 $mh->setVars($modVars);
 
 // Устанавливаем язык панели
-$mh_template->addExtension(new TranslationExtension(MhTranslation::getTranslator('mhadmin')));
+$mh_template->addExtension(new TranslationExtension(MhTranslation::getTranslator()));
 
 // Загружаем шаблон
 $template = $mh_template->load($htmlTemplate);

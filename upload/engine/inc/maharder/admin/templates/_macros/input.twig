@@ -41,14 +41,12 @@
 
 {% endmacro %}
 
-{% macro hidden(id, name, descr, opts) %}
+{% macro hidden(id, val) %}
 
-	{{ include('templateIncludes/segRow.html', {
+	{{ include('templateIncludes/addInput.html', {
 		type: 'hidden',
-		id: id,
-		name: name,
-		descr: descr,
-		variable: opts
+		name: id,
+		value: val
 	})
 	}}
 

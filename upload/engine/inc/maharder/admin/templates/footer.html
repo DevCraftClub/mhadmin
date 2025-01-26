@@ -5,7 +5,7 @@
 				<h4 class="ui inverted header">{% trans %}Модуль{% endtrans %}</h4>
 				<div class="ui inverted link list">
 					{% for l in links %}
-						{% if( l.getLink != '#' or l.getLink != '') and l.getType == 'link' %}<a href="{{l.getLink}}" class="item">{{l.getName|trans}}</a>{% endif %}
+						{% if( l.getLink != '#' or l.getLink != '') and l.getType == 'link' %}<a href="{{l.getLink}}" class="item">{{l.getName}}</a>{% endif %}
 					{% endfor %}
 					{% block modullinks %} {% endblock %}
 				</div>
@@ -31,7 +31,7 @@
 							{% for c in author.getContacts %}
 							<div class="item">
 								<div class="content">
-									<a href="{{c.link}}" target="_blank" title="{{c.name|trans}}">{{c.name|trans}}</a>
+									<a href="{{c.link}}" target="_blank" title="{{c.name}}">{{c.name}}</a>
 								</div>
 							</div>
 							{% endfor %}
@@ -44,9 +44,9 @@
 							<div class="item">
 								<div class="content">
 									{% if d.link != '' %}
-										<a href="{{d.link}}" rel='' target="_blank"	title="{{d.name|trans}}">
+										<a href="{{d.link}}" rel='' target="_blank"	title="{{d.name}}">
 									{% else %}
-											<span title="{{d.name|trans}}">
+											<span title="{{d.name}}">
 									{% endif %}
 										{{d.value}}
 									{% if d.link != '' %}</a>{% else %}</span>{% endif %}

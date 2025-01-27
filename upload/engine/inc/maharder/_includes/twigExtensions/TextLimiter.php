@@ -1,11 +1,16 @@
 <?php
 
-//namespace MaHarder\classes;
-
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+/**
+ * Twig-расширение, предоставляющее инструмент для ограничения длины текста.
+ *
+ * Класс расширяет AbstractExtension и включает фильтр для обрезки текста
+ * до заданной длины. Полезно для шаблонов, где требуется ограничение
+ * длины текста, например, для кратких описаний или превью.
+ */
 class TextLimiter extends AbstractExtension  {
 
 	public function limit( ?string $text, int $limit = 100 ) : string {

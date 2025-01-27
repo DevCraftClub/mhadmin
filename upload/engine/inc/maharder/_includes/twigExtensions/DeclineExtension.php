@@ -3,6 +3,15 @@
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * Склонение слова в зависимости от числа.
+ *
+ * Выбирает правильную форму слова (например, яблоко, яблока, яблок)
+ * в зависимости от числового значения.
+ * В основе логики склонения лежат правила русского языка.
+ *
+ * @link https://gist.github.com/realmyst/1262561?permalink_comment_id=2032406#gistcomment-2032406
+ */
 class DeclineExtension extends AbstractExtension {
 
 

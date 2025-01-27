@@ -237,6 +237,15 @@ SQL;
 
 				$db->query($sql_insert);
 				$plugin_id = $db->insert_id();
+
+				$sql_plugin_update = <<<SQL
+INSERT INTO {$prefix}_plugins_files (plugin_id, file, action, searchcode, replacecode, active, searchcount, replacecount, filedisable, filedleversion, fileversioncompare) VALUES ("{$plugin_id}", "engine/inc/maharder/_includes/extras/paths.php", "before", "// Custom models //", "  // {$mod_data['name']}
+  MH_ROOT . '/_modules/{$mod_data['translit']}/models',
+  // {$mod_data['name']}", 1, 0, 0, 1, "", "=="), ("{$plugin_id}", "engine/inc/maharder/_includes/extras/paths.php", "before", "// Custom paths //", "  // {$mod_data['name']}
+  //  MH_ROOT . '/_modules/{$mod_data['translit']}/repositories',
+  //  // {$mod_data['name']}", 1, 0, 0, 1, "", "==");
+SQL;
+
 				$db->query(
 					"INSERT INTO " . USERPREFIX . "_admin_logs (name, date, ip, action, extras) values ('" . $db->safesql(
 						$member_id['name']

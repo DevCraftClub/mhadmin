@@ -18,12 +18,12 @@
 if (!function_exists('translate')) {
 	/**
 	 * Переводит заданную фразу с использованием модуля перевода.
-	 *
 	 * Если язык и путь для локалей не установлены в конфигурации, возвращает исходную фразу.
 	 * В зависимости от переданных параметров, поддерживает как обрабатываемый,
 	 * так и базовый перевод с использованием модулей `MhTranslation`.
 	 * При возникновении ошибки логирует её и возвращает исходную фразу.
 	 *
+	 * @version 173.3.0
 	 * @since   173.3.0
 	 *
 	 * @param string $phrase Фраза для перевода.
@@ -31,18 +31,14 @@ if (!function_exists('translate')) {
 	 * @param int    $count  Количество для выбора формы множественного числа (опционально).
 	 *
 	 * @return string Переведённая строка.
-	 *
 	 * @throws Exception|Throwable Если возникает ошибка при работе с переводом.
-	 *
-	 * @version 173.3.0
-	 *
-	 * @see DataManager::getConfig() Используется для получения конфигурации.
-	 * @see MhTranslation::setTranslator() Устанавливает текущий модуль для перевода.
-	 * @see MhTranslation::getTranslation() Получает простой перевод фразы.
-	 * @see MhTranslation::getTranslationWithParameters() Получает перевод с параметрами.
-	 * @see MhTranslation::getTranslationPlural() Получает множественную форму перевода.
-	 * @see MhTranslation::getTranslationPluralWithParameters() Получает множественный перевод с параметрами.
-	 * @see LogGenerator::generateLog() Логирует ошибки при работе функции.
+	 * @see     DataManager::getConfig() Используется для получения конфигурации.
+	 * @see     MhTranslation::setTranslator() Устанавливает текущий модуль для перевода.
+	 * @see     MhTranslation::getTranslation() Получает простой перевод фразы.
+	 * @see     MhTranslation::getTranslationWithParameters() Получает перевод с параметрами.
+	 * @see     MhTranslation::getTranslationPlural() Получает множественную форму перевода.
+	 * @see     MhTranslation::getTranslationPluralWithParameters() Получает множественный перевод с параметрами.
+	 * @see     LogGenerator::generateLog() Логирует ошибки при работе функции.
 	 */
 	function translate(string $phrase, array $params = [], int $count = 0): string {
 		$mh = DataManager::getConfig('maharder');
@@ -82,18 +78,17 @@ if (!function_exists('translate')) {
 if (!function_exists('__')) {
 	/**
 	 * Синоним функции перевода translate для упрощённого использования.
-	 *
 	 * Служит для вызова функции перевода текстовых строк с возможностью передачи параметров и обработки множественного числа.
 	 *
 	 * @version 173.3.0
-	 * @param string $phrase Переводимая строка.
+	 * @since   173.3.0
+	 *
 	 * @param array  $params Ассоциативный массив параметров для подстановки в строку.
 	 * @param int    $count  Количество для обработки множественного числа (опционально).
+	 * @param string $phrase Переводимая строка.
 	 *
 	 * @return string Переведённая строка.
-	 *
 	 * @throws Throwable
-	 * @since   173.3.0
 	 * @see     translate()
 	 * @see     DataManager::getConfig()
 	 */
@@ -105,7 +100,6 @@ if (!function_exists('__')) {
 if (!function_exists('dirToArray')) {
 	/**
 	 * Преобразует заданный путь к директории в массив, содержащий дерево папок и файлов.
-	 *
 	 * Эта функция позволяет получить структуру файловой системы в виде ассоциативного массива.
 	 * Папки представлены в виде ключей, а файлы - в виде элементов массива.
 	 * Также поддерживает возможность исключения определенных файлов и расширений.
@@ -114,13 +108,12 @@ if (!function_exists('dirToArray')) {
 	 * @param array  $ignoredExtensions Список дополнительных файлов/расширений для исключения из результата (например: ['.log', '.tmp']).
 	 *
 	 * @return array Массив, представляющий собой дерево файловой структуры. Каждая директория содержит вложенные файлы/папки.
-	 *
 	 * @throws RuntimeException Если `scandir` не удается получить содержимое директории.
 	 */
 	function dirToArray(string $dir, array $ignoredExtensions = []): array {
 		// Общий список игнорируемых файлов
 		$defaultIgnored = ['.', '..', '.htaccess'];
-		$ignoredItems = array_merge($defaultIgnored, $ignoredExtensions);
+		$ignoredItems   = array_merge($defaultIgnored, $ignoredExtensions);
 
 		// Приведение путей к стандартному формату
 		$resolvedDir = str_replace(ENGINE_DIR, ROOT . DIRECTORY_SEPARATOR . 'engine', $dir);
@@ -161,7 +154,6 @@ if (!function_exists('dirToArray')) {
 if (!function_exists('br2nl')) {
 	/**
 	 * Преобразует теги `<br>` в заданный разделитель строк.
-	 *
 	 * Данная функция заменяет все теги `<br>` (включая различные его варианты, такие как `<br>`, `<br/>` и `<br />`)
 	 * на указанный разделитель строк. Если переданный разделитель не входит в список допустимых
 	 * значений, будет использован стандартный разделитель `PHP_EOL`.
@@ -172,7 +164,6 @@ if (!function_exists('br2nl')) {
 	 *                          Если переданный разделитель не соответствует этим значениям, будет выбран `PHP_EOL`.
 	 *
 	 * @return string Строка, в которой все `<br>` заменены на указанный разделитель.
-	 *
 	 * @throws \InvalidArgumentException Исключение выбрасывается, если входные данные недействительны или пустые.
 	 */
 	function br2nl(string $string, string $separator = PHP_EOL): string {

@@ -4,6 +4,14 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+/**
+ * Расширение Twig для работы с форматированием даты и времени.
+ *
+ * Основной функционал включает преобразование объекта DateTimeImmutable
+ * или строки в строки заданного формата для использования в фильтрах и функциях Twig.
+ *
+ * @extends AbstractExtension
+ */
 class DateTimeFormatter extends AbstractExtension {
 
 	/**

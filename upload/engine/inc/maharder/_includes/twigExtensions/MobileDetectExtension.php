@@ -12,9 +12,13 @@ use Twig\TwigFunction;
 require_once DLEPlugins::Check(ENGINE_DIR . '/classes/mobiledetect.class.php');
 
 /**
- * Inspired by bes89
+ * Расширение Twig, основанное на MobileDetect.
  *
- * @link https://github.com/bes89/mobiledetect-twig-extension
+ * Это расширение предоставляет функции, которые позволяют определять устройства,
+ * такие как мобильные телефоны, планшеты, операционные системы и браузеры, через Twig.
+ *
+ * @link https://github.com/bes89/mobiledetect-twig-extension Инспирация для разработки.
+ * @link https://github.com/serbanghita/Mobile-Detect Библиотека Mobile-Detect.
  */
 class MobileDetectExtension extends AbstractExtension {
 

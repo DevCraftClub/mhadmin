@@ -4,12 +4,18 @@ use Cycle\ORM\RepositoryInterface;
 use Cycle\Database\Query\SelectQuery;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Класс для создания и обработки фильтров данных, а также для работы с сортировкой и стандартными фильтрами для шаблонов.
+ */
 class TwigFilter {
 	private RepositoryInterface $repository;
 
 	/**
-	 * @param RepositoryInterface $repository
+	 * Конструктор класса.
+	 *
+	 * @param RepositoryInterface $repository Репозиторий, используемый для получения данных.
 	 */
+
 	public function __construct(RepositoryInterface $repository) { $this->setRepository($repository); }
 
 	/**
@@ -62,10 +68,10 @@ class TwigFilter {
 	 * @param string $select Имя SQL-колонки, используемой в запросе для группировки данных.
 	 *
 	 * @return array Ассоциативный массив, где ключи — значения фильтров, а значения — отображаемые имена фильтров.
-	 *
-	 * @see __ Используется для локализации первой строки массива фильтров.
+	 * @throws \Throwable
 	 * @see translate Вызванный косвенно через функцию __.
 	 * @see getRepository Используется для получения данных из базы через методы репозитория.
+	 * @see __ Используется для локализации первой строки массива фильтров.
 	 */
 	public function createFilterChoices($name, $select): array {
 		$filter = [

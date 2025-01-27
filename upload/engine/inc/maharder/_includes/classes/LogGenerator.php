@@ -19,6 +19,12 @@ if (!class_exists('MhLog') || !class_exists('DataLoader')) {
 	require_once (DLEPlugins::Check(MH_INCLUDES . '/extras/paths.php'));
 }
 
+/**
+ * Абстрактный класс для управления процессом логирования. Класс включает в себя базовый функционал для записи логов
+ * в файлы, базу данных и отправки уведомлений в Telegram.
+ *
+ * @since 170.2.10
+ */
 abstract class LogGenerator {
 
 	/**

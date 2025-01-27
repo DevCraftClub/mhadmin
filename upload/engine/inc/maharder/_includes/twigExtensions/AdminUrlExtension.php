@@ -6,6 +6,18 @@ use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 
+/**
+ * Класс предоставляет функции и глобальные переменные для использования в Twig-шаблонах.
+ *
+ * Реализует интерфейс `GlobalsInterface` для предоставления глобальных переменных и
+ * наследует `AbstractExtension` для добавления пользовательских функций.
+ *
+ * Основная функциональность:
+ * - Генерация URL для статических ресурсов и модулей.
+ * - Работа с параметрами запросов (`GET` и `POST`).
+ * - Обработка и преобразование URL.
+ * - Предоставление глобальных переменных для настройки окружения.
+ */
 class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 
 	protected static function getServerData() : array {

@@ -165,6 +165,7 @@ $mh_loader_paths = [
 	MH_INCLUDES . '/database',
 	MH_INCLUDES . '/responses',
 	MH_INCLUDES . '/traits',
+	MH_INCLUDES . '/types',
 	MH_INCLUDES . '/twigExtensions',
 	MH_MODULES . '/admin/repositories',
 	// Custom paths //
@@ -194,8 +195,5 @@ if (!file_exists(MH_INCLUDES . '/vendor/autoload.php')) {
 include_once MH_INCLUDES . '/vendor/autoload.php';
 
 $MHDB = new MhDB();
-
-
-
 
 ComposerAction::destroy();

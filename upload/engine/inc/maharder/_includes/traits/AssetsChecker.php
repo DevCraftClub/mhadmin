@@ -253,7 +253,7 @@ trait AssetsChecker {
 			LogGenerator::generateLog(
 				'maharder/admin',
 				'save_asset',
-				__("Файл ':file' не был сохранён!", [':file' => $file]),
+				__('mhadmin', "Файл '{$file}' не был сохранён!")
 			);
 			return false;
 		}

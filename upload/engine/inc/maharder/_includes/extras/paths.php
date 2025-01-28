@@ -148,6 +148,12 @@ if (!defined('MH_TEMPLATES')) {
 	 */
 	define("MH_TEMPLATES", MH_ROOT . '/_templates');
 }
+if (!defined('COMPOSER_DIR')) {
+	/**
+	 * Определяет константу COMPOSER_DIR, которая содержит путь до библиотеки копмозера
+	 */
+	define("COMPOSER_DIR", MH_INCLUDES . '/composer');
+}
 
 $mh_models_paths = [
 	MH_MODULES . '/admin/models',
@@ -159,7 +165,6 @@ $mh_loader_paths = [
 	MH_INCLUDES . '/database',
 	MH_INCLUDES . '/responses',
 	MH_INCLUDES . '/traits',
-	MH_INCLUDES . '/types',
 	MH_INCLUDES . '/twigExtensions',
 	MH_MODULES . '/admin/repositories',
 	// Custom paths //
@@ -168,9 +173,28 @@ $mh_loader_paths = array_filter(array_merge($mh_loader_paths, $mh_models_paths))
 
 include_once DLEPlugins::Check(MH_INCLUDES . '/extras/functions.php');
 include_once DLEPlugins::Check(MH_INCLUDES . '/extras/mhLoader.php');
+
+if (!file_exists(MH_INCLUDES . '/vendor/autoload.php')) {
+	putenv('COMPOSER_HOME=' . COMPOSER_DIR . '/vendor/bin/composer');
+	DataManager::createDir(service: 'ComposerAction', permission: 0777, _path: COMPOSER_DIR);
+	$composer = COMPOSER_DIR . '/composer.phar';
+	if (!file_exists($composer)) {
+		copy('https://getcomposer.org/download/latest-stable/composer.phar', $composer);
+	}
+	try {
+		$phar = new Phar($composer);
+		$phar->extractTo(COMPOSER_DIR);
+	} catch (Exception $e) {}
+	unlink($composer);
+
+
+	ComposerAction::install();
+}
+
 include_once MH_INCLUDES . '/vendor/autoload.php';
 
 $MHDB = new MhDB();
+
 
 
 

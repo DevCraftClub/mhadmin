@@ -726,189 +726,189 @@
         <source>Плагин уже существует</source>
         <target state="final">Plugin already exists</target>
       </trans-unit>
-      <trans-unit id="182">
+      <trans-unit id="182" approved="yes">
         <source>Путь &quot;%s&quot; не был создан</source>
-        <target state="translated">The path "%s" was not created</target>
+        <target state="final">The path "%s" was not created</target>
       </trans-unit>
-      <trans-unit id="184">
+      <trans-unit id="184" approved="yes">
         <source>PayPal</source>
-        <target state="translated">PayPal</target>
+        <target state="final">PayPal</target>
       </trans-unit>
-      <trans-unit id="185">
+      <trans-unit id="185" approved="yes">
         <source>Ko-Fi</source>
-        <target state="translated">Ko-Fi</target>
+        <target state="final">Ko-Fi</target>
       </trans-unit>
-      <trans-unit id="186">
+      <trans-unit id="186" approved="yes">
         <source>YooMoney</source>
-        <target state="translated">YooMoney</target>
+        <target state="final">YooMoney</target>
       </trans-unit>
-      <trans-unit id="187">
+      <trans-unit id="187" approved="yes">
         <source>DonationAlerts</source>
-        <target state="translated">DonationAlerts</target>
+        <target state="final">DonationAlerts</target>
       </trans-unit>
-      <trans-unit id="188">
+      <trans-unit id="188" approved="yes">
         <source>Файл '{file}' не был сохранён!</source>
-        <target state="translated">The file '{file}' was not saved!</target>
+        <target state="final">The file '{file}' was not saved!</target>
       </trans-unit>
-      <trans-unit id="189">
+      <trans-unit id="189" approved="yes">
         <source>ID ресурса не было указано</source>
-        <target state="translated">Resource ID was not specified</target>
+        <target state="final">Resource ID was not specified</target>
       </trans-unit>
-      <trans-unit id="190">
+      <trans-unit id="190" approved="yes">
         <source>[NEW] Добавлено моделирование таблиц в базе данных при помощи &lt;a href=&quot;https://cycle-orm.dev&quot; target=&quot;_blank&quot;&gt;Cycle ORM&lt;/a&gt;. Это поможет в дальнейшем создавать модули с более сложной структурой и работу с данными.</source>
-        <target state="translated">[NEW] Database table modeling has been added using &lt;a href="https://cycle-orm.dev" target="_blank"&gt;Cycle ORM&lt;/a&gt;. This will help further in creating modules with a more complex structure and working with data.</target>
+        <target state="final">[NEW] Database table modeling has been added using &lt;a href="https://cycle-orm.dev" target="_blank"&gt;Cycle ORM&lt;/a&gt;. This will help further in creating modules with a more complex structure and working with data.</target>
       </trans-unit>
-      <trans-unit id="191">
+      <trans-unit id="191" approved="yes">
         <source>[NEW] Все изменения в таблицах будут храниться в отдельной таблице &quot;migrations&quot; и в папке &quot;_migrations&quot;. Это позволит легко сделать откат изменений.</source>
-        <target state="translated">[NEW] All changes to the tables will be stored in a separate table "migrations" and in the "_migrations" folder. This will make it easy to roll back changes.</target>
+        <target state="final">[NEW] All changes to the tables will be stored in a separate table "migrations" and in the "_migrations" folder. This will make it easy to roll back changes.</target>
       </trans-unit>
-      <trans-unit id="192">
+      <trans-unit id="192" approved="yes">
         <source>[NEW] Добавлена возможность сортировать и фильтровать данные таблиц на страницах административной панели (где такие есть, пример: Логи).</source>
-        <target state="translated">[NEW] The ability to sort and filter table data has been added on the administrative panel pages (where available, e.g., Logs).</target>
+        <target state="final">[NEW] The ability to sort and filter table data has been added on the administrative panel pages (where available, e.g., Logs).</target>
       </trans-unit>
-      <trans-unit id="193">
+      <trans-unit id="193" approved="yes">
         <source>[NEW] Добавлена возможность проверять на обновление плагина на сайте &lt;a href=&quot;https://devcraft.club&quot; target=&quot;_blank&quot;&gt;devcraft.club&lt;/a&gt;. Используется гостевой ключ.</source>
-        <target state="translated">[NEW] The ability to check for plugin updates on the website &lt;a href="https://devcraft.club" target="_blank"&gt;devcraft.club&lt;/a&gt; has been added. A guest key is used.</target>
+        <target state="final">[NEW] The ability to check for plugin updates on the website &lt;a href="https://devcraft.club" target="_blank"&gt;devcraft.club&lt;/a&gt; has been added. A guest key is used.</target>
       </trans-unit>
-      <trans-unit id="194">
+      <trans-unit id="194" approved="yes">
         <source>[UPDATE][BETA] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
-        <target state="translated">[UPDATE] The installer has been simplified. Dependencies are now loaded and installed the first time you open [any] module. May take a few minutes. The installer now weighs very little.</target>
+        <target state="final">[UPDATE] The installer has been simplified. Dependencies are now loaded and installed the first time you open [any] module. May take a few minutes. The installer now weighs very little.</target>
       </trans-unit>
-      <trans-unit id="195">
+      <trans-unit id="195" approved="yes">
         <source>[UPDATE] Изменена структура файлов админпанели. Теперь все файлы модуля находятся в папке &quot;_modules&quot;, a шаблоны в папке &quot;_templates&quot;.</source>
-        <target state="translated">[UPDATE] The admin panel file structure has been changed. Now all module files are located in the "_modules" folder, and templates in the "_templates" folder.</target>
+        <target state="final">[UPDATE] The admin panel file structure has been changed. Now all module files are located in the "_modules" folder, and templates in the "_templates" folder.</target>
       </trans-unit>
-      <trans-unit id="196">
+      <trans-unit id="196" approved="yes">
         <source>[DELETE] Удалены устаревшие и ненужные методы логирования.</source>
-        <target state="translated">[DELETE] Deprecated and unnecessary logging methods have been removed.</target>
+        <target state="final">[DELETE] Deprecated and unnecessary logging methods have been removed.</target>
       </trans-unit>
-      <trans-unit id="197">
+      <trans-unit id="197" approved="yes">
         <source>[DELETE] Удалена замена иконок в админпанели DLE.</source>
-        <target state="translated">[DELETE] Icon replacement in the DLE admin panel has been removed.</target>
+        <target state="final">[DELETE] Icon replacement in the DLE admin panel has been removed.</target>
       </trans-unit>
-      <trans-unit id="198">
+      <trans-unit id="198" approved="yes">
         <source>Журнал изменений</source>
-        <target state="translated">Changelog</target>
+        <target state="final">Changelog</target>
       </trans-unit>
-      <trans-unit id="218">
+      <trans-unit id="218" approved="yes">
         <source>Название модуля</source>
-        <target state="translated">Module Name</target>
+        <target state="final">Module Name</target>
       </trans-unit>
-      <trans-unit id="219">
+      <trans-unit id="219" approved="yes">
         <source>Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.</source>
-        <target state="translated">Enter the module name; the script will create all paths and files and set the necessary access rights automatically.</target>
+        <target state="final">Enter the module name; the script will create all paths and files and set the necessary access rights automatically.</target>
       </trans-unit>
-      <trans-unit id="220">
+      <trans-unit id="220" approved="yes">
         <source>Название модуля на латинице</source>
-        <target state="translated">Module Name in Latin</target>
+        <target state="final">Module Name in Latin</target>
       </trans-unit>
-      <trans-unit id="221">
+      <trans-unit id="221" approved="yes">
         <source>Введите название модуля на латинице, иначе будет использована стандартная функция DLE для преобразования названия.</source>
-        <target state="translated">Enter the module name in Latin; otherwise, the standard DLE function for converting the name will be used.</target>
+        <target state="final">Enter the module name in Latin; otherwise, the standard DLE function for converting the name will be used.</target>
       </trans-unit>
-      <trans-unit id="222">
+      <trans-unit id="222" approved="yes">
         <source>Описание модуля</source>
-        <target state="translated">Module Description</target>
+        <target state="final">Module Description</target>
       </trans-unit>
-      <trans-unit id="223">
+      <trans-unit id="223" approved="yes">
         <source>Введите описание модуля</source>
-        <target state="translated">Enter the module description</target>
+        <target state="final">Enter the module description</target>
       </trans-unit>
-      <trans-unit id="224">
+      <trans-unit id="224" approved="yes">
         <source>Версия модуля</source>
-        <target state="translated">Module Version</target>
+        <target state="final">Module Version</target>
       </trans-unit>
-      <trans-unit id="225">
+      <trans-unit id="225" approved="yes">
         <source>Введите версию модуля</source>
-        <target state="translated">Enter the module version</target>
+        <target state="final">Enter the module version</target>
       </trans-unit>
-      <trans-unit id="226">
+      <trans-unit id="226" approved="yes">
         <source>Иконка</source>
-        <target state="translated">Icon</target>
+        <target state="final">Icon</target>
       </trans-unit>
-      <trans-unit id="227">
+      <trans-unit id="227" approved="yes">
         <source>Класс иконки. К сайту подключены FontAwesome PRO.&lt;br&gt;По умолчанию: &lt;i class=&quot;fad fa-cogs&quot;&gt;&lt;/i&gt; (fad fa-cogs)</source>
-        <target state="translated">Icon class. FontAwesome PRO is connected to the site.&lt;br&gt;Default: &lt;i class="fad fa-cogs"&gt;&lt;/i&gt;(fad fa-cogs)</target>
+        <target state="final">Icon class. FontAwesome PRO is connected to the site.&lt;br&gt;Default: &lt;i class="fad fa-cogs"&gt;&lt;/i&gt;(fad fa-cogs)</target>
       </trans-unit>
-      <trans-unit id="228">
+      <trans-unit id="228" approved="yes">
         <source>Иконка плагина</source>
-        <target state="translated">Plugin Icon</target>
+        <target state="final">Plugin Icon</target>
       </trans-unit>
-      <trans-unit id="229">
+      <trans-unit id="229" approved="yes">
         <source>Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png</source>
-        <target state="translated">Specify the full path to the plugin icon starting from your site's root. For example, engine/skins/images/my_icon.png</target>
+        <target state="final">Specify the full path to the plugin icon starting from your site's root. For example, engine/skins/images/my_icon.png</target>
       </trans-unit>
-      <trans-unit id="230">
+      <trans-unit id="230" approved="yes">
         <source>Название проекта на CrowdIn</source>
-        <target state="translated">Project Name on CrowdIn</target>
+        <target state="final">Project Name on CrowdIn</target>
       </trans-unit>
-      <trans-unit id="231">
+      <trans-unit id="231" approved="yes">
         <source>Укажите URL наимование Вашего проекта на CrowdIn. Пример: Из https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ берём mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;По умолчанию: Название на латинице&lt;/i&gt;</source>
-        <target state="translated">Specify the URL name of your project on CrowdIn. Example: From https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ take mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;Default: Name in Latin letters&lt;/i&gt;</target>
+        <target state="final">Specify the URL name of your project on CrowdIn. Example: From https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ take mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;Default: Name in Latin letters&lt;/i&gt;</target>
       </trans-unit>
-      <trans-unit id="232">
+      <trans-unit id="232" approved="yes">
         <source>ID статистики перевода на CrowdIn</source>
-        <target state="translated">Translation Statistics ID on CrowdIn</target>
+        <target state="final">Translation Statistics ID on CrowdIn</target>
       </trans-unit>
-      <trans-unit id="233">
+      <trans-unit id="233" approved="yes">
         <source>Укажите ID статистики перевода на CrowdIn из дополнения &lt;a href=&quot;https://crowdin.com/store/apps/bds&quot; target=&quot;_blank&quot;&gt;Badges &amp; Status Images&lt;/a&gt;</source>
-        <target state="translated">Specify the Translation Statistics ID on CrowdIn from the &lt;a href="https://crowdin.com/store/apps/bds" target="_blank"&gt;Badges &amp; Status Images&lt;/a&gt; add-on</target>
+        <target state="final">Specify the Translation Statistics ID on CrowdIn from the &lt;a href="https://crowdin.com/store/apps/bds" target="_blank"&gt;Badges &amp; Status Images&lt;/a&gt; add-on</target>
       </trans-unit>
-      <trans-unit id="234">
+      <trans-unit id="234" approved="yes">
         <source>Ссылка на модуль автора</source>
-        <target state="translated">Author's Module Link</target>
+        <target state="final">Author's Module Link</target>
       </trans-unit>
-      <trans-unit id="235">
+      <trans-unit id="235" approved="yes">
         <source>Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)</source>
-        <target state="translated">Enter the module's link on the author's website (technical support, GitHub, etc.)</target>
+        <target state="final">Enter the module's link on the author's website (technical support, GitHub, etc.)</target>
       </trans-unit>
-      <trans-unit id="236">
+      <trans-unit id="236" approved="yes">
         <source>Ссылка на документацию модуля</source>
-        <target state="translated">Module Documentation Link</target>
+        <target state="final">Module Documentation Link</target>
       </trans-unit>
-      <trans-unit id="237">
+      <trans-unit id="237" approved="yes">
         <source>Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)</source>
-        <target state="translated">Enter the module documentation link on the author's website (technical support, GitHub, etc.)</target>
+        <target state="final">Enter the module documentation link on the author's website (technical support, GitHub, etc.)</target>
       </trans-unit>
-      <trans-unit id="238">
+      <trans-unit id="238" approved="yes">
         <source>Добавить в плагины?</source>
-        <target state="translated">Add to plugins?</target>
+        <target state="final">Add to plugins?</target>
       </trans-unit>
-      <trans-unit id="239">
+      <trans-unit id="239" approved="yes">
         <source>Скрипт создаст начальный плагин и добавит его в базу данных</source>
-        <target state="translated">The script will create an initial plugin and add it to the database</target>
+        <target state="final">The script will create an initial plugin and add it to the database</target>
       </trans-unit>
-      <trans-unit id="240">
+      <trans-unit id="240" approved="yes">
         <source>Перезаписать файлы?</source>
-        <target state="translated">Overwrite files?</target>
+        <target state="final">Overwrite files?</target>
       </trans-unit>
-      <trans-unit id="241">
+      <trans-unit id="241" approved="yes">
         <source>Скрипт перезапишет существующие файлы шаблонами.&lt;br&gt;&lt;span class=&quot;ui red text&quot;&gt;На свой страх и риск!&lt;/span&gt;</source>
-        <target state="translated">The script will overwrite existing files with templates.&lt;br&gt;&lt;span class="ui red text"&gt;At your own risk!&lt;/span&gt;</target>
+        <target state="final">The script will overwrite existing files with templates.&lt;br&gt;&lt;span class="ui red text"&gt;At your own risk!&lt;/span&gt;</target>
       </trans-unit>
-      <trans-unit id="242">
+      <trans-unit id="242" approved="yes">
         <source>Создать</source>
-        <target state="translated">Create</target>
+        <target state="final">Create</target>
       </trans-unit>
-      <trans-unit id="243">
+      <trans-unit id="243" approved="yes">
         <source>Файл :file: создан</source>
-        <target state="translated">File :file: created</target>
+        <target state="final">File :file: created</target>
       </trans-unit>
-      <trans-unit id="244">
+      <trans-unit id="244" approved="yes">
         <source>Плагин &quot;&lt;b&gt;:name:&lt;/b&gt;&quot; был создан</source>
-        <target state="translated">The plugin "&lt;b&gt;:name:&lt;/b&gt;" has been created</target>
+        <target state="final">The plugin "&lt;b&gt;:name:&lt;/b&gt;" has been created</target>
       </trans-unit>
-      <trans-unit id="245">
+      <trans-unit id="245" approved="yes">
         <source>Плагин не был создан!</source>
-        <target state="translated">The plugin was not created!</target>
+        <target state="final">The plugin was not created!</target>
       </trans-unit>
-      <trans-unit id="246">
+      <trans-unit id="246" approved="yes">
         <source>Модуль был создан!</source>
-        <target state="translated">The module has been created!</target>
+        <target state="final">The module has been created!</target>
       </trans-unit>
-      <trans-unit id="247">
+      <trans-unit id="247" approved="yes">
         <source>Произошла ошибка!</source>
-        <target state="translated">An error has occurred!</target>
+        <target state="final">An error has occurred!</target>
       </trans-unit>
     </body>
   </file>

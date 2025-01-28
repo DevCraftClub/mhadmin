@@ -365,10 +365,10 @@ Deny from all'
 	public function setVar(
 		#[ExpectedValues(values:
 			[
-			'css_dir', 'js_dir',
-			'css', 'js',
-			'url', 'lic_link',
-			'author', 'menu', 'breadcrumbs'
+				'css_dir', 'js_dir',
+				'css', 'js',
+				'url', 'lic_link',
+				'author', 'menu', 'breadcrumbs'
 			])]
 		string $name, mixed $value): void {
 		$this->variables[$name] = $value;
@@ -522,4 +522,3 @@ Deny from all'
 	public function upload_file() { }
 
 }
-

@@ -7,11 +7,6 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * @link https://github.com/serbanghita/Mobile-Detect/
- */
-require_once DLEPlugins::Check(ENGINE_DIR . '/classes/mobiledetect.class.php');
-
-/**
  * Inspired by bes89
  *
  * @link https://github.com/bes89/mobiledetect-twig-extension

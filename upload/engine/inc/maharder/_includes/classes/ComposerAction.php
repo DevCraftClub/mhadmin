@@ -3,23 +3,9 @@
 use Composer\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 
-const COMPOSER_DIRECTORY = ENGINE_DIR . '/inc/maharder/_includes/composer';
+const COMPOSER_DIRECTORY = COMPOSER_DIR;
+require_once COMPOSER_DIRECTORY . '/vendor/autoload.php';
 
-if (!file_exists(COMPOSER_DIRECTORY . '/vendor/autoload.php')) {
-	DataManager::createDir(service: 'ComposerAction', permission: 0777, _path: COMPOSER_DIRECTORY);
-	$composer_zip = COMPOSER_DIRECTORY . '/composer.zip';
-	copy('https://assets.devcraft.club/composer.zip', $composer_zip);
-	$zip = new ZipArchive();
-	if ($zip->open($composer_zip) === true) {
-		$zip->extractTo(COMPOSER_DIRECTORY);
-		$zip->close();
-	}
-	unlink($composer_zip);
-}
-
-require COMPOSER_DIRECTORY . '/vendor/autoload.php';
-
-putenv('COMPOSER_HOME=' . COMPOSER_DIRECTORY . '/vendor/bin/composer');
 
 /**
  * @link https://stackoverflow.com/a/17244866

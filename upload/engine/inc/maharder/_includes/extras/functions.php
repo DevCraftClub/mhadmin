@@ -24,9 +24,7 @@ if (!function_exists('translate')) {
 	 * так и базовый перевод с использованием модулей `MhTranslation`.
 	 * При возникновении ошибки логирует её и возвращает исходную фразу.
 	 *
-	 * @since   2.0.9
-	 *
-	 * @param string $module Модуль, связанный с переводом.
+	 * @since   173.3.0
 	 * @param string $phrase Фраза для перевода.
 	 * @param array  $params Параметры для подстановки в строку перевода (опционально).
 	 * @param int    $count  Количество для выбора формы множественного числа (опционально).
@@ -35,7 +33,7 @@ if (!function_exists('translate')) {
 	 *
 	 * @throws Exception|Throwable Если возникает ошибка при работе с переводом.
 	 *
-	 * @version 2.0.9
+	 * @version 173.3.0
 	 *
 	 * @see DataManager::getConfig() Используется для получения конфигурации.
 	 * @see MhTranslation::setTranslator() Устанавливает текущий модуль для перевода.
@@ -45,9 +43,9 @@ if (!function_exists('translate')) {
 	 * @see MhTranslation::getTranslationPluralWithParameters() Получает множественный перевод с параметрами.
 	 * @see LogGenerator::generateLog() Логирует ошибки при работе функции.
 	 */
-	function translate(string $module, string $phrase, array $params = [], int $count = 0): string {
+	function translate(string $phrase, array $params = [], int $count = 0): string {
 		$mh = DataManager::getConfig('maharder');
-		MhTranslation::setTranslator($module);
+		MhTranslation::setTranslator();
 		if (!isset($mh['language']) && !isset($mh['locales_path'])) {
 			return $phrase;
 		}
@@ -86,9 +84,8 @@ if (!function_exists('__')) {
 	 *
 	 * Служит для вызова функции перевода текстовых строк с возможностью передачи параметров и обработки множественного числа.
 	 *
-	 * @version 2.0.9
+	 * @version 173.3.0
 	 *
-	 * @param string $module Модуль, связанный с переводом.
 	 * @param string $phrase Переводимая строка.
 	 * @param array  $params Ассоциативный массив параметров для подстановки в строку.
 	 * @param int    $count  Количество для обработки множественного числа (опционально).
@@ -96,12 +93,12 @@ if (!function_exists('__')) {
 	 * @return string Переведённая строка.
 	 *
 	 * @throws Throwable
-	 * @since   2.0.9
+	 * @since   173.3.0
 	 * @see     translate()
 	 * @see     DataManager::getConfig()
 	 */
-	function __(string $module, string $phrase, array $params = [], int $count = 0): string {
-		return translate($module, $phrase, $params, $count);
+	function __(string $phrase, array $params = [], int $count = 0): string {
+		return translate($phrase, $params, $count);
 	}
 }
 

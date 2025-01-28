@@ -31,14 +31,6 @@ abstract class MhTranslation {
 	 */
 	private static ?string $localization_path = null;
 	/**
-	 * Названия модуля, к которому будет применяться перевод
-	 *
-	 * @version 173.3.0
-	 * @since   173.3.0
-	 * @var string|null
-	 */
-	private static ?string $module = null;
-	/**
 	 * Название локали
 	 *
 	 * @version 173.3.0
@@ -60,8 +52,6 @@ abstract class MhTranslation {
 	 * @version 173.3.0
 	 * @since   173.3.0
 	 *
-	 * @param string $module Название модуля, для которого устанавливается переводчик.
-	 *
 	 * @throws JsonException Если возникла ошибка при работе с JSON-файлами.
 	 *
 	 * @return void
@@ -73,13 +63,12 @@ abstract class MhTranslation {
 	 * @see ArrayLoader Для загрузки переводов в виде массива.
 	 * @global Translator self::$translator Глобальный объект переводчика для приложения.
 	 */
-	public static function setTranslator(string $module) : void {
+	public static function setTranslator() : void {
 		$mh_config = DataManager::getConfig('maharder');
 		$path      = $mh_config['locales_path'] ?? ENGINE_DIR . '/inc/maharder/_locales';
 		$locale    = $mh_config['language'] ?? 'ru_RU';
 
 		self::setLocalizationPath($path);
-		self::setModule($module);
 		self::setLocale($locale);
 
 		$locale_array = self::getTranslationArray();
@@ -96,8 +85,6 @@ abstract class MhTranslation {
 	 * Если модуль передан как параметр, то он устанавливается перед получением переводчика.
 	 * Если переводчик ещё не установлен, он будет автоматически инициализирован для текущего модуля.
 	 *
-	 * @param string|null $module Имя модуля, для которого требуется получить переводчик.
-	 *
 	 * @throws JsonException Генерируется при ошибках работы с JSON во внутренних методах.
 	 *
 	 * @return Translator|null Экземпляр переводчика или null, если переводчик не установлен.
@@ -106,39 +93,11 @@ abstract class MhTranslation {
 	 * @see self::setTranslator() Используется для инициализации переводчика для модуля.
 	 * @see self::$translator Хранит текущий экземпляр переводчика.
 	 */
-	public static function getTranslator(?string $module = null) : ?Translator {
-		if (!is_null($module)) {
-			self::setModule($module);
-		}
+	public static function getTranslator() : ?Translator {
 		if (is_null(self::$translator)) {
-			self::setTranslator(self::getModule());
+			self::setTranslator();
 		}
 		return self::$translator;
-	}
-
-
-	/**
-	 * Устанавливает значение для статического свойства $module.
-	 *
-	 * @param string $module Название модуля, которое будет установлено в свойство $module.
-	 *
-	 * @global string|null $module Глобальная переменная, хранящая название текущего модуля.
-	 *
-	 * @return void
-	 */
-	public static function setModule(string $module) : void {
-		self::$module = $module;
-	}
-
-	/**
-	 * Возвращает название модуля.
-	 *
-	 * Если статическое свойство `$module` не установлено, возвращается строка `'mhadmin'`.
-	 *
-	 * @return string Название модуля.
-	 */
-	public static function getModule() : string {
-		return self::$module ?: 'mhadmin';
 	}
 
 	/**
@@ -225,7 +184,7 @@ abstract class MhTranslation {
 	 */
 	public static function getTranslationWithParameters(string $phrase, array $parameters) : string {
 		if (is_null(self::$translator) && self::isUseTranslator()) {
-			self::setTranslator(self::getModule());
+			self::setTranslator();
 		}
 		if (!self::isUseTranslator()) return self::nonTranslator($phrase, $parameters);
 
@@ -275,24 +234,29 @@ abstract class MhTranslation {
 	 * @see     self::getTranslationWithParameters() Получение перевода фразы с подстановкой параметров.
 	 * @see     self::nonTranslator() Возвращение строки без перевода.
 	 */
-	public static function getTranslationPluralWithParameters(string $phrase, int $count, array $parameters) : string {
-		if (is_null(self::$translator) && self::isUseTranslator()) {
-			self::setTranslator(self::getModule());
+	public static function getTranslationPluralWithParameters(string $phrase, int $count, array $parameters): string {
+		// Инициализация переводчика, если он еще не установлен
+		if (self::$translator === null && self::isUseTranslator()) {
+			self::setTranslator();
 		}
-		$parameters = array_merge($parameters, ['%count%' => $count, '{{count}}' => $count]);
 
+		// Обогащение параметров информацией о числе
+		$parameters += ['%count%' => $count, '{{count}}' => $count];
+
+		// Если переводчик не используется, возвращаем обработанный текст без перевода
 		if (!self::isUseTranslator()) {
 			return self::nonTranslator($phrase, $parameters);
 		}
 
-		$phrases = explode('|~|', self::getTranslationWithParameters($phrase, $parameters));
+		// Определение корректной формы множественного числа
+		$variants = explode('|~|', self::getTranslationWithParameters($phrase, $parameters));
+		$index    = match (true) {
+			$count % 10 === 1 && $count % 100 !== 11                                          => 0,
+			$count % 10 >= 2 && $count % 10 <= 4 && ($count % 100 < 10 || $count % 100 >= 20) => 1,
+			default                                                                           => 2,
+		};
 
-		return $phrases[($count % 10 === 1 && $count % 100 !== 11)
-			? 0
-			: ($count % 10 >= 2 &&
-			$count % 10 <= 4 &&
-			($count % 100 < 10 || $count % 100 >= 20) ? 1 : 2)];
-
+		return $variants[$index] ?? $variants[0];
 	}
 
 	/**
@@ -328,85 +292,77 @@ abstract class MhTranslation {
 	/**
 	 * Возвращает массив переводов из XLIFF файла в виде ассоциативного массива,
 	 * где ключами являются исходные строки, а значениями — переведённые строки.
-	 *
 	 * Если файл перевода отсутствует или возникает ошибка при его обработке,
 	 * возвращается пустой массив. Реализована поддержка кеширования для ускорения
 	 * получения данных при последующих вызовах.
 	 *
-	 * @param string|null $file Путь к XLIFF файлу. Если не указан, путь будет сгенерирован автоматически.
-	 *
-	 * @return array Ассоциативный массив переводов.
-	 *
-	 * @throws JsonException Исключение при ошибке работы с JSON при кэшировании.
-	 * @throws Throwable Исключение при неизвестной ошибке в процессе обработки файла.
-	 *
 	 * @version 173.3.0
 	 * @since   173.3.0
-	 *
-	 * @see DataManager::normalizePath() Для нормализации пути к XLIFF файлу.
-	 * @see LogGenerator::generateLog() Для логирования ошибок и предупреждений.
-	 * @see CacheControl::getCache() Для получения данных из кэша.
-	 * @see CacheControl::setCache() Для сохранения данных в кэше.
+	 * @return array Ассоциативный массив переводов.
+	 * @throws JsonException Исключение при ошибке работы с JSON при кэшировании.
+	 * @throws Throwable Исключение при неизвестной ошибке в процессе обработки файла.
+	 * @see     DataManager::normalizePath() Для нормализации пути к XLIFF файлу.
+	 * @see     LogGenerator::generateLog() Для логирования ошибок и предупреждений.
+	 * @see     CacheControl::getCache() Для получения данных из кэша.
+	 * @see     CacheControl::setCache() Для сохранения данных в кэше.
 	 */
-	private static function getTranslationArray(?string $file = null) : array {
-		$file = $file ?? DataManager::normalizePath(sprintf(
-											   "%s/%s/%s.xliff",
-											   self::getLocalizationPath(),
-											   self::getLocale(),
-											   self::getModule()
-										   ));
-		if (!file_exists($file)) {
-			// Логируем и завершаем выполнение сразу, если файл отсутствует
+	private static function getTranslationArray(): array {
+		$directory = DataManager::normalizePath(self::getLocalizationPath() . '/' . self::getLocale());
+
+		if (!is_dir($directory)) {
 			LogGenerator::generateLog(
 				'MhTranslation',
 				'getTranslationArray',
-				"Файл перевода \"{$file}\" не был найден!",
+				"Директория с переводами \"{$directory}\" не найдена!",
 				"warn"
 			);
 			self::setUseTranslator(false);
-
 			return [];
 		}
 
-		// Берем данные из кэша
 		$data = CacheControl::getCache('MhTranslation', 'lang_' . self::getLocale());
-		if ($data) {
-			return $data; // Если данные есть в кэше, возвращаем их, чтобы пропустить парсинг
-		}
+		if (!$data) {
 
-		try {
-			// Пытаемся загрузить и обработать файл
-			// Читаем содержимое файла корректировкой в одну строку
-			$fileContent = str_replace(["\n", "\r", "\t"], '', file_get_contents($file));
-
-			// Используем `SimpleXMLElement` для обработки XML
-			$xml = new SimpleXMLElement($fileContent, LIBXML_NOCDATA);
-
-			// Безопасно приводим содержимое XML в массив
 			$data = [];
+			try {
+				$files = DataManager::dirToArray($directory);
+
+				// Чтение и обработка файлов с использованием array_reduce для избежания array_merge в цикле
+				$data = array_reduce(
+					$files,
+					static fn(array $carry, string $fileName): array => [
+						...$carry, ...self::parseXliffFile($fileName)],
+					[]
+				);
+
+				CacheControl::setCache('MhTranslation', 'lang_' . self::getLocale(), $data);
+			} catch (Exception $e) {
+				LogGenerator::generateLog(
+					'MhTranslation',
+					'getTranslationArray',
+					"Ошибка чтения и обработки файлов перевода: {$e->getMessage()}",
+					"critical"
+				);
+			}
+		}
+		return $data;
+	}
+
+	private static function parseXliffFile(string $filePath): array {
+		$data = [];
+		if (pathinfo($filePath, PATHINFO_EXTENSION) === 'xliff') {
+			$fileContent = str_replace(["\n", "\r", "\t"], '', file_get_contents($filePath));
+			$xml         = new SimpleXMLElement($fileContent, LIBXML_NOCDATA);
+
 			if (!empty($xml->file->body->{'trans-unit'})) {
 				foreach ($xml->file->body->{'trans-unit'} as $unit) {
-					$source = (string) $unit->source;
-					$target = trim((string) $unit->target);
-
-					// Пропускаем пустые строки
-					if ($source !== '') {
+					$source = (string)$unit->source;
+					$target = trim((string)$unit->target);
+					if ($source !== '' && !isset($data[$source])) {
 						$data[$source] = $target;
 					}
 				}
 			}
-
-			// Сохраняем в кэш
-			CacheControl::setCache('MhTranslation', 'lang_' . self::getLocale(), $data);
-		} catch (Exception $e) {
-			// Добавляем логирование ошибок для упрощения отладки
-			LogGenerator::generateLog(
-				'MhTranslation',
-				'getTranslationArray',
-				"Ошибка чтения и обработки файла перевода: {$e->getMessage()}",
-				"critical"
-			);
-			return []; // Возвращаем пустой массив в случае ошибки
 		}
 
 		return $data;
@@ -500,32 +456,30 @@ abstract class MhTranslation {
 	 *               - `iso2` (string): Код ISO 639-1 языка.
 	 *               - `tag` (string): Полный тег языка.
 	 *
-	 * @global function __ Используется для получения локализованных строк.
-	 *
 	 * @see __ Для получения локализованных данных о языке.
 	 */
 	private static function languageList($lang) : array {
 		$langs = [
 			'ru_RU' => [
-				'original' => __('mhadmin', 'Русский'),
+				'original' => __('Русский'),
 				'english'  => 'Russian',
 				'iso2'     => 'ru',
 				'tag'      => 'ru_RU',
 			],
 			'en_US' => [
-				'original' => __('mhadmin', 'Английский'),
+				'original' => __('Английский'),
 				'english'  => 'English',
 				'iso2'     => 'en',
 				'tag'      => 'en_US',
 			],
 			'de_DE' => [
-				'original' => __('mhadmin', 'Немецкий'),
+				'original' => __('Немецкий'),
 				'english'  => 'German',
 				'iso2'     => 'de',
 				'tag'      => 'de_DE',
 			],
 			'uk_UA' => [
-				'original' => __('mhadmin', 'Украинский'),
+				'original' => __('Украинский'),
 				'english'  => 'Ukrainian',
 				'iso2'     => 'uk',
 				'tag'      => 'uk_UA',
@@ -619,11 +573,7 @@ abstract class MhTranslation {
 						LogGenerator::generateLog(
 							'MhTranslation',
 							'convertXliffToJs',
-							__(
-								'mhadmin',
-								"Директория перевода не найдена: :langFilesPath",
-								[':langFilesPath' => $langFilesPath]
-							)
+							__("Директория перевода не найдена: :langFilesPath", [':langFilesPath' => $langFilesPath]	)
 						);
 						continue;
 					}
@@ -655,11 +605,7 @@ abstract class MhTranslation {
 						LogGenerator::generateLog(
 							'MhTranslation',
 							'convertXliffToJs',
-							__(
-								'mhadmin',
-								"Файл перевода успешно преобразован в JS: :outputFile",
-								[':outputFile' => $outputFile]
-							),
+							__("Файл перевода успешно преобразован в JS: :outputFile", [':outputFile' => $outputFile]	),
 							'info'
 						);
 					}
@@ -704,7 +650,7 @@ abstract class MhTranslation {
 				LogGenerator::generateLog(
 					'MhTranslation',
 					'writeJsFile',
-					__('mhadmin', "Ошибка создания JS файла: :path", [':path' => $path]),
+					__("Ошибка создания JS файла: :path", [':path' => $path]),
 					'critical'
 				);
 				return false;
@@ -715,7 +661,7 @@ abstract class MhTranslation {
 				'writeJsFile',
 				[
 					$e->getMessage(),
-					__('mhadmin', "Ошибка создания JS файла: :path", [':path' => $path])
+					__("Ошибка создания JS файла: :path", [':path' => $path])
 				],
 				'critical'
 			);
@@ -728,7 +674,7 @@ abstract class MhTranslation {
 				LogGenerator::generateLog(
 					'MhTranslation',
 					'writeJsFile',
-					__('mhadmin', "Ошибка записи JS файла: :path", [':path' => $path]),
+					__("Ошибка записи JS файла: :path", [':path' => $path]),
 					'critical'
 				);
 				return false;
@@ -739,7 +685,7 @@ abstract class MhTranslation {
 				'writeJsFile',
 				[
 					$e->getMessage(),
-					__('mhadmin', "Ошибка записи JS файла: :path", [':path' => $path])
+					__("Ошибка записи JS файла: :path", [':path' => $path])
 				],
 				'critical'
 			);

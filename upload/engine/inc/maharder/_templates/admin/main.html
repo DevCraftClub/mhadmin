@@ -23,25 +23,25 @@
 			{% autoescape 'html' %}
 
 			{{ include('templateIncludes/segRow.html', {
-				id: 'list_count',
-				name: 'Количество объектов'|trans|raw,
-				descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д. Это глобальное
-				значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
-				отображаемых новостей на страницу" => '|trans|html_entity_decode ~ dle_config.news_number ~ '.',
-				type: 'number',
-				variable: settings
+			id: 'list_count',
+			name: 'Количество объектов'|trans|raw,
+			descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д. Это глобальное
+			значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
+			отображаемых новостей на страницу" => '|trans|html_entity_decode ~ dle_config.news_number ~ '.',
+			type: 'number',
+			variable: settings
 			})
 			}}
 
 			{{ input('cache_path', 'Путь до кеша файлов'|trans, 'Укажите путь, где будут храниться файлы кеша.<br>По умолчанию: /engine/inc/maharder/_cache'|htmlentities|raw|trans|html_entity_decode, settings ) }}
 
 			{{ include('templateIncludes/segRow.html', {
-					id: 'cache_timer',
-					name: 'Время хранения кеша'|trans,
-					descr: 'Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.<br><b><i>По умолчанию: 60 минут</i></b>'|htmlentities|raw|trans|html_entity_decode,
-					type: 'number',
-					variable: settings
-				})
+			id: 'cache_timer',
+			name: 'Время хранения кеша'|trans,
+			descr: 'Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.<br><b><i>По умолчанию: 60 минут</i></b>'|htmlentities|raw|trans|html_entity_decode,
+			type: 'number',
+			variable: settings
+			})
 			}}
 
 			{{ select('language', 'Язык админки'|trans, 'Данная опция позволит использовать админпанель и модули на разных языках'|trans, settings, lang_data ) }}
@@ -49,11 +49,11 @@
 			{{ input('locales_path', 'Путь до файлов языков'|trans, 'Укажите путь, откуда будут браться языковые файлы.<br>По умолчанию: /engine/inc/maharder/_locales'|htmlentities|raw|trans|html_entity_decode, settings ) }}
 
 			{{ include('templateIncludes/segRow.html', {
-				id: 'logs',
-				name: 'Включить логирование?'|trans,
-				descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/_logs</b>'|htmlentities|raw|trans|html_entity_decode,
-				type: 'checkbox',
-				variable: settings
+			id: 'logs',
+			name: 'Включить логирование?'|trans,
+			descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/_logs</b>'|htmlentities|raw|trans|html_entity_decode,
+			type: 'checkbox',
+			variable: settings
 			})
 			}}
 
@@ -73,7 +73,7 @@
 			'<div class="item"><b>Предупреждения</b> - Отправляет только предупреждения в канал</div>'|htmlentities|raw|trans|html_entity_decode ~
 			'<div class="item"><b>Критические ошибки</b> - Отправляет только критические ошибки в канал</div>'|htmlentities|raw|trans|html_entity_decode ~
 			'<div class="item"><b>Отладка</b> - Отправляет только информацию об отладке в канал</div>'|htmlentities|raw|trans|html_entity_decode ~
-		'</div><br>' ~
+			'</div><br>' ~
 			'Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.<br>Если выбрано "Все", то остальные выбранные параметры игнорируются'|htmlentities|raw|trans|html_entity_decode, settings, {
 			'all': "Все"|trans,
 			'error': "Ошибки"|trans,
@@ -86,34 +86,25 @@
 			}) }}
 
 			{{ include('templateIncludes/segRow.html', {
-				id: 'icons',
-				name: 'Заменять иконки?'|trans,
-				descr: 'При включении, в админпанеле DLE будут заменены старые иконки на обновлённые'|trans,
-				type: 'checkbox',
-				variable: settings
+			id: 'cache_icon',
+			name: 'Добавить кнопку с очищением кеша?'|trans,
+			descr: 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша
+			системы'|trans,
+			type: 'checkbox',
+			variable: settings
 			})
 			}}
 
 			{{ include('templateIncludes/segRow.html', {
-				id: 'cache_icon',
-				name: 'Добавить кнопку с очищением кеша?'|trans,
-				descr: 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша
-				системы'|trans,
-				type: 'checkbox',
-				variable: settings
-			})
-			}}
-
-			{{ include('templateIncludes/segRow.html', {
-				id: 'theme',
-				name: 'Тема оформления админки'|trans,
-				descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу'|trans,
-				type: 'select',
-				variable: settings,
-				values: {
-					light: 'Светлая'|trans,
-					dark: 'Тёмная'|trans,
-				}
+			id: 'theme',
+			name: 'Тема оформления админки'|trans,
+			descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу'|trans,
+			type: 'select',
+			variable: settings,
+			values: {
+			light: 'Светлая'|trans,
+			dark: 'Тёмная'|trans,
+			}
 			})
 			}}
 
@@ -144,266 +135,266 @@
 
 {% autoescape 'js' %}
 <script>
-    var
-        started_assets = false,
-        total_assets = 0,
-        now_asset = 0
-    ;
+	var
+		started_assets = false,
+		total_assets = 0,
+		now_asset = 0
+	;
 
-    function generate_list(id, data) {
-        let list = '<ul class="ui list" id="' + id + '" style="margin-left: 1.5rem;">\n';
-        for (let k in data) {
-            list += '<li>' + k + '</li>';
-        }
-        list += '</ul>';
+	function generate_list(id, data) {
+		let list = '<ul class="ui list" id="' + id + '" style="margin-left: 1.5rem;">\n';
+		for (let k in data) {
+			list += '<li>' + k + '</li>';
+		}
+		list += '</ul>';
 
-        return list;
-    }
+		return list;
+	}
 
-    function generate_item(show, header, description = '', list = {
-        enable: false,
-        id: '',
-        data: []
-    }) {
-        if (show) {
-
-
-            let item = '<div class="item">\n' +
-                '    <div class="content">\n' +
-                '        <a class="header">' + header + '</a>' +
-                '        <div class="description">';
-            if (list.enable) item += generate_list(list.id, list.data);
-            else item += description;
-            item += '        </div>\n' +
-                '    </div>\n' +
-                '</div>\n';
-
-            return item;
-        }
-
-        return '';
-    }
-
-    function check_assets() {
-        let name = 'mh_assets_check', cookies = getCookie(name);
-        if (cookies === undefined || cookies != 1) {
-            $('[data-action="check_assets"] .icon').addClass('loading');
-            startLoading(__('Проверка обновлений'));
-            $.ajax({
-                url: 'engine/ajax/controller.php?mod=maharder',
-                data: {
-                    user_hash: '{{dle_login_hash}}',
-                    module: 'maharder',
-                    file: 'master',
-                    method: 'check_assets',
-                },
-                type: 'POST',
-                success: function (data) {
-                    $('[data-action="check_assets"] .icon').removeClass('loading');
-                    hideLoading('');
-                    try {
-                        data = JSON.parse(data);
-                    } catch (e) {
-                    }
-                    if (data.local !== data.on_server) {
-                        total_assets = Math.abs(data.missing_count + data.update_count);
-                        $('.new_assets_count').html(total_assets);
-                        if (total_assets > 0) {
-                            $('[data-action="check_assets"]').addClass('basic').addClass('red');
-                            $('.new_assets_count').addClass('red');
-                        }
+	function generate_item(show, header, description = '', list = {
+		enable: false,
+		id: '',
+		data: []
+	}) {
+		if (show) {
 
 
-                    }
+			let item = '<div class="item">\n' +
+				'    <div class="content">\n' +
+				'        <a class="header">' + header + '</a>' +
+				'        <div class="description">';
+			if (list.enable) item += generate_list(list.id, list.data);
+			else item += description;
+			item += '        </div>\n' +
+				'    </div>\n' +
+				'</div>\n';
 
-                }
-            });
-            setCookie(name, 1);
-        }
-    }
+			return item;
+		}
 
-    function save_asset(file, data) {
-        startLoading(__(`Загружаем файл: <b>${file}</b>!<br>Результат находится в консоли браузера!`));
-        $.ajax({
-            url: 'engine/ajax/controller.php?mod=maharder',
-            data: {
-                user_hash: '{{dle_login_hash}}',
-                module: 'maharder',
-                file: 'master',
-                method: 'save_asset',
-                data: {
-                    file: file,
-                    data: data
-                }
-            },
-            type: 'POST',
-            success: function (response) {
-                try {
-                    response = JSON.parse(response);
-                } catch (e) {
-                }
-                console.log(response);
-                let count_obj = $(document).find('#now_loading').first(), count = $(count_obj).html();
-                try {
-                    count = parseInt(count);
-                } catch (e) {
-                    count = 0;
-                }
-                count++;
-                $(count_obj).html(count);
-                now_asset = count;
-                $('#file_loading').html(file);
+		return '';
+	}
 
-                if (now_asset >= total_assets) {
-                    hideLoading();
-                    $('.new_assets_count').html(0).removeClass('red');
-                }
-            }
-        });
-    }
+	function check_assets() {
+		let name = 'mh_assets_check', cookies = getCookie(name);
+		if (cookies === undefined || cookies != 1) {
+			$('[data-action="check_assets"] .icon').addClass('loading');
+			startLoading(__('Проверка обновлений'));
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: 'maharder',
+					file: 'master',
+					method: 'check_assets',
+				},
+				type: 'POST',
+				success: function (data) {
+					$('[data-action="check_assets"] .icon').removeClass('loading');
+					hideLoading('');
+					try {
+						data = JSON.parse(data);
+					} catch (e) {
+					}
+					if (data.local !== data.on_server) {
+						total_assets = Math.abs(data.missing_count + data.update_count);
+						$('.new_assets_count').html(total_assets);
+						if (total_assets > 0) {
+							$('[data-action="check_assets"]').addClass('basic').addClass('red');
+							$('.new_assets_count').addClass('red');
+						}
 
-    $(() => {
 
-        $(document).on('click', '[data-action="check_assets"]', function () {
-            $('[data-action="check_assets"] .icon').addClass('loading');
-            $.ajax({
-                url: 'engine/ajax/controller.php?mod=maharder',
-                data: {
-                    user_hash: '{{dle_login_hash}}',
-                    module: 'maharder',
-                    file: 'master',
-                    method: 'check_assets',
-                },
-                type: 'POST',
-                success: function (data) {
-                    hideLoading('');
-                    $('[data-action="check_assets"] .icon').removeClass('loading');
-                    try {
-                        data = JSON.parse(data);
-                    } catch (e) {
-                    }
-                    console.log(data)
-                    if (data.local === data.on_server && data.missing_count === 0 && data.update_count === 0)
-                        $('body').toast({
-                            class: 'info',
+					}
+
+				}
+			});
+			setCookie(name, 1);
+		}
+	}
+
+	function save_asset(file, data) {
+		startLoading(__('Загружаем файл: <b>:file:</b>!<br>Результат находится в консоли браузера!', {file: file}));
+		$.ajax({
+			url: 'engine/ajax/controller.php?mod=maharder',
+			data: {
+				user_hash: '{{dle_login_hash}}',
+				module: 'maharder',
+				file: 'master',
+				method: 'save_asset',
+				data: {
+					file: file,
+					data: data
+				}
+			},
+			type: 'POST',
+			success: function (response) {
+				try {
+					response = JSON.parse(response);
+				} catch (e) {
+				}
+				console.log(response);
+				let count_obj = $(document).find('#now_loading').first(), count = $(count_obj).html();
+				try {
+					count = parseInt(count);
+				} catch (e) {
+					count = 0;
+				}
+				count++;
+				$(count_obj).html(count);
+				now_asset = count;
+				$('#file_loading').html(file);
+
+				if (now_asset >= total_assets) {
+					hideLoading();
+					$('.new_assets_count').html(0).removeClass('red');
+				}
+			}
+		});
+	}
+
+	$(() => {
+
+		$(document).on('click', '[data-action="check_assets"]', function () {
+			$('[data-action="check_assets"] .icon').addClass('loading');
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: 'maharder',
+					file: 'master',
+					method: 'check_assets',
+				},
+				type: 'POST',
+				success: function (data) {
+					hideLoading('');
+					$('[data-action="check_assets"] .icon').removeClass('loading');
+					try {
+						data = JSON.parse(data);
+					} catch (e) {
+					}
+					console.log(data)
+					if (data.local === data.on_server && data.missing_count === 0 && data.update_count === 0)
+						$('body').toast({
+							class: 'info',
 							title: __('Информация!'),
 							message: __('Обновлений нет'),
-                            showProgress: 'bottom'
-                        });
-                    else {
-                        $('[data-action="check_assets"]').addClass('basic').addClass('red').popup({
-                            popup: '.special.popup'
-                        }).popup('toggle');
-                        $('.new_assets_count').html(Math.abs(data.missing_count + data.update_count)).addClass('red');
-                        $.confirm({
-                            title: t('Обновлениям быть!'),
-                            content: '<div class="ui middle aligned divided list">\n' +
-                                '  <div class="item">\n' +
-                                '    <div class="content">\n' +
-                                '      <a class="header">{% trans %}На сервере{% endtrans %}</a> \n' +
-                                '       <div class="description">' + data.on_server + ' {% trans %}файлов{% endtrans %}</div>' +
-                                '    </div>\n' +
-                                '  </div>\n' +
-                                '  <div class="item">\n' +
-                                '    <div class="content">\n' +
-                                '      <a class="header">{% trans %}Загружено на сайт{% endtrans %}</a> ' +
-                                '       <div class="description">' + data.local + ' {% trans %}файлов{% endtrans %}</div>\n' +
-                                '    </div>\n' +
-                                '  </div>\n' +
-                                generate_item(data.missing_count > 0, __('Требуют установки'), '', {
-                                    enable: true,
-                                    id: 'assets_to_install',
-                                    data: data.missing
-                                }) +
-                                generate_item(data.update_count > 0, __('Требуют обновления'), '', {
-                                    enable: true,
-                                    id: 'assets_to_update',
-                                    data: data.update
-                                }) +
-                                '</div>',
-                            closeIcon: true,
-                            columnClass: 'four wide',
-                            offsetBottom: 40,
-                            useBootstrap: false,
-                            theme: 'material',
-                            draggable: true,
-                            backgroundDismiss: false,
-                            backgroundDismissAnimation: 'shake',
-                            buttons: {
-                                installAll: {
-                                    text: __('Установить всё'),
-                                    btnClass: 'ui green button',
-                                    action: function () {
-                                        $('[data-action="check_assets"]').popup('toggle');
-                                        total_assets = Math.abs(data.missing_count + data.update_count);
-                                        $('#total_loading').html(total_assets);
-                                        if (data.missing_count > 0) for (let f in data.missing) {
-                                            save_asset(f, data.missing[f]);
-                                        }
-                                        if (data.update_count > 0) for (let f in data.update) {
-                                            save_asset(f, data.update[f]);
-                                        }
-                                    }
-                                },
-                                onlyInstall: {
-                                    text: __('Установить недостающие'),
-                                    btnClass: 'ui blue button',
-                                    action: function () {
-                                        $('[data-action="check_assets"]').popup('toggle');
-                                        total_assets = data.missing_count;
-                                        $('#total_loading').html(total_assets);
-                                        if (total_assets > 0) for (let f in data.missing) {
-                                            save_asset(f, data.missing[f]);
-                                        }
-                                    }
-                                },
-                                onlyUpdate: {
-                                    text: __('Установить обновления'),
-                                    btnClass: 'ui orange button',
-                                    action: function () {
-                                        $('[data-action="check_assets"]').popup('toggle');
-                                        total_assets = data.update_count;
-                                        $('#total_loading').html(total_assets);
-                                        if (total_assets > 0) for (let f in data.update) {
-                                            save_asset(f, data.update[f]);
-                                        }
-                                    }
-                                },
-                            }
-                        });
-                    }
-                }
-            });
-        });
-        $(document).on('click', '.save', function () {
-            startLoading();
-            $.ajax({
-                url: 'engine/ajax/controller.php?mod=maharder',
-                data: {
-                    user_hash: '{{dle_login_hash}}',
-                    module: '{{module_code}}',
-                    file: 'master',
-                    method: 'settings',
-                    data: $('.form').serializeArray()
-                },
-                type: 'POST',
-                success: function (data) {
-                    hideLoading('');
-                    $('body').toast({
-                        class: 'success',
-                        title: __('Всё отлично!'),
+							showProgress: 'bottom'
+						});
+					else {
+						$('[data-action="check_assets"]').addClass('basic').addClass('red').popup({
+							popup: '.special.popup'
+						}).popup('toggle');
+						$('.new_assets_count').html(Math.abs(data.missing_count + data.update_count)).addClass('red');
+						$.confirm({
+							title: __('Обновлениям быть!'),
+							content: '<div class="ui middle aligned divided list">\n' +
+								'  <div class="item">\n' +
+								'    <div class="content">\n' +
+								'      <a class="header">${__("На сервере")}</a> \n' +
+								'       <div class="description">' + data.on_server + ' ${__("файлов")}</div>' +
+								'    </div>\n' +
+								'  </div>\n' +
+								'  <div class="item">\n' +
+								'    <div class="content">\n' +
+								'      <a class="header">${__("Загружено на сайт")}</a> ' +
+								'       <div class="description">' + data.local + ' ${__("файлов")}</div>\n' +
+								'    </div>\n' +
+								'  </div>\n' +
+								generate_item(data.missing_count > 0, __('Требуют установки'), '', {
+									enable: true,
+									id: 'assets_to_install',
+									data: data.missing
+								}) +
+								generate_item(data.update_count > 0, __('Требуют обновления'), '', {
+									enable: true,
+									id: 'assets_to_update',
+									data: data.update
+								}) +
+								'</div>',
+							closeIcon: true,
+							columnClass: 'four wide',
+							offsetBottom: 40,
+							useBootstrap: false,
+							theme: 'material',
+							draggable: true,
+							backgroundDismiss: false,
+							backgroundDismissAnimation: 'shake',
+							buttons: {
+								installAll: {
+									text: __('Установить всё'),
+									btnClass: 'ui green button',
+									action: function () {
+										$('[data-action="check_assets"]').popup('toggle');
+										total_assets = Math.abs(data.missing_count + data.update_count);
+										$('#total_loading').html(total_assets);
+										if (data.missing_count > 0) for (let f in data.missing) {
+											save_asset(f, data.missing[f]);
+										}
+										if (data.update_count > 0) for (let f in data.update) {
+											save_asset(f, data.update[f]);
+										}
+									}
+								},
+								onlyInstall: {
+									text: __('Установить недостающие'),
+									btnClass: 'ui blue button',
+									action: function () {
+										$('[data-action="check_assets"]').popup('toggle');
+										total_assets = data.missing_count;
+										$('#total_loading').html(total_assets);
+										if (total_assets > 0) for (let f in data.missing) {
+											save_asset(f, data.missing[f]);
+										}
+									}
+								},
+								onlyUpdate: {
+									text: __('Установить обновления'),
+									btnClass: 'ui orange button',
+									action: function () {
+										$('[data-action="check_assets"]').popup('toggle');
+										total_assets = data.update_count;
+										$('#total_loading').html(total_assets);
+										if (total_assets > 0) for (let f in data.update) {
+											save_asset(f, data.update[f]);
+										}
+									}
+								},
+							}
+						});
+					}
+				}
+			});
+		});
+		$(document).on('click', '.save', function () {
+			startLoading();
+			$.ajax({
+				url: 'engine/ajax/controller.php?mod=maharder',
+				data: {
+					user_hash: '{{dle_login_hash}}',
+					module: '{{module_code}}',
+					file: 'master',
+					method: 'settings',
+					data: $('.form').serializeArray()
+				},
+				type: 'POST',
+				success: function (data) {
+					hideLoading('');
+					$('body').toast({
+						class: 'success',
+						title: __('Всё отлично!'),
 						message:  __('<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>'),
-                        showProgress: 'bottom'
-                    });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                }
-            });
-        });
+						showProgress: 'bottom'
+					});
+					setTimeout(() => {
+						window.location.reload();
+					}, 1000);
+				}
+			});
+		});
 
-        check_assets();
-    });
+		check_assets();
+	});
 </script>
 {% endautoescape %}
 {% endblock %}

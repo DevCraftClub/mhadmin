@@ -20,7 +20,7 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 // заполняем важную и нужную информацию о модуле
 $modInfo = [
 	'module_name'        => 'MaHarder Assets',
-	'module_version'     => '173.3.1',
+	'module_version'     => '173.3.0',
 	'module_description' => __('Административная панель для моих разработок'),
 	'module_code'        => 'maharder',
 	'module_id'          => 4,
@@ -44,19 +44,19 @@ $mh->setLink(new AdminLink('logs', __('Вывод логов'), '?mod='.$modInfo
 switch ($_GET['sites']) {
 	// Страница с выводом логов
 	case 'logs':
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/logs.php');
+		require_once DLEPlugins::Check(MH_MODULES.'/admin/module/logs.php');
 		break;
 	// Страница с генератором модуля
 	case 'new_module':
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/new_module.php');
+		require_once DLEPlugins::Check(MH_MODULES.'/admin/module/new_module.php');
 		break;
 	// Страница с логами изменений
 	case 'changelog':
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/changelog.php');
+		require_once DLEPlugins::Check(MH_MODULES.'/admin/module/changelog.php');
 		break;
 	// Главная страница
 	default:
-		require_once DLEPlugins::Check(MH_ROOT.'/_modules/admin/module/main.php');
+		require_once DLEPlugins::Check(MH_MODULES.'/admin/module/main.php');
 		break;
 }
 

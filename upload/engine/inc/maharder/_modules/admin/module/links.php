@@ -43,4 +43,3 @@ $mh->setLink(
 	new AdminLink('changelog', name: __('Журнал изменений'), link: '?mod=' . $modInfo['module_code'] . '&sites=changelog'),
 	'changelog'
 );
-

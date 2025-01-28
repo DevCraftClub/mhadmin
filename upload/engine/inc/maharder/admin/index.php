@@ -72,7 +72,7 @@ $loader = new FilesystemLoader(
 	]
 );
 
-$debug = true;
+$debug = false;
 
 $twigConfigDebug = [
 	'cache'       => false,

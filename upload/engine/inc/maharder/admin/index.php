@@ -2,23 +2,24 @@
 
 global $lang, $config;
 
-use Twig\TwigFilter;
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
+use Twig\Extra\Cache\CacheExtension;
 use Twig\Extra\Cache\CacheRuntime;
+use Twig\Extra\CssInliner\CssInlinerExtension;
 use Twig\Extra\Html\HtmlExtension;
 use Twig\Extra\Inky\InkyExtension;
 use Twig\Extra\Intl\IntlExtension;
-use Twig\Extra\Cache\CacheExtension;
-use Twig\Extra\String\StringExtension;
 use Twig\Extra\Markdown\DefaultMarkdown;
-use Twig\Extra\Markdown\MarkdownRuntime;
 use Twig\Extra\Markdown\MarkdownExtension;
-use Twig\Extra\CssInliner\CssInlinerExtension;
+use Twig\Extra\Markdown\MarkdownRuntime;
+use Twig\Extra\String\StringExtension;
+use Twig\Loader\FilesystemLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
-use Symfony\Component\Cache\Adapter\TagAwareAdapter;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Twig\TwigFilter;
 
 if (!defined('DATALIFEENGINE')) {
 	header("HTTP/1.1 403 Forbidden");
@@ -55,14 +56,12 @@ if (!defined('MH_INIT')) {
 	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 }
 
-$mh        = new Admin();
-
-include_once DLEPlugins::Check(MH_MODULES . '/admin/module/links.php');
+$links = include DLEPlugins::Check(MH_MODULES . '/admin/module/links.php');
 
 try {
 	MhTranslation::convertXliffToJs();
 } catch (JsonException|Throwable $e) {
-	LogGenerator::generateLog('Admin/index', 'convertXliffToJs', $e->getMessage(), 'critical');
+	LogGenerator::generateLog('Admin/index.php', 'convertXliffToJs', $e->getMessage(), 'critical');
 }
 
 $loader = new FilesystemLoader(
@@ -121,5 +120,18 @@ $mh_template->addRuntimeLoader(
 );
 
 
+$breadcrumbs = [
+	[
+		'name' => $links['index']['name'],
+		'url'  => $links['index']['href'],
+	],
+];
+
+$mh        = new Admin();
+
+if(!file_exists(MH_INCLUDES . '/assets.json')) {
+	$mh->parseAssets(true);
+}
+
 $mh_config = DataManager::getConfig('maharder');
-$mh->setBreadcrumb(new BreadCrumb($mh->getLinkName('index'), $mh->getLinkUrl('index')));
+

@@ -56,6 +56,12 @@ if (!defined('MH_INIT')) {
 	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 }
 
+$mh        = new Admin();
+
+if(!file_exists(MH_INCLUDES . '/assets.json')) {
+	$mh->parseAssets(true);
+}
+
 $links = include DLEPlugins::Check(MH_MODULES . '/admin/module/links.php');
 
 try {
@@ -120,18 +126,5 @@ $mh_template->addRuntimeLoader(
 );
 
 
-$breadcrumbs = [
-	[
-		'name' => $links['index']['name'],
-		'url'  => $links['index']['href'],
-	],
-];
-
-$mh        = new Admin();
-
-if(!file_exists(MH_INCLUDES . '/assets.json')) {
-	$mh->parseAssets(true);
-}
-
 $mh_config = DataManager::getConfig('maharder');
-
+$mh->setBreadcrumb(new BreadCrumb($mh->getLinkName('index'), $mh->getLinkUrl('index')));

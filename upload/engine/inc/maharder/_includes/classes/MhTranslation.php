@@ -31,14 +31,6 @@ abstract class MhTranslation {
 	 */
 	private static ?string $localization_path = null;
 	/**
-	 * Названия модуля, к которому будет применяться перевод
-	 *
-	 * @version 173.3.0
-	 * @since   173.3.0
-	 * @var string|null
-	 */
-	private static ?string $module = null;
-	/**
 	 * Название локали
 	 *
 	 * @version 173.3.0
@@ -60,8 +52,6 @@ abstract class MhTranslation {
 	 * @version 173.3.0
 	 * @since   173.3.0
 	 *
-	 * @param string $module Название модуля, для которого устанавливается переводчик.
-	 *
 	 * @throws JsonException Если возникла ошибка при работе с JSON-файлами.
 	 *
 	 * @return void
@@ -73,13 +63,12 @@ abstract class MhTranslation {
 	 * @see ArrayLoader Для загрузки переводов в виде массива.
 	 * @global Translator self::$translator Глобальный объект переводчика для приложения.
 	 */
-	public static function setTranslator(string $module) : void {
+	public static function setTranslator() : void {
 		$mh_config = DataManager::getConfig('maharder');
 		$path      = $mh_config['locales_path'] ?? ENGINE_DIR . '/inc/maharder/_locales';
 		$locale    = $mh_config['language'] ?? 'ru_RU';
 
 		self::setLocalizationPath($path);
-		self::setModule($module);
 		self::setLocale($locale);
 
 		$locale_array = self::getTranslationArray();
@@ -96,8 +85,6 @@ abstract class MhTranslation {
 	 * Если модуль передан как параметр, то он устанавливается перед получением переводчика.
 	 * Если переводчик ещё не установлен, он будет автоматически инициализирован для текущего модуля.
 	 *
-	 * @param string|null $module Имя модуля, для которого требуется получить переводчик.
-	 *
 	 * @throws JsonException Генерируется при ошибках работы с JSON во внутренних методах.
 	 *
 	 * @return Translator|null Экземпляр переводчика или null, если переводчик не установлен.
@@ -106,39 +93,11 @@ abstract class MhTranslation {
 	 * @see self::setTranslator() Используется для инициализации переводчика для модуля.
 	 * @see self::$translator Хранит текущий экземпляр переводчика.
 	 */
-	public static function getTranslator(?string $module = null) : ?Translator {
-		if (!is_null($module)) {
-			self::setModule($module);
-		}
+	public static function getTranslator() : ?Translator {
 		if (is_null(self::$translator)) {
-			self::setTranslator(self::getModule());
+			self::setTranslator();
 		}
 		return self::$translator;
-	}
-
-
-	/**
-	 * Устанавливает значение для статического свойства $module.
-	 *
-	 * @param string $module Название модуля, которое будет установлено в свойство $module.
-	 *
-	 * @global string|null $module Глобальная переменная, хранящая название текущего модуля.
-	 *
-	 * @return void
-	 */
-	public static function setModule(string $module) : void {
-		self::$module = $module;
-	}
-
-	/**
-	 * Возвращает название модуля.
-	 *
-	 * Если статическое свойство `$module` не установлено, возвращается строка `'mhadmin'`.
-	 *
-	 * @return string Название модуля.
-	 */
-	public static function getModule() : string {
-		return self::$module ?: 'mhadmin';
 	}
 
 	/**

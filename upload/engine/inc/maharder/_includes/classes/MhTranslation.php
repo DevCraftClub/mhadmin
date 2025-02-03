@@ -331,7 +331,7 @@ abstract class MhTranslation {
 				$data = array_reduce(
 					$files,
 					static fn(array $carry, string $fileName): array => [
-						...$carry, ...self::parseXliffFile($fileName)],
+						...$carry, ...self::parseXliffFile($fileName, $directory)],
 					[]
 				);
 
@@ -348,10 +348,11 @@ abstract class MhTranslation {
 		return $data;
 	}
 
-	private static function parseXliffFile(string $filePath): array {
+	private static function parseXliffFile(string $filePath, string $directory): array {
 		$data = [];
 		if (pathinfo($filePath, PATHINFO_EXTENSION) === 'xliff') {
-			$fileContent = str_replace(["\n", "\r", "\t"], '', file_get_contents($filePath));
+			$file        = DataManager::normalizePath($directory . '/' . $filePath);
+			$fileContent = str_replace(["\n", "\r", "\t"], '', file_get_contents($file));
 			$xml         = new SimpleXMLElement($fileContent, LIBXML_NOCDATA);
 
 			if (!empty($xml->file->body->{'trans-unit'})) {
@@ -455,31 +456,29 @@ abstract class MhTranslation {
 	 *               - `english` (string): Название языка на английском.
 	 *               - `iso2` (string): Код ISO 639-1 языка.
 	 *               - `tag` (string): Полный тег языка.
-	 *
-	 * @see __ Для получения локализованных данных о языке.
 	 */
 	private static function languageList($lang) : array {
 		$langs = [
 			'ru_RU' => [
-				'original' => __('Русский'),
+				'original' => 'Русский',
 				'english'  => 'Russian',
 				'iso2'     => 'ru',
 				'tag'      => 'ru_RU',
 			],
 			'en_US' => [
-				'original' => __('Английский'),
+				'original' => 'Английский',
 				'english'  => 'English',
 				'iso2'     => 'en',
 				'tag'      => 'en_US',
 			],
 			'de_DE' => [
-				'original' => __('Немецкий'),
+				'original' => 'Немецкий',
 				'english'  => 'German',
 				'iso2'     => 'de',
 				'tag'      => 'de_DE',
 			],
 			'uk_UA' => [
-				'original' => __('Украинский'),
+				'original' => 'Украинский',
 				'english'  => 'Ukrainian',
 				'iso2'     => 'uk',
 				'tag'      => 'uk_UA',
@@ -530,9 +529,10 @@ abstract class MhTranslation {
 	public static function getLocalizationPath() : ?string {
 		if (is_null(self::$localization_path) || empty(self::$localization_path)) {
 			$config                  = DataManager::getConfig('mhadmin');
-			self::$localization_path = ROOT_DIR . $config['locales_path'] ?: '/engine/inc/maharder/_locales';
+			$path                    = $config['locales_path'] ?: '/engine/inc/maharder/_locales';
+			self::$localization_path = ROOT_DIR . $path;
 		}
-		return self::$localization_path;
+		return DataManager::normalizePath(self::$localization_path);
 	}
 
 	/**
@@ -573,7 +573,7 @@ abstract class MhTranslation {
 						LogGenerator::generateLog(
 							'MhTranslation',
 							'convertXliffToJs',
-							__("Директория перевода не найдена: :langFilesPath", [':langFilesPath' => $langFilesPath]	)
+							"Директория перевода не найдена: {$langFilesPath}"
 						);
 						continue;
 					}
@@ -605,7 +605,7 @@ abstract class MhTranslation {
 						LogGenerator::generateLog(
 							'MhTranslation',
 							'convertXliffToJs',
-							__("Файл перевода успешно преобразован в JS: :outputFile", [':outputFile' => $outputFile]	),
+							"Файл перевода успешно преобразован в JS: {$outputFile}",
 							'info'
 						);
 					}
@@ -650,7 +650,7 @@ abstract class MhTranslation {
 				LogGenerator::generateLog(
 					'MhTranslation',
 					'writeJsFile',
-					__("Ошибка создания JS файла: :path", [':path' => $path]),
+					"Ошибка создания JS файла: {$path}",
 					'critical'
 				);
 				return false;
@@ -661,7 +661,7 @@ abstract class MhTranslation {
 				'writeJsFile',
 				[
 					$e->getMessage(),
-					__("Ошибка создания JS файла: :path", [':path' => $path])
+					"Ошибка создания JS файла: {$path}"
 				],
 				'critical'
 			);
@@ -674,7 +674,7 @@ abstract class MhTranslation {
 				LogGenerator::generateLog(
 					'MhTranslation',
 					'writeJsFile',
-					__("Ошибка записи JS файла: :path", [':path' => $path]),
+					"Ошибка записи JS файла: {$path}",
 					'critical'
 				);
 				return false;
@@ -685,7 +685,7 @@ abstract class MhTranslation {
 				'writeJsFile',
 				[
 					$e->getMessage(),
-					__("Ошибка записи JS файла: :path", [':path' => $path])
+					"Ошибка записи JS файла: {$path}"
 				],
 				'critical'
 			);

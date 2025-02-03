@@ -567,9 +567,10 @@ abstract class DataManager {
 			return ''; // Некорректный путь
 		}
 
-		$rootDir = rtrim(ROOT_DIR, '/') . '/';
+		$rootDir = rtrim(ROOT_DIR, '/');
 
 		// Избавляемся от нежелательных частей пути
+		$path          = str_replace($rootDir, '', $path);
 		$pathParts     = explode('/', $path);
 		$filteredParts = array_filter($pathParts, static fn($part) => $part !== '.' && $part !== '..' && $part !== '');
 
@@ -585,6 +586,8 @@ abstract class DataManager {
 		if (PHP_OS_FAMILY === 'Linux' && !str_starts_with($normalizedPath, '/')) {
 			$normalizedPath = '/' . $normalizedPath;
 		}
+
+		if (!str_contains($rootDir, $normalizedPath)) $normalizedPath = $rootDir . $normalizedPath;
 
 		return $normalizedPath;
 	}
@@ -726,40 +729,34 @@ abstract class DataManager {
 	 */
 	public static function createLockFile(string $path) {
 		global $_TIME;
-		if(!touch($path)) {
-			LogGenerator::generateLog(
-				'DataManager',
-				'createLockFile/touch',
-				__(
-					'mhadmin',
-					'Не удалось сохранить файл блокировки обновлений: {{path}}',
-					['{{path}}' => $path]
-				)
-			);
-		}
 
-		if(!chmod($path, 0666)) {
-			LogGenerator::generateLog(
-				'DataManager',
-				'createLockFile/chmod',
-				__(
-					'dle_faker',
-					'Не удалось выставить права на запись файла блокировки обновлений: {{path}}',
-					['{{path}}' => $path]
-				)
-			);
-		}
+		if (!file_exists($path)) {
+			if (!touch($path)) {
+				LogGenerator::generateLog(
+					'DataManager',
+					'createLockFile/touch',
+					__('Не удалось сохранить файл блокировки обновлений: {{path}}', ['{{path}}' => $path]
+					)
+				);
+			}
 
-		if (!file_put_contents($path, $_TIME, LOCK_EX)) {
-			LogGenerator::generateLog(
-				'DataManager',
-				'createLockFile/file_put_contents',
-				__(
-					'dle_faker',
-					'Не удалось обновить содержимое файла блокировки обновлений: {{path}}',
-					['{{path}}' => $path]
-				)
-			);
+			if (!chmod($path, 0666)) {
+				LogGenerator::generateLog(
+					'DataManager',
+					'createLockFile/chmod',
+					__('Не удалось выставить права на запись файла блокировки обновлений: {{path}}', ['{{path}}' => $path]
+					)
+				);
+			}
+
+			if (!file_put_contents($path, $_TIME, LOCK_EX)) {
+				LogGenerator::generateLog(
+					'DataManager',
+					'createLockFile/file_put_contents',
+					__('Не удалось обновить содержимое файла блокировки обновлений: {{path}}', ['{{path}}' => $path]
+					)
+				);
+			}
 		}
 	}
 

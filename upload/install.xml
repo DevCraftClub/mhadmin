@@ -3,7 +3,7 @@
 	<name>MH Admin</name>
 	<description>Универсальная административная панель для модификаций от MaHarder</description>
 	<icon>engine/inc/maharder/_modules/admin/assets/icon.jpg</icon>
-	<version>171.3.2</version>
+	<version>173.3.3</version>
 	<dleversion>17</dleversion>
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
@@ -12,11 +12,11 @@
 	<mnotice>0</mnotice>
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MH Admin v171.3.2', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MH Admin v171.3.2;]]></mysqlupgrade>
+VALUES('maharder', 'MH Admin v173.3.3', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MH Admin v173.3.3;]]></mysqlupgrade>
 	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MH Admin v171.3.2', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MH Admin v171.3.2';]]></mysqlenable>
+VALUES('maharder', 'MH Admin v173.3.3', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
+ON DUPLICATE KEY UPDATE title = 'MH Admin v173.3.3';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
 	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
 	<phpinstall><![CDATA[]]></phpinstall>

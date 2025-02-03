@@ -1,21 +1,19 @@
 {
 	"name": "maharder/admin",
 	"description": "MaHarder AdminPanel",
+	"version": "173.3.3",
 	"type": "project",
 	"authors": [
 		{
 			"name": "Maxim Harder",
-			"email": "dev@devcraft.club"
+			"email": "dev@devcraft.club",
+			"homepage": "https://devcraft.club"
 		}
 	],
 	"config": {
-		"platform": {
-			"php": "8.3"
-		},
 		"vendor-dir": "../_includes/vendor"
 	},
 	"require": {
-		"php": "^8.3",
 		"twig/twig": "^3.8",
 		"twig/markdown-extra": "^3.8",
 		"twig/cache-extra": "^3.8",
@@ -35,16 +33,14 @@
 		"cycle/schema-migrations-generator": "^2.3",
 		"cycle/entity-behavior": "^1.3",
 		"cycle/schema-builder": "^2.8",
-		"cycle/entity-behavior-uuid": "^1.2",
+		"cycle/entity-behavior-uuid": "^1.2"
+	},
+	"require-dev": {
 		"ext-simplexml": "*",
 		"ext-libxml": "*",
 		"ext-intl": "*",
-		"james-heinrich/getid3": "*",
-		"ext-SimpleXML": "*",
-		"ext-sqlite3": "*",
-		"ext-curl": "*",
-		"fakerphp/faker": "*",
-		"ext-fileinfo": "*"
+		"ext-fileinfo": "*",
+		"php": "^8.3"
 	},
 	"conflict": {
 		"symfony/translation-contracts": ">=3.0"

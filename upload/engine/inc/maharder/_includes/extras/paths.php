@@ -175,25 +175,18 @@ $mh_loader_paths = array_filter(array_merge($mh_loader_paths, $mh_models_paths))
 include_once DLEPlugins::Check(MH_INCLUDES . '/extras/functions.php');
 include_once DLEPlugins::Check(MH_INCLUDES . '/extras/mhLoader.php');
 
+putenv('COMPOSER_HOME=' . MH_INCLUDES . '/vendor/bin/composer');
+
+ComposerAction::init();
+if (!ComposerAction::isComposerInstalled()) {
+	ComposerAction::installTemporaryComposer();
+}
+
 if (!file_exists(MH_INCLUDES . '/vendor/autoload.php')) {
-	putenv('COMPOSER_HOME=' . COMPOSER_DIR . '/vendor/bin/composer');
-	DataManager::createDir(service: 'ComposerAction', permission: 0777, _path: COMPOSER_DIR);
-	$composer = COMPOSER_DIR . '/composer.phar';
-	if (!file_exists($composer)) {
-		copy('https://getcomposer.org/download/latest-stable/composer.phar', $composer);
-	}
-	try {
-		$phar = new Phar($composer);
-		$phar->extractTo(COMPOSER_DIR);
-	} catch (Exception $e) {}
-	unlink($composer);
-
-
-	ComposerAction::install();
+	ComposerAction::installDependencies();
 }
 
 include_once MH_INCLUDES . '/vendor/autoload.php';
 
 $MHDB = new MhDB();
 
-ComposerAction::destroy();

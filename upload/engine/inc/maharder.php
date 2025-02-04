@@ -20,7 +20,7 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 // заполняем важную и нужную информацию о модуле
 $modInfo = [
 	'module_name'        => 'MaHarder Assets',
-	'module_version'     => '173.3.0',
+	'module_version'     => '173.3.3',
 	'module_description' => __('Административная панель для моих разработок'),
 	'module_code'        => 'maharder',
 	'module_id'          => 4,

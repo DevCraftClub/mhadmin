@@ -13,7 +13,7 @@
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
 VALUES('maharder', 'MH Admin v173.3.3', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MH Admin v173.3.3;]]></mysqlupgrade>
+ON DUPLICATE KEY UPDATE title = 'MH Admin v173.3.3';]]></mysqlupgrade>
 	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
 VALUES('maharder', 'MH Admin v173.3.3', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
 ON DUPLICATE KEY UPDATE title = 'MH Admin v173.3.3';]]></mysqlenable>
@@ -74,7 +74,7 @@ ON DUPLICATE KEY UPDATE title = 'MH Admin v173.3.3';]]></mysqlenable>
 	die( "Hacking attempt!" );
 }]]></searchcode>
 			<replacecode><![CDATA[
-global $clear_cache, $clear_cache_script;]]></replacecode>
+global $clear_cache, $clear_cache_script; // MH Admin]]></replacecode>
 			<enabled>1</enabled>
 		</operation>
 	</file>

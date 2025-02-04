@@ -730,185 +730,233 @@
         <source>Путь &quot;%s&quot; не был создан</source>
         <target>Путь &quot;%s&quot; не был создан</target>
       </trans-unit>
-      <trans-unit id="184">
+      <trans-unit id="183">
         <source>PayPal</source>
         <target>PayPal</target>
       </trans-unit>
-      <trans-unit id="185">
+      <trans-unit id="184">
         <source>Ko-Fi</source>
         <target>Ko-Fi</target>
       </trans-unit>
-      <trans-unit id="186">
+      <trans-unit id="185">
         <source>YooMoney</source>
         <target>YooMoney</target>
       </trans-unit>
-      <trans-unit id="187">
+      <trans-unit id="186">
         <source>DonationAlerts</source>
         <target>DonationAlerts</target>
       </trans-unit>
-      <trans-unit id="188">
+      <trans-unit id="187">
         <source>Файл '{file}' не был сохранён!</source>
         <target>Файл '{file}' не был сохранён!</target>
       </trans-unit>
-      <trans-unit id="189">
+      <trans-unit id="188">
         <source>ID ресурса не было указано</source>
         <target>ID ресурса не было указано</target>
       </trans-unit>
-      <trans-unit id="190">
+      <trans-unit id="189">
         <source>[NEW] Добавлено моделирование таблиц в базе данных при помощи &lt;a href=&quot;https://cycle-orm.dev&quot; target=&quot;_blank&quot;&gt;Cycle ORM&lt;/a&gt;. Это поможет в дальнейшем создавать модули с более сложной структурой и работу с данными.</source>
         <target>[NEW] Добавлено моделирование таблиц в базе данных при помощи &lt;a href=&quot;https://cycle-orm.dev&quot; target=&quot;_blank&quot;&gt;Cycle ORM&lt;/a&gt;. Это поможет в дальнейшем создавать модули с более сложной структурой и работу с данными.</target>
       </trans-unit>
-      <trans-unit id="191">
+      <trans-unit id="190">
         <source>[NEW] Все изменения в таблицах будут храниться в отдельной таблице &quot;migrations&quot; и в папке &quot;_migrations&quot;. Это позволит легко сделать откат изменений.</source>
         <target>[NEW] Все изменения в таблицах будут храниться в отдельной таблице &quot;migrations&quot; и в папке &quot;_migrations&quot;. Это позволит легко сделать откат изменений.</target>
       </trans-unit>
-      <trans-unit id="192">
+      <trans-unit id="191">
         <source>[NEW] Добавлена возможность сортировать и фильтровать данные таблиц на страницах административной панели (где такие есть, пример: Логи).</source>
         <target>[NEW] Добавлена возможность сортировать и фильтровать данные таблиц на страницах административной панели (где такие есть, пример: Логи).</target>
       </trans-unit>
-      <trans-unit id="193">
+      <trans-unit id="192">
         <source>[NEW] Добавлена возможность проверять на обновление плагина на сайте &lt;a href=&quot;https://devcraft.club&quot; target=&quot;_blank&quot;&gt;devcraft.club&lt;/a&gt;. Используется гостевой ключ.</source>
         <target>[NEW] Добавлена возможность проверять на обновление плагина на сайте &lt;a href=&quot;https://devcraft.club&quot; target=&quot;_blank&quot;&gt;devcraft.club&lt;/a&gt;. Используется гостевой ключ.</target>
       </trans-unit>
-      <trans-unit id="194">
+      <trans-unit id="193">
         <source>[UPDATE][BETA] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
         <target>[UPDATE][BETA] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</target>
       </trans-unit>
-      <trans-unit id="195">
+      <trans-unit id="194">
         <source>[UPDATE] Изменена структура файлов админпанели. Теперь все файлы модуля находятся в папке &quot;_modules&quot;, a шаблоны в папке &quot;_templates&quot;.</source>
         <target>[UPDATE] Изменена структура файлов админпанели. Теперь все файлы модуля находятся в папке &quot;_modules&quot;, a шаблоны в папке &quot;_templates&quot;.</target>
       </trans-unit>
-      <trans-unit id="196">
+      <trans-unit id="195">
         <source>[DELETE] Удалены устаревшие и ненужные методы логирования.</source>
         <target>[DELETE] Удалены устаревшие и ненужные методы логирования.</target>
       </trans-unit>
-      <trans-unit id="197">
+      <trans-unit id="196">
         <source>[DELETE] Удалена замена иконок в админпанели DLE.</source>
         <target>[DELETE] Удалена замена иконок в админпанели DLE.</target>
       </trans-unit>
-      <trans-unit id="198">
+      <trans-unit id="197">
         <source>Журнал изменений</source>
         <target>Журнал изменений</target>
       </trans-unit>
-      <trans-unit id="218">
+      <trans-unit id="198">
         <source>Название модуля</source>
         <target>Название модуля</target>
       </trans-unit>
-      <trans-unit id="219">
+      <trans-unit id="199">
         <source>Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.</source>
         <target>Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.</target>
       </trans-unit>
-      <trans-unit id="220">
+      <trans-unit id="200">
         <source>Название модуля на латинице</source>
         <target>Название модуля на латинице</target>
       </trans-unit>
-      <trans-unit id="221">
+      <trans-unit id="201">
         <source>Введите название модуля на латинице, иначе будет использована стандартная функция DLE для преобразования названия.</source>
         <target>Введите название модуля на латинице, иначе будет использована стандартная функция DLE для преобразования названия.</target>
       </trans-unit>
-      <trans-unit id="222">
+      <trans-unit id="202">
         <source>Описание модуля</source>
         <target>Описание модуля</target>
       </trans-unit>
-      <trans-unit id="223">
+      <trans-unit id="203">
         <source>Введите описание модуля</source>
         <target>Введите описание модуля</target>
       </trans-unit>
-      <trans-unit id="224">
+      <trans-unit id="204">
         <source>Версия модуля</source>
         <target>Версия модуля</target>
       </trans-unit>
-      <trans-unit id="225">
+      <trans-unit id="205">
         <source>Введите версию модуля</source>
         <target>Введите версию модуля</target>
       </trans-unit>
-      <trans-unit id="226">
+      <trans-unit id="206">
         <source>Иконка</source>
         <target>Иконка</target>
       </trans-unit>
-      <trans-unit id="227">
+      <trans-unit id="207">
         <source>Класс иконки. К сайту подключены FontAwesome PRO.&lt;br&gt;По умолчанию: &lt;i class=&quot;fad fa-cogs&quot;&gt;&lt;/i&gt; (fad fa-cogs)</source>
         <target>Класс иконки. К сайту подключены FontAwesome PRO.&lt;br&gt;По умолчанию: &lt;i class=&quot;fad fa-cogs&quot;&gt;&lt;/i&gt; (fad fa-cogs)</target>
       </trans-unit>
-      <trans-unit id="228">
+      <trans-unit id="208">
         <source>Иконка плагина</source>
         <target>Иконка плагина</target>
       </trans-unit>
-      <trans-unit id="229">
+      <trans-unit id="209">
         <source>Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png</source>
         <target>Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png</target>
       </trans-unit>
-      <trans-unit id="230">
+      <trans-unit id="210">
         <source>Название проекта на CrowdIn</source>
         <target>Название проекта на CrowdIn</target>
       </trans-unit>
-      <trans-unit id="231">
+      <trans-unit id="211">
         <source>Укажите URL наимование Вашего проекта на CrowdIn. Пример: Из https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ берём mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;По умолчанию: Название на латинице&lt;/i&gt;</source>
         <target>Укажите URL наимование Вашего проекта на CrowdIn. Пример: Из https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ берём mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;По умолчанию: Название на латинице&lt;/i&gt;</target>
       </trans-unit>
-      <trans-unit id="232">
+      <trans-unit id="212">
         <source>ID статистики перевода на CrowdIn</source>
         <target>ID статистики перевода на CrowdIn</target>
       </trans-unit>
-      <trans-unit id="233">
+      <trans-unit id="213">
         <source>Укажите ID статистики перевода на CrowdIn из дополнения &lt;a href=&quot;https://crowdin.com/store/apps/bds&quot; target=&quot;_blank&quot;&gt;Badges &amp; Status Images&lt;/a&gt;</source>
         <target>Укажите ID статистики перевода на CrowdIn из дополнения &lt;a href=&quot;https://crowdin.com/store/apps/bds&quot; target=&quot;_blank&quot;&gt;Badges &amp; Status Images&lt;/a&gt;</target>
       </trans-unit>
-      <trans-unit id="234">
+      <trans-unit id="214">
         <source>Ссылка на модуль автора</source>
         <target>Ссылка на модуль автора</target>
       </trans-unit>
-      <trans-unit id="235">
+      <trans-unit id="215">
         <source>Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)</source>
         <target>Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)</target>
       </trans-unit>
-      <trans-unit id="236">
+      <trans-unit id="216">
         <source>Ссылка на документацию модуля</source>
         <target>Ссылка на документацию модуля</target>
       </trans-unit>
-      <trans-unit id="237">
+      <trans-unit id="217">
         <source>Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)</source>
         <target>Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)</target>
       </trans-unit>
-      <trans-unit id="238">
+      <trans-unit id="218">
         <source>Добавить в плагины?</source>
         <target>Добавить в плагины?</target>
       </trans-unit>
-      <trans-unit id="239">
+      <trans-unit id="219">
         <source>Скрипт создаст начальный плагин и добавит его в базу данных</source>
         <target>Скрипт создаст начальный плагин и добавит его в базу данных</target>
       </trans-unit>
-      <trans-unit id="240">
+      <trans-unit id="220">
         <source>Перезаписать файлы?</source>
         <target>Перезаписать файлы?</target>
       </trans-unit>
-      <trans-unit id="241">
+      <trans-unit id="221">
         <source>Скрипт перезапишет существующие файлы шаблонами.&lt;br&gt;&lt;span class=&quot;ui red text&quot;&gt;На свой страх и риск!&lt;/span&gt;</source>
         <target>Скрипт перезапишет существующие файлы шаблонами.&lt;br&gt;&lt;span class=&quot;ui red text&quot;&gt;На свой страх и риск!&lt;/span&gt;</target>
       </trans-unit>
-      <trans-unit id="242">
+      <trans-unit id="222">
         <source>Создать</source>
         <target>Создать</target>
       </trans-unit>
-      <trans-unit id="243">
+      <trans-unit id="223">
         <source>Файл :file: создан</source>
         <target>Файл :file: создан</target>
       </trans-unit>
-      <trans-unit id="244">
+      <trans-unit id="224">
         <source>Плагин &quot;&lt;b&gt;:name:&lt;/b&gt;&quot; был создан</source>
         <target>Плагин &quot;&lt;b&gt;:name:&lt;/b&gt;&quot; был создан</target>
       </trans-unit>
-      <trans-unit id="245">
+      <trans-unit id="225">
         <source>Плагин не был создан!</source>
         <target>Плагин не был создан!</target>
       </trans-unit>
-      <trans-unit id="246">
+      <trans-unit id="226">
         <source>Модуль был создан!</source>
         <target>Модуль был создан!</target>
       </trans-unit>
-      <trans-unit id="247">
+      <trans-unit id="227">
         <source>Произошла ошибка!</source>
         <target>Произошла ошибка!</target>
+      </trans-unit>
+      <trans-unit id="245">
+        <source>Загружаем файл: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
+        <target>Загружаем файл: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</target>
+      </trans-unit>
+      <trans-unit id="246">
+        <source>Обновлениям быть!</source>
+        <target>Обновлениям быть!</target>
+      </trans-unit>
+      <trans-unit id="247">
+        <source>Создание модуля</source>
+        <target>Создание модуля</target>
+      </trans-unit>
+      <trans-unit id="249">
+        <source>[FIX] Исправлена работа с composer</source>
+        <target>[FIX] Исправлена работа с composer</target>
+      </trans-unit>
+      <trans-unit id="250">
+        <source>[FIX] Исправлена проблема цикличности в классе переводов</source>
+        <target>[FIX] Исправлена проблема цикличности в классе переводов</target>
+      </trans-unit>
+      <trans-unit id="251">
+        <source>[FIX] По неопределённой причине закинул старую версию поверх новой при мёрдже</source>
+        <target>[FIX] По неопределённой причине закинул старую версию поверх новой при мёрдже</target>
+      </trans-unit>
+      <trans-unit id="252">
+        <source>[FIX] Исправлена загрузка скриптов при помощи composer</source>
+        <target>[FIX] Исправлена загрузка скриптов при помощи composer</target>
+      </trans-unit>
+      <trans-unit id="253">
+        <source>[FIX] Исправлены мелкие ошибки в коде</source>
+        <target>[FIX] Исправлены мелкие ошибки в коде</target>
+      </trans-unit>
+      <trans-unit id="254">
+        <source>[FIX] Добавлены placeholder для стилей и скриптов</source>
+        <target>[FIX] Добавлены placeholder для стилей и скриптов</target>
+      </trans-unit>
+      <trans-unit id="256">
+        <source>Не удалось сохранить файл блокировки обновлений: {{path}}</source>
+        <target>Не удалось сохранить файл блокировки обновлений: {{path}}</target>
+      </trans-unit>
+      <trans-unit id="257">
+        <source>Не удалось выставить права на запись файла блокировки обновлений: {{path}}</source>
+        <target>Не удалось выставить права на запись файла блокировки обновлений: {{path}}</target>
+      </trans-unit>
+      <trans-unit id="258">
+        <source>Не удалось обновить содержимое файла блокировки обновлений: {{path}}</source>
+        <target>Не удалось обновить содержимое файла блокировки обновлений: {{path}}</target>
       </trans-unit>
     </body>
   </file>

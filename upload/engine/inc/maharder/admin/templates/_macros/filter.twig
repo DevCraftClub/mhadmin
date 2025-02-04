@@ -1,7 +1,7 @@
 {% macro search_and_filter(filters, action, currentParams) %}
     {% autoescape 'html' %}
         <form action="{{ action }}" method="get" class="">
-            <div class="ui equal width wrapping menu">
+            <div class="ui width wrapping menu">
                 <div class="item "><i class="fa-duotone fa-solid fa-filter-list"></i></div>
                 <div class="item">
                     <button type="submit" class="ui primary button">{{ 'Поиск'|trans }}</button>

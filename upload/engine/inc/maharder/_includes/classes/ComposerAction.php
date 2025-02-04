@@ -126,20 +126,26 @@ class ComposerAction {
 	 */
 	public static function requirePackage(string|array $package, ?string $version = null, bool $isDev = false, ?string $lockerFile = null): void {
 
-		if (is_array($package)) {
-			foreach ($package as $p => $v) {
-				ComposerAction::requirePackage($p, $v, $isDev, $lockerFile);
+		$runRequire = $lockerFile === null;
+		if (!$runRequire) $runRequire = !file_exists($lockerFile);
+
+
+		if ($runRequire) {
+			if (is_array($package)) {
+				foreach ($package as $p => $v) {
+					ComposerAction::requirePackage($p, $v, $isDev, $lockerFile);
+				}
+
+				return;
 			}
 
-			return;
+			$dev     = $isDev ? '-dev' : '';
+			$command = "require{$dev} $package";
+			if ($version !== null) {
+				$command .= ":$version";
+			}
+			ComposerAction::runCommand($command);
 		}
-
-		$dev     = $isDev ? '-dev' : '';
-		$command = "require{$dev} $package";
-		if ($version !== null) {
-			$command .= ":$version";
-		}
-		ComposerAction::runCommand($command);
 
 		if ($lockerFile) {
 			DataManager::createLockFile($lockerFile);

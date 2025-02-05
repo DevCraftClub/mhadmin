@@ -16,6 +16,7 @@ global $mh;
 
 $logs = [
 	'173.3.4' => [
+		__('[UPDATE] Обновлена документация методов getGlobals и getFunctions в AdminUrlExtension'),
 		__('[UPDATE] Добавлен новый метод createOrUpdate для класса MhDB'),
 		__('[FIX] Исправлены мелкие ошибки'),
 	],

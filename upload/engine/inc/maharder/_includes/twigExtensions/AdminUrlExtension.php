@@ -8,27 +8,27 @@ use Twig\TwigFunction;
 
 class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 
-	protected static function getServerData() : array {
+	protected static function getServerData(): array {
 		return $_SERVER;
 	}
 
-	protected static function getUserHash() : string {
+	protected static function getUserHash(): string {
 		global $dle_login_hash;
 
 		return $dle_login_hash;
 	}
 
-	protected static function getDleConfig() : array {
+	protected static function getDleConfig(): array {
 		global $config;
 
 		return $config;
 	}
 
-	protected static function getGetParams() : ?array {
+	protected static function getGetParams(): ?array {
 		return filter_input_array(INPUT_GET);
 	}
 
-	protected static function getPostParams() : ?array {
+	protected static function getPostParams(): ?array {
 		return filter_input_array(INPUT_POST);
 	}
 
@@ -55,9 +55,9 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @see AdminUrlExtension::getServerData()
 	 * @see AdminUrlExtension::getThisHost()
 	 */
-	protected static function getAssetsUrl() : string {
-		return (isset(self::getServerData()['HTTPS']) && 'on' === self::getServerData()['HTTPS'] ? 'https' : 'http')
-			. '://' . self::getThisHost() . '/engine/inc/maharder/admin/assets';
+	protected static function getAssetsUrl(): string {
+		return (isset(self::getServerData()['HTTPS']) && 'on' === self::getServerData(
+			)['HTTPS'] ? 'https' : 'http') . '://' . self::getThisHost() . '/engine/inc/maharder/admin/assets';
 	}
 
 	/**
@@ -74,8 +74,8 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	protected static function getModulesUrl() {
 		return (!empty(self::getServerData()['HTTP_REFERER']))
 			? self::getServerData()['HTTP_REFERER']
-			: ((!empty(self::getServerData()['REQUEST_URI'])) ? self::getServerData()['REQUEST_URI']
-				: self::getThisSelf() . "?" .self::getServerData()['QUERY_STRING']);
+			: ((!empty(self::getServerData()['REQUEST_URI'])) ? self::getServerData(
+			)['REQUEST_URI'] : self::getThisSelf() . "?" . self::getServerData()['QUERY_STRING']);
 	}
 
 	/**
@@ -85,9 +85,10 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * и создаёт корректную строку URL с обновленными параметрами запроса.
 	 *
 	 * @param string $url Строка URL для обработки.
+	 *
 	 * @return string Обработанный URL.
 	 */
-	public function parseUrl(string $url) : string {
+	public function parseUrl(string $url): string {
 		$parts = parse_url(trim(str_replace(['&amp;', '\t', '\n'], ['&', '', ''], $url)));
 		parse_str($parts['query'], $_url_data);
 
@@ -103,7 +104,37 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 		return "{$url_path}?" . http_build_query($_url_data);
 	}
 
-	public function getGlobals() : array {
+	/**
+	 * Возвращает массив глобальных данных для использования в приложении.
+	 *
+	 * Метод собирает различные данные, такие как URL ресурсов, настройки пользователя,
+	 * серверные данные, параметры запроса `GET` и `POST`, а также информацию о локали и языках.
+	 * Эти данные могут быть использованы, например, для настройки интерфейса или работы с конфигурацией приложения.
+	 *
+	 * @return array Ассоциативный массив глобальных данных:
+	 * - `assets_url` (`string`): URL статических ресурсов (см. {@see AdminUrlExtension::getAssetsUrl()}).
+	 * - `plugin_url` (`string`): URL модуля (см. {@see AdminUrlExtension::getModulesUrl()}).
+	 * - `dle_login_hash` (`string`): Хэш авторизации пользователя (см. {@see AdminUrlExtension::getUserHash()}).
+	 * - `dle_config` (`array`): Конфигурация DataLife Engine (см. {@see AdminUrlExtension::getDleConfig()}).
+	 * - `_server` (`array`): Суперглобальный массив `$_SERVER` (см. {@see AdminUrlExtension::getServerData()}).
+	 * - `_get` (`array|null`): Параметры запроса `GET` (см. {@see AdminUrlExtension::getGetParams()}).
+	 * - `_post` (`array|null`): Параметры запроса `POST` (см. {@see AdminUrlExtension::getPostParams()}).
+	 * - `languages` (`array`): Форматированный список языков (см. {@see MhTranslation::getFormattedLanguageList()}).
+	 * - `selected_lang` (`string`): Текущая локаль/язык (см. {@see MhTranslation::getLocale()}).
+	 * - `lang_data` (`array`): Данные о текущей локали (см. {@see MhTranslation::getLocaleData()}).
+	 *
+	 * @see AdminUrlExtension::getAssetsUrl()
+	 * @see AdminUrlExtension::getModulesUrl()
+	 * @see AdminUrlExtension::getUserHash()
+	 * @see AdminUrlExtension::getDleConfig()
+	 * @see AdminUrlExtension::getServerData()
+	 * @see AdminUrlExtension::getGetParams()
+	 * @see AdminUrlExtension::getPostParams()
+	 * @see MhTranslation::getFormattedLanguageList()
+	 * @see MhTranslation::getLocale()
+	 * @see MhTranslation::getLocaleData()
+	 */
+	public function getGlobals(): array {
 
 		return [
 			'assets_url'     => self::getAssetsUrl(),
@@ -120,7 +151,13 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 		];
 	}
 
-	public function getFunctions() : array {
+	/**
+	 * Возвращает массив функций Twig, доступных в данном расширении.
+	 *
+	 * @return array Массив объектов TwigFunction, предоставляющих функции для использования в Twig-шаблонах.
+	 * @see \AdminUrlExtension::parseUrl Метод, который используется в качестве привязанной функции Twig.
+	 */
+	public function getFunctions(): array {
 		return [
 			new TwigFunction('parse_url', [$this, 'parseUrl'])
 		];

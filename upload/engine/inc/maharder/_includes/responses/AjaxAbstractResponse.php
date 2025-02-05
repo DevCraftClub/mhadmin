@@ -49,15 +49,22 @@ abstract class AjaxAbstractResponse {
 	/**
 	 * Устанавливает данные ответа.
 	 *
-	 * @param array $data Массив данных, который будет включён в ответ.
+	 * @param array|string $data Массив данных или просто строка сообщения, которые будут включены в ответ.
 	 *
 	 * @return self Экземпляр текущего объекта для цепочки вызовов.
 	 *
 	 * @see AjaxAbstractResponse::$data
 	 */
-	public function setData(array $data): self {
-		$this->data = $data;
+	public function setData(array|string $data): self {
+		if (is_array($data)) {
+			// Объединяем массив входных данных с текущим массивом $this->data
+			$this->data = array_filter(array_merge($this->data, $data));
+		} else {
+			// Добавляем строку в массив $this->data
+			$this->data[] = $data;
+		}
 		return $this;
+
 	}
 
 	/**

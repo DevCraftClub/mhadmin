@@ -357,6 +357,7 @@ class MhDB {
 	 *                           сохранения.
 	 */
 	public function run(object $entity): ORM\Transaction\StateInterface {
+		$entity->beforeSave();
 		return $this->getManager()->persist($entity)->run();
 	}
 

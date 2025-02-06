@@ -52,6 +52,16 @@ abstract class BasisModel {
 		$this->updatedAt = new DateTimeImmutable();
 	}
 
+	public function getCreator(): ?int {
+		return $this->creator;
+	}
+
+	public function getLastEditor(): ?int {
+		return $this->lastEditor;
+	}
+
+
+
 	/**
 	 * Обновление последнего редактора.
 	 *

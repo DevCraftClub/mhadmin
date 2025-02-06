@@ -12,20 +12,43 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * Метод обращается к глобальному объекту `$mh` и вызывает его метод `getUser` с переданным идентификатором
 	 * пользователя. Если пользователь с указанным идентификатором не найден, возвращается пустой массив.
 	 *
-	 * @param int     $user_id Идентификатор пользователя, информацию о котором необходимо получить.
+	 * @param int|null $user_id Идентификатор пользователя, информацию о котором необходимо получить.
 	 *
 	 * @return array Массив данных пользователя или пустой массив, если пользователь не найден.
 	 * @throws JsonException Если возникает ошибка при обработке JSON данных (если таковая может появиться внутри
 	 *                       `getUser`).
-	 * @global object $mh      Глобальный объект, предоставляющий метод `getUser` для работы с данными пользователей.
+	 * @global object  $mh      Глобальный объект, предоставляющий метод `getUser` для работы с данными пользователей.
 	 * @see DataLoader::load_data() Для получения данных из базы.
 	 * @see DataLoader::getDb() Для инициализации базы данных.
 	 */
-	protected static function getUserInfo(int $user_id): array {
+	public static function getUserInfo(?int $user_id): array {
 		global $mh;
 		$user = $mh->getUser($user_id);
 
 		return $user ?: [];
+	}
+
+	/**
+	 * Получает информацию о группе пользователей по её идентификатору.
+	 *
+	 * Этот метод использует глобальный объект $mh для получения данных о всех
+	 * пользовательских группах с помощью метода getFullUserGroups.
+	 *
+	 * Если идентификатор группы передан, возвращается массив данных для указанной группы.
+	 * Если идентификатор группы равен null, возвращается пустой массив.
+	 *
+	 * @param int|null $group_id Идентификатор группы пользователей. Может быть null.
+	 *
+	 * @return array Массив данных о конкретной группе пользователей или пустой массив.
+	 * @throws JsonException
+	 * @see DleData::getFullUserGroups() Используется для получения данных о всех группах пользователей.
+	 * @global object  $mh       Глобальный объект, предоставляющий методы работы с данными.
+	 */
+	public static function getUserGroupInfo(?int $group_id): array {
+		global $mh;
+		$groups = $mh->getFullUserGroups();
+
+		return $group_id ? $groups[$group_id] : [];
 	}
 
 	/**
@@ -39,7 +62,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @global array $member_id Массив с информацией об идентификаторе текущего пользователя.
 	 * @global bool  $is_logged Флаг, указывающий, авторизован ли текущий пользователь.
 	 */
-	protected static function getCurrentUser(): array {
+	public static function getCurrentUser(): array {
 		global $member_id, $is_logged;
 		if ($is_logged) {
 			return self::getUserInfo((int)$member_id['user_id']);
@@ -54,7 +77,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @global array $_SERVER Глобальная переменная, содержащая данные о сервере и окружении.
 	 *
 	 */
-	protected static function getServerData(): array {
+	public static function getServerData(): array {
 		return $_SERVER;
 	}
 
@@ -65,7 +88,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @global string $dle_login_hash Хэш аутентификации пользователя.
 	 *
 	 */
-	protected static function getUserHash(): string {
+	public static function getUserHash(): string {
 		global $dle_login_hash;
 
 		return $dle_login_hash;
@@ -77,7 +100,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @return array Возвращает массив конфигурации.
 	 * @global array $config Глобальный массив конфигурации.
 	 */
-	protected static function getDleConfig(): array {
+	public static function getDleConfig(): array {
 		global $config;
 
 		return $config;
@@ -92,7 +115,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @global int INPUT_GET Константа, определяющая использование массива GET.
 	 * @see filter_input_array()
 	 */
-	protected static function getGetParams(): ?array {
+	public static function getGetParams(): ?array {
 		return filter_input_array(INPUT_GET);
 	}
 
@@ -106,7 +129,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @see filter_input_array()
 	 * @global array $_POST Глобальный массив данных POST-запроса.
 	 */
-	protected static function getPostParams(): ?array {
+	public static function getPostParams(): ?array {
 		return filter_input_array(INPUT_POST);
 	}
 
@@ -120,7 +143,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @return string|null Строка, содержащая путь к исполняемому скрипту (PHP_SELF),
 	 * если такой ключ существует, иначе null.
 	 */
-	protected static function getThisSelf() {
+	public static function getThisSelf() {
 		return self::getServerData()['PHP_SELF'];
 	}
 
@@ -134,7 +157,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 *
 	 * @global array $_SERVER Глобальный массив данных сервера.
 	 */
-	protected static function getThisHost() {
+	public static function getThisHost() {
 		return self::getServerData()['HTTP_HOST'];
 	}
 
@@ -148,7 +171,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @see self::getServerData() Для получения данных сервера.
 	 * @global array $_SERVER Глобальный массив с данными сервера.
 	 */
-	protected static function getThisRoot() {
+	public static function getThisRoot() {
 		return self::getServerData()['DOCUMENT_ROOT'];
 	}
 
@@ -163,9 +186,13 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @see AdminUrlExtension::getServerData()
 	 * @see AdminUrlExtension::getThisHost()
 	 */
-	protected static function getAssetsUrl(): string {
+	public static function getAssetsUrl(): string {
+		return self::getSiteUrl() . '/engine/inc/maharder/admin/assets';
+	}
+
+	public static function getSiteUrl(): string {
 		return (isset(self::getServerData()['HTTPS']) && 'on' === self::getServerData(
-			)['HTTPS'] ? 'https' : 'http') . '://' . self::getThisHost() . '/engine/inc/maharder/admin/assets';
+			)['HTTPS'] ? 'https' : 'http') . '://' . self::getThisHost();
 	}
 
 	/**
@@ -179,7 +206,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @see AdminUrlExtension::getServerData()
 	 * @see AdminUrlExtension::getThisSelf()
 	 */
-	protected static function getModulesUrl() {
+	public static function getModulesUrl() {
 		return (!empty(self::getServerData()['HTTP_REFERER']))
 			? self::getServerData()['HTTP_REFERER']
 			: ((!empty(self::getServerData()['REQUEST_URI'])) ? self::getServerData(
@@ -216,8 +243,9 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * Возвращает массив глобальных данных для использования в приложении.
 	 *
 	 * Метод собирает различные данные, такие как URL ресурсов, настройки пользователя,
-	 * серверные данные, параметры запросов `GET` и `POST`, а также информацию о локали и языках.
-	 * Эти данные могут быть использованы, например, для настройки интерфейса или работы с конфигурацией приложения.
+	 * серверные данные, параметры запросов `GET` и `POST`, информацию о локали и языках,
+	 * а также базовый URL сайта. Эти данные могут быть использованы, например, для настройки
+	 * интерфейса или работы с конфигурацией приложения.
 	 *
 	 * @return array Ассоциативный массив глобальных данных:
 	 * - `assets_url` (`string`): URL статических ресурсов (см. {@see AdminUrlExtension::getAssetsUrl()}).
@@ -231,6 +259,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * - `selected_lang` (`string`): Текущая локаль/язык (см. {@see MhTranslation::getLocale()}).
 	 * - `lang_data` (`array`): Данные о текущей локали (см. {@see MhTranslation::getLocaleData()}).
 	 * - `current_user` (`array`): Данные о текущем пользователе (см. {@see AdminUrlExtension::getCurrentUser()}).
+	 * - `dle_url` (`string`): Базовый URL сайта (см. {@see AdminUrlExtension::getSiteUrl()}).
 	 *
 	 * @throws JsonException|Throwable
 	 *
@@ -245,6 +274,7 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * @see MhTranslation::getLocale()
 	 * @see MhTranslation::getLocaleData()
 	 * @see AdminUrlExtension::getCurrentUser()
+	 * @see AdminUrlExtension::getSiteUrl()
 	 */
 	public function getGlobals(): array {
 
@@ -259,8 +289,8 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 			'languages'      => MhTranslation::getFormattedLanguageList(),
 			'selected_lang'  => MhTranslation::getLocale(),
 			'lang_data'      => MhTranslation::getLocaleData(MhTranslation::getLocale()),
-			'current_user'   => self::getCurrentUser()
-
+			'current_user'   => self::getCurrentUser(),
+			'dle_url'        => self::getSiteUrl(),
 		];
 	}
 
@@ -268,14 +298,20 @@ class AdminUrlExtension extends AbstractExtension implements GlobalsInterface {
 	 * Возвращает массив функций Twig, доступных в данном расширении.
 	 *
 	 * @return array Массив объектов TwigFunction, предоставляющих функции для использования в Twig-шаблонах.
-	 * Каждая функция представляет определённую логику, доступную для вызова в Twig-шаблонах:
+	 * Каждая функция предоставляет специфическую логику, реализуемую методами данного класса:
 	 * - `parse_url`: вызывает метод {@see \AdminUrlExtension::parseUrl}.
 	 * - `userInfo`: вызывает метод {@see \AdminUrlExtension::getUserInfo}.
+	 * - `userGroup`: вызывает метод {@see \AdminUrlExtension::getUserGroupInfo}.
+	 *
+	 * @see \AdminUrlExtension::parseUrl Метод, вызываемый функцией `parse_url`.
+	 * @see \AdminUrlExtension::getUserInfo Метод, вызываемый функцией `userInfo`.
+	 * @see \AdminUrlExtension::getUserGroupInfo Метод, вызываемый функцией `userGroup`.
 	 */
 	public function getFunctions(): array {
 		return [
 			new TwigFunction('parse_url', [$this, 'parseUrl']),
-			new TwigFunction('userInfo', [$this, 'getUserInfo'])
+			new TwigFunction('userInfo', [$this, 'getUserInfo']),
+			new TwigFunction('userGroup', [$this, 'getUserGroupInfo'])
 		];
 	}
 }

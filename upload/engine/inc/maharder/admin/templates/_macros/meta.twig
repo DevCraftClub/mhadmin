@@ -1,0 +1,31 @@
+{% import _self as macro %}
+
+{% macro metaUser(user_id, time, role) %}
+    {% set user = userInfo(user_id) %}
+
+<div class="comment">
+    <a class="avatar">
+        <img src="{{ user.foto }}">
+    </a>
+    <div class="content">
+        <a class="author">{{ user.name }}{% if user.fullname %} ({{ user.fullname }}){% endif %}</a>
+        <div class="metadata">
+            <span class="date">{{ time }}</span>
+        </div>
+        <div class="text">
+            {{ role }}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro meta(entity) %}
+<div class="ui comments">
+    <h3 class="ui dividing header">{% trans %}Метаданные{% endtrans %}</h3>
+    {{ metaUser(entity.creator, entity.createdAt, 'Создатель'|trans) }}
+
+    {% if entity.lastEditor %}
+        {{ metaUser(entity.lastEditor, entity.updatedAt, 'Редактор'|trans) }}
+    {% endif %}
+</div>
+{% endmacro %}

@@ -42,8 +42,8 @@ class Admin {
 			URL . '/maharder/admin/assets/css/tokens.css',
 			URL . '/maharder/admin/assets/css/prettify.css',
 			URL . '/maharder/admin/assets/css/jquery-confirm.min.css',
+			DLE_URL . 'engine/editor/css/content.css',
 			URL . '/maharder/admin/assets/css/theme.css',
-			URL . '/maharder/admin/assets/editor/themes/default.min.css',
 		];
 	/**
 	 * Массив со скриптами, которые используются в административной панели.
@@ -68,12 +68,8 @@ class Admin {
 			URL . '/maharder/admin/assets/js/timeago/jquery.timeago.ru.js',
 			URL . '/maharder/admin/assets/js/jquery-confirm.min.js',
 			URL . '/maharder/admin/assets/js/clipboard.js',
-			URL . '/maharder/admin/assets/editor/sceditor.min.js',
-			URL . '/maharder/admin/assets/editor/formats/bbcode.js',
-			URL . '/maharder/admin/assets/editor/icons/material.js',
-			URL . '/maharder/admin/assets/editor/plugins/autosave.js',
-			URL . '/maharder/admin/assets/editor/plugins/autoyoutube.js',
-			URL . '/maharder/admin/assets/editor/plugins/undo.js',
+			DLE_URL . 'engine/editor/jscripts/tiny_mce/tinymce.min.js',
+			DLE_URL . 'engine/classes/js/typograf.min.js',
 			URL . '/maharder/admin/assets/js/theme.js',
 		];
 	/**
@@ -176,8 +172,6 @@ Deny from all'
 		}
 
 		$this->setDefaultAuthor();
-		$this->setJs(URL . '/maharder/admin/assets/editor/languages/' . MhTranslation::getLocaleData(MhTranslation::getLocale())['iso2'] . '.js'
-		);
 
 	}
 

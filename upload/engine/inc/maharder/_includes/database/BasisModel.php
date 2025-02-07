@@ -22,7 +22,7 @@ use Cycle\Annotated\Annotation\Table\Index;
 #[Behavior\UpdatedAt(field: 'updatedAt', column: 'updated_at')]
 abstract class BasisModel {
 	#[Column(type: 'bigPrimary', primary: true, autoincrement: true)]
-	protected int                 $id;
+	protected int              $id;
 	#[Column(type: 'datetime', default: 'CURRENT_TIMESTAMP')]
 	public \DateTimeImmutable  $createdAt;
 	#[Column(type: 'datetime', nullable: true, default: null)]
@@ -60,8 +60,6 @@ abstract class BasisModel {
 		return $this->lastEditor;
 	}
 
-
-
 	/**
 	 * Обновление последнего редактора.
 	 *
@@ -80,14 +78,10 @@ abstract class BasisModel {
 
 		$user_id = $is_logged ? $member_id['user_id'] : null;
 
-		try {
-			if (isset($this->id)) {
-				$this->setLastEditor($user_id);
-				$this->setUpdatedDate();
-			} else {
-				$this->setCreator($user_id);
-			}
-		} catch (Exception $e) {
+		if (isset($this->id)) {
+			$this->setLastEditor($user_id);
+			$this->setUpdatedDate();
+		} else {
 			$this->setCreator($user_id);
 		}
 	}

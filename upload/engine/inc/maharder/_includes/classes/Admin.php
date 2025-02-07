@@ -42,7 +42,6 @@ class Admin {
 			URL . '/maharder/admin/assets/css/tokens.css',
 			URL . '/maharder/admin/assets/css/prettify.css',
 			URL . '/maharder/admin/assets/css/jquery-confirm.min.css',
-			DLE_URL . 'engine/editor/css/content.css',
 			URL . '/maharder/admin/assets/css/theme.css',
 		];
 	/**

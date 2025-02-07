@@ -24,13 +24,13 @@ abstract class BasisModel {
 	#[Column(type: 'bigPrimary', primary: true, autoincrement: true)]
 	protected int                 $id;
 	#[Column(type: 'datetime', default: 'CURRENT_TIMESTAMP')]
-	protected \DateTimeImmutable  $createdAt;
+	public \DateTimeImmutable  $createdAt;
 	#[Column(type: 'datetime', nullable: true, default: null)]
-	protected ?\DateTimeImmutable $updatedAt  = null;
+	public ?\DateTimeImmutable $updatedAt  = null;
 	#[Column('bigInteger', nullable: true, default: null)]
-	protected ?int                $creator    = null;
+	public ?int                $creator    = null;
 	#[Column('bigInteger', nullable: true, default: null)]
-	protected ?int                $lastEditor = null;
+	public ?int                $lastEditor = null;
 
 	public function getId(): int {
 		return $this->id;
@@ -80,10 +80,14 @@ abstract class BasisModel {
 
 		$user_id = $is_logged ? $member_id['user_id'] : null;
 
-		if ($this->id) {
-			$this->setLastEditor($user_id);
-			$this->setUpdatedDate();
-		} else {
+		try {
+			if (isset($this->id)) {
+				$this->setLastEditor($user_id);
+				$this->setUpdatedDate();
+			} else {
+				$this->setCreator($user_id);
+			}
+		} catch (Exception $e) {
 			$this->setCreator($user_id);
 		}
 	}

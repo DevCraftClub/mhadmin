@@ -50,6 +50,60 @@
                                        {% if attribute(currentParams, 'filter_' ~ name) %}checked{% endif %}>
                                 <label for="filter_{{ name }}">{{ options.label|trans }}</label>
                             </div>
+                        {% elseif options.type == 'range' %}
+                            <div class="ui labeled ticked range slider" id="range-{{ name }}"></div>
+                            <div class="ui input">
+                                <input type="text" id="range-{{ name }}-input-1" name="filter_{{ name }}_from">
+                                <input type="text" id="range-{{ name }}-input-2" name="filter_{{ name }}_to">
+                            </div>
+                            <script>
+								$('#range-{{ name }}')
+									.slider({
+										min: options.min,
+										max: options.max,
+										step: 1,
+										showThumbTooltip: true,
+										tooltipConfig: {
+											position: 'bottom center',
+											variation: 'small visible blue'
+										},
+										smooth: true
+									})
+								;
+                            </script>
+                        {% elseif options.type == 'daterange' %}
+                            <div class="two fields">
+                                <div class="field">
+                                    <label for={{ name }}-range-start">{% trans %}Начальная дата{% endtrans %}</label>
+                                    <div class="ui tiny calendar" id="{{ name }}-range-start">
+                                        <div class="ui input left icon">
+                                            <i class="calendar icon"></i>
+                                            <input type="text" placeholder="" name="filter_{{ name }}_from">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="{{ name }}-range-end">{% trans %}Конечная дата{% endtrans %}</label>
+                                    <div class="ui tiny calendar" id="{{ name }}-range-end">
+                                        <div class="ui input left icon">
+                                            <i class="calendar icon"></i>
+                                            <input type="text" placeholder="" name="filter_{{ name }}_to">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                let {{ name }}_settings = calendarSettings('datetime');
+                                {{ name }}_settings.minDate = {{ options.min }};
+                                {{ name }}_settings.maxDate = {{ options.max }};
+
+                                let startCalSettings = {{ name }}_settings;
+                                let endCalSettings = {{ name }}_settings;
+								startCalSettings.endCalendar('#{{ name }}-range-end');
+								endCalSettings.startCalendar('#{{ name }}-range-start');
+								$('#{{ name }}-range-start').calendar(startCalSettings);
+								$('#{{ name }}-range-end').calendar(endCalSettings);
+                            </script>
                         {% endif %}
                     </div>
                 {% endfor %}

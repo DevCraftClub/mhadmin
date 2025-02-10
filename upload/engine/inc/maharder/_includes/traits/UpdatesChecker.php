@@ -1,6 +1,6 @@
 <?php
 
-
+use Curl\Curl;
 
 trait UpdatesChecker {
 

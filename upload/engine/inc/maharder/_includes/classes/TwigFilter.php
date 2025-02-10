@@ -175,11 +175,9 @@ class TwigFilter {
 	 * @see getRepository() Метод получения текущего репозитория.
 	 */
 	public function createRangeFilter(string $column_name, string $label): array {
-		$data  = (array)$this->getRepository()->select()->columns([$column_name])->orderBy($column_name)->sortBy(
-			SelectQuery::SORT_ASC
-		)->fetchAll();
-		$first = $data[0][$column_name];
-		$last  = $data[count($data) - 1][$column_name];
+		$data  = (array)$this->getRepository()->select()->columns([$column_name])->orderBy($column_name, SelectQuery::SORT_ASC)->fetchAll();
+		$first = $data[0][$column_name] ?: 0;
+		$last  = $data[count($data) - 1][$column_name] ?: 10;
 
 		return [
 			$column_name => [
@@ -208,11 +206,9 @@ class TwigFilter {
 	 * @global RepositoryInterface $repository  Репозиторий, с которым связан класс.
 	 */
 	public function createDateRangeFilter(string $column_name, string $label): array {
-		$data  = (array)$this->getRepository()->select()->columns([$column_name])->orderBy($column_name)->sortBy(
-			SelectQuery::SORT_ASC
-		)->fetchAll();
-		$first = $data[0][$column_name];
-		$last  = $data[count($data) - 1][$column_name];
+		$data  = (array)$this->getRepository()->select()->columns([$column_name])->orderBy($column_name, SelectQuery::SORT_ASC)->fetchAll();
+		$first = $data[0][$column_name] ?: (new DateTimeImmutable())->format('Y-m-d H:i:s');
+		$last  = $data[count($data) - 1][$column_name] ?: (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
 		return [
 			$column_name => [

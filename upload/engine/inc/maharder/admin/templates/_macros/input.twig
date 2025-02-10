@@ -28,6 +28,45 @@
 
 {% endmacro %}
 
+{% macro date(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'date',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts,
+	})
+	}}
+
+{% endmacro %}
+
+{% macro time(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'time',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts,
+	})
+	}}
+
+{% endmacro %}
+
+{% macro datetime(id, name, descr, opts) %}
+
+	{{ include('templateIncludes/segRow.html', {
+		type: 'datetime',
+		id: id,
+		name: name,
+		descr: descr,
+		variable: opts,
+	})
+	}}
+
+{% endmacro %}
+
 {% macro number(id, name, descr, opts) %}
 
 	{{ include('templateIncludes/segRow.html', {

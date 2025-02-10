@@ -51,25 +51,50 @@
                                 <label for="filter_{{ name }}">{{ options.label|trans }}</label>
                             </div>
                         {% elseif options.type == 'range' %}
-                            <div class="ui labeled ticked range slider" id="range-{{ name }}"></div>
-                            <div class="ui input">
-                                <input type="text" id="range-{{ name }}-input-1" name="filter_{{ name }}_from">
-                                <input type="text" id="range-{{ name }}-input-2" name="filter_{{ name }}_to">
+                            <div class="sliderrange">
+                                <div class="ui labeled ticked range slider" id="range-{{ name }}"></div>
+                                <div class="ui mini input">
+                                    <input type="number" id="range-{{ name }}-input-from" name="filter_{{ name }}_from">
+                                </div>
+                                <div class="ui mini input">
+                                    <input type="number" id="range-{{ name }}-input-to" name="filter_{{ name }}_to">
+                                </div>
                             </div>
+
                             <script>
-								$('#range-{{ name }}')
-									.slider({
-										min: options.min,
-										max: options.max,
-										step: 1,
-										showThumbTooltip: true,
-										tooltipConfig: {
-											position: 'bottom center',
-											variation: 'small visible blue'
-										},
-										smooth: true
-									})
-								;
+                                setTimeout(() => {
+									$('#range-{{ name }}')
+										.slider({
+											min: {{ options.from }},
+											max: {{ options.to }},
+											step: 1,
+											showThumbTooltip: true,
+											tooltipConfig: {
+												position: 'bottom center',
+												variation: 'small visible blue'
+											},
+											smooth: true,
+                                            onChange: function () {
+												let from = $(this).slider('get thumbValue', 'first'),
+													to = $(this).slider('get thumbValue', 'second');
+
+												$('#range-{{ name }}-input-from').val(from);
+												$('#range-{{ name }}-input-to').val(to);
+                                            }
+										})
+									;
+									$('#range-{{ name }}-input-from').on('change', function () {
+										let min = parseInt($(this).val()) <= {{ options.from }} ? {{ options.from }} : parseInt($(this).val());
+										$('#range-{{ name }}').slider('set rangeValue', min, $('#range-{{ name }}-input-to').val());
+										$(this).val(min);
+                                    });
+									$('#range-{{ name }}-input-to').on('change', function () {
+										let max = parseInt($(this).val()) >= {{ options.to }} ? {{ options.to }} : parseInt($(this).val());
+										$('#range-{{ name }}').slider('set rangeValue', $('#range-{{ name }}-input-from').val(), max);
+										$(this).val(max);
+                                    });
+
+                                }, 1000);
                             </script>
                         {% elseif options.type == 'daterange' %}
                             <div class="two fields">
@@ -93,16 +118,19 @@
                                 </div>
                             </div>
                             <script>
-                                let {{ name }}_settings = calendarSettings('datetime');
-                                {{ name }}_settings.minDate = Date.parse('{{ options.min }}');
-                                {{ name }}_settings.maxDate = Date.parse('{{ options.max }}');
+                                setTimeout(() => {
+									let {{ name }}_settings = calendarSettings('datetime');
+                                    {{ name }}_settings.minDate = new Date('{{ options.min }}');
+                                    {{ name }}_settings.maxDate = new Date('{{ options.max }}');
 
-                                let startCalSettings = {{ name }}_settings;
-                                let endCalSettings = {{ name }}_settings;
-								startCalSettings.endCalendar('#{{ name }}-range-end');
-								endCalSettings.startCalendar('#{{ name }}-range-start');
-								$('#{{ name }}-range-start').calendar(startCalSettings);
-								$('#{{ name }}-range-end').calendar(endCalSettings);
+									let startCalSettings = {{ name }}_settings;
+									let endCalSettings = {{ name }}_settings;
+									startCalSettings.endCalendar = '#{{ name }}-range-end';
+									endCalSettings.startCalendar = '#{{ name }}-range-start';
+
+									$('#{{ name }}-range-start').calendar(startCalSettings);
+									$('#{{ name }}-range-end').calendar(endCalSettings);
+                                }, 1000);
                             </script>
                         {% endif %}
                     </div>

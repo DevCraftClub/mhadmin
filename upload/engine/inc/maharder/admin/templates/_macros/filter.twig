@@ -74,28 +74,28 @@
                         {% elseif options.type == 'daterange' %}
                             <div class="two fields">
                                 <div class="field">
-                                    <label for={{ name }}-range-start">{% trans %}Начальная дата{% endtrans %}</label>
+                                    <label for="filter_{{ name }}_from">{% trans %}Начальная дата{% endtrans %}</label>
                                     <div class="ui tiny calendar" id="{{ name }}-range-start">
                                         <div class="ui input left icon">
                                             <i class="calendar icon"></i>
-                                            <input type="text" placeholder="" name="filter_{{ name }}_from">
+                                            <input type="text" placeholder="" name="filter_{{ name }}_from" id="filter_{{ name }}_from">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="field">
-                                    <label for="{{ name }}-range-end">{% trans %}Конечная дата{% endtrans %}</label>
+                                    <label for="filter_{{ name }}_to">{% trans %}Конечная дата{% endtrans %}</label>
                                     <div class="ui tiny calendar" id="{{ name }}-range-end">
                                         <div class="ui input left icon">
                                             <i class="calendar icon"></i>
-                                            <input type="text" placeholder="" name="filter_{{ name }}_to">
+                                            <input type="text" placeholder="" name="filter_{{ name }}_to" id="filter_{{ name }}_to">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <script>
                                 let {{ name }}_settings = calendarSettings('datetime');
-                                {{ name }}_settings.minDate = {{ options.min }};
-                                {{ name }}_settings.maxDate = {{ options.max }};
+                                {{ name }}_settings.minDate = Date.parse('{{ options.min }}');
+                                {{ name }}_settings.maxDate = Date.parse('{{ options.max }}');
 
                                 let startCalSettings = {{ name }}_settings;
                                 let endCalSettings = {{ name }}_settings;

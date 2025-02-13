@@ -16,6 +16,7 @@ global $mh;
 
 $logs = [
 	'173.3.4' => [
+		__('[NEШ] Новый вид в input.twig: date, time и datetime'),
 		__('[NEW] Добавление новых фильтров (rangeFilter и dateRangeFilter) для TwigFilter'),
 		__('[NEW] Добавлена функция `getFullUserGroups()` в трейте `DleData` для вывода информации о всех группах'),
 		__('[NEW] Добавлена функция `userGroup()` для вывода определённой группы пользователей в шаблонах Twig'),

@@ -14,7 +14,7 @@
         <div class="metadata">
             <span class="date">
                 <i class="calendar alternate outline icon"></i>&nbsp;
-                {{ time|from_dti }}</span>
+                <time class="timeago" datetime="{{ time|from_dti('Y-m-d') }}T{{ time|from_dti('h:i:s') }}Z">{{ time|from_dti }}</time></span>
             <span>
                 <i class="users icon"></i>&nbsp;{{ group.group_name }}
             </span>

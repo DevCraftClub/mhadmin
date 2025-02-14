@@ -70,14 +70,20 @@ abstract class AjaxAbstractResponse {
 	/**
 	 * Устанавливает дополнительные мета-данные.
 	 *
-	 * @param array $meta Массив данных мета-информации.
+	 * @param array|string $meta Массив данных мета-информации.
 	 *
 	 * @return self Экземпляр текущего объекта для цепочки вызовов.
 	 *
 	 * @see AjaxAbstractResponse::$meta
 	 */
-	public function setMeta(array $meta): self {
-		$this->meta = $meta;
+	public function setMeta(array|string $meta): self {
+		if (is_array($meta)) {
+			// Объединяем массив входных данных с текущим массивом $this->data
+			$this->meta = array_filter(array_merge($this->data, $meta));
+		} else {
+			// Добавляем строку в массив $this->data
+			$this->meta[] = $meta;
+		}
 		return $this;
 	}
 

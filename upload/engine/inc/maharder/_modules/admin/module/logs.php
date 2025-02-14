@@ -74,7 +74,7 @@ $modVars = [
 $mh->setBreadcrumb(new BreadCrumb($modVars['title'], THIS_SELF . '?' . http_build_query($GET_DATA)));
 
 if ($cur_page > 1) {
-	$mh->setBreadcrumb(new BreadCrumb(__('mhadmin', 'Страница %page%', ['%page%' => $cur_page]), THIS_SELF . '?' . http_build_query($GET_DATA)));
+	$mh->setBreadcrumb(new BreadCrumb(__('Страница %page%', ['%page%' => $cur_page]), THIS_SELF . '?' . http_build_query($GET_DATA)));
 }
 
 $htmlTemplate = 'admin/logs.html';

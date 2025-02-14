@@ -50,6 +50,95 @@
                                        {% if attribute(currentParams, 'filter_' ~ name) %}checked{% endif %}>
                                 <label for="filter_{{ name }}">{{ options.label|trans }}</label>
                             </div>
+                        {% elseif options.type == 'range' %}
+                            <div class="sliderrange">
+                                <div class="ui labeled ticked range slider" id="range-{{ name }}"></div>
+                                <div class="ui mini input">
+                                    <input type="number" id="range-{{ name }}-input-from" name="filter_{{ name }}_from">
+                                </div>
+                                <div class="ui mini input">
+                                    <input type="number" id="range-{{ name }}-input-to" name="filter_{{ name }}_to">
+                                </div>
+                            </div>
+
+                            <script>
+                                setTimeout(() => {
+									let restricted = [];
+
+									{% for r in options.values|default(range(options.from, options.to)) %}
+									    restricted.push({{ r }});
+									{% endfor %}
+
+									$('#range-{{ name }}')
+										.slider({
+											min: {{ options.from }},
+											max: {{ options.to }},
+											step: 1,
+											showThumbTooltip: true,
+											restrictedLabels: restricted,
+											tooltipConfig: {
+												position: 'bottom center',
+												variation: 'small visible blue'
+											},
+											smooth: true,
+                                            onChange: function () {
+												let from = $(this).slider('get thumbValue', 'first'),
+													to = $(this).slider('get thumbValue', 'second');
+
+												$('#range-{{ name }}-input-from').val(from);
+												$('#range-{{ name }}-input-to').val(to);
+                                            }
+										})
+									;
+									$('#range-{{ name }}-input-from').on('change', function () {
+										let min = parseInt($(this).val()) <= {{ options.from }} ? {{ options.from }} : parseInt($(this).val());
+										$('#range-{{ name }}').slider('set rangeValue', min, $('#range-{{ name }}-input-to').val());
+										$(this).val(min);
+                                    });
+									$('#range-{{ name }}-input-to').on('change', function () {
+										let max = parseInt($(this).val()) >= {{ options.to }} ? {{ options.to }} : parseInt($(this).val());
+										$('#range-{{ name }}').slider('set rangeValue', $('#range-{{ name }}-input-from').val(), max);
+										$(this).val(max);
+                                    });
+
+                                }, 1000);
+                            </script>
+                        {% elseif options.type == 'daterange' %}
+                            <div class="two fields">
+                                <div class="field">
+                                    <label for="filter_{{ name }}_from">{% trans %}Начальная дата{% endtrans %}</label>
+                                    <div class="ui tiny calendar" id="{{ name }}-range-start">
+                                        <div class="ui input left icon">
+                                            <i class="calendar icon"></i>
+                                            <input type="text" placeholder="" name="filter_{{ name }}_from" id="filter_{{ name }}_from">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="filter_{{ name }}_to">{% trans %}Конечная дата{% endtrans %}</label>
+                                    <div class="ui tiny calendar" id="{{ name }}-range-end">
+                                        <div class="ui input left icon">
+                                            <i class="calendar icon"></i>
+                                            <input type="text" placeholder="" name="filter_{{ name }}_to" id="filter_{{ name }}_to">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                setTimeout(() => {
+									let {{ name }}_settings = calendarSettings('datetime');
+                                    {{ name }}_settings.minDate = new Date('{{ options.min|from_dti }}');
+                                    {{ name }}_settings.maxDate = new Date('{{ options.max|from_dti }}');
+
+									let startCalSettings = {{ name }}_settings;
+									let endCalSettings = {{ name }}_settings;
+									startCalSettings.endCalendar = '#{{ name }}-range-end';
+									endCalSettings.startCalendar = '#{{ name }}-range-start';
+
+									$('#{{ name }}-range-start').calendar(startCalSettings);
+									$('#{{ name }}-range-end').calendar(endCalSettings);
+                                }, 1000);
+                            </script>
                         {% endif %}
                     </div>
                 {% endfor %}

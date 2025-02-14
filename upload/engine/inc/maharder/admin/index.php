@@ -27,26 +27,11 @@ if (!defined('DATALIFEENGINE')) {
 	die("Hacking attempt!");
 }
 
-if (!file_exists(ENGINE_DIR . '/inc/maharder/_includes/vendor/autoload.php')) {
-	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/classes/ComposerAction.php');
-	try {
-		try {
-			if (!file_exists(ENGINE_DIR . '/inc/maharder/admin/composer.lock')) {
-				ComposerAction::install();
-			}
-			ComposerAction::update();
-		} catch (Exception $e) {
-			ComposerAction::update();
-		}
-	} catch (Exception $e) {
-		ComposerAction::require();
-	}
-}
-
 
 define('THIS_HOST', $_SERVER['HTTP_HOST']);
 define('THIS_SELF', $_SERVER['PHP_SELF']);
-define('URL', $config['http_home_url'] . 'engine/inc');
+define('DLE_URL', $config['http_home_url']);
+define('URL', DLE_URL . 'engine/inc');
 
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php');
 require_once DLEPlugins::Check(ENGINE_DIR . '/skins/default.skin.php');
@@ -56,7 +41,7 @@ if (!defined('MH_INIT')) {
 	require_once DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php');
 }
 
-$mh        = new Admin();
+$mh = new Admin();
 
 if(!file_exists(MH_INCLUDES . '/assets.json')) {
 	$mh->parseAssets(true);
@@ -77,7 +62,7 @@ $loader = new FilesystemLoader(
 	]
 );
 
-$debug = false;
+$debug = true;
 
 $twigConfigDebug = [
 	'cache'       => false,

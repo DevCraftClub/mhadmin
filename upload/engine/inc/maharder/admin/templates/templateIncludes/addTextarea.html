@@ -2,21 +2,8 @@
 	<textarea id="{{name}}_editor" name="{{name}}" placeholder="{{label}}">{{value}}</textarea>
 	{% if editor %}
 	<script>
-		var texteditor_{{ name }} = document.getElementById('{{name}}_editor');
 		setTimeout(() => {
-			sceditor.create(texteditor_{{ name }}, {
-				format: 'bbcode',
-				style: '{{assets_url}}/editor/themes/content/default.min.css',
-				emoticonsEnabled: true,
-				emoticonsRoot: '{{assets_url}}/editor/',
-				icons: 'material',
-				dateFormat: 'day.month.year',
-				autoExpand: true,
-				autoUpdate: true,
-				plugins: 'autosave,autoyoutube,undo',
-				toolbar: 'bold,italic,underline,strike,subscript,superscript|left,center,right,justify|font,size,color,removeformat|bulletlist,orderedlist,table|code,quote,horizontalrule,image,link,unlink,emoticon,youtube|maximize,source',
-				locale: '{{ lang_data['iso2'] }}'
-			});
+			initTinyMce('#{{name}}_editor');
 		}, 1000);
 	</script>
 	{% endif %}

@@ -357,6 +357,7 @@ class MhDB {
 	 *                           сохранения.
 	 */
 	public function run(object $entity): ORM\Transaction\StateInterface {
+		$entity->beforeSave();
 		return $this->getManager()->persist($entity)->run();
 	}
 
@@ -391,6 +392,27 @@ class MhDB {
 	 * @throws ORM\Exception\TransactionException|Throwable Если транзакция не может быть завершена.
 	 */
 	public function update(object $entity): ORM\Transaction\StateInterface {
+		return $this->run($entity);
+	}
+
+	/**
+	 * Создаёт или обновляет указанную сущность в базе данных.
+	 *
+	 * Если первичный ключ указан, вызывается метод обновления сущности.
+	 * В противном случае создаётся новая запись.
+	 *
+	 * @since 173.3.4
+	 *
+	 * @param object   $entity Сущность, подлежащая созданию или обновлению.
+	 *
+	 * @return ORM\Transaction\StateInterface Возвращает состояние выполненной транзакции.
+	 *
+	 * @throws Throwable Может выбрасывать исключения при ошибках работы с базой данных.
+	 *
+	 * @see \MhDB::update() Для обновления существующей записи в базе данных.
+	 * @see \MhDB::create() Для создания новой записи в базе данных.
+	 */
+	public function createOrUpdate(object $entity): ORM\Transaction\StateInterface {
 		return $this->run($entity);
 	}
 

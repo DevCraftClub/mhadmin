@@ -178,15 +178,21 @@ class TwigFilter {
 		$data  = (array)$this->getRepository()->select()->columns([$column_name])->orderBy($column_name, SelectQuery::SORT_ASC)->fetchAll();
 		$firstData = (array) $data[0];
 		$lastData = (array) $data[count($data) - 1];
+		$values = [];
 		$first = $firstData[$column_name] ?: 0;
 		$last  = $lastData[$column_name] ?: 10;
+
+		foreach ($data as $d) {
+			$values[] = $d[$column_name];
+		}
 
 		return [
 			$column_name => [
 				'type'  => 'range',
 				'label' => $label,
 				'from'  => $first,
-				'to'    => $last
+				'to'    => $last,
+				'values'=> $values
 			]
 		];
 	}

@@ -1,0 +1,38 @@
+{% import _self as macro %}
+
+{% macro metaUser(user_id, time, role) %}
+    {% set user = userInfo(user_id) %}
+    {% set user_url = dle_url ~ '/' ~ dle_config.admin_path ~ '?mod=editusers&action=edituser&id=' ~ user_id %}
+    {% set group = userGroup(user.user_group) %}
+
+<div class="comment">
+    <a class="avatar" href="{{ user_url }}">
+        <img src="{% if user.foto %}{{ user.foto }}{% else %}https://placehold.co/100x100{% endif %}">
+    </a>
+    <div class="content">
+        <a class="author" href="{{ user_url }}">{{ user.name }}{% if user.fullname %} ({{ user.fullname }}){% endif %}</a>
+        <div class="metadata">
+            <span class="date">
+                <i class="calendar alternate outline icon"></i>&nbsp;
+                <time class="timeago" datetime="{{ time|from_dti('Y-m-d') }}T{{ time|from_dti('h:i:s') }}Z">{{ time|from_dti }}</time></span>
+            <span>
+                <i class="users icon"></i>&nbsp;{{ group.group_name }}
+            </span>
+        </div>
+        <div class="text">
+            {{ role }}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro meta(entity) %}
+<div class="ui comments meta">
+    <h3 class="ui dividing header">{% trans %}Метаданные{% endtrans %}</h3>
+    {{ _self.metaUser(entity.creator, entity.createdAt, 'Создатель'|trans) }}
+
+    {% if entity.lastEditor %}
+        {{ _self.metaUser(entity.lastEditor, entity.updatedAt, 'Редактор'|trans) }}
+    {% endif %}
+</div>
+{% endmacro %}

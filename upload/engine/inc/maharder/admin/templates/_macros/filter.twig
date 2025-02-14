@@ -63,12 +63,19 @@
 
                             <script>
                                 setTimeout(() => {
+									let restricted = [];
+
+									{% for r in options.values|default(range(options.from, options.to)) %}
+									    restricted.push({{ r }});
+									{% endfor %}
+
 									$('#range-{{ name }}')
 										.slider({
 											min: {{ options.from }},
 											max: {{ options.to }},
 											step: 1,
 											showThumbTooltip: true,
+											restrictedLabels: restricted,
 											tooltipConfig: {
 												position: 'bottom center',
 												variation: 'small visible blue'
@@ -120,8 +127,8 @@
                             <script>
                                 setTimeout(() => {
 									let {{ name }}_settings = calendarSettings('datetime');
-                                    {{ name }}_settings.minDate = new Date('{{ options.min }}');
-                                    {{ name }}_settings.maxDate = new Date('{{ options.max }}');
+                                    {{ name }}_settings.minDate = new Date('{{ options.min|from_dti }}');
+                                    {{ name }}_settings.maxDate = new Date('{{ options.max|from_dti }}');
 
 									let startCalSettings = {{ name }}_settings;
 									let endCalSettings = {{ name }}_settings;

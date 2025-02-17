@@ -15,6 +15,10 @@
 global $mh;
 
 $logs = [
+	'180.3.5' => [
+		__('[NEW] Добавлен метод <code>saveConfig</code> в классе DataManager для сохранения настроект'),
+		__('[FIX] Исправление функции <code>joinPaths</code> класса DataManager'),
+	],
 	'173.3.4' => [
 		__('[NEШ] Новый вид в input.twig: date, time и datetime'),
 		__('[NEW] Добавление новых фильтров (rangeFilter и dateRangeFilter) для TwigFilter'),

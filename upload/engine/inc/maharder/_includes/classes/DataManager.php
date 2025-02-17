@@ -12,7 +12,6 @@
 // Код распространяется по лицензии MIT                         =
 //===============================================================
 
-
 abstract class DataManager {
 	/**
 	 * Статическое свойство для хранения экземпляра базы данных.
@@ -146,7 +145,7 @@ abstract class DataManager {
 	 *
 	 * @return bool Возвращает `true`, если все директории успешно созданы, иначе `false`.
 	 *
-	 * @throws RuntimeException 		  Бросается, если директория не может быть создана.
+	 * @throws RuntimeException          Бросается, если директория не может быть создана.
 	 * @throws JsonException|Throwable    Может быть вызван, если ошибка логирования связана с кодировкой JSON.
 	 */
 	public static function createDir(string $service = 'DataManager', string $module = 'mhadmin', int $permission = 0755, string ...$paths): bool {
@@ -182,7 +181,7 @@ abstract class DataManager {
 	 * Объединение происходит слева направо. Пустые значения игнорируются.
 	 * Возвращаемый путь нормализуется (лишние символы удаляются, контролируется корректность пути).
 	 *
-	 * @version 173.3.0
+	 * @version 180.3.5
 	 *
 	 * @param string ...$paths Список путей, которые нужно объединить. Каждый аргумент должен быть строкой.
 	 *
@@ -192,12 +191,33 @@ abstract class DataManager {
 	 * @since   173.3.0
 	 *
 	 */
-	function joinPaths(string ...$paths): string {
+	public static function joinPaths(string ...$paths): string {
 		// Фильтруем пустые значения
 		$filteredPaths = array_filter($paths, fn($path) => $path !== '');
 
+		// Проверяем корректность / между составляющими пути
+		$correctedPaths = [];
+		foreach ($filteredPaths as $index => $path) {
+			// Если это первый элемент, просто добавляем
+			if ($index === 0) {
+				$correctedPaths[] = $path;
+				continue;
+			}
+
+			$previous = $correctedPaths[$index - 1];
+
+			// Убираем дублирующиеся "/" на стыке
+			if (str_ends_with($previous, '/') && str_starts_with($path, '/')) {
+				$correctedPaths[$index - 1] = rtrim($previous, '/');
+			} else if (!str_ends_with($previous, '/') && !str_starts_with($path, '/')) {
+				$correctedPaths[$index - 1] .= '/';
+			}
+
+			$correctedPaths[] = $path;
+		}
+
 		// Объединяем пути
-		$joinedPath = implode(DIRECTORY_SEPARATOR, $filteredPaths);
+		$joinedPath = implode(DIRECTORY_SEPARATOR, $correctedPaths);
 
 		return self::normalizePath($joinedPath);
 	}
@@ -398,6 +418,37 @@ abstract class DataManager {
 	}
 
 	/**
+	 * Сохраняет конфигурационные данные в JSON-файл.
+	 *
+	 * @version 180.3.5
+	 *
+	 * @param string      $codename   Имя конфигурационного файла (без расширения).
+	 * @param array       $config     Данные конфигурации, которые нужно сохранить.
+	 * @param string|null $configPath Путь к директории, где будет храниться файл конфигурации.
+	 *                                Если путь не указан, используется значение константы `MH_CONFIG`.
+	 *
+	 * @return array Содержимое существующего JSON-файла конфигурации или пустой массив, если файл отсутствует.
+	 *
+	 * @since   180.3.5
+	 *
+	 * Если файл конфигурации с указанным именем уже существует, возвращает данные, содержащиеся в этом файле.
+	 * В противном случае возвращает пустой массив.
+	 *
+	 * @see     \DataManager::loadJsonConfig Метод, который может использовать файлы конфигурации для загрузки данных.
+	 * @see     MH_CONFIG Константа, определяющая путь по умолчанию к директории конфигураций.
+	 */
+	public static function saveConfig(string $codename, array $config, ?string $configPath = null): array {
+		$configPath   = $configPath ?? MH_CONFIG;
+		$jsonFilePath = $configPath . DIRECTORY_SEPARATOR . $codename . '.json';
+
+		if (is_file($jsonFilePath)) {
+			return json_decode($jsonFilePath, true);
+		}
+
+		return [];
+	}
+
+	/**
 	 * Получает конфигурацию на основе указанного кода имени и пути к файлу JSON.
 	 *
 	 * Метод сначала пытается загрузить конфигурацию из указанного или стандартного пути.
@@ -412,11 +463,11 @@ abstract class DataManager {
 	 * @return array Возвращает массив конфигурации. Если файл или миграция недоступны, возвращается пустой массив.
 	 *
 	 * @throws JsonException Если содержимое JSON-файла некорректно при вызове `loadJsonConfig`.
-	 * @throws RuntimeException Если ошибка возникает во время миграции конфигурации.
+	 * @throws RuntimeException|Throwable Если ошибка возникает во время миграции конфигурации.
 	 */
 	public static function getConfig(string $codename, ?string $path = null, ?string $confName = null): array {
 		// Используем Null-safe оператор и константу DIRECTORY_SEPARATOR для улучшения читаемости
-		$configPath = $path ?? ENGINE_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'maharder' . DIRECTORY_SEPARATOR . '_config';
+		$configPath = $path ?? MH_CONFIG;
 
 		// Формируем путь к JSON-файлу
 		$jsonFilePath = $configPath . DIRECTORY_SEPARATOR . $codename . '.json';
@@ -663,7 +714,6 @@ abstract class DataManager {
 			$underscored = strtolower($underscored);
 		}
 
-
 		return $underscored ?? '';
 	}
 
@@ -689,7 +739,18 @@ abstract class DataManager {
 		}
 
 		if (is_array($input)) {
-			$sanitizedInput =  array_filter(array_map(fn($value) => is_array($value) ? self::sanitizeArrayInput($value, $flags) : self::sanitizeInput($value, $flags), $input));
+			$sanitizedInput = array_filter(
+				array_map(
+					fn($value)
+						=> is_array($value)
+						? self::sanitizeArrayInput($value, $flags)
+						: self::sanitizeInput(
+							$value,
+							$flags
+						),
+					$input
+				)
+			);
 		} else {
 			$sanitizedInput = self::sanitizeInput($input, $flags);
 		}
@@ -735,8 +796,7 @@ abstract class DataManager {
 				LogGenerator::generateLog(
 					'DataManager',
 					'createLockFile/touch',
-					__('Не удалось сохранить файл блокировки обновлений: {{path}}', ['{{path}}' => $path]
-					)
+					__('Не удалось сохранить файл блокировки обновлений: {{path}}', ['{{path}}' => $path])
 				);
 			}
 
@@ -744,7 +804,9 @@ abstract class DataManager {
 				LogGenerator::generateLog(
 					'DataManager',
 					'createLockFile/chmod',
-					__('Не удалось выставить права на запись файла блокировки обновлений: {{path}}', ['{{path}}' => $path]
+					__(
+						'Не удалось выставить права на запись файла блокировки обновлений: {{path}}',
+						['{{path}}' => $path]
 					)
 				);
 			}
@@ -753,8 +815,7 @@ abstract class DataManager {
 				LogGenerator::generateLog(
 					'DataManager',
 					'createLockFile/file_put_contents',
-					__('Не удалось обновить содержимое файла блокировки обновлений: {{path}}', ['{{path}}' => $path]
-					)
+					__('Не удалось обновить содержимое файла блокировки обновлений: {{path}}', ['{{path}}' => $path])
 				);
 			}
 		}
@@ -778,7 +839,7 @@ abstract class DataManager {
 		global $config;
 
 		// Обрезка пробелов и разбор URL
-		$url = trim($url);
+		$url     = trim($url);
 		$urlInfo = parse_url($url);
 
 		// Если URL уже содержит схему или начинается с "//", возвращаем его как есть
@@ -786,17 +847,14 @@ abstract class DataManager {
 			return $url;
 		}
 
-		$baseUrl = isset($urlInfo['path']) || !$urlInfo['host']
-			? $config['http_home_url'] . $config['admin_path']
-			: "{$urlInfo['scheme']}://{$urlInfo['host']}";
+		$baseUrl = isset($urlInfo['path']) || !$urlInfo['host'] ? $config['http_home_url'] . $config['admin_path'] : "{$urlInfo['scheme']}://{$urlInfo['host']}";
 
 		// Обрабатываем строку запроса
 		$query = [];
-		if($urlInfo['query']) parse_str($urlInfo['query'], $query);
+		if ($urlInfo['query']) parse_str($urlInfo['query'], $query);
 
 		// Конечный объединённый массив параметров
 		$mergedQuery = array_filter(array_merge($query, $additionalQuery));
-
 
 		// Если путь относительный, добавить базовый URL
 		return $baseUrl . '?' . http_build_query($mergedQuery);

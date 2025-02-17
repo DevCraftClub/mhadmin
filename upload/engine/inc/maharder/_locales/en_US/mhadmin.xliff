@@ -734,17 +734,17 @@
         <source>PayPal</source>
         <target state="translated">PayPal</target>
       </trans-unit>
-      <trans-unit id="184">
+      <trans-unit id="184" approved="yes">
         <source>Ko-Fi</source>
-        <target state="translated">Ko-Fi</target>
+        <target state="final">Ko-Fi</target>
       </trans-unit>
-      <trans-unit id="185">
+      <trans-unit id="185" approved="yes">
         <source>YooMoney</source>
-        <target state="translated">YooMoney</target>
+        <target state="final">YooMoney</target>
       </trans-unit>
-      <trans-unit id="186">
+      <trans-unit id="186" approved="yes">
         <source>DonationAlerts</source>
-        <target state="translated">DonationAlerts</target>
+        <target state="final">DonationAlerts</target>
       </trans-unit>
       <trans-unit id="187">
         <source>Файл '{file}' не был сохранён!</source>
@@ -762,13 +762,13 @@
         <source>[NEW] Все изменения в таблицах будут храниться в отдельной таблице &quot;migrations&quot; и в папке &quot;_migrations&quot;. Это позволит легко сделать откат изменений.</source>
         <target state="translated">[NEW] All changes to the tables will be stored in a separate table "migrations" and in the "_migrations" folder. This will make it easy to roll back changes.</target>
       </trans-unit>
-      <trans-unit id="191">
+      <trans-unit id="191" approved="yes">
         <source>[NEW] Добавлена возможность сортировать и фильтровать данные таблиц на страницах административной панели (где такие есть, пример: Логи).</source>
-        <target state="translated">[NEW] The ability to sort and filter table data has been added on the administrative panel pages (where available, e.g., Logs).</target>
+        <target state="final">[NEW] The ability to sort and filter table data has been added on the administrative panel pages (where available, e.g., Logs).</target>
       </trans-unit>
-      <trans-unit id="192">
+      <trans-unit id="192" approved="yes">
         <source>[NEW] Добавлена возможность проверять на обновление плагина на сайте &lt;a href=&quot;https://devcraft.club&quot; target=&quot;_blank&quot;&gt;devcraft.club&lt;/a&gt;. Используется гостевой ключ.</source>
-        <target state="translated">[NEW] The ability to check for plugin updates on the website &lt;a href="https://devcraft.club" target="_blank"&gt;devcraft.club&lt;/a&gt; has been added. A guest key is used.</target>
+        <target state="final">[NEW] The ability to check for plugin updates on the website &lt;a href="https://devcraft.club" target="_blank"&gt;devcraft.club&lt;/a&gt; has been added. A guest key is used.</target>
       </trans-unit>
       <trans-unit id="193">
         <source>[UPDATE][BETA] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
@@ -786,9 +786,9 @@
         <source>[DELETE] Удалена замена иконок в админпанели DLE.</source>
         <target state="translated">[DELETE] Icon replacement in the DLE admin panel has been removed.</target>
       </trans-unit>
-      <trans-unit id="197">
+      <trans-unit id="197" approved="yes">
         <source>Журнал изменений</source>
-        <target state="translated">Changelog</target>
+        <target state="final">Changelog</target>
       </trans-unit>
       <trans-unit id="198">
         <source>Название модуля</source>
@@ -826,9 +826,9 @@
         <source>Иконка</source>
         <target state="translated">Icon</target>
       </trans-unit>
-      <trans-unit id="207">
+      <trans-unit id="207" approved="yes">
         <source>Класс иконки. К сайту подключены FontAwesome PRO.&lt;br&gt;По умолчанию: &lt;i class=&quot;fad fa-cogs&quot;&gt;&lt;/i&gt; (fad fa-cogs)</source>
-        <target state="translated">Icon class. FontAwesome PRO is connected to the site.&lt;br&gt;Default: &lt;i class="fad fa-cogs"&gt;&lt;/i&gt;(fad fa-cogs)</target>
+        <target state="final">Icon class. FontAwesome PRO is connected to the site.&lt;br&gt;Default: &lt;i class="fad fa-cogs"&gt;&lt;/i&gt;(fad fa-cogs)</target>
       </trans-unit>
       <trans-unit id="208">
         <source>Иконка плагина</source>
@@ -838,21 +838,21 @@
         <source>Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png</source>
         <target state="translated">Specify the full path to the plugin icon starting from your site's root. For example, engine/skins/images/my_icon.png</target>
       </trans-unit>
-      <trans-unit id="210">
+      <trans-unit id="210" approved="yes">
         <source>Название проекта на CrowdIn</source>
-        <target state="translated">Project Name on CrowdIn</target>
+        <target state="final">Project Name on CrowdIn</target>
       </trans-unit>
-      <trans-unit id="211">
+      <trans-unit id="211" approved="yes">
         <source>Укажите URL наимование Вашего проекта на CrowdIn. Пример: Из https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ берём mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;По умолчанию: Название на латинице&lt;/i&gt;</source>
-        <target state="translated">Specify the URL name of your project on CrowdIn. Example: From https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ take mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;Default: Name in Latin letters&lt;/i&gt;</target>
+        <target state="final">Specify the URL name of your project on CrowdIn. Example: From https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ take mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;Default: Name in Latin letters&lt;/i&gt;</target>
       </trans-unit>
-      <trans-unit id="212">
+      <trans-unit id="212" approved="yes">
         <source>ID статистики перевода на CrowdIn</source>
-        <target state="translated">Translation Statistics ID on CrowdIn</target>
+        <target state="final">Translation Statistics ID on CrowdIn</target>
       </trans-unit>
-      <trans-unit id="213">
+      <trans-unit id="213" approved="yes">
         <source>Укажите ID статистики перевода на CrowdIn из дополнения &lt;a href=&quot;https://crowdin.com/store/apps/bds&quot; target=&quot;_blank&quot;&gt;Badges &amp; Status Images&lt;/a&gt;</source>
-        <target state="translated">Specify the Translation Statistics ID on CrowdIn from the &lt;a href="https://crowdin.com/store/apps/bds" target="_blank"&gt;Badges &amp; Status Images&lt;/a&gt; add-on;</target>
+        <target state="final">Specify the Translation Statistics ID on CrowdIn from the &lt;a href="https://crowdin.com/store/apps/bds" target="_blank"&gt;Badges &amp; Status Images&lt;/a&gt; add-on;</target>
       </trans-unit>
       <trans-unit id="214">
         <source>Ссылка на модуль автора</source>
@@ -882,9 +882,9 @@
         <source>Перезаписать файлы?</source>
         <target state="translated">Overwrite files?</target>
       </trans-unit>
-      <trans-unit id="221">
+      <trans-unit id="221" approved="yes">
         <source>Скрипт перезапишет существующие файлы шаблонами.&lt;br&gt;&lt;span class=&quot;ui red text&quot;&gt;На свой страх и риск!&lt;/span&gt;</source>
-        <target state="translated">The script will overwrite existing files with templates.&lt;br&gt;&lt;span class="ui red text"&gt;At your own risk!&lt;/span&gt;</target>
+        <target state="final">The script will overwrite existing files with templates.&lt;br&gt;&lt;span class="ui red text"&gt;At your own risk!&lt;/span&gt;</target>
       </trans-unit>
       <trans-unit id="222">
         <source>Создать</source>
@@ -910,9 +910,9 @@
         <source>Произошла ошибка!</source>
         <target state="translated">An error has occurred!</target>
       </trans-unit>
-      <trans-unit id="245">
+      <trans-unit id="245" approved="yes">
         <source>Загружаем файл: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
-        <target state="translated">Download the file: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;The result is in the browser console!</target>
+        <target state="final">Download the file: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;The result is in the browser console!</target>
       </trans-unit>
       <trans-unit id="246">
         <source>Обновлениям быть!</source>

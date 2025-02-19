@@ -291,14 +291,14 @@
 							content: '<div class="ui middle aligned divided list">\n' +
 								'  <div class="item">\n' +
 								'    <div class="content">\n' +
-								'      <a class="header">${__("На сервере")}</a> \n' +
-								'       <div class="description">' + data.on_server + ' ${__("файлов")}</div>' +
+								'      <a class="header">' + __("На сервере") + '</a> \n' +
+								'       <div class="description">' + data.on_server + __("файлов") + '</div>' +
 								'    </div>\n' +
 								'  </div>\n' +
 								'  <div class="item">\n' +
 								'    <div class="content">\n' +
-								'      <a class="header">${__("Загружено на сайт")}</a> ' +
-								'       <div class="description">' + data.local + ' ${__("файлов")}</div>\n' +
+								`      <a class="header">${__("Загружено на сайт")}</a> ` +
+								'       <div class="description">' + data.local + __("файлов") + '</div>\n' +
 								'    </div>\n' +
 								'  </div>\n' +
 								generate_item(data.missing_count > 0, __('Требуют установки'), '', {

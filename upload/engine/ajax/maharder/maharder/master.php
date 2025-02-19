@@ -13,49 +13,22 @@
 // Код распространяется по лицензии MIT                         =
 //===============================================================
 
-//	===============================
-//	Настройки модуля | сохраняем
-//	===============================
-//	Автор: Maxim Harder
-//	Сайт: https://maxim-harder.de
-//	Телеграм: http://t.me/MaHarder
-//	===============================
-//	Ничего не менять
-//	===============================
-
-
+global $parsedData;
 if (!defined('DATALIFEENGINE')) {
 	header('HTTP/1.1 403 Forbidden');
 	header('Location: ../../../../');
 	exit('Hacking attempt!');
 }
 
-global $is_logged, $dle_login_hash, $mh_admin, $method, $data;
-
-if (!$is_logged) {
-	exit('error');
-}
-
-if ('' == $_REQUEST['user_hash'] or $_REQUEST['user_hash'] != $dle_login_hash) {
-	exit('error');
-}
-
+global $mh_admin, $method, $data;
 require_once DLEPlugins::Check(__DIR__ . '/_functions.php');
 
 if (!$method) {
-	exit();
+	echo (new ErrorResponseAjax())->setData(__('Метод запроса не установлен!'))->send();
+	exit;
 }
 
-$save_con = [];
-
-if (isset($data['data'])) {
-	foreach (filter_var_array($data['data']) as $id => $d) {
-		$name            = $d['name'];
-		$value           = $d['value'];
-		$value           = htmlspecialchars($value);
-		$save_con[$name] = $value;
-	}
-}
+$save_con = filter_var_array($parsedData);
 
 switch ($method) {
 	case 'settings':
@@ -82,7 +55,7 @@ switch ($method) {
 	case 'save_asset':
 
 		try {
-			echo json_encode($mh_admin->save_asset($data['data'], $data['file']), JSON_UNESCAPED_UNICODE);
+			echo json_encode($mh_admin->save_asset($save_con['data'], $save_con['file']), JSON_UNESCAPED_UNICODE);
 		} catch (\Exception $e) {
 			LogGenerator::generateLog('mhadmin', 'save_asset', $e->getMessage());
 			echo json_encode([]);
@@ -93,7 +66,7 @@ switch ($method) {
 	case 'check_update':
 
 		try {
-			$mh_admin->setRecourceId($data['resource_id']);
+			$mh_admin->setRecourceId($save_con['resource_id']);
 			echo json_encode($mh_admin->checkUpdate(), JSON_UNESCAPED_UNICODE);
 		} catch (Exception $e) {
 			LogGenerator::generateLog('mhadmin', 'check_update', $e->getMessage());

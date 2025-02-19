@@ -2,7 +2,7 @@
 
 //===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===
 // Mod: %name%
-// File: main.php
+// File: %latin%.php
 // Path: %path%
 // ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  =
 // Author: Maxim Harder <dev@devcraft.club> (c) %year%
@@ -36,8 +36,6 @@ $modInfo = [
 // Подключаем классы, функции и основные переменные
 require_once DLEPlugins::Check(__DIR__.'/maharder/admin/index.php');
 
-$mh = new Admin();
-
 // Подключаем переменные модуля и его функционал
 // Используем переменную sites для навигации в модуле
 switch ($_GET['sites']) {
@@ -52,13 +50,12 @@ switch ($_GET['sites']) {
 }
 
 $xtraVariable = [
-	'links'       => $links,
-	'breadcrumbs' => $breadcrumbs,
-	'settings'    => DataManager::getConfig($modInfo['module_code']),
+    'links'       => $mh->getVariables('menu'),
+    'breadcrumbs' => $mh->getBreadcrumb(),
+    'settings'    => DataManager::getConfig($modInfo['module_code']),
 ];
 
 $mh->setVars($modInfo);
-$mh->setLinks($links);
 $mh->setVars($xtraVariable);
 $mh->setVars($modVars);
 

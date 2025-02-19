@@ -173,8 +173,6 @@ trait DleData {
 	 *
 	 * @see CacheControl::getCache() Метод используется для получения данных из кэша.
 	 * @see CacheControl::setCache() Метод используется для сохранения данных в кэше.
-	 * @see file() Функция используется для чтения строк из файла.
-	 * @see fclose() Функция вызывается для закрытия файлового потока.
 	 */
 	public function loadXfields(#[ExpectedValues(values: ['post', 'user'])]
 								string $type = 'post'): array|false {
@@ -362,7 +360,7 @@ trait DleData {
 	 *
 	 * @return array Ассоциативный массив категорий, где ключ — ID категории, а значение — её название.
 	 * @throws JsonException
-	 * @see load_data() Для загрузки данных из базы данных
+	 * @see DataLoader::load_data() Для загрузки данных из базы данных
 	 */
 	public function getCats(): array {
 

@@ -213,6 +213,23 @@ abstract class LogGenerator {
 		));
 	}
 
+	private static function preventCurlFile(mixed $message) {
+		if (is_array($message)) {
+			foreach ($message as $idx => $mess) {
+				if ($mess instanceof CURLFile) {
+					$message[$idx] = (array) $mess;
+				}
+				if (is_array($mess)) $message[$idx] = self::preventCurlFile($mess);
+			}
+		}
+
+		if ($message instanceof CURLFile) {
+			$message = (array) $message;
+		}
+
+		return $message;
+	}
+
 	/**
 	 * Логирование сообщений в файл.
 	 *
@@ -232,6 +249,8 @@ abstract class LogGenerator {
 	private static function fileLog(string $file, mixed $message, int $level): void {
 		self::init();
 		if (self::getLogs()) {
+			$message = self::preventCurlFile($message);
+
 			Analog::handler(Analog\Handler\File::init($file));
 			Analog::log(serialize($message), $level);
 		}

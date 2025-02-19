@@ -2,7 +2,7 @@
 
 	//===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===
 	// Mod: %name%
-	// File: main.php
+	// File: master.php
 	// Path: %path%
 	// ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  ===  =
 	// Author: Maxim Harder <dev@devcraft.club> (c) %year%
@@ -18,48 +18,22 @@
 		exit('Hacking attempt!');
 	}
 
-	if (!$is_logged) {
-		exit('error');
-	}
+	global $method, $data, $config, $parsedData;
 
-	if ('' == $_REQUEST['user_hash'] or $_REQUEST['user_hash'] != $dle_login_hash) {
-		exit('error');
-	}
-
-	$method = $_POST['method'];
 	if (!$method) {
-		exit();
+		echo (new ErrorResponseAjax())->setData(__('Метод мастер запроса не указан!'))->send();
+		exit;
 	}
-	parse_str($_POST['data'], $data);
-	foreach ($data as $id => $d) {
-		$name = $d['name'];
-		$value = $d['value'];
-		$value = htmlspecialchars($value);
-		$data[$name] = $value;
-	}
-	$data = filter_var_array($data);
 
 	switch ($method) {
 		case 'settings':
-			if (!mkdir($concurrentDirectory = ENGINE_DIR . '/inc/maharder/_config', 0777, true)
-				&& !is_dir(
-					$concurrentDirectory
-				)) {
-				LogGenerator::generateLog('%latin%', 'save_setting', __('Папка ":path" не была создана', [':path' =>$concurrentDirectory]));
-			}
-			$file = $concurrentDirectory.'/'.$_POST['module'].'.json';
+			$settingsData = filter_var_array($parsedData);
 
-
-			if (empty($data['list_count']) || !isset($data['list_count'])) {
-				$data['list_count'] = $config['news_number'];
-			}
-
-
-			$data = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
-			file_put_contents($file, $data);
+			DataManager::saveConfig('%latin%', $settingsData);
 			clear_cache();
 
-			echo 'ok';
+			echo (new SuccessResponseAjax())
+					->setData(__('Настройки сохранены'))->setRedirect($_SERVER['HTTP_REFERER'])->send();
 
 			break;
 

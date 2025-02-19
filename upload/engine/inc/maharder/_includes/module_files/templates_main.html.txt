@@ -24,27 +24,9 @@
 		<script>
 			$(() => {
 				$(document).on('click', '.save', function () {
-					startLoading();
-					$.ajax({
-						url: 'engine/ajax/controller.php?mod=maharder',
-						data: {
-							user_hash: '{{dle_login_hash}}',
-							module: '{{module_code}}',
-							file: 'master',
-							method: 'settings',
-							data: $('.form').serialize()
-						},
-						type: 'POST',
-						success: function (data) {
-							hideLoading('');
-							$('body').toast({
-								class: 'success',
-								title: `{%trans%}Всё отлично!{%endtrans%}`,
-								message: `{%trans%}Данные были сохранены!{%endtrans%}`,
-								showProgress: 'bottom'
-							});
-
-						}
+					sendPreparedAjaxRequest({
+						method: 'settings',
+						inputData: $('.form').serialize()
 					});
 				});
 			});

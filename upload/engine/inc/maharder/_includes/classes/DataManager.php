@@ -427,8 +427,6 @@ abstract class DataManager {
 	 * @param string|null $configPath Путь к директории, где будет храниться файл конфигурации.
 	 *                                Если путь не указан, используется значение константы `MH_CONFIG`.
 	 *
-	 * @return array Содержимое существующего JSON-файла конфигурации или пустой массив, если файл отсутствует.
-	 *
 	 * @since   180.3.5
 	 *
 	 * Если файл конфигурации с указанным именем уже существует, возвращает данные, содержащиеся в этом файле.
@@ -437,15 +435,12 @@ abstract class DataManager {
 	 * @see     \DataManager::loadJsonConfig Метод, который может использовать файлы конфигурации для загрузки данных.
 	 * @see     MH_CONFIG Константа, определяющая путь по умолчанию к директории конфигураций.
 	 */
-	public static function saveConfig(string $codename, array $config, ?string $configPath = null): array {
+	public static function saveConfig(string $codename, array $config, ?string $configPath = null) {
 		$configPath   = $configPath ?? MH_CONFIG;
-		$jsonFilePath = $configPath . DIRECTORY_SEPARATOR . $codename . '.json';
+		$jsonFilePath = self::normalizePath($configPath . DIRECTORY_SEPARATOR . $codename . '.json');
 
-		if (is_file($jsonFilePath)) {
-			return json_decode($jsonFilePath, true);
-		}
+		file_put_contents($jsonFilePath, json_encode($config, JSON_UNESCAPED_UNICODE), LOCK_EX);
 
-		return [];
 	}
 
 	/**

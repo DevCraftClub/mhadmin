@@ -183,7 +183,8 @@ class TwigFilter {
 		$last  = $lastData[$column_name] ?: 10;
 
 		foreach ($data as $d) {
-			$values[] = $d[$column_name];
+			$obj = (array) $d;
+			$values[] = $obj[$column_name];
 		}
 
 		return [

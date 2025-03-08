@@ -27,7 +27,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 	exit;
 } else {
 	if (empty($mod_data['translit'])) $mod_data['translit'] = $mod_data['name'];
-	$mod_data['translit'] = totranslit(stripslashes($mod_data['translit']), true, false);
+	$mod_data['translit'] = DataManager::toTranslit($mod_data['translit']);
 
 	if (empty($mod_data['icon'])) {
 		$mod_data['icon'] = 'fad fa-cogs';

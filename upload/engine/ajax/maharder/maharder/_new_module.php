@@ -151,7 +151,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 				'%icon%'             => $mod_data['icon'],
 				'%link%'             => $mod_data['link'],
 				'%docs%'             => $mod_data['docs'],
-				'%path%'             => str_replace(ROOT_DIR, '', $targetFile),
+				'%path%'             => str_replace([ROOT_DIR, '\\'], '', $targetFile),
 				'%year%'             => date('Y'),
 			];
 
@@ -176,21 +176,21 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 		}
 	}
 
-	$langsPath     = ENGINE_DIR . '/inc/maharder/_locales';
+	$langsPath     = DataManager::normalizePath(DataManager::joinPaths(ENGINE_DIR, '/inc/maharder/_locales'));
 	$langsTemplate = file_get_contents(
-		DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/module_files/module_locale.txt')
+		DLEPlugins::Check(DataManager::normalizePath(DataManager::joinPaths(ENGINE_DIR, '/inc/maharder/_includes/module_files/module_locale.txt')))
 	);
 
 	$targetLangDir = DataManager::dirToArray($langsPath);
 
-	foreach ($targetLangDir as $item) {
+	foreach ($targetLangDir as $lang => $item) {
 		// Пропускаем текущую директорию и родительский указатель
-		if (in_array($item, ['.', '..']) || !is_dir($langsPath . DIRECTORY_SEPARATOR . $item)) {
+		if (in_array($lang, ['.', '..']) || !is_dir(DataManager::joinPaths($langsPath, $lang))) {
 			continue;
 		}
 
 		// Определяем путь до XLIFF-файла
-		$localePath = "{$langsPath}/{$item}/{$mod_data['translit']}.xliff";
+		$localePath = DataManager::joinPaths($langsPath, $lang, "{$mod_data['translit']}.xliff");
 
 		if (file_exists($localePath) && ((int)$mod_data['override'] !== 1 || $mod_data['override'] !== 'on')) {
 			$fails['files'][] = [
@@ -201,13 +201,13 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 		}
 
 		// Обрабатываем соответствие ru_RU отдельной логике
-		$langPath = ($item === 'ru_RU') ? "{$mod_data['translit']}.ru_RU" : "{$langsPath}/ru_RU/{$mod_data['translit']}.xliff";
+		$langPath = ($lang === 'ru_RU') ? "{$mod_data['translit']}.ru_RU" : "{$langsPath}/ru_RU/{$mod_data['translit']}.xliff";
 
 		// Подготавливаем подстановки для шаблона
 		$replacements = [
 			'%lang_path%'   => $langPath,
 			'%source_lang%' => 'ru',
-			'%target_lang%' => explode('_', $item)[0],
+			'%target_lang%' => explode('_', $lang)[0],
 		];
 
 		// Выполняем замены в шаблоне
@@ -270,14 +270,14 @@ SQL;
 		$dle_mysqlenable  = $dle_mysqlupgrade;
 		$dle_mysqldisable = "DELETE FROM {prefix}_admin_sections WHERE name = '{$mod_data['translit']}';";
 		$dle_mysqldelete  = $dle_mysqldisable;
-		$dle_notice       = "<ul><li><b>" . __('Ссылка на плагин') . "</b>: <a href=\"{$mod_data['link']}\" target=\"_blank\">" . __('Перейти') . "</a></li><li><b>" . __('Документация') . "</b>: <a href=\"{$mod_data['docs']}\" target=\"_blank\">" . __('Перейти') . "</a></li></ul>";
+		$dle_notice       = addslashes("<ul><li><b>" . __('Ссылка на плагин') . "</b>: <a href=\"{$mod_data['link']}\" target=\"_blank\">" . __('Перейти') . "</a></li><li><b>" . __('Документация') . "</b>: <a href=\"{$mod_data['docs']}\" target=\"_blank\">" . __('Перейти') . "</a></li></ul>");
 
 		try {
 			$plugin = $db->query('SELECT * FROM ' . PREFIX . "_plugins WHERE name = '{$dle_connector_name}'");
 			if ($plugin->num_rows === 0) {
 				$prefix     = PREFIX;
 				$sql_insert = <<<SQL
-INSERT INTO {$prefix}_plugins (name, description, icon, version, dleversion, versioncompare, active, mysqlinstall, mysqlupgrade, mysqlenable, mysqldisable, mysqldelete, filedelete, filelist, upgradeurl, needplugin, phpinstall, phpupgrade, phpenable, phpdisable, phpdelete, notice, mnotice) VALUES ('{$dle_connector_name}', '{$dle_connector_description}', '{$icon}', '{$dle_connector_version}', '{$dle_connector_dleversion}', '{$dle_connector_dleversion_compare}', $dle_connector_active, '', '{$dle_mysqlupgrade}', '{$dle_mysqlenable}', '{$dle_mysqldisable}', '{$dle_mysqldelete}', 1, '', '', '', '', '', '', '', '', '{$dle_notice}', 1);
+INSERT INTO {$prefix}_plugins (name, description, icon, version, dleversion, versioncompare, active, mysqlinstall, mysqlupgrade, mysqlenable, mysqldisable, mysqldelete, filedelete, filelist, upgradeurl, needplugin, phpinstall, phpupgrade, phpenable, phpdisable, phpdelete, notice, mnotice) VALUES ('{$dle_connector_name}', '{$dle_connector_description}', '{$icon}', "{$dle_connector_version}", "{$dle_connector_dleversion}", "{$dle_connector_dleversion_compare}", $dle_connector_active, '', "{$dle_mysqlupgrade}", "{$dle_mysqlenable}", "{$dle_mysqldisable}", "{$dle_mysqldelete}", 1, '', '', '', '', '', '', '', '', '{$dle_notice}', 1);
 SQL;
 
 				$db->query($sql_insert);
@@ -292,7 +292,7 @@ SQL;
 INSERT INTO {$prefix}_plugins_files (`plugin_id`, `file`, `action`, `searchcode`, `replacecode`, `active`, `searchcount`,
                                       `replacecount`, `filedisable`, `filedleversion`, `fileversioncompare`)
 VALUES ({$plugin_id}, 'engine/inc/maharder/_includes/extras/paths.php', 'before', '// Custom models //', '// {$mod_data['name']}
-  MH_MODULES . "/{$mod_data['latin']}/models",
+  MH_MODULES . "/{$mod_data['translit']}/models",
   // {$mod_data['name']}
 '                                                                               , 1, 0, 0, 1, '', '==');
 SQL;
@@ -300,9 +300,9 @@ SQL;
 INSERT INTO {$prefix}_plugins_files (`plugin_id`, `file`, `action`, `searchcode`, `replacecode`, `active`, `searchcount`,
                                       `replacecount`, `filedisable`, `filedleversion`, `fileversioncompare`)
 VALUES ({$plugin_id}, 'engine/inc/maharder/_includes/extras/paths.php', 'before', '// Custom paths //', '// {$mod_data['name']}
-    MH_MODULES . "/{$mod_data['latin']}/classes",
-	MH_MODULES . "/{$mod_data['latin']}/repositories",
-	MH_MODULES . "/{$mod_data['latin']}/utils",
+    MH_MODULES . "/{$mod_data['translit']}/classes",
+	MH_MODULES . "/{$mod_data['translit']}/repositories",
+	MH_MODULES . "/{$mod_data['translit']}/utils",
   // {$mod_data['name']}
 ', 1, 0, 0, 1, '', '==');
 SQL;

@@ -637,7 +637,7 @@ abstract class DataManager {
 
 		if (!str_contains($rootDir, $normalizedPath)) $normalizedPath = self::joinPaths($rootDir, $normalizedPath);
 
-		return $normalizedPath;
+		return realpath(str_replace(['\\\\', '//'], ['\\', '/'], $normalizedPath)) ?? str_replace(['\\\\', '//'], ['\\', '/'], $normalizedPath);
 	}
 
 	/**

@@ -1,6 +1,9 @@
 <?php
 
-global $member_id, $_TIME, $_IP, $name, $parsedData;
+global $member_id, $_TIME, $_IP, $name, $parsedData, $db, $config;
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 $mod_data = filter_var_array(array_column($parsedData, 'value', 'name'), [
 	'name'             => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -23,6 +26,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 	)->send();
 	exit;
 } else {
+	if (empty($mod_data['translit'])) $mod_data['translit'] = $mod_data['name'];
 	$mod_data['translit'] = totranslit(stripslashes($mod_data['translit']), true, false);
 
 	if (empty($mod_data['icon'])) {
@@ -36,6 +40,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 	$dirs = [
 		ROOT_DIR . '/engine/ajax/maharder/' . $mod_data['translit'],
 		ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'],
+		ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'] . '/classes',
 		ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'] . '/module',
 		ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'] . '/assets',
 		ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'] . '/models',
@@ -48,32 +53,32 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 		[
 			ROOT_DIR . '/engine/ajax/maharder/' . $mod_data['translit'] . '/master.php',
 			ENGINE_DIR . '/inc/maharder/_includes/module_files/ajax_master.php.txt',
-			755,
+			0755,
 		],
 		[
-			ROOT_DIR . '/engine/inc/maharder/admin/_modules/' . $mod_data['translit'] . '/assets/.htaccess',
+			ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'] . '/assets/.htaccess',
 			ENGINE_DIR . '/inc/maharder/_includes/module_files/assets_htaccess.txt',
-			755,
+			0755,
 		],
 		[
-			ROOT_DIR . '/engine/inc/maharder/admin/_modules/' . $mod_data['translit'] . '/module/changelog.php',
+			ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'] . '/module/changelog.php',
 			ENGINE_DIR . '/inc/maharder/_includes/module_files/changelog.php.txt',
-			755,
+			0755,
 		],
 		[
 			ROOT_DIR . '/engine/inc/' . $mod_data['translit'] . '.php',
 			ENGINE_DIR . '/inc/maharder/_includes/module_files/inc_admin.php.txt',
-			755,
+			0755,
 		],
 		[
-			ROOT_DIR . '/engine/inc/maharder/admin/_modules/' . $mod_data['translit'] . '/module/main.php',
+			ROOT_DIR . '/engine/inc/maharder/_modules/' . $mod_data['translit'] . '/module/main.php',
 			ENGINE_DIR . '/inc/maharder/_includes/module_files/modules_main.php.txt',
-			755,
+			0755,
 		],
 		[
 			ROOT_DIR . '/engine/inc/maharder/_templates/' . $mod_data['translit'] . '/main.html',
 			ENGINE_DIR . '/inc/maharder/_includes/module_files/templates_main.html.txt',
-			755,
+			0755,
 		],
 	];
 
@@ -105,42 +110,67 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 		$success['dirs'][] = $dir;
 	}
 
-	foreach ($files as $file) {
-		if (file_exists($file[0])) {
+	foreach ($files as [$targetFile, $sourceFile, $perms]) {
+		// Проверяем существование файла, не дублируя индексы массива
+		if (file_exists($targetFile)) {
 			if (!$mod_data['override']) {
 				$fails['files'][] = [
-					'file'    => $file[0],
+					'file'    => $targetFile,
 					'message' => __('Данный файл уже существует.'),
 				];
 				continue;
 			}
 		}
+
 		try {
-			@touch($file[0]);
+			$targetDir = dirname($targetFile);
+			$targetFile = DataManager::normalizePath($targetFile);
 
-			$file_data = file_get_contents($file[1]);
-			$file_data = preg_replace('/%latin%/', $mod_data['translit'], $file_data);
-			$file_data = preg_replace('/%name%/', $mod_data['name'], $file_data);
-			$file_data = preg_replace(
-				'/%crowdin_name%/',
-				$mod_data['crowdin_name'] ?? $mod_data['translit'],
-				$file_data
-			);
-			$file_data = preg_replace('/%crowdin_state_id%/', $mod_data['crowdin_state_id'], $file_data);
-			$file_data = preg_replace('/%version%/', $mod_data['version'], $file_data);
-			$file_data = preg_replace('/%description%/', $mod_data['description'], $file_data);
-			$file_data = preg_replace('/%icon%/', $mod_data['icon'], $file_data);
-			$file_data = preg_replace('/%link%/', $mod_data['link'], $file_data);
-			$file_data = preg_replace('/%docs%/', $mod_data['docs'], $file_data);
-			$file_data = preg_replace('/%path%/', str_replace(ROOT_DIR, '', $file[0]), $file_data);
-			$file_data = preg_replace('/%year%/', date('Y'), $file_data);
+			if(!touch($targetFile)) {
+				$error = error_get_last();
+				LogGenerator::generateLog(
+					'maharder',
+					'ajax/new_module',
+					[
+						__('Файл "%s" не был создан', ["%s" => $targetFile]),
+						$error
+					]
+				);
+			}
 
-			file_put_contents($file[0], $file_data);
-			chmod($file[0], $file[2]);
-			$success['files'][] = $file[0];
+			// Считываем и заменяем данные через единую функцию
+			$file_data = file_get_contents($sourceFile);
+
+			$replacements = [
+				'%latin%'            => $mod_data['translit'],
+				'%name%'             => $mod_data['name'],
+				'%crowdin_name%'     => $mod_data['crowdin_name'] ?? $mod_data['translit'],
+				'%crowdin_stat_id%'  => $mod_data['crowdin_state_id'],
+				'%version%'          => $mod_data['version'],
+				'%description%'      => $mod_data['description'],
+				'%icon%'             => $mod_data['icon'],
+				'%link%'             => $mod_data['link'],
+				'%docs%'             => $mod_data['docs'],
+				'%path%'             => str_replace(ROOT_DIR, '', $targetFile),
+				'%year%'             => date('Y'),
+			];
+
+			$file_data = str_replace(array_keys($replacements), array_values($replacements), $file_data);
+
+			// Записываем данные обратно в файл
+			if(!file_put_contents($targetFile, $file_data, LOCK_EX)) {
+				$error = error_get_last();
+				LogGenerator::generateLog('MH Admin', 'ajax/new_module', [
+					__('Невозможно записать файл "%s"', ["%s" => $targetFile]),
+					$error
+				]);
+			}
+			chmod($targetFile, $perms);
+
+			$success['files'][] = $targetFile;
 		} catch (Exception $e) {
 			$fails['files'][] = [
-				'file'    => $file[0],
+				'file'    => $targetFile,
 				'message' => $e->getMessage(),
 			];
 		}
@@ -234,13 +264,13 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 			'1,2'
 		);
 
-		$dle_mysqlupgrade = addslashes(
-			"INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups) VALUES ('{$mod_data['translit']}', '{$mod_data['name']} v{$mod_data['version']}', '{$mod_data['description']}', '{$icon}', '1, 2') ON DUPLICATE KEY UPDATE title = '{$mod_data['name']} v{$mod_data['version']}';"
-		);
+		$dle_mysqlupgrade = <<<SQL
+INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups) VALUES ('{$mod_data['translit']}', '{$mod_data['name']} v{$mod_data['version']}', '{$mod_data['description']}', '{$icon}', '1, 2') ON DUPLICATE KEY UPDATE title = '{$mod_data['name']} v{$mod_data['version']}';
+SQL;
 		$dle_mysqlenable  = $dle_mysqlupgrade;
-		$dle_mysqldisable = addslashes("DELETE FROM {prefix}_admin_sections WHERE name = '{$mod_data['translit']}';");
+		$dle_mysqldisable = "DELETE FROM {prefix}_admin_sections WHERE name = '{$mod_data['translit']}';";
 		$dle_mysqldelete  = $dle_mysqldisable;
-		$dle_notice       = addslashes("<ul><li><b>" . __('Ссылка на плагин') . "</b>: <a href=\"{$mod_data['link']}\" target=\"_blank\">" . __('Перейти') . "</a></li><li><b>" . __('Документация') . "</b>: <a href=\"{$mod_data['docs']}\" target=\"_blank\">" . __('Перейти') . "</a></li></ul>");
+		$dle_notice       = "<ul><li><b>" . __('Ссылка на плагин') . "</b>: <a href=\"{$mod_data['link']}\" target=\"_blank\">" . __('Перейти') . "</a></li><li><b>" . __('Документация') . "</b>: <a href=\"{$mod_data['docs']}\" target=\"_blank\">" . __('Перейти') . "</a></li></ul>";
 
 		try {
 			$plugin = $db->query('SELECT * FROM ' . PREFIX . "_plugins WHERE name = '{$dle_connector_name}'");
@@ -253,14 +283,36 @@ SQL;
 				$db->query($sql_insert);
 				$plugin_id = $db->insert_id();
 				$db->query(
-					"INSERT INTO " . USERPREFIX . "_admin_logs (name, date, ip, action, extras) values ('" . $db->safesql(
-						$member_id['name']
-					) . "', '{$_TIME}', '{$_IP}', '116', '{$name}')"
+					"INSERT INTO " . USERPREFIX . "_admin_logs (name, date, ip, action, extras) values ('" . $db->safesql($member_id['name']) . "', '{$_TIME}', '{$_IP}', '116', '{$name}')"
 				);
 				execute_query($plugin_id, $dle_mysqlenable);
 
+				$plugin_files = [];
+				$plugin_files[] = <<<SQL
+INSERT INTO {$prefix}_plugins_files (`plugin_id`, `file`, `action`, `searchcode`, `replacecode`, `active`, `searchcount`,
+                                      `replacecount`, `filedisable`, `filedleversion`, `fileversioncompare`)
+VALUES ({$plugin_id}, 'engine/inc/maharder/_includes/extras/paths.php', 'before', '// Custom models //', '// {$mod_data['name']}
+  MH_MODULES . "/{$mod_data['latin']}/models",
+  // {$mod_data['name']}
+'                                                                               , 1, 0, 0, 1, '', '==');
+SQL;
+				$plugin_files[] = <<<SQL
+INSERT INTO {$prefix}_plugins_files (`plugin_id`, `file`, `action`, `searchcode`, `replacecode`, `active`, `searchcount`,
+                                      `replacecount`, `filedisable`, `filedleversion`, `fileversioncompare`)
+VALUES ({$plugin_id}, 'engine/inc/maharder/_includes/extras/paths.php', 'before', '// Custom paths //', '// {$mod_data['name']}
+    MH_MODULES . "/{$mod_data['latin']}/classes",
+	MH_MODULES . "/{$mod_data['latin']}/repositories",
+	MH_MODULES . "/{$mod_data['latin']}/utils",
+  // {$mod_data['name']}
+', 1, 0, 0, 1, '', '==');
+SQL;
+
+				foreach ($plugin_files as $query) {
+					$db->query($query);
+				}
+
 				$success['plugin'][] = [
-					'link' => "{$config['']}{$config['']}?mod=plugins&action=edit&id={$plugin_id}",
+					'link' => "{$config['http_home_url']}{$config['admin_path']}?mod=plugins&action=edit&id={$plugin_id}",
 					'name' => "{$mod_data['name']} v{$mod_data['version']}",
 				];
 			} else {

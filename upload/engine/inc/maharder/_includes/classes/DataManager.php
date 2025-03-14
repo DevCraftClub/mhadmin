@@ -151,29 +151,33 @@ abstract class DataManager {
 	public static function createDir(string $service = 'DataManager', string $module = 'mhadmin', int $permission = 0755, string ...$paths): bool {
 		foreach ($paths as $path) {
 			try {
-				// Используем mkdir с проверкой is_dir только при необходимости
-				if (!@mkdir($path, $permission, true) && !is_dir($path)) {
+				// Проверяем, существует ли директория, перед созданием
+				if (is_dir($path)) {
+					continue; // Пропускаем, если директория уже существует
+				}
+
+				// Создаем директорию с подавлением ошибок
+				if (!mkdir($path, $permission, true) && !is_dir($path)) {
+					// Генерируем лог ошибки, если не удалось создать директорию
 					LogGenerator::generateLog(
 						$service,
-						'createDir',
-						[
-							__($module, "Путь \"{path}\" не был создан.", ['{path}' => $path]),
-						]
+						"{$module}/createDir",
+						__("Путь \"{path}\" не был создан.", ['{path}' => $path]),
 					);
+					return false; // Немедленно возвращаем false при ошибке
 				}
 			} catch (Throwable $e) {
-				// Логируем ошибку на основе исключений
+				// Генерируем лог исключения
 				LogGenerator::generateLog(
 					$service,
-					'createDir',
-					[
-						__($module, $e->getMessage()),
-					]
+					"{$module}/createDir",
+					__("Ошибка: {error}", ['{error}' => $e->getMessage()]),
 				);
-				return false;
+				return false; // Немедленно возвращаем false в случае исключения
 			}
 		}
-		return true;
+
+		return true; // Возвращаем true только если все директории созданы
 	}
 
 	/**
@@ -207,19 +211,17 @@ abstract class DataManager {
 			$previous = $correctedPaths[$index - 1];
 
 			// Убираем дублирующиеся "/" на стыке
-			if (str_ends_with($previous, '/') && str_starts_with($path, '/')) {
-				$correctedPaths[$index - 1] = rtrim($previous, '/');
-			} else if (!str_ends_with($previous, '/') && !str_starts_with($path, '/')) {
-				$correctedPaths[$index - 1] .= '/';
+			if (str_ends_with($previous, DIRECTORY_SEPARATOR) && str_starts_with($path, DIRECTORY_SEPARATOR)) {
+				$correctedPaths[$index - 1] = rtrim($previous, DIRECTORY_SEPARATOR);
+			} else if (!str_ends_with($previous, DIRECTORY_SEPARATOR) && !str_starts_with($path, DIRECTORY_SEPARATOR)) {
+				$correctedPaths[$index - 1] .= DIRECTORY_SEPARATOR;
 			}
 
 			$correctedPaths[] = $path;
 		}
 
 		// Объединяем пути
-		$joinedPath = implode(DIRECTORY_SEPARATOR, $correctedPaths);
-
-		return self::normalizePath($joinedPath);
+		return str_replace([DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, '//', '\\\\', '\/'], DIRECTORY_SEPARATOR, implode(DIRECTORY_SEPARATOR, $correctedPaths));
 	}
 
 	/**
@@ -606,22 +608,22 @@ abstract class DataManager {
 	 */
 	public static function normalizePath(string $path): string {
 		// Убираем нежелательные символы и лишние пробелы
-		$path = preg_replace('#[\0\\\\]+#', '/', trim($path));
+		$path = preg_replace('#[\0\\\\]+#', DIRECTORY_SEPARATOR, trim($path));
 
 		// Проверяем наличие управляющих символов
 		if (preg_match('#\p{C}+#u', $path)) {
 			return ''; // Некорректный путь
 		}
 
-		$rootDir = rtrim(ROOT_DIR, '/');
+		$rootDir = rtrim(ROOT_DIR, DIRECTORY_SEPARATOR);
 
 		// Избавляемся от нежелательных частей пути
 		$path          = str_replace($rootDir, '', $path);
-		$pathParts     = explode('/', $path);
+		$pathParts     = explode(DIRECTORY_SEPARATOR, $path);
 		$filteredParts = array_filter($pathParts, static fn($part) => $part !== '.' && $part !== '..' && $part !== '');
 
 		// Собираем нормализованный путь
-		$normalizedPath = implode('/', $filteredParts);
+		$normalizedPath = implode(DIRECTORY_SEPARATOR, $filteredParts);
 
 		// Убираем корневой каталог ROOT_DIR
 		if (str_starts_with($normalizedPath, $rootDir)) {
@@ -630,12 +632,14 @@ abstract class DataManager {
 
 		// Убедимся, что путь начинается с '/' на Linux
 		if (PHP_OS_FAMILY === 'Linux' && !str_starts_with($normalizedPath, '/')) {
-			$normalizedPath = '/' . $normalizedPath;
+			$normalizedPath = DIRECTORY_SEPARATOR . $normalizedPath;
 		}
 
-		if (!str_contains($rootDir, $normalizedPath)) $normalizedPath = $rootDir . $normalizedPath;
+		if (!str_contains($rootDir, $normalizedPath)) $normalizedPath = self::joinPaths($rootDir, $normalizedPath);
+		$normalizedPath = str_replace(['\\\\', '//', '\/'], ['\\', '/', DIRECTORY_SEPARATOR], $normalizedPath);
+		$realPath = realpath($normalizedPath);
 
-		return $normalizedPath;
+		return $realPath ?: $normalizedPath;
 	}
 
 	/**

@@ -168,18 +168,20 @@
 
 	$(() => {
 		$(document).on('click', '.create', function () {
-			startLoading();
+
 			sendPreparedAjaxRequest({
 				method         : 'new_module',
 				inputData      : $('.form').serializeArray(),
 				successCallback: function (data) {
 					try {
 						data = JSON.parse(data);
-					} catch (err) {
-					}
-					let meta = data.meta
 
-					let d = data.data;
+					} catch (err) {}
+
+					let meta = data.meta,
+                        success = meta[1],
+                        failed = meta[2];
+
 					shiftFieldStatus('name');
 					shiftFieldStatus('description');
 					shiftFieldStatus('version');
@@ -193,41 +195,41 @@
 
 					console.log(data);
 
-
-					if (meta.success.dirs.length > 0) {
-						meta.success.dirs.forEach(function (e, i) {
+					if (success.dirs.length > 0) {
+						success.dirs.forEach(function (e, i) {
 							$('#dirs_success').append(item(e));
 						});
 						$('#dirs_success').show();
 					}
-					if (meta.success.files.length > 0) {
-						meta.success.files.forEach(function (e, i) {
+					if (success.files.length > 0) {
+						success.files.forEach(function (e, i) {
 							$('#files_success').append(item(__('Файл :file: создан', {file: e}), 'file'));
 						});
 						$('#files_success').show();
 					}
-					if (meta.success.plugin.length > 0) {
-						meta.success.plugin.forEach(function (e, i) {
+					if (success.plugin.length > 0) {
+						success.plugin.forEach(function (e, i) {
 							$('#plugin_success')
 								.append(item(__('Плагин "<b>:name:</b>" был создан', {name: e.name}), 'cloud download alternate', __('<a href=":link:" target="_blank">Открыть на сайте</a>', {link: e.link})));
 						});
 						$('#plugin_success').show();
 					}
 
-					if (meta.failed.dirs.length > 0) {
-						meta.failed.dirs.forEach(function (e, i) {
+					if (failed.dirs.length > 0) {
+						failed.dirs.forEach(function (e, i) {
 							$('#dirs_failed').append(item(e.dir, 'folder', e.message));
 						});
 						$('#dirs_failed').show();
 					}
-					if (meta.failed.files.length > 0) {
-						meta.failed.files.forEach(function (e, i) {
+					if (failed.files.length > 0) {
+						failed.files.forEach(function (e, i) {
 							$('#files_failed').append(item(e.file, 'file', e.message));
 						});
 						$('#files_failed').show();
 					}
-					if (meta.failed.plugin.length > 0) {
-						meta.failed.plugin.forEach(function (e, i) {
+					if (failed.plugin.length > 0) {
+						failed.plugin.forEach(function (e, i) {
+
 							$('#plugin_failed')
 								.append(item(__('Плагин не был создан!'), 'cloud download alternate', e.message));
 						});
@@ -237,9 +239,17 @@
 					$('#lists').show();
 				},
 				errorCallback  : function (err) {
-					if (d.name === '') shiftFieldStatus('name', true);
-					if (d.description === '') shiftFieldStatus('description', true);
-					if (d.version === '') shiftFieldStatus('version', true);
+                    let data;
+					try {
+                        data = JSON.parse(err.responseText)
+					} catch (e) {}
+
+                    console.error(data)
+
+					let d = data?.data;
+					if (d?.name === '') shiftFieldStatus('name', true);
+					if (d?.description === '') shiftFieldStatus('description', true);
+					if (d?.version === '') shiftFieldStatus('version', true);
 
 					$('#lists').show();
 				}

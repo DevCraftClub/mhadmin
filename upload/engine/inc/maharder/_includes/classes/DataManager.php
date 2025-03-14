@@ -221,7 +221,7 @@ abstract class DataManager {
 		}
 
 		// Объединяем пути
-		return implode(DIRECTORY_SEPARATOR, $correctedPaths);
+		return str_replace([DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, '//', '\\\\', '\/'], DIRECTORY_SEPARATOR, implode(DIRECTORY_SEPARATOR, $correctedPaths));
 	}
 
 	/**
@@ -636,8 +636,10 @@ abstract class DataManager {
 		}
 
 		if (!str_contains($rootDir, $normalizedPath)) $normalizedPath = self::joinPaths($rootDir, $normalizedPath);
+		$normalizedPath = str_replace(['\\\\', '//', '\/'], ['\\', '/', DIRECTORY_SEPARATOR], $normalizedPath);
+		$realPath = realpath($normalizedPath);
 
-		return realpath(str_replace(['\\\\', '//'], ['\\', '/'], $normalizedPath)) ?? str_replace(['\\\\', '//'], ['\\', '/'], $normalizedPath);
+		return $realPath ?: $normalizedPath;
 	}
 
 	/**

@@ -2,139 +2,147 @@
 
 {% block content %}
 <form class="ui form segment">
-	<div class="ui bottom attached tab active" data-tab="main">
-		<h4 class="ui dividing header">{{ 'Создание модуля'|trans }}</h4>
-		<div class="ui four column grid">
-			{% autoescape 'html' %}
+    <div class="ui bottom attached tab active" data-tab="main">
+        <h4 class="ui dividing header">{{ 'Создание модуля'|trans }}</h4>
+        <div class="ui four column grid">
+            {% autoescape 'html' %}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'name',
-						name: 'Название модуля'|trans,
-						descr: 'Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'name',
+            name: 'Название модуля'|trans,
+            descr: 'Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права
+            доступа.'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'translit',
-						name: 'Название модуля на латинице'|trans,
-						descr: 'Введите название модуля на латинице, иначе будет использована стандартная функция DLE для преобразования названия.'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'translit',
+            name: 'Название модуля на латинице'|trans,
+            descr: 'Введите название модуля на латинице, иначе будет использована стандартная функция DLE для
+            преобразования названия.'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'description',
-						name: 'Описание модуля'|trans,
-						descr: 'Введите описание модуля'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'description',
+            name: 'Описание модуля'|trans,
+            descr: 'Введите описание модуля'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'version',
-						name: 'Версия модуля'|trans,
-						descr: 'Введите версию модуля'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'version',
+            name: 'Версия модуля'|trans,
+            descr: 'Введите версию модуля'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'icon',
-						name: 'Иконка'|trans,
-						descr: 'Класс иконки. К сайту подключены FontAwesome PRO.<br>По умолчанию: <i class="fad fa-cogs"></i> (fad fa-cogs)'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'icon',
+            name: 'Иконка'|trans,
+            descr: 'Класс иконки. К сайту подключены FontAwesome PRO.<br>По умолчанию: <i class="fad fa-cogs"></i> (fad
+            fa-cogs)'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'plugin_icon',
-						name: 'Иконка плагина'|trans,
-						descr: 'Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'plugin_icon',
+            name: 'Иконка плагина'|trans,
+            descr: 'Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например
+            engine/skins/images/my_icon.png'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'crowdin_name',
-						name: 'Название проекта на CrowdIn'|trans,
-			descr: 'Укажите URL наимование Вашего проекта на CrowdIn. Пример: Из https://crowdin.com/project/<b>mhadmin</b>/ берём mhadmin.<br><br><i>По умолчанию: Название на латинице</i>'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'crowdin_name',
+            name: 'Название проекта на CrowdIn'|trans,
+            descr: 'Укажите URL наимование Вашего проекта на CrowdIn. Пример: Из
+            https://crowdin.com/project/<b>mhadmin</b>/ берём mhadmin.<br><br><i>По умолчанию: Название на латинице</i>'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'crowdin_state_id',
-						name: 'ID статистики перевода на CrowdIn'|trans,
-						descr: 'Укажите ID статистики перевода на CrowdIn из дополнения <a href="https://crowdin.com/store/apps/bds" target="_blank">Badges & Status Images</a>'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'crowdin_state_id',
+            name: 'ID статистики перевода на CrowdIn'|trans,
+            descr: 'Укажите ID статистики перевода на CrowdIn из дополнения <a href="https://crowdin.com/store/apps/bds"
+                                                                               target="_blank">Badges & Status
+            Images</a>'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'link',
-						name: 'Ссылка на модуль автора'|trans,
-						descr: 'Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'link',
+            name: 'Ссылка на модуль автора'|trans,
+            descr: 'Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'docs',
-						name: 'Ссылка на документацию модуля'|trans,
-						descr: 'Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)'|trans,
-						type: 'text'
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'docs',
+            name: 'Ссылка на документацию модуля'|trans,
+            descr: 'Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)'|trans,
+            type: 'text'
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'db',
-						name: 'Добавить в плагины?'|trans,
-						descr: 'Скрипт создаст начальный плагин и добавит его в базу данных'|trans,
-						type: 'checkbox',
-						settings: {
-							selected: true
-						}
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'db',
+            name: 'Добавить в плагины?'|trans,
+            descr: 'Скрипт создаст начальный плагин и добавит его в базу данных'|trans,
+            type: 'checkbox',
+            settings: {
+            selected: true
+            }
+            })
+            }}
 
-				{{ include('templateIncludes/segRow.html', {
-						id: 'override',
-						name: 'Перезаписать файлы?'|trans,
-						descr: 'Скрипт перезапишет существующие файлы шаблонами.<br><span class="ui red text">На свой страх и риск!</span>'|trans,
-						type: 'checkbox',
-						settings: {
-							selected: false
-						}
-					})
-				}}
+            {{ include('templateIncludes/segRow.html', {
+            id: 'override',
+            name: 'Перезаписать файлы?'|trans,
+            descr: 'Скрипт перезапишет существующие файлы шаблонами.<br><span
+                class="ui red text">На свой страх и риск!</span>'|trans,
+            type: 'checkbox',
+            settings: {
+            selected: false
+            }
+            })
+            }}
 
-			{% endautoescape %}
-		</div>
-	</div>
+            {% endautoescape %}
+        </div>
+    </div>
 </form>
 <div class="ui segment" id="lists" style="display:none">
-	<div class="ui list" id="dirs_success" style="display:none">
+    <div class="ui list" id="dirs_success" style="display:none">
 
-	</div>
-	<div class="ui list" id="dirs_failed" style="display:none">
+    </div>
+    <div class="ui list" id="dirs_failed" style="display:none">
 
-	</div>
-	<div class="ui list" id="files_success" style="display:none">
+    </div>
+    <div class="ui list" id="files_success" style="display:none">
 
-	</div>
-	<div class="ui list" id="files_failed" style="display:none">
+    </div>
+    <div class="ui list" id="files_failed" style="display:none">
 
-	</div>
-	<div class="ui list" id="plugin_success" style="display:none">
+    </div>
+    <div class="ui list" id="plugin_success" style="display:none">
 
-	</div>
-	<div class="ui list" id="plugin_failed" style="display:none">
+    </div>
+    <div class="ui list" id="plugin_failed" style="display:none">
 
-	</div>
+    </div>
 </div>
 <div class="ui segment">
-	<div class="ui button create" tabindex="0">{{'Создать'|trans}}</div>
+    <div class="ui button create" tabindex="0">{{'Создать'|trans}}</div>
 </div>
 {% endblock %}
 
@@ -160,23 +168,18 @@
 
 	$(() => {
 		$(document).on('click', '.create', function () {
-			startLoading();
-			$.ajax({
-				url: 'engine/ajax/controller.php?mod=maharder',
-				data: {
-					user_hash: '{{dle_login_hash}}',
-					module: '{{module_code}}',
-					file: 'master',
-					method: 'new_module',
-					data: $('.form').serializeArray()
-				},
-				type: 'POST',
-				success: function (data) {
+			sendPreparedAjaxRequest({
+				method         : 'new_module',
+				inputData      : $('.form').serializeArray(),
+				successCallback: function (data) {
 					try {
 						data = JSON.parse(data);
-					} catch(err) {}
+					} catch (err) {}
 
-					let d = data.data;
+					let meta = data.meta,
+                        success = meta[1],
+                        failed = meta[2];
+
 					shiftFieldStatus('name');
 					shiftFieldStatus('description');
 					shiftFieldStatus('version');
@@ -190,70 +193,63 @@
 
 					console.log(data);
 
-					if (data.status === 'success') {
-						if (data.success.dirs.length > 0) {
-							data.success.dirs.forEach(function (e, i) {
-								$('#dirs_success').append(item(e));
-							});
-							$('#dirs_success').show();
-						}
-						if (data.success.files.length > 0) {
-							data.success.files.forEach(function (e, i) {
-								$('#files_success').append(item(__('Файл :file: создан', {file: e}), 'file'));
-							});
-							$('#files_success').show();
-						}
-						if (data.success.plugin.length > 0) {
-							data.success.plugin.forEach(function (e, i) {
-								$('#plugin_success').append(item(__('Плагин "<b>:name:</b>" был создан', {name: e.name}), 'cloud download alternate', __('<a href=":link:" target="_blank">Открыть на сайте</a>', {link: link})));
-							});
-							$('#plugin_success').show();
-						}
 
-						if (data.failed.dirs.length > 0) {
-							data.failed.dirs.forEach(function (e, i) {
-								$('#dirs_failed').append(item(e.dir, 'folder', e.message));
-							});
-							$('#dirs_failed').show();
-						}
-						if (data.failed.files.length > 0) {
-							data.failed.files.forEach(function (e, i) {
-								$('#files_failed').append(item(e.file, 'file', e.message));
-							});
-							$('#files_failed').show();
-						}
-						if (data.failed.plugin.length > 0) {
-							data.failed.plugin.forEach(function (e, i) {
-								$('#plugin_failed').append(item(__('Плагин не был создан!'), 'cloud download alternate', e.message));
-							});
-							$('#plugin_failed').show();
-						}
-
-						$('#lists').show();
-
-						$('body').toast({
-							class: 'success',
-							title: __('Всё отлично!'),
-							message: __('Модуль был создан!'),
-							showProgress: 'bottom'
+					if (success.dirs.length > 0) {
+						success.dirs.forEach(function (e, i) {
+							$('#dirs_success').append(item(e));
 						});
-
-					} else {
-						if (d.name === '') shiftFieldStatus('name', true);
-						if (d.description === '') shiftFieldStatus('description', true);
-						if (d.version === '') shiftFieldStatus('version', true);
-
-						$('#lists').show();
-
-						$('body').toast({
-							class: 'error',
-							title: __('Произошла ошибка!'),
-							message: data.message,
-							showProgress: 'bottom'
+						$('#dirs_success').show();
+					}
+					if (success.files.length > 0) {
+						success.files.forEach(function (e, i) {
+							$('#files_success').append(item(__('Файл :file: создан', {file: e}), 'file'));
 						});
+						$('#files_success').show();
+					}
+					if (success.plugin.length > 0) {
+						success.plugin.forEach(function (e, i) {
+							$('#plugin_success')
+								.append(item(__('Плагин "<b>:name:</b>" был создан', {name: e.name}), 'cloud download alternate', __('<a href=":link:" target="_blank">Открыть на сайте</a>', {link: e.link})));
+						});
+						$('#plugin_success').show();
 					}
 
-					hideLoading('');
+					if (failed.dirs.length > 0) {
+						failed.dirs.forEach(function (e, i) {
+							$('#dirs_failed').append(item(e.dir, 'folder', e.message));
+						});
+						$('#dirs_failed').show();
+					}
+					if (failed.files.length > 0) {
+						failed.files.forEach(function (e, i) {
+							$('#files_failed').append(item(e.file, 'file', e.message));
+						});
+						$('#files_failed').show();
+					}
+					if (failed.plugin.length > 0) {
+						failed.plugin.forEach(function (e, i) {
+							$('#plugin_failed')
+								.append(item(__('Плагин не был создан!'), 'cloud download alternate', e.message));
+						});
+						$('#plugin_failed').show();
+					}
+
+					$('#lists').show();
+				},
+				errorCallback  : function (err) {
+                    let data;
+					try {
+                        data = JSON.parse(err.responseText)
+					} catch (e) {}
+
+                    console.error(data)
+
+					let d = data?.data;
+					if (d?.name === '') shiftFieldStatus('name', true);
+					if (d?.description === '') shiftFieldStatus('description', true);
+					if (d?.version === '') shiftFieldStatus('version', true);
+
+					$('#lists').show();
 				}
 			});
 		});

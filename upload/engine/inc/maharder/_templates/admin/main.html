@@ -257,23 +257,14 @@
 
 		$(document).on('click', '[data-action="check_assets"]', function () {
 			$('[data-action="check_assets"] .icon').addClass('loading');
-			$.ajax({
-				url: 'engine/ajax/controller.php?mod=maharder',
-				data: {
-					user_hash: '{{dle_login_hash}}',
-					module: 'maharder',
-					file: 'master',
+			sendPreparedAjaxRequest({
 					method: 'check_assets',
-				},
-				type: 'POST',
-				success: function (data) {
-					hideLoading('');
+				successCallback: function (data) {
 					$('[data-action="check_assets"] .icon').removeClass('loading');
 					try {
 						data = JSON.parse(data);
 					} catch (e) {
 					}
-					console.log(data)
 					if (data.local === data.on_server && data.missing_count === 0 && data.update_count === 0)
 						$('body').toast({
 							class: 'info',
@@ -291,14 +282,14 @@
 							content: '<div class="ui middle aligned divided list">\n' +
 								'  <div class="item">\n' +
 								'    <div class="content">\n' +
-								'      <a class="header">${__("На сервере")}</a> \n' +
-								'       <div class="description">' + data.on_server + ' ${__("файлов")}</div>' +
+								'      <a class="header">' + __("На сервере") + '</a> \n' +
+								'       <div class="description">' + data.on_server + __("файлов") + '</div>' +
 								'    </div>\n' +
 								'  </div>\n' +
 								'  <div class="item">\n' +
 								'    <div class="content">\n' +
-								'      <a class="header">${__("Загружено на сайт")}</a> ' +
-								'       <div class="description">' + data.local + ' ${__("файлов")}</div>\n' +
+								`      <a class="header">${__("Загружено на сайт")}</a> ` +
+								'       <div class="description">' + data.local + __("файлов") + '</div>\n' +
 								'    </div>\n' +
 								'  </div>\n' +
 								generate_item(data.missing_count > 0, __('Требуют установки'), '', {
@@ -368,24 +359,10 @@
 		});
 		$(document).on('click', '.save', function () {
 			startLoading();
-			$.ajax({
-				url: 'engine/ajax/controller.php?mod=maharder',
-				data: {
-					user_hash: '{{dle_login_hash}}',
-					module: '{{module_code}}',
-					file: 'master',
-					method: 'settings',
-					data: $('.form').serializeArray()
-				},
-				type: 'POST',
-				success: function (data) {
-					hideLoading('');
-					$('body').toast({
-						class: 'success',
-						title: __('Всё отлично!'),
-						message:  __('<p>Данные были сохранены!</p><p>Страница сейчас обновится!</p>'),
-						showProgress: 'bottom'
-					});
+			sendPreparedAjaxRequest({
+				method: 'settings',
+				inputData: $('.form').serializeArray(),
+				successCallback: function (data) {
 					setTimeout(() => {
 						window.location.reload();
 					}, 1000);

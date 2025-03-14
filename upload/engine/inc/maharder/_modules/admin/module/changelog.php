@@ -16,12 +16,12 @@ global $mh;
 
 $logs = [
 	'180.3.5' => [
-		__('[NEШ] Добавлен метод сохранения конфигурации плагина, <kbd>saveConfig</kbd> в классе <kbd>DataManager</kbd>'),
+		__('[NEW] Добавлен метод сохранения конфигурации плагина, <kbd>saveConfig</kbd> в классе <kbd>DataManager</kbd>'),
 		__('[FIX] Исправлена функция <kbd>joinPaths</kbd> для корректной обработки путей, особенно в средах Windows'),
 		__('[FIX] Исправлены проблемы с переменными при генерации новых модулей.'),
 	],
 	'173.3.4' => [
-		__('[NEШ] Новый вид в input.twig: date, time и datetime'),
+		__('[NEW] Новый вид в input.twig: date, time и datetime'),
 		__('[NEW] Добавление новых фильтров (rangeFilter и dateRangeFilter) для TwigFilter'),
 		__('[NEW] Добавлена функция `getFullUserGroups()` в трейте `DleData` для вывода информации о всех группах'),
 		__('[NEW] Добавлена функция `userGroup()` для вывода определённой группы пользователей в шаблонах Twig'),

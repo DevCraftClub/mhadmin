@@ -168,6 +168,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 			chmod($targetFile, $perms);
 
 			$success['files'][] = $targetFile;
+
 		} catch (Exception $e) {
 			$fails['files'][] = [
 				'file'    => $targetFile,
@@ -263,6 +264,7 @@ if (empty($mod_data['name']) || empty($mod_data['description']) || empty($mod_da
 			$icon,
 			'1,2'
 		);
+
 
 		$dle_mysqlupgrade = <<<SQL
 INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups) VALUES ('{$mod_data['translit']}', '{$mod_data['name']} v{$mod_data['version']}', '{$mod_data['description']}', '{$icon}', '1, 2') ON DUPLICATE KEY UPDATE title = '{$mod_data['name']} v{$mod_data['version']}';

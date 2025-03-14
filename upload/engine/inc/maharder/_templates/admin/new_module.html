@@ -168,12 +168,14 @@
 
 	$(() => {
 		$(document).on('click', '.create', function () {
+
 			sendPreparedAjaxRequest({
 				method         : 'new_module',
 				inputData      : $('.form').serializeArray(),
 				successCallback: function (data) {
 					try {
 						data = JSON.parse(data);
+
 					} catch (err) {}
 
 					let meta = data.meta,
@@ -192,7 +194,6 @@
 					$('#lists').hide();
 
 					console.log(data);
-
 
 					if (success.dirs.length > 0) {
 						success.dirs.forEach(function (e, i) {
@@ -228,6 +229,7 @@
 					}
 					if (failed.plugin.length > 0) {
 						failed.plugin.forEach(function (e, i) {
+
 							$('#plugin_failed')
 								.append(item(__('Плагин не был создан!'), 'cloud download alternate', e.message));
 						});

@@ -1,5 +1,11 @@
 {% import _self as macro %}
 
+{% macro arrayInput(id, name, descr, opts, arrayName) %}
+	{% set id = id|replace({(arrayName ~ '['): '', ']': ''}) %}
+
+	{{ _self.input(id, name, descr, opts) }}
+{% endmacro %}
+
 {% macro input(id, name, descr, opts) %}
 
 	{{ include('templateIncludes/segRow.html', {
@@ -12,95 +18,95 @@
 	})
 	}}
 
-{% endmacro %}
+	{% endmacro %}
 
-{% macro tags(id, name, descr, opts) %}
+	{% macro tags(id, name, descr, opts) %}
 
-	{{ include('templateIncludes/segRow.html', {
-		type: 'tag_input',
-		id: id,
-		name: name,
-		descr: descr,
-		variable: opts,
-		tags: true
-	})
-	}}
+		{{ include('templateIncludes/segRow.html', {
+			type: 'tag_input',
+			id: id,
+			name: name,
+			descr: descr,
+			variable: opts,
+			tags: true
+		})
+		}}
 
-{% endmacro %}
+	{% endmacro %}
 
-{% macro date(id, name, descr, opts) %}
+	{% macro date(id, name, descr, opts) %}
 
-	{{ include('templateIncludes/segRow.html', {
-		type: 'date',
-		id: id,
-		name: name,
-		descr: descr,
-		variable: opts,
-	})
-	}}
+		{{ include('templateIncludes/segRow.html', {
+			type: 'date',
+			id: id,
+			name: name,
+			descr: descr,
+			variable: opts,
+		})
+		}}
 
-{% endmacro %}
+	{% endmacro %}
 
-{% macro time(id, name, descr, opts) %}
+	{% macro time(id, name, descr, opts) %}
 
-	{{ include('templateIncludes/segRow.html', {
-		type: 'time',
-		id: id,
-		name: name,
-		descr: descr,
-		variable: opts,
-	})
-	}}
+		{{ include('templateIncludes/segRow.html', {
+			type: 'time',
+			id: id,
+			name: name,
+			descr: descr,
+			variable: opts,
+		})
+		}}
 
-{% endmacro %}
+	{% endmacro %}
 
-{% macro datetime(id, name, descr, opts) %}
+	{% macro datetime(id, name, descr, opts) %}
 
-	{{ include('templateIncludes/segRow.html', {
-		type: 'datetime',
-		id: id,
-		name: name,
-		descr: descr,
-		variable: opts,
-	})
-	}}
+		{{ include('templateIncludes/segRow.html', {
+			type: 'datetime',
+			id: id,
+			name: name,
+			descr: descr,
+			variable: opts,
+		})
+		}}
 
-{% endmacro %}
+	{% endmacro %}
 
-{% macro number(id, name, descr, opts) %}
+	{% macro number(id, name, descr, opts) %}
 
-	{{ include('templateIncludes/segRow.html', {
-		type: 'number',
-		id: id,
-		name: name,
-		descr: descr,
-		variable: opts
-	})
-	}}
+		{{ include('templateIncludes/segRow.html', {
+			type: 'number',
+			id: id,
+			name: name,
+			descr: descr,
+			variable: opts
+		})
+		}}
 
-{% endmacro %}
+	{% endmacro %}
 
-{% macro hidden(id, val) %}
+	{% macro hidden(id, val) %}
 
-	{{ include('templateIncludes/addInput.html', {
-		type: 'hidden',
-		name: id,
-		value: val
-	})
-	}}
+		{{ include('templateIncludes/addInput.html', {
+			type: 'hidden',
+			name: id,
+			value: val
+		})
+		}}
 
-{% endmacro %}
+	{% endmacro %}
 
-{% macro file(id, name, descr, opts, extra) %}
+	{% macro file(id, name, descr, opts, extra) %}
 
-	{{ include('templateIncludes/segRow.html', {
-		type: 'file',
-		id: id,
-		name: name,
-		descr: descr,
-		variable: opts,
-		extra: extra
-	})
-	}}
+		{{ include('templateIncludes/segRow.html', {
+			type: 'file',
+			id: id,
+			name: name,
+			descr: descr,
+			variable: opts,
+			extra: extra
+		})
+		}}
 
-{% endmacro %}
+	{% endmacro %}

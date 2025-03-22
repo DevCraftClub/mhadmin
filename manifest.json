@@ -1,8 +1,8 @@
 {
-	"version": "173.3.4",
+	"version": "180.3.5",
 	"status": "Stable",
 	"dle": [
-		"17.x"
+		"18.x"
 	],
 	"php": [
 		"8.3"

@@ -22,40 +22,17 @@
 		<div class="ui four column grid">
 			{% autoescape 'html' %}
 
-			{{ include('templateIncludes/segRow.html', {
-			id: 'list_count',
-			name: 'Количество объектов'|trans|raw,
-			descr: 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д. Это глобальное
-			значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество
-			отображаемых новостей на страницу" => '|trans|html_entity_decode ~ dle_config.news_number ~ '.',
-			type: 'number',
-			variable: settings
-			})
-			}}
+			{{ number('list_count', 'Количество объектов'|trans, 'Введите количество объектов, которые будут отображены в списках, таблицах и т.д. Это глобальное значение для всех модулей автора. При пустом значении будут браться значения из настройки движка "Количество отображаемых новостей на страницу" => '|trans|html_entity_decode ~ dle_config.news_number ~ '.', settings) }}
 
-			{{ input('cache_path', 'Путь до кеша файлов'|trans, 'Укажите путь, где будут храниться файлы кеша.<br>По умолчанию: /engine/inc/maharder/_cache'|htmlentities|raw|trans|html_entity_decode, settings ) }}
+			{{ input('cache_path', 'Путь до кеша файлов'|trans, 'Укажите путь, где будут храниться файлы кеша.<br>По умолчанию: /engine/inc/maharder/_cache'|trans, settings ) }}
 
-			{{ include('templateIncludes/segRow.html', {
-			id: 'cache_timer',
-			name: 'Время хранения кеша'|trans,
-			descr: 'Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.<br><b><i>По умолчанию: 60 минут</i></b>'|htmlentities|raw|trans|html_entity_decode,
-			type: 'number',
-			variable: settings
-			})
-			}}
+			{{ number('cache_timer', 'Время хранения кеша'|trans, 'Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.<br><b><i>По умолчанию: 60 минут</i></b>', settings) }}
 
 			{{ select('language', 'Язык админки'|trans, 'Данная опция позволит использовать админпанель и модули на разных языках'|trans, settings, lang_data ) }}
 
 			{{ input('locales_path', 'Путь до файлов языков'|trans, 'Укажите путь, откуда будут браться языковые файлы.<br>По умолчанию: /engine/inc/maharder/_locales'|htmlentities|raw|trans|html_entity_decode, settings ) }}
 
-			{{ include('templateIncludes/segRow.html', {
-			id: 'logs',
-			name: 'Включить логирование?'|trans,
-			descr: 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/_logs</b>'|htmlentities|raw|trans|html_entity_decode,
-			type: 'checkbox',
-			variable: settings
-			})
-			}}
+			{{ checkbox('logs', 'Включить логирование?'|trans, 'При включенном параметре будет создавать текстовые логи в папке <b>engine/inc/maharder/_logs</b>'|trans, settings) }}
 
 			{{ checkbox('logs_db', 'Сохранять логи в базе данных?'|trans, 'При включённом параметре все логи будут сохраняться в базу данных'|trans, settings) }}
 
@@ -75,38 +52,22 @@
 			'<div class="item"><b>Отладка</b> - Отправляет только информацию об отладке в канал</div>'|htmlentities|raw|trans|html_entity_decode ~
 			'</div><br>' ~
 			'Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.<br>Если выбрано "Все", то остальные выбранные параметры игнорируются'|htmlentities|raw|trans|html_entity_decode, settings, {
-			'all': "Все"|trans,
-			'error': "Ошибки"|trans,
-			'info': "Информация"|trans,
-			'notice': "Уведомления"|trans,
-			'warning':
-			"Предупреждения"|trans,
-			'critical': "Критические ошибки"|trans,
-			'debug': "Отладка"|trans
+				'all': "Все"|trans,
+				'error': "Ошибки"|trans,
+				'info': "Информация"|trans,
+				'notice': "Уведомления"|trans,
+				'warning':
+				"Предупреждения"|trans,
+				'critical': "Критические ошибки"|trans,
+				'debug': "Отладка"|trans
 			}) }}
 
-			{{ include('templateIncludes/segRow.html', {
-			id: 'cache_icon',
-			name: 'Добавить кнопку с очищением кеша?'|trans,
-			descr: 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша
-			системы'|trans,
-			type: 'checkbox',
-			variable: settings
-			})
-			}}
+			{{ input('cache_icon', 'Добавить кнопку с очищением кеша?'|trans, 'При включенном параметре, в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша системы'|trans, settings) }}
 
-			{{ include('templateIncludes/segRow.html', {
-			id: 'theme',
-			name: 'Тема оформления админки'|trans,
-			descr: 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу'|trans,
-			type: 'select',
-			variable: settings,
-			values: {
-			light: 'Светлая'|trans,
-			dark: 'Тёмная'|trans,
-			}
-			})
-			}}
+			{{ select('theme', 'Тема оформления админки'|trans, 'Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу'|trans, settings, {
+				light: 'Светлая'|trans,
+				dark: 'Тёмная'|trans,
+			}) }}
 
 			{% endautoescape %}
 		</div>
@@ -361,7 +322,7 @@
 			startLoading();
 			sendPreparedAjaxRequest({
 				method: 'settings',
-				inputData: $('.form').serializeArray(),
+				inputData: $('.form').serialize(),
 				successCallback: function (data) {
 					setTimeout(() => {
 						window.location.reload();

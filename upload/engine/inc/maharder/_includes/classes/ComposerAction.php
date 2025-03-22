@@ -59,7 +59,7 @@ class ComposerAction {
 
 		$context = stream_context_create(['http' => ['timeout' => 30]]);
 
-		$pharContent = @file_get_contents('https://getcomposer.org/composer.phar', false, $context);
+		$pharContent = @file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar', false, $context);
 		if ($pharContent === false) {
 			throw new \RuntimeException('Ошибка загрузки Composer');
 		}
@@ -74,7 +74,7 @@ class ComposerAction {
 		}
 
 		if (hash('sha256', $pharContent) !== trim($expectedHash)) {
-			throw new \RuntimeException('Неверная контрольная сумма Composer');
+			throw new \RuntimeException(sprintf('Неверная контрольная сумма Composer! Ожидалось %s; получено %s!<br>1. Загрузите <a href="%s" target="_blank">composer.phar</a> вручную и закиньте загруженный файл по пути %s.<br>2. Обновите страницу!', $expectedHash, hash('sha256', $pharContent, 'https://getcomposer.org/download/latest-stable/composer.phar', ComposerAction::$composerPath)));
 		}
 
 		if (!@file_put_contents(ComposerAction::$composerPath, $pharContent)) {

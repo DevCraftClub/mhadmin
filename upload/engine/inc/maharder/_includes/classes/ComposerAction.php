@@ -9,15 +9,14 @@ class ComposerAction {
 	 *
 	 * @param string|null $projectPath  Путь к проекту (где находится composer.json)
 	 * @param string|null $composerPath Путь к временному Composer (опционально)
-	 *
 	 */
 	public static function init(?string $projectPath = null, ?string $composerPath = null): void {
-		ComposerAction::$projectPath = $projectPath ? realpath($projectPath) : MH_ADMIN;
-		if (!is_dir(ComposerAction::$projectPath)) {
+		self::$projectPath = $projectPath ? realpath($projectPath) : MH_ADMIN;
+		if (!is_dir(self::$projectPath)) {
 			throw new \InvalidArgumentException("Директория проекта не существует: $projectPath");
 		}
 
-		ComposerAction::$composerPath = $composerPath ?? COMPOSER_DIR . '/composer.phar';
+		self::$composerPath = $composerPath ?? COMPOSER_DIR . '/composer.phar';
 	}
 
 	/**
@@ -35,10 +34,18 @@ class ComposerAction {
 				return true;
 			}
 
+			if (PHP_OS_FAMILY === 'Windows') return false;
+
 			// Используем `which` или альтернативу для проверки выполнения команды через PATH
-			$command  = PHP_OS_FAMILY === 'Windows' ? 'where composer' : 'which composer';
 			$exitCode = null;
-			@exec($command, $output, $exitCode);
+			@exec('which composer', $output, $exitCode);
+
+			if (isset($output[0])) {
+				$newPath = realpath($output[0]);
+				if ($newPath !== false) {
+					self::$composerPath = $newPath;
+				}
+			}
 
 			return $exitCode === 0;
 		} catch (Exception $e) {
@@ -52,14 +59,15 @@ class ComposerAction {
 	 * @throws \RuntimeException При ошибках загрузки или сохранения
 	 */
 	public static function installTemporaryComposer(): void {
-		$composerDir = dirname(ComposerAction::$composerPath);
+		$composerDir = dirname(self::$composerPath);
 		if (!is_dir($composerDir) && !mkdir($composerDir, 0755, true)) {
 			throw new \RuntimeException("Не удалось создать директорию: $composerDir");
 		}
 
 		$context = stream_context_create(['http' => ['timeout' => 30]]);
 
-		$pharContent = @file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar', false, $context);
+		$pharContent =
+			@file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar', false, $context);
 		if ($pharContent === false) {
 			throw new \RuntimeException('Ошибка загрузки Composer');
 		}
@@ -74,14 +82,22 @@ class ComposerAction {
 		}
 
 		if (hash('sha256', $pharContent) !== trim($expectedHash)) {
-			throw new \RuntimeException(sprintf('Неверная контрольная сумма Composer! Ожидалось %s; получено %s!<br>1. Загрузите <a href="%s" target="_blank">composer.phar</a> вручную и закиньте загруженный файл по пути %s.<br>2. Обновите страницу!', $expectedHash, hash('sha256', $pharContent, 'https://getcomposer.org/download/latest-stable/composer.phar', ComposerAction::$composerPath)));
+			throw new \RuntimeException(
+				sprintf(
+					'Неверная контрольная сумма Composer! Ожидалось %s; получено %s!<br>1. Загрузите <a href="%s" target="_blank">composer.phar</a> вручную и закиньте загруженный файл по пути %s.<br>2. Обновите страницу!',
+					$expectedHash,
+					hash('sha256', $pharContent),
+					'https://getcomposer.org/download/latest-stable/composer.phar',
+					dir(self::$composerPath)
+				)
+			);
 		}
 
-		if (!@file_put_contents(ComposerAction::$composerPath, $pharContent)) {
-			throw new \RuntimeException("Ошибка сохранения в " . ComposerAction::$composerPath);
+		if (!@file_put_contents(self::$composerPath, $pharContent)) {
+			throw new \RuntimeException("Ошибка сохранения в " . self::$composerPath);
 		}
 
-		chmod(ComposerAction::$composerPath, 0755);
+		chmod(self::$composerPath, 0755);
 	}
 
 	/**
@@ -90,7 +106,7 @@ class ComposerAction {
 	 * @throws \RuntimeException При ошибке выполнения
 	 */
 	public static function installDependencies(): void {
-		ComposerAction::runCommand('install');
+		self::runCommand('install');
 	}
 
 	/**
@@ -99,7 +115,7 @@ class ComposerAction {
 	 * @throws \RuntimeException При ошибке выполнения
 	 */
 	public static function updateDependencies(): void {
-		ComposerAction::runCommand('update');
+		self::runCommand('update');
 	}
 
 	/**
@@ -110,7 +126,7 @@ class ComposerAction {
 	 * @throws \RuntimeException При ошибке выполнения
 	 */
 	public static function removePackage(string $package): void {
-		ComposerAction::runCommand("remove $package");
+		self::runCommand("remove $package");
 	}
 
 	/**
@@ -133,7 +149,7 @@ class ComposerAction {
 		if ($runRequire) {
 			if (is_array($package)) {
 				foreach ($package as $p => $v) {
-					ComposerAction::requirePackage($p, $v, $isDev, $lockerFile);
+					self::requirePackage($p, $v, $isDev, $lockerFile);
 				}
 
 				return;
@@ -144,7 +160,7 @@ class ComposerAction {
 			if ($version !== null) {
 				$command .= ":$version";
 			}
-			ComposerAction::runCommand($command);
+			self::runCommand($command);
 		}
 
 		if ($lockerFile) {
@@ -158,18 +174,18 @@ class ComposerAction {
 	 * @throws \RuntimeException При ошибке выполнения
 	 */
 	private static function runCommand(string $command): string {
-		if (ComposerAction::$projectPath === null) {
+		if (self::$projectPath === null) {
 			throw new \RuntimeException("Класс не инициализирован. Вызовите метод init()");
 		}
 
 		$fullCommand = sprintf(
 			'%s %s --working-dir=%s',
-			ComposerAction::getComposerCommand(),
+			self::getComposerCommand(),
 			$command,
-			escapeshellarg(ComposerAction::$projectPath)
+			escapeshellarg(self::$projectPath)
 		);
 
-		$output = ComposerAction::executeCommand($fullCommand);
+		$output = self::executeCommand($fullCommand);
 		return $output;
 	}
 
@@ -177,7 +193,14 @@ class ComposerAction {
 	 * Возвращает команду для вызова Composer
 	 */
 	private static function getComposerCommand(): string {
-		return file_exists(ComposerAction::$composerPath) ? escapeshellarg(ComposerAction::$composerPath) : 'composer';
+		$prefix = '';
+		if(file_exists(self::$composerPath)) {
+			$pathInfo = pathinfo(self::$composerPath);
+			if (in_array($pathInfo['extension'], ['phar', 'phar.exe', 'bat', 'cmd'])) {
+				$prefix = 'php ';
+			}
+		}
+		return file_exists(self::$composerPath) ? $prefix . escapeshellarg(self::$composerPath) : self::$composerPath;
 	}
 
 	/**
@@ -192,26 +215,51 @@ class ComposerAction {
 			2 => ['pipe', 'w']
 		];
 
-//		echo "<strong>Обработка команды</strong>: <code>{$command}</code><br>";
+		$process = proc_open(
+			command        : $command,
+			descriptor_spec: $descriptors,
+			pipes          : $pipes,
+			cwd            : self::$projectPath ?? null
+		);
 
-		$process = proc_open($command, $descriptors, $pipes, ComposerAction::$projectPath);
 		if (!is_resource($process)) {
 			throw new \RuntimeException("Ошибка запуска процесса");
 		}
 
-		// Используем try-finally для гарантированного освобождения ресурсов
+		fclose($pipes[0]);
 
-		fclose($pipes[0]); // Закрываем STDIN, так как оно не используется
+		try {
+			$stdout = self::readStream($pipes[1]);
+			$stderr = self::readStream($pipes[2]);
+		} finally {
+			foreach ($pipes as $pipe) {
+				if (is_resource($pipe)) {
+					fclose($pipe);
+				}
+			}
+		}
 
-		$stdout     = '';
-		$stderr     = '';
-		$stdoutOpen = true;
-		$stderrOpen = true;
+		$exitCode = proc_close($process);
 
-		while ($stdoutOpen || $stderrOpen) {
-			$read = [];
-			if ($stdoutOpen) $read[] = $pipes[1];
-			if ($stderrOpen) $read[] = $pipes[2];
+		if ($exitCode !== 0) {
+			$output = trim("$stdout\n$stderr");
+			throw new \RuntimeException("Ошибка ({$exitCode}): $output");
+		}
+
+		return trim($stdout);
+
+	}
+
+	private static function readStream($stream): string {
+		if (!is_resource($stream)) {
+			throw new \InvalidArgumentException("Переданный аргумент не является потоком");
+		}
+
+		$buffOpen = true;
+		$buffOut = '';
+
+		while ($buffOpen) {
+			$read[] = $stream;
 
 			$write  = null;
 			$except = null;
@@ -222,37 +270,19 @@ class ComposerAction {
 			}
 
 			// Чтение stdout
-			if (in_array($pipes[1], $read)) {
-				$data = fread($pipes[1], 8192);
+			if (in_array($stream, $read)) {
+				$data = fread($stream, 8192);
 				if ($data === false || strlen($data) === 0) {
-					fclose($pipes[1]);
-					$stdoutOpen = false;
+					fclose($stream);
+					$buffOpen = false;
 				} else {
-					$stdout .= $data;
+					$buffOut .= $data;
 				}
 			}
 
-			// Чтение stderr
-			if (in_array($pipes[2], $read)) {
-				$data = fread($pipes[2], 8192);
-				if ($data === false || strlen($data) === 0) {
-					fclose($pipes[2]);
-					$stderrOpen = false;
-				} else {
-					$stderr .= $data;
-				}
-			}
-
-//			echo "Идёт обработка! Пожалуйста, подождите...<br>";
 		}
 
-		$exitCode = proc_close($process);
-		$output   = trim($stdout . "\n" . $stderr);
-
-		if ($exitCode !== 0) {
-			throw new \RuntimeException("Ошибка ($exitCode): $output");
-		}
-
-		return $output;
+		return $buffOut;
 	}
+
 }

@@ -148,13 +148,13 @@ abstract class CacheControl {
 	 * @param string $type Тип данных (будет преобразован в транслит).
 	 * @param string $name Имя данных (будет преобразовано в транслит).
 	 *
-	 * @return false|array|int Возвращает массив данных, число или `false` в случае ошибки.
+	 * @return mixed Возвращает массив данных, число или `false` в случае ошибки.
 	 * @throws JsonException|Exception|Throwable Если произошла ошибка при декодировании кеша.
 	 * @see DataManager::normalizePath() Для нормализации пути файла.
 	 * @see LogGenerator::generateLog() Для логирования ошибок декодирования JSON.
 	 * @see DataManager::toTranslit() Для преобразования имени и типа в транслит.
 	 */
-	public static function getCache(string $type, string $name): false|array|int {
+	public static function getCache(string $type, string $name): mixed {
 		// Инициализация пути, если это не сделано заранее
 		if (self::$path === null) {
 			self::init();

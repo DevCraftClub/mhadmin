@@ -1,45 +1,50 @@
 <?php
 
-if (!$is_logged) {
-	exit('error');
-}
+global $parsedData, $config;
 
-if ('' == $_REQUEST['user_hash'] or $_REQUEST['user_hash'] != $dle_login_hash) {
-	exit('error');
-}
 $concurrentDirectory = ENGINE_DIR . '/inc/maharder/_config';
+DataManager::createDir(service : 'maharder', module : 'save_setting', _path : $concurrentDirectory);
 
-if (!DataManager::createDir(service : 'maharder', module : 'save_setting', _path : $concurrentDirectory)) {
-	LogGenerator::setLogs(1);
-}
-$file = $concurrentDirectory.'/'.$_POST['module'].'.json';
+$settings = filter_var_array($parsedData, [
+	'list_count' => FILTER_VALIDATE_INT,
+	'cache_path' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+	'cache_timer' => FILTER_VALIDATE_INT,
+	'language' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+	'locales_path' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+	'logs' => FILTER_VALIDATE_BOOLEAN,
+	'logs_db' => FILTER_VALIDATE_BOOLEAN,
+	'logs_telegram' => FILTER_VALIDATE_BOOLEAN,
+	'logs_telegram_api' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+	'logs_telegram_channel' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+	'cache_icon' => FILTER_VALIDATE_BOOLEAN,
+	'theme' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+]);
 
-
-if (empty($save_con['list_count']) || !isset($save_con['list_count'])) {
-	$save_con['list_count'] = $config['news_number'];
-}
-
-if (empty($save_con['language']) || !isset($save_con['language'])) {
-	$save_con['language'] = 'ru_RU';
-}
-
-if (empty($save_con['cache_path']) || !isset($save_con['cache_path'])) {
-	$save_con['cache_path'] = '/engine/inc/maharder/_cache';
-}
-
-if (empty($save_con['locales_path']) || !isset($save_con['locales_path'])) {
-	$save_con['locales_path'] = '/engine/inc/maharder/_locales';
+if (empty($settings['list_count']) || !isset($settings['list_count'])) {
+	$settings['list_count'] = $config['news_number'];
 }
 
-if (empty($save_con['cache_timer']) || !isset($save_con['cache_timer'])) {
-	$save_con['cache_timer'] = 60;
+if (empty($settings['language']) || !isset($settings['language'])) {
+	$settings['language'] = 'ru_RU';
 }
 
-if (empty($save_con['theme']) || !isset($save_con['theme'])) {
-	$save_con['theme'] = 'light';
+if (empty($settings['cache_path']) || !isset($settings['cache_path'])) {
+	$settings['cache_path'] = '/engine/inc/maharder/_cache';
 }
 
-file_put_contents($file, json_encode($save_con, JSON_UNESCAPED_UNICODE));
+if (empty($settings['locales_path']) || !isset($settings['locales_path'])) {
+	$settings['locales_path'] = '/engine/inc/maharder/_locales';
+}
+
+if (empty($settings['cache_timer']) || !isset($settings['cache_timer'])) {
+	$settings['cache_timer'] = 60;
+}
+
+if (empty($settings['theme']) || !isset($settings['theme'])) {
+	$settings['theme'] = 'light';
+}
+
+DataManager::saveConfig('maharder',  $settings);
 clear_cache();
 
 echo 'ok';

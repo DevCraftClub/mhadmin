@@ -44,11 +44,11 @@
       </trans-unit>
       <trans-unit id="148bbf94cef9e1e431bf97570eb0644d">
         <source>Всё отлично!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Ein Autor kann nicht leer sein</target>
+        <target state="translated">Sieht gut aus!</target>
       </trans-unit>
       <trans-unit id="5caa4e121b8305c3fe48155a42745e57">
         <source>&lt;p&gt;Запись была удалена!&lt;/p&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Einstellungen</target>
+        <target state="translated">&lt;&gt;&lt;&gt;p Dieser Eintrag wurde gelöscht! /p</target>
       </trans-unit>
       <trans-unit id="c6fd3c6a629b51b28c19e8495994f4ca">
         <source>Ошибка</source>
@@ -72,7 +72,7 @@
       </trans-unit>
       <trans-unit id="3dc1bbf2a49cba7ffaa7606f475e3b7b">
         <source>Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.&lt;br&gt;&lt;b&gt;&lt;i&gt;По умолчанию: 60 минут&lt;/i&gt;&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Geben Sie die Zeit in Minuten an, wie viel vom Anfrage-Cache auf dem Server gespeichert werden soll. Wenn eine Anfrage gestellt wird, prüft das Skript, wann die Cachedatei erstellt wurde, und wenn sie das angegebene Limit überschreitet, wird der Cache neu erstellt.&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;br b i Standardwert: 60 Minuten /i /b</target>
+        <target state="translated">Geben Sie die Zeit in Minuten an, wie viel vom Anfrage-Cache auf dem Server gespeichert werden soll. Wenn eine Anfrage gestellt wird, prüft das Skript, wann die Cachedatei erstellt wurde, und wenn sie das angegebene Limit überschreitet, wird der Cache neu erstellt.&lt;br&gt;&lt;b&gt;&lt;i&gt;Standardwert: 60 Minuten&lt;/i&gt;&lt;/b&gt;</target>
       </trans-unit>
       <trans-unit id="c9db20e2b5626b2915621712d9b605e8">
         <source>Язык админки</source>
@@ -88,11 +88,11 @@
       </trans-unit>
       <trans-unit id="5fa1dffd2f9452575fb81af2628d4b3f">
         <source>При включенном параметре будет создавать текстовые логи в папке &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;&gt;&lt;&gt;Wenn aktiviert, werden Textprotokolle im Ordner b engine/inc/maharder/_logs /b erstellt.</target>
+        <target state="translated">Wenn aktiviert, werden Textprotokolle im Ordner &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt; erstellt.</target>
       </trans-unit>
       <trans-unit id="dd1c9d0523323b94cf2e8e3a2b22bffe">
         <source>Сохранять логи в базе данных?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Protokollierung einschalten?</target>
+        <target state="translated">Protokolle in der Datenbank speichern?</target>
       </trans-unit>
       <trans-unit id="d38cfd51e4de8e8b6dbed99f80356a86">
         <source>Отправлять логи в телеграм?</source>
@@ -104,79 +104,79 @@
       </trans-unit>
       <trans-unit id="cfd5bbdcfab069b7de4a5647fa592029">
         <source>Канал телеграма</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Falls aktiviert, werden alle Protokolle in der Datenbank gespeichert.</target>
+        <target state="translated">Telegram-Kanal</target>
       </trans-unit>
       <trans-unit id="8d3161d21c5f3a0ca454eb1b9cb3dfe0">
         <source>Тип оповещений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Protokolle an Telegram senden?</target>
+        <target state="translated">Benachrichtigungstyp</target>
       </trans-unit>
       <trans-unit id="dfd97193bf9c95b3bc431045e3a27c39">
         <source>&lt;div class="item"&gt;&lt;b&gt;Все&lt;/b&gt; - Отправляет буквально все отчёты и логи в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Wenn aktiviert und die unten stehenden Felder ausgefüllt sind, sendet das Skript Protokolle an Ihren Telegram-Kanal</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Alle&lt;/b&gt; - Sendet buchstäblich alle Berichte und Protokolle an den Kanal&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="28f8c05e922e20a42b370b34bd6bb8b1">
         <source>&lt;div class="item"&gt;&lt;b&gt;Ошибки&lt;/b&gt; - Отправляет только ошибки в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">API-Bot-Schlüssel</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Fehler&lt;/b&gt; - Sendet nur Fehler an den Kanal&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="ccec57b509348ed0aadf5dcbf4d2089d">
         <source>&lt;div class="item"&gt;&lt;b&gt;Информация&lt;/b&gt; - Отправляет только информационные отчёты в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;hier /a .</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Informationen&lt;/b&gt; - Sendet nur Informationsberichte an den Kanal&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="a290c6697ae5bfca2ec2b73a828a77b1">
         <source>&lt;div class="item"&gt;&lt;b&gt;Уведомления&lt;/b&gt; - Отправляет только уведомления в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Telegramm-Kanal</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Benachrichtigungen&lt;/b&gt; - Sendet nur Benachrichtigungen an den Kanal&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="f2b56d892888626e01951081d14a80b6">
         <source>&lt;div class="item"&gt;&lt;b&gt;Предупреждения&lt;/b&gt; - Отправляет только предупреждения в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Art der Ausschreibungen</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Warnungen&lt;/b&gt; - Sendet nur Warnungen an den Kanal&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="0b20a126dfcc9da65d9c013ae7ffff35">
         <source>&lt;div class="item"&gt;&lt;b&gt;Критические ошибки&lt;/b&gt; - Отправляет только критические ошибки в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Variation der Warnmeldungen pro Kanal:</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Kritische Fehler&lt;/b&gt; - Sendet nur kritische Fehler an den Kanal&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="54d9591fb3c4b3afc161c4c1017539c8">
         <source>&lt;div class="item"&gt;&lt;b&gt;Отладка&lt;/b&gt; - Отправляет только информацию об отладке в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;&lt;&gt;&lt;&gt;b All /b - Sendet buchstäblich alle Berichte und Protokolle an den Kanal /div</target>
+        <target state="translated">&lt;div class="item"&gt;&lt;b&gt;Fehlersuche&lt;/b&gt; - Sendet nur Fehlersuchinformationen an den Kanal&lt;/div&gt;</target>
       </trans-unit>
       <trans-unit id="76bf59b6b8f230198e49fa2f282be094">
         <source>Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.&lt;br&gt;Если выбрано "Все", то остальные выбранные параметры игнорируются</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;&lt;&gt;&lt;&gt;b Fehler /b - Sendet nur Fehler an den Kanal /div</target>
+        <target state="translated">Wenn die Protokollierung im Plugin nicht eingestellt ist, werden Nachrichten dieser Art auch nicht gesendet.&lt;br&gt;Wenn "Alle" ausgewählt ist, werden die anderen ausgewählten Optionen ignoriert.</target>
       </trans-unit>
       <trans-unit id="984bf1497dea9513aa66cf7b0e1eeb0e">
         <source>Все</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;&lt;&gt;&lt;&gt;b Information /b - Sendet nur Informationsberichte an den Kanal /div</target>
+        <target state="translated">Alles</target>
       </trans-unit>
       <trans-unit id="b217306d86257f115db3addf1930bba4">
         <source>Ошибки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;&lt;&gt;&lt;&gt;b Benachrichtigungen /b - Sendet nur Benachrichtigungen an den Kanal /div</target>
+        <target state="translated">Fehler</target>
       </trans-unit>
       <trans-unit id="a7fd9bee17172ede11112e463b50d260">
         <source>Информация</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;&lt;&gt;&lt;&gt;b Warnungen /b - Sendet nur Warnungen an den Kanal /div</target>
+        <target state="translated">Informationen</target>
       </trans-unit>
       <trans-unit id="d2ed721d0c08f9f114598a084f24c784">
         <source>Уведомления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;&lt;&gt;&lt;&gt;b Kritische Fehler /b - Sendet nur kritische Fehler an den Kanal /div</target>
+        <target state="translated">Benachrichtigungen</target>
       </trans-unit>
       <trans-unit id="d1253d0df47413f42f9df0569c52357f">
         <source>Предупреждения</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&gt;&lt;&gt;&lt;&gt;&lt;&gt;b Debugging /b - Sendet nur Debugging-Informationen an den Kanal /div</target>
+        <target state="translated">Warnungen</target>
       </trans-unit>
       <trans-unit id="401a3c6078e28ab4ce3f3142722081ab">
         <source>Критические ошибки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">dann werden die anderen ausgewählten Parameter ignoriert</target>
+        <target state="translated">Kritische Fehler</target>
       </trans-unit>
       <trans-unit id="4281acce7b355277f1bb8499fd0a56d4">
         <source>Отладка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Alle von ihnen</target>
+        <target state="translated">Debug</target>
       </trans-unit>
       <trans-unit id="1d4865eb11d75e95c66b5ceb02172789">
         <source>Заменять иконки?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Irrtümer</target>
+        <target state="translated">Icons ersetzen?</target>
       </trans-unit>
       <trans-unit id="d2a9738e199995a2c64501f5b1a9be8c">
         <source>При включении, в админпанеле DLE будут заменены старые иконки на обновлённые</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Informationen</target>
+        <target state="translated">Wenn diese Option aktiviert ist, werden die alten Symbole durch aktualisierte Symbole im DLE-Verwaltungsbereich ersetzt.</target>
       </trans-unit>
       <trans-unit id="9416adbf7597517b46866e1b204ea0b4">
         <source>Добавить кнопку с очищением кеша?</source>
@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="0d26b6e1c201904eba926a3222412a03">
         <source>Тема оформления админки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Thema Verwaltungsbereich</target>
+        <target state="translated">Thema für den Adminbereich</target>
       </trans-unit>
       <trans-unit id="b64d4ca1bd6045fd5b1ec52334de2aa4">
         <source>Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу</source>
@@ -192,11 +192,11 @@
       </trans-unit>
       <trans-unit id="cc8596f1aaba8d13e52b92bafeb63bf0">
         <source>Светлая</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Fehlersuche</target>
+        <target state="translated">Hell (Light)</target>
       </trans-unit>
       <trans-unit id="d9b9bd22390c54a244a4739168409cc6">
         <source>Тёмная</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Icons ersetzen?</target>
+        <target state="translated">Dunkel (Dark)</target>
       </trans-unit>
       <trans-unit id="74ea58b6a801f0dce4e5d34dbca034dc">
         <source>Сохранить</source>

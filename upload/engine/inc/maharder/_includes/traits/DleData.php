@@ -180,6 +180,7 @@ trait DleData {
 		$xfields = CacheControl::getCache($type, 'xfields_full_info');
 
 		if (!$xfields) {
+			$xfields = [];
 			$filePath = match ($type) {
 				'post'          => DataManager::normalizePath(ENGINE_DIR . '/data/xfields.txt'),
 				'user', 'users' => DataManager::normalizePath(ENGINE_DIR . '/data/xprofile.txt'),

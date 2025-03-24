@@ -204,71 +204,71 @@
       </trans-unit>
       <trans-unit id="ab456ba2305d7425f4b2c86f607eb912">
         <source>Проверить обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Eine Schaltfläche mit Cache-Löschung hinzufügen?</target>
+        <target state="translated">Nach Updates suchen</target>
       </trans-unit>
       <trans-unit id="6058d86335703676aba7815b34efd496">
         <source>Идёт загрузка...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Thema Verwaltungsbereich</target>
+        <target state="translated">Es wird geladen...</target>
       </trans-unit>
       <trans-unit id="d444887a3619451b01c75b2571b128d6">
         <source>Загружается:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Sie können vorerst zwischen hell (Standard) und dunkel wählen. Speichern und aktualisieren Sie die Seite</target>
+        <target state="translated">Es wird geladen:</target>
       </trans-unit>
       <trans-unit id="1fb96ed1ba6b192d83fe527974eb340b">
         <source>Загружено</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Leuchtend</target>
+        <target state="translated"> Heruntergeladen</target>
       </trans-unit>
       <trans-unit id="21f4e2084cced0467d61c4fe6765d919">
         <source>Проверка обновлений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Dunkelheit</target>
+        <target state="translated">Auf Update überprüfen</target>
       </trans-unit>
       <trans-unit id="6a3a4896e9c842c52873c8f4a039b4c1">
         <source>Загружаем файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Speichern Sie</target>
+        <target state="translated">Datei wird geladen: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Das Ergebnis befindet sich in der Browserkonsole!</target>
       </trans-unit>
       <trans-unit id="7774f772b2b9e2b7958851c430a925cf">
         <source>Информация!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Nach Updates suchen</target>
+        <target state="translated">Informationen!</target>
       </trans-unit>
       <trans-unit id="60ef1e001c00f0001a8472bda0ee9ec1">
         <source>Обновлений нет</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Laden...</target>
+        <target state="translated">Keine Aktualisierung verfügbar</target>
       </trans-unit>
       <trans-unit id="7ee04b2e85a78f02ef1d6cbd41fbd8f6">
         <source>На сервере</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Es wird geladen:</target>
+        <target state="translated">Auf dem Server</target>
       </trans-unit>
       <trans-unit id="796ad137fc6074cdbb0896653805cf5b">
         <source>файлов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Hochgeladen von</target>
+        <target state="translated">Dateien</target>
       </trans-unit>
       <trans-unit id="cbf687ba2ea2eb79eb526f596c232338">
         <source>Загружено на сайт</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Prüfen auf Updates</target>
+        <target state="translated">Auf die Website hochgeladen</target>
       </trans-unit>
       <trans-unit id="11de90b8bd3c5ec77367e62c6c250de5">
         <source>Требуют установки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;&gt;${file}&lt;&gt;&lt;&gt;Laden Sie die Datei herunter: b /b ! br Das Ergebnis sehen Sie in der Browserkonsole!</target>
+        <target state="translated">Erfordert die Installation</target>
       </trans-unit>
       <trans-unit id="947a01e04969876af12db78482a0102d">
         <source>Требуют обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Informationen!</target>
+        <target state="translated">Benötigt Updates</target>
       </trans-unit>
       <trans-unit id="d5b618e738df38d79aee980279d73710">
         <source>Установить всё</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Es gibt keine Updates</target>
+        <target state="translated">Alles installieren</target>
       </trans-unit>
       <trans-unit id="0cc652ed6a48058bb3c98a4681ac9ddd">
         <source>Установить недостающие</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;&gt; \nAuf dem Server /a</target>
+        <target state="translated">Fehlende installieren</target>
       </trans-unit>
       <trans-unit id="367a46ab970d44cfaa3bca9f4d68e6d8">
         <source>Установить обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Dateien</target>
+        <target state="translated">Updates installieren</target>
       </trans-unit>
       <trans-unit id="e1ca135ca2c83a071a7a37a18c5d8d4f">
         <source>&lt;p&gt;Данные были сохранены!&lt;/p&gt;&lt;p&gt;Страница сейчас обновится!&lt;/p&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;&gt;Heruntergeladen von /a</target>
+        <target state="translated">&lt;p&gt;Die Daten wurden gespeichert!&lt;/p&gt;&lt;p&gt;Die Seite wird gleich aktualisiert!&lt;/p&gt;</target>
       </trans-unit>
       <trans-unit id="b475317d4d28461ae61ccf975b1c98f2">
         <source>Настройки модуля</source>
@@ -276,19 +276,19 @@
       </trans-unit>
       <trans-unit id="f34e046d1b628a326e255e0b954670eb">
         <source>[UPDATE] Минимальная версия PHP 8.3</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Muss aktualisiert werden</target>
+        <target state="translated">[UPDATE] Mindestversion von PHP 8.3</target>
       </trans-unit>
       <trans-unit id="af37233050da967bbc7f59bba096b3fb">
         <source>[UPDATE] Функционал обновлён до версий DLE 17.3</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Alles installieren</target>
+        <target state="translated">[UPDATE] Funktionalität auf DLE 17.3 Versionen aktualisiert</target>
       </trans-unit>
       <trans-unit id="4a7891903f6808b0948237386d73af6e">
         <source>[NEW] Добавлена поддержка Doctrine MhDB. Дальнейшие модели для базы данных будут работать через эту систему.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Stellen Sie die fehlenden</target>
+        <target state="translated">[NEW] Unterstützung für Doctrine MhDB wurde hinzugefügt. Weitere Modelle für die Datenbank werden über dieses System funktionieren.</target>
       </trans-unit>
       <trans-unit id="c3db75eaf3921da9651f6f86b93ec4ac">
         <source>[UPDATE] Функционал обновлён до версий DLE 17.0</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Updates installieren</target>
+        <target state="translated">[UPDATE] Funktionalität auf DLE 17.0 Versionen aktualisiert</target>
       </trans-unit>
       <trans-unit id="2403eac96342c79920159584ffa4e66c">
         <source>[NEW] Добавлена мультиязычная поддержка, перевод можно осуществить при помощи сервиса Crowdin. Ссылка в подвале каждого модуля.</source>
@@ -296,111 +296,111 @@
       </trans-unit>
       <trans-unit id="5a73af999a963fe7ab84e3575560e320">
         <source>[NEW] Добавлена возможность выводов логов на отдельной странице.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Modul</target>
+        <target state="translated">[NEW] Es wurde die Möglichkeit hinzugefügt, Protokolle auf einer separaten Seite auszugeben.</target>
       </trans-unit>
       <trans-unit id="e6a61bbb3ae9b96267afebfa0950e4ff">
         <source>[UPDATE] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Zusätzliche Links</target>
+        <target state="translated">[UPDATE] Das Installationsprogramm wurde vereinfacht. Die Abhängigkeiten werden jetzt beim ersten Öffnen eines Moduls geladen und installiert. Dies kann ein paar Minuten dauern. Das Installationsprogramm wiegt jetzt nur noch wenig.</target>
       </trans-unit>
       <trans-unit id="65e635bff3a9cad8a283b83e8e90cb33">
         <source>[UPDATE] Откат функций, которые использовали класс DLEFiles. Он не работает со сторонними разработками как надо. Либо работает, но документации к нему то нет.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Auf der Website des Autors</target>
+        <target state="translated">[UPDATE] Rollback-Funktionen, die die Klasse DLEFiles verwendet haben. Es funktioniert nicht mit Entwicklungen von Drittanbietern, wie es sollte. Oder sie funktioniert, aber es gibt keine Dokumentation dafür.</target>
       </trans-unit>
       <trans-unit id="021b86fbf34a8d2600f826b1c0ced362">
         <source>[UPDATE] Функционал обновлён до версий PHP 8.1</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Dokumentation</target>
+        <target state="translated">[UPDATE] Die Funktionalität wurde auf PHP 8.1 aktualisiert.</target>
       </trans-unit>
       <trans-unit id="d90c67b6ef364b7ce43b7982528ca432">
         <source>[UPDATE] Функционал обновлён до версий DLE 16.0</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Benutzervereinbarung</target>
+        <target state="translated">[UPDATE] Funktionalität auf DLE 16.0 Versionen aktualisiert</target>
       </trans-unit>
       <trans-unit id="47f79eee835adf2f608e8d6f09d7d985">
         <source>[UPDATE] Решено было использовать стандартные классы DLE для работы с файлами</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Übersetzung</target>
+        <target state="translated">[UPDATE] Es wurde beschlossen, Standard-DLE-Klassen für die Arbeit mit Dateien zu verwenden</target>
       </trans-unit>
       <trans-unit id="0b7d7e25c8ff8a6a524eadc69ab56b38">
         <source>[FIX] Исправлена ошибка: https://devcraft.club/tickets/http-error-500.6/</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Über den Autor</target>
+        <target state="translated">[FIX] Fehler behoben: https://devcraft.club/tickets/http-error-500.6/</target>
       </trans-unit>
       <trans-unit id="bf2b58e3a747f7ed8945303debd490ae">
         <source>[NEW] Добавлен функционал проверки обновления плагина</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Finanzielle Unterstützung (freiwillig)</target>
+        <target state="translated">[NEW] Funktion zur Überprüfung von Plugin-Updates hinzugefügt</target>
       </trans-unit>
       <trans-unit id="c6cc5a376e4bde5d5df403b02f02c9d9">
         <source>[UPDATE] Изменён подход к некоторым классам</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">,</target>
+        <target state="translated">[UPDATE] Geänderte Vorgehensweise bei einigen Klassen</target>
       </trans-unit>
       <trans-unit id="561a7ac5e990c748e3fea2fbbf32a1b2">
         <source>[FIX] Вернул поддержку PHP 7.2</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Aktueller Wert</target>
+        <target state="translated">[FIX] Zurückgegebene PHP 7.2-Unterstützung</target>
       </trans-unit>
       <trans-unit id="296f0fba2d5dd69fe58ea75e3344591b">
         <source>[FIX] Вернул поддержку PHP &gt;= 8</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Die Daten wurden gespeichert!</target>
+        <target state="translated">[FIX] Zurückgegebene PHP-Unterstützung &gt;= 8</target>
       </trans-unit>
       <trans-unit id="ad626ba08326fa3fef97d4befdb3d60d">
         <source>[FIX] Удалены остаточные файлы (кеш, конфигурации, ...)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Seite</target>
+        <target state="translated">[FIX] Restliche Dateien (Cache, Konfigurationen, ...) entfernt</target>
       </trans-unit>
       <trans-unit id="88a772164c82067037f269be0e4ecdbf">
         <source>[FIX] Вернул нужные, но удалённые файлы</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Suchbegriff</target>
+        <target state="translated">[FIX] Benötigte, aber gelöschte Dateien wiederherstellen</target>
       </trans-unit>
       <trans-unit id="1767bf81dc7bdb695ebecceca6e1d0a2">
         <source>[NEW] Добавлена функция отправки логов в телеграм [БЕТА]</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Suchen Sie</target>
+        <target state="translated">[NEW] Funktion zum Senden von Protokollen an Telegram hinzugefügt [BETA]</target>
       </trans-unit>
       <trans-unit id="e15f96c15c0fafb64f13cff6738c4f4c">
         <source>[FIX] Исправил ошибку работы логирования</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Suche</target>
+        <target state="translated">[FIX] Fehler in der Protokollierung behoben</target>
       </trans-unit>
       <trans-unit id="5db3e03c7155ba93757945543beabf8a">
         <source>[FIX] Исправил работу моделей</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">ja</target>
+        <target state="translated">[FIX] Modelle korrigiert</target>
       </trans-unit>
       <trans-unit id="d8096056bfe5c3567eb6e2e1756bfb18">
         <source>[FIX] Исправил обработку кеша</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">keine</target>
+        <target state="translated">[FIX] Cache-Behandlung korrigiert</target>
       </trans-unit>
       <trans-unit id="cae51846fe44123590545efcc313b158">
         <source>[FIX] Обновил файлы для генерации модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Index</target>
+        <target state="translated">[FIX] Aktualisierte Dateien für die Modulgenerierung</target>
       </trans-unit>
       <trans-unit id="e6424f12e7004e1a7e85303cb6fd66d1">
         <source>[NEW] Добавлена возможность пользователю самому решать использовать ли в админпанели обновлённые иконки или нет</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Menü schließen</target>
+        <target state="translated">[NEW] Es wurde die Möglichkeit hinzugefügt, dass der Benutzer entscheiden kann, ob er die aktualisierten Icons im Admin-Panel verwenden möchte oder nicht.</target>
       </trans-unit>
       <trans-unit id="df3d71251490504f7b10bc6ca92c400a">
         <source>[NEW] Добавлена возможность пользователю самому решать подключать в админке глобальную кнопку по очистке кеша или нет</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Nach einer neuen Version suchen</target>
+        <target state="translated">[NEU] Es wurde die Möglichkeit hinzugefügt, dass der Benutzer entscheiden kann, ob er die Schaltfläche zum Löschen des globalen Caches im Admin-Bereich aktivieren möchte oder nicht.</target>
       </trans-unit>
       <trans-unit id="c2bcfa4d22fac8bfde827547e52474e0">
         <source>[NEW] Дальнейшая работа с базой данных будет происходить только через созданные мною модели. Для этого будет использоваться функционал классов Model и Table</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Warten Sie, es wird geladen...</target>
+        <target state="translated">[NEW] Die weitere Arbeit mit der Datenbank wird nur über die von mir erstellten Modelle erfolgen. Zu diesem Zweck werden die Funktionen der Klassen Model und Table verwendet</target>
       </trans-unit>
       <trans-unit id="35c9398291b1379c65c54137802ec74c">
         <source>[UPDATE] Логирование ошибок будет происходить в дальнейшем через &lt;a href="https://seldaek.github.io/monolog/" target="_blank"&gt;Monolog - Logging for PHP&lt;/a&gt;. При включённом функционале - библиотека будет отправлять уведомления в консоль браузера, а так-же сохранять файлов в папку логов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Menü öffnen</target>
+        <target state="translated">[UPDATE] Fehler in der Protokollierung werden weiterhin über &lt;a href="https://seldaek.github.io/monolog/" target="_blank"&gt;Monolog - Logging for PHP&lt;/a&gt;protokolliert. Wenn diese Funktion aktiviert ist, sendet die Bibliothek Benachrichtigungen an die Browserkonsole und speichert Dateien im Ordner logs.</target>
       </trans-unit>
       <trans-unit id="2d136fe3afcac9f35dbe54fda63a4d26">
         <source>[UPDATE] Обновление библиотек до последних версий с минимально возможной PHP версией &lt;b&gt;7.2.9&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Hacking-Versuch!</target>
+        <target state="translated">[UPDATE] Aktualisieren Sie die Bibliotheken auf die neuesten Versionen mit der niedrigstmöglichen PHP-Version &lt;b&gt;7.2.9&lt;/b&gt;</target>
       </trans-unit>
       <trans-unit id="75f1f1c1f22ff04e3e5affae3773c68b">
         <source>[UPDATE] Подключены иконки FontAwesome 6.1.1 Pro, используется вариант light (о не достающих или пропавших иконок прошу сообщать)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Fehler</target>
+        <target state="translated">[UPDATE] FontAwesome 6.1.1 Pro Icons sind verbunden, es wird die Light-Variante verwendet (bitte melden Sie fehlende oder nicht vorhandene Icons).</target>
       </trans-unit>
       <trans-unit id="629c2fad4296bde35eb498d8c4f707bd">
         <source>[FIX] Путь до иконки модуля исправлен 🤦‍♂️</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">funktionen_deaktivieren</target>
+        <target state="translated">[FIX] Pfad zum Modulsymbol korrigiert 🤦‍♂️</target>
       </trans-unit>
       <trans-unit id="d3c84be1c5d698c45fe2dc37d2ccbac4">
         <source>[FIX] Продокументировал классы с небольшими объяснениями, что делает какая функция и для чего используется та или иная переменная</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Variablen_Ordnung</target>
+        <target state="translated">[FIX] Dokumentierte Klassen mit kleinen Erklärungen, was eine Funktion tut und wofür eine Variable verwendet wird.</target>
       </trans-unit>
       <trans-unit id="37664b29316d3731efedac6eb641a69e">
         <source>[DEL] Удалён кошелёк WMR</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">uopz.deaktivieren</target>
+        <target state="translated">[DEL] Gelöschte WMR-Brieftasche</target>
       </trans-unit>
       <trans-unit id="a15d0ae522d4eba350070f70c8d924a6">
         <source>FIX: Добавлена иконка</source>

@@ -48,7 +48,7 @@
       </trans-unit>
       <trans-unit id="5caa4e121b8305c3fe48155a42745e57">
         <source>&lt;p&gt;Запись была удалена!&lt;/p&gt;</source>
-        <target state="translated">&lt;&gt;&lt;&gt;p Dieser Eintrag wurde gelöscht! /p</target>
+        <target state="translated">&lt;p&gt;Eintrag wurde gelöscht!&lt;/p&gt;</target>
       </trans-unit>
       <trans-unit id="c6fd3c6a629b51b28c19e8495994f4ca">
         <source>Ошибка</source>
@@ -404,151 +404,151 @@
       </trans-unit>
       <trans-unit id="a15d0ae522d4eba350070f70c8d924a6">
         <source>FIX: Добавлена иконка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">xdebug.mode</target>
+        <target state="translated">FIX: Symbol hinzugefügt</target>
       </trans-unit>
       <trans-unit id="ba161a5d335518ae8267670e8f629d43">
         <source>FIX: Исправлен файл AJAX</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">openssl.cafile</target>
+        <target state="translated">FIX: AJAX-Datei korrigiert</target>
       </trans-unit>
       <trans-unit id="b38e875caefc28421d7e9277943cc0f8">
         <source>В связи с некоторыми обстоятельствами пришлось отказаться от i18n модуля. Возможно он выйдет отдельным модулем.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">openssl.capath</target>
+        <target state="translated">Aufgrund einiger Umstände musste das i18n-Modul aufgegeben werden. Vielleicht wird es als separates Modul veröffentlicht.</target>
       </trans-unit>
       <trans-unit id="4db51d86f277321d033302f663afad3b">
         <source>Обновление зависимостей до минимально требуемой версии PHP 7.4</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">apc.enabled</target>
+        <target state="translated">Aktualisierung der Abhängigkeiten auf die minimal erforderliche Version von PHP 7.4</target>
       </trans-unit>
       <trans-unit id="cb7b63d6ad1f9fb2c960d85c44e5d3b9">
         <source>Улучшена реструктуризация классов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">open_basedir</target>
+        <target state="translated">Verbesserte Klassenumstrukturierung</target>
       </trans-unit>
       <trans-unit id="469b806de2f5819090bedebb2b7ccf57">
         <source>Добавлена тёмная тема оформления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">foo</target>
+        <target state="translated">Thema "Dunkles Design" hinzugefügt</target>
       </trans-unit>
       <trans-unit id="11d69f4eadc69c118552b0207ec595d3">
         <source>Для желающих создать модуль на основе моей админки была создана функция генерации путей и файлов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Bar</target>
+        <target state="translated">Für diejenigen, die ein Modul auf der Grundlage meines Admins erstellen möchten, wurde eine Funktion zur Generierung von Pfaden und Dateien erstellt</target>
       </trans-unit>
       <trans-unit id="fb060b22ea30a7008d2d54abad598987">
         <source>Fontawesome были обновлены до 6ой версии</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">baz</target>
+        <target state="translated">Fontawesome wurde auf Version 6 aktualisiert</target>
       </trans-unit>
       <trans-unit id="a24589f6b2c135e5cd6cb01375ac3db9">
         <source>Добавлена проверка на целостность файлов и их обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Befehl</target>
+        <target state="translated">Prüfung auf Dateiintegrität und Updates hinzugefügt</target>
       </trans-unit>
       <trans-unit id="9285d3617aa4f84c862ef7658fc6e773">
         <source>Полностью новая админпанель, которая не зависит от оформления и функционала самой DLE</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Hilfe</target>
+        <target state="translated">Völlig neue Administrationsoberfläche, die nicht vom Design und der Funktionalität von DLE selbst abhängt</target>
       </trans-unit>
       <trans-unit id="741973b00f6f0fb8528425f6340d4c27">
         <source>За основу панели был взят движок Twig, создавать свои шаблоны будет проще</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;&gt;%s&lt;&gt;info /info</target>
+        <target state="translated">Die Twig-Engine wurde als Grundlage für das Panel genommen, so dass es einfacher ist, Ihre eigenen Vorlagen zu erstellen</target>
       </trans-unit>
       <trans-unit id="b93352e254776e8dc69d2eaffa4dc7fe">
         <source>Очищать кеш в админке стало проще - кнопка была выведена в ряд с "Добавить новость" и "Редактировать новости</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Definition</target>
+        <target state="translated">Das Löschen des Caches in der Verwaltung ist einfacher geworden - die Schaltfläche wurde in einer Reihe mit "Nachrichten hinzufügen" und "Nachrichten bearbeiten" platziert.</target>
       </trans-unit>
       <trans-unit id="77dfb530f33da8ba775567f3f604fe93">
         <source>Внедрён i18n в систему DLE, это даёт возможность создавать мультиязычные сайты (модуль отдельно продаваться или делаться не будет)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Argumente</target>
+        <target state="translated">Mit der Einführung von i18n im DLE-System haben Sie die Möglichkeit, mehrsprachige Websites zu erstellen (das Modul wird nicht separat verkauft oder hergestellt).</target>
       </trans-unit>
       <trans-unit id="fd0159956edfff09c7103db5487c168e">
         <source>i18n: не зависит от базы данных, все фразы хранятся в файлах json</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Optionen</target>
+        <target state="translated">i18n: Datenbankunabhängig, alle Phrasen sind in json-Dateien gespeichert</target>
       </trans-unit>
       <trans-unit id="3402446956c0cb8dd404237b650b7c7c">
         <source>i18n: в шаблонах достаточно использовать тег {trans text="сюда переводимый текст"}, чтобы перевести фразу</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Verwendungen</target>
+        <target state="translated">i18n: in Vorlagen genügt es, den Tag {trans text="hier übersetzbarer Text"} zu verwenden, um die Phrase zu übersetzen</target>
       </trans-unit>
       <trans-unit id="86679731701083122c5fa1eaa9d8f4d5">
         <source>i18n: в скриптах PHP достаточно использовать функцию translate("сюда переводимый текст"), чтобы перевести фразу</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Beschreibung</target>
+        <target state="translated">i18n: in PHP-Skripten reicht es aus, translate("hier Text übersetzen") zu verwenden, um die Phrase zu übersetzen</target>
       </trans-unit>
       <trans-unit id="f22e965c29ef73a6804e2e7b6d8b59fb">
         <source>сюда переводимый текст</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">symfony</target>
+        <target state="translated">hier ist der übersetzte Text</target>
       </trans-unit>
       <trans-unit id="ab3f6a05b108fe72b613c1d45ff62168">
         <source>i18n: в скриптах JS достаточно использовать функцию translateJS("сюда переводимый текст"), чтобы перевести фразу. Желательно подгружать фразы при загруженной странице, т.к. async не доработан</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Befehle</target>
+        <target state="translated">i18n: In JS-Skripten genügt es, die Funktion translateJS("Text hier übersetzen") zu verwenden, um eine Phrase zu übersetzen. Es ist besser, die Phrasen zu laden, wenn die Seite geladen wird, da async nicht abgeschlossen ist.</target>
       </trans-unit>
       <trans-unit id="6113401d13bf82bd65f509da1e7d6c52">
         <source>i18n: мультиязычность поддерживается в "Новости", "Баннеры", "Категории", "Электронная почта / Рассылки", "Метатеги", "Опросы", "Вопросы и ответы", "Статические страницы", "Группы пользователей", а так-же вывод новостей и статических страниц на сайте</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Namespaces</target>
+        <target state="translated">i18n: Die Mehrsprachigkeit wird in den Bereichen "Nachrichten", "Banner", "Kategorien", "E-Mail / Newsletter", "Meta-Tags", "Umfragen", "Fragen und Antworten", "Statische Seiten", "Benutzergruppen" sowie in der Ausgabe von Nachrichten und statischen Seiten auf der Website unterstützt.</target>
       </trans-unit>
       <trans-unit id="cf0aaa30951f70914b3f04574e5f351d">
         <source>i18n: поддерживается машинный перевод через сервис RapidApi</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Namespace</target>
+        <target state="translated">i18n: unterstützte maschinelle Übersetzung über den RapidApi-Dienst</target>
       </trans-unit>
       <trans-unit id="79556898523afbf4822fc27f018e142f">
         <source>i18n: динамичное использование, не требующее массивов данных - достаточно указать текст</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Argument</target>
+        <target state="translated">i18n: dynamische Verwendung, die keine großen Datenmengen erfordert - geben Sie einfach Text an</target>
       </trans-unit>
       <trans-unit id="55f819c4108f8a10034ca67872fc9468">
         <source>небольшой фикс в языковом файле</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Standardwerte</target>
+        <target state="translated">Kleine Korrektur in der Sprachdatei</target>
       </trans-unit>
       <trans-unit id="b89f70d536c077b672f42d341690a3bb">
         <source>Обновление иконок от fontawesome глобально</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Standard</target>
+        <target state="translated">Icon-Update von fontawesome global</target>
       </trans-unit>
       <trans-unit id="f6599d4d87a19be32fbe65000ab73463">
         <source>Обновление многих функций</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Option</target>
+        <target state="translated">Aktualisierung vieler Funktionen</target>
       </trans-unit>
       <trans-unit id="101965aa52d031d919606868539135fa">
         <source>Добавление языковых файлов (в дальнейшем будет проще локализовать модули)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">\n</target>
+        <target state="translated">Hinzufügen von Sprachdateien (in Zukunft wird es einfacher sein, Module zu lokalisieren)</target>
       </trans-unit>
       <trans-unit id="4ba56b674d6c2ca441a45ef75b3d623f">
         <source>Добавлен немецкий язык к оболочке</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">\n\n</target>
+        <target state="translated">Deutsche Sprache zur Oberfläche hinzugefügt</target>
       </trans-unit>
       <trans-unit id="72481a6472758c6f3d94577e87a84ab4">
         <source>Фикс</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">befehl_name</target>
+        <target state="translated">Fix</target>
       </trans-unit>
       <trans-unit id="ba81893e08e03e0c24e81627ebc47a49">
         <source>Новые модальные и всплывающие окна</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Shell</target>
+        <target state="translated">Neue modale und Popup-Fenster</target>
       </trans-unit>
       <trans-unit id="e1234047fb870b036bf8343a4cc9bf50">
         <source>Улучшены некоторые функции</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Formatierer</target>
+        <target state="translated">Einige Funktionen wurden verbessert</target>
       </trans-unit>
       <trans-unit id="bc1ee4643ebd2d84ee265fddd3b2852a">
         <source>Добавлен скрипт DateTimePicker</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Erstausrüster</target>
+        <target state="translated">DateTimePicker Skript hinzugefügt</target>
       </trans-unit>
       <trans-unit id="99dc695c02bacd4aef9a4251e494db36">
         <source>Добавлены несколько украшательств</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">debug_formatter</target>
+        <target state="translated">Einige Ausschmückungen hinzugefügt</target>
       </trans-unit>
       <trans-unit id="d5852f1ea99a2e818637ec8f54fc6891">
         <source>Вывод категорий</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">%s</target>
+        <target state="translated">Kategorie Ausgabe</target>
       </trans-unit>
       <trans-unit id="73405e6268270aef308df1ca0f7e0c91">
         <source>Автоматический вывод доп. полей в админке</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">U</target>
+        <target state="translated">Automatische Ausgabe von zusätzlichen Feldern im Adminbereich</target>
       </trans-unit>
       <trans-unit id="c6c9bd15fb1ce85fd6db17db6c8b5cab">
         <source>Автоматический вывод пользователей</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">mbstring.func_overload</target>
+        <target state="translated">Automatische Benutzerausgabe</target>
       </trans-unit>
       <trans-unit id="1c79cfb8a91a2e450625b0125dde3ce4">
         <source>Исправлены баги в JS</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">FILTER_FLAG_EMAIL_UNICODE</target>
+        <target state="translated">Fehler in JS behoben</target>
       </trans-unit>
       <trans-unit id="def483d5c01c06f3156de844246ca931">
         <source>Обновление до актуальных версий DLE</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">speicher_limit</target>
+        <target state="translated">Update auf aktuelle DLE-Versionen</target>
       </trans-unit>
       <trans-unit id="f4877e9cea055c8140cde26a462a2ded">
         <source>Мелкие правки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">sperren</target>
+        <target state="translated">Kleinere Änderungen</target>
       </trans-unit>
       <trans-unit id="1afbfb509050909fea9ac2ba73ac2366">
         <source>Основной релиз</source>
@@ -556,63 +556,63 @@
       </trans-unit>
       <trans-unit id="0de733bff24bb8215fb1f0cc839d8db3">
         <source>История изменений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Geschichte der Änderungen</target>
+        <target state="translated">Änderungshistorie</target>
       </trans-unit>
       <trans-unit id="69df1f85b0abbce850b5feb29bddcb2a">
         <source>Новости</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">vendor-dir</target>
+        <target state="translated">Nachrichten</target>
       </trans-unit>
       <trans-unit id="5364b1f4badca81af46082a23d5a3ef9">
         <source>Страницы DLE</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">bitbucket-oauth</target>
+        <target state="translated">DLE Seiten</target>
       </trans-unit>
       <trans-unit id="047f5653b183292396e67f14c8750b73">
         <source>Главная</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">github-oauth</target>
+        <target state="translated">Startseite</target>
       </trans-unit>
       <trans-unit id="1b05f82d2098987727517e8c76c1db07">
         <source>Модуль</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">gitlab-oauth</target>
+        <target state="translated">Modul</target>
       </trans-unit>
       <trans-unit id="4b34d55240c195e33a09d89b84b3d8e5">
         <source>Доп. ссылки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">gitlab-token</target>
+        <target state="translated">Zusätzliche Links</target>
       </trans-unit>
       <trans-unit id="3f96aa21ab1aeb0551903291d561aee9">
         <source>На сайте автора</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">http-basic</target>
+        <target state="translated">Auf der Website des Autors</target>
       </trans-unit>
       <trans-unit id="3d300329be2a963d8f95b23c95c406c9">
         <source>Документация</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Überbringer</target>
+        <target state="translated">Wissensdatenbank</target>
       </trans-unit>
       <trans-unit id="bdeb8fb02326bd4bc9f1736e31218913">
         <source>Пользовательское соглашение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Prozess-Timeout</target>
+        <target state="translated">Benutzervereinbarung</target>
       </trans-unit>
       <trans-unit id="b93e8b66b6319a40df9884bb15e6f990">
         <source>Перевод</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Frage</target>
+        <target state="translated">Übersetzung</target>
       </trans-unit>
       <trans-unit id="3916327a0c9386d6910b07fa98edaedf">
         <source>Об авторе</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Verwerfen-Ändern</target>
+        <target state="translated">Über den Autor</target>
       </trans-unit>
       <trans-unit id="d3cf9c892e43cf0a1e10db8910081ef5">
         <source>Финансовая поддержка (добровольная)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cache-vcs-dir</target>
+        <target state="translated">Finanzielle Unterstützung (freiwillig)</target>
       </trans-unit>
       <trans-unit id="5a143863a498ca145db4fbd21a89f0ab">
         <source>Текущее значение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">github-protocols</target>
+        <target state="needs-translation">Текущее значение</target>
       </trans-unit>
       <trans-unit id="3a92eb91d4231b257e155f628ff13990">
         <source>Данные были сохранены!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cache-files-ttl</target>
+        <target state="needs-translation">Данные были сохранены!</target>
       </trans-unit>
       <trans-unit id="0524e133f74588e0d969ff17078e9e47">
         <source>Поисковая фраза</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cache-files-maxsize</target>
+        <target state="needs-translation">Поисковая фраза</target>
       </trans-unit>
       <trans-unit id="6ba3c79e6531621b070404943e9097aa">
         <source>Искать</source>
@@ -624,19 +624,19 @@
       </trans-unit>
       <trans-unit id="5454466766d1f464ae212dcb14f164e6">
         <source>Закрыть меню</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">allow_url_fopen</target>
+        <target state="needs-translation">Закрыть меню</target>
       </trans-unit>
       <trans-unit id="ea5e087328834d5d3dda39b336fc1313">
         <source>Проверить на наличие новой версии</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">gitlab-Domänen</target>
+        <target state="needs-translation">Проверить на наличие новой версии</target>
       </trans-unit>
       <trans-unit id="cb8d6810b27946f0295021fbcd48827e">
         <source>Подождите, идёт загрузка...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">standard_ocket_timeout</target>
+        <target state="needs-translation">Подождите, идёт загрузка...</target>
       </trans-unit>
       <trans-unit id="7b3e8fbc28e8899bdb654dc95efa59ba">
         <source>Открыть меню</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">github-Domains</target>
+        <target state="needs-translation">Открыть меню</target>
       </trans-unit>
       <trans-unit id="7bc2da188f98c166d3f88a56154b9e38">
         <source>Ошибка при обработке данных!</source>
@@ -644,15 +644,15 @@
       </trans-unit>
       <trans-unit id="dcf473f838d8989397f02c2073b0b829">
         <source>Успех!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">github-expose-hostname</target>
+        <target state="needs-translation">Успех!</target>
       </trans-unit>
       <trans-unit id="e39acab346131c0118de4a926e9520a9">
         <source>Уведомление</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">xdebug.scream</target>
+        <target state="needs-translation">Уведомление</target>
       </trans-unit>
       <trans-unit id="b64c7c6e626e249a083516b7919f4651">
         <source>Дата и время</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">disable-tls</target>
+        <target state="needs-translation">Дата и время</target>
       </trans-unit>
       <trans-unit id="38ca0af80cd7bd241500e81ba2e6efff">
         <source>Описание</source>
@@ -660,7 +660,7 @@
       </trans-unit>
       <trans-unit id="17b5c435f8cb7640ce5e3419fdd91d23">
         <source>Все типы ошибок</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cache-dir</target>
+        <target state="needs-translation">Все типы ошибок</target>
       </trans-unit>
       <trans-unit id="7d9a8bdc1394f95791d379bd442cd3b4">
         <source>Уведомление / К справке</source>
@@ -668,7 +668,7 @@
       </trans-unit>
       <trans-unit id="ce2968f80c176f6ee6d198cfd7556305">
         <source>Предупреждение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cache-files-dir</target>
+        <target state="needs-translation">Предупреждение</target>
       </trans-unit>
       <trans-unit id="5c92d8d02ea4bcd422d4095875a1fec0">
         <source>Критическая ошибка</source>
@@ -676,43 +676,43 @@
       </trans-unit>
       <trans-unit id="c49e1079ee06231ae1285caef2ec5797">
         <source>Требует срочного решения</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">prefer-install</target>
+        <target state="needs-translation">Требует срочного решения</target>
       </trans-unit>
       <trans-unit id="082e55a73f10496681c84231dc1c88f7">
         <source>E-Mail</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">bin-dir</target>
+        <target state="needs-translation">E-Mail</target>
       </trans-unit>
       <trans-unit id="c915683f3ec888b8edcc7b06bd1428ec">
         <source>Telegram</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">bin-compat</target>
+        <target state="needs-translation">Telegram</target>
       </trans-unit>
       <trans-unit id="e37b6e6ba0cd7549614bf0f00607fc70">
         <source>Вебсайт</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cafile</target>
+        <target state="needs-translation">Вебсайт</target>
       </trans-unit>
       <trans-unit id="a5c072fa947c0f5677a599b14f3fd48c">
         <source>Русский</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">capath</target>
+        <target state="needs-translation">Русский</target>
       </trans-unit>
       <trans-unit id="9321aedc04310439d064dbe6b6a0f0fd">
         <source>Английский</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">optimise-autoloader</target>
+        <target state="needs-translation">Английский</target>
       </trans-unit>
       <trans-unit id="6f7e86adb01fd3fa66c2ae922d087aac">
         <source>Немецкий</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">classmap-authoritative</target>
+        <target state="needs-translation">Немецкий</target>
       </trans-unit>
       <trans-unit id="6ddd60c89784c0980e865472ad24ff5d">
         <source>Украинский</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">apcu-autoloader</target>
+        <target state="needs-translation">Украинский</target>
       </trans-unit>
       <trans-unit id="009e33dcc551a5d3b8985fd470b4e45b">
         <source>Нужные данные не были заполнены</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cache-repo-dir</target>
+        <target state="needs-translation">Нужные данные не были заполнены</target>
       </trans-unit>
       <trans-unit id="c4bea6420f5c077cad3e7134a065910f">
         <source>Ошибка во время создания папки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">cache-ttl</target>
+        <target state="needs-translation">Ошибка во время создания папки</target>
       </trans-unit>
       <trans-unit id="8e066842bb6ef69f1dcebfec71211fa5">
         <source>Такая папка уже существует</source>

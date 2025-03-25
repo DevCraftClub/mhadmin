@@ -2,1097 +2,1097 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="mhadmin.ru_RU" datatype="plaintext" source-language="ru" target-language="uk">
     <body>
-      <trans-unit id="d2022d2a8ef997483d97854624ae8a1e">
+      <trans-unit id="d2022d2a8ef997483d97854624ae8a1e" approved="yes">
         <source>Административная панель для моих разработок</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Адміністративна панель для моїх розробок</target>
+        <target state="final">Адміністративна панель для моїх розробок</target>
       </trans-unit>
-      <trans-unit id="10415103cffacfab4cd90c094a9c946a">
+      <trans-unit id="10415103cffacfab4cd90c094a9c946a" approved="yes">
         <source>Генератор модулей</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Генератор модулів</target>
+        <target state="final">Генератор модулів</target>
       </trans-unit>
-      <trans-unit id="8aa82d6984950aa5d14d4bcbefd5b925">
+      <trans-unit id="8aa82d6984950aa5d14d4bcbefd5b925" approved="yes">
         <source>Вывод логов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Вивід логів</target>
+        <target state="final">Вивід логів</target>
       </trans-unit>
-      <trans-unit id="345805b88b9ca1e189fa11ea817e5666">
+      <trans-unit id="345805b88b9ca1e189fa11ea817e5666" approved="yes">
         <source>Тип</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Тип</target>
+        <target state="final">Тип</target>
       </trans-unit>
-      <trans-unit id="e0273c1916b249278a31bca788fc1059">
+      <trans-unit id="e0273c1916b249278a31bca788fc1059" approved="yes">
         <source>Плагин</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Плагін</target>
+        <target state="final">Плагін</target>
       </trans-unit>
-      <trans-unit id="172b2af4e33580a53919a43ab47f5116">
+      <trans-unit id="172b2af4e33580a53919a43ab47f5116" approved="yes">
         <source>Функция</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Функція</target>
+        <target state="final">Функція</target>
       </trans-unit>
-      <trans-unit id="3e729b3484832c4d7e40709d83a20ee4">
+      <trans-unit id="3e729b3484832c4d7e40709d83a20ee4" approved="yes">
         <source>Время</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Час</target>
+        <target state="final">Час</target>
       </trans-unit>
-      <trans-unit id="3715766541542726d2733a0f8dade99b">
+      <trans-unit id="3715766541542726d2733a0f8dade99b" approved="yes">
         <source>Сообщение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Повідомлення</target>
+        <target state="final">Повідомлення</target>
       </trans-unit>
-      <trans-unit id="50a761a11275b70272b97775ec641e61">
+      <trans-unit id="50a761a11275b70272b97775ec641e61" approved="yes">
         <source>Действие</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Дія</target>
+        <target state="final">Дія</target>
       </trans-unit>
-      <trans-unit id="ed2bbfbc53d83d3ad81f7fd6485ac6e8">
+      <trans-unit id="ed2bbfbc53d83d3ad81f7fd6485ac6e8" approved="yes">
         <source>Удалить</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Удалить</target>
+        <target state="final">Удалить</target>
       </trans-unit>
-      <trans-unit id="148bbf94cef9e1e431bf97570eb0644d">
+      <trans-unit id="148bbf94cef9e1e431bf97570eb0644d" approved="yes">
         <source>Всё отлично!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Все чудово!</target>
+        <target state="final">Все чудово!</target>
       </trans-unit>
-      <trans-unit id="5caa4e121b8305c3fe48155a42745e57">
+      <trans-unit id="5caa4e121b8305c3fe48155a42745e57" approved="yes">
         <source>&lt;p&gt;Запись была удалена!&lt;/p&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;p&gt;Запис був видалений!&lt;/p&gt;</target>
+        <target state="final">&lt;p&gt;Запис був видалений!&lt;/p&gt;</target>
       </trans-unit>
-      <trans-unit id="c6fd3c6a629b51b28c19e8495994f4ca">
+      <trans-unit id="c6fd3c6a629b51b28c19e8495994f4ca" approved="yes">
         <source>Ошибка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Помилка</target>
+        <target state="final">Помилка</target>
       </trans-unit>
-      <trans-unit id="c919d65bd95698af8f15fa8133bf490d">
+      <trans-unit id="c919d65bd95698af8f15fa8133bf490d" approved="yes">
         <source>Настройки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Настройки</target>
+        <target state="final">Настройки</target>
       </trans-unit>
-      <trans-unit id="5fea3bb0f53a8d7efcb0d8d942cee4c2">
+      <trans-unit id="5fea3bb0f53a8d7efcb0d8d942cee4c2" approved="yes">
         <source>Количество объектов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Кількість об'єктів</target>
+        <target state="final">Кількість об'єктів</target>
       </trans-unit>
-      <trans-unit id="0233cc157f42b5128174b12a695f40a0">
+      <trans-unit id="0233cc157f42b5128174b12a695f40a0" approved="yes">
         <source>Путь до кеша файлов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Шлях до кешу файлів</target>
+        <target state="final">Шлях до кешу файлів</target>
       </trans-unit>
-      <trans-unit id="6348c222d4fa5f63e099b3c289e5b015">
+      <trans-unit id="6348c222d4fa5f63e099b3c289e5b015" approved="yes">
         <source>Время хранения кеша</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Час зберігання кешу</target>
+        <target state="final">Час зберігання кешу</target>
       </trans-unit>
-      <trans-unit id="3dc1bbf2a49cba7ffaa7606f475e3b7b">
+      <trans-unit id="3dc1bbf2a49cba7ffaa7606f475e3b7b" approved="yes">
         <source>Введите время в минутах, сколько кеш запросов должен быть сохранён на сервере. При запросе скрипт будет проверять когда был создан файл кеша и если он будет превышать заданный лимит, то кеш будет пересоздан.&lt;br&gt;&lt;b&gt;&lt;i&gt;По умолчанию: 60 минут&lt;/i&gt;&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Введіть час у хвилинах, на скільки кеш-запитів має бути збережено на сервері. При запиті скрипт буде перевіряти, коли був створений кеш-файл, і якщо він перевищує заданий ліміт, кеш буде пересозданий.&lt;br&gt;&lt;b&gt;&lt;i&gt;За замовчуванням: 60 хвилин&lt;/i&gt;&lt;/b&gt;</target>
+        <target state="final">Введіть час у хвилинах, на скільки кеш-запитів має бути збережено на сервері. При запиті скрипт буде перевіряти, коли був створений кеш-файл, і якщо він перевищує заданий ліміт, кеш буде пересозданий.&lt;br&gt;&lt;b&gt;&lt;i&gt;За замовчуванням: 60 хвилин&lt;/i&gt;&lt;/b&gt;</target>
       </trans-unit>
-      <trans-unit id="c9db20e2b5626b2915621712d9b605e8">
+      <trans-unit id="c9db20e2b5626b2915621712d9b605e8" approved="yes">
         <source>Язык админки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Мова адмінки</target>
+        <target state="final">Мова адмінки</target>
       </trans-unit>
-      <trans-unit id="4397201a2bce40394d6cb87caba8bdd5">
+      <trans-unit id="4397201a2bce40394d6cb87caba8bdd5" approved="yes">
         <source>Путь до файлов языков</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Шлях до файлів мов</target>
+        <target state="final">Шлях до файлів мов</target>
       </trans-unit>
-      <trans-unit id="bcb916d958fc0ea56abd6be5a281addb">
+      <trans-unit id="bcb916d958fc0ea56abd6be5a281addb" approved="yes">
         <source>Включить логирование?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Увімкнути логування?</target>
+        <target state="final">Увімкнути логування?</target>
       </trans-unit>
-      <trans-unit id="5fa1dffd2f9452575fb81af2628d4b3f">
+      <trans-unit id="5fa1dffd2f9452575fb81af2628d4b3f" approved="yes">
         <source>При включенном параметре будет создавать текстовые логи в папке &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">При увімкненні параметра буде створюватися текстові логи в папці &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</target>
+        <target state="final">При увімкненні параметра буде створюватися текстові логи в папці &lt;b&gt;engine/inc/maharder/_logs&lt;/b&gt;</target>
       </trans-unit>
-      <trans-unit id="dd1c9d0523323b94cf2e8e3a2b22bffe">
+      <trans-unit id="dd1c9d0523323b94cf2e8e3a2b22bffe" approved="yes">
         <source>Сохранять логи в базе данных?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Зберігати логи в базі даних?</target>
+        <target state="final">Зберігати логи в базі даних?</target>
       </trans-unit>
-      <trans-unit id="d38cfd51e4de8e8b6dbed99f80356a86">
+      <trans-unit id="d38cfd51e4de8e8b6dbed99f80356a86" approved="yes">
         <source>Отправлять логи в телеграм?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Надсилати логи в телеграм?</target>
+        <target state="final">Надсилати логи в телеграм?</target>
       </trans-unit>
-      <trans-unit id="2cba1881c9e1bccf21acc1aa7623da05">
+      <trans-unit id="2cba1881c9e1bccf21acc1aa7623da05" approved="yes">
         <source>API ключ бота</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">API ключ бота</target>
+        <target state="final">API ключ бота</target>
       </trans-unit>
-      <trans-unit id="cfd5bbdcfab069b7de4a5647fa592029">
+      <trans-unit id="cfd5bbdcfab069b7de4a5647fa592029" approved="yes">
         <source>Канал телеграма</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Канал телеграму</target>
+        <target state="final">Канал телеграму</target>
       </trans-unit>
-      <trans-unit id="8d3161d21c5f3a0ca454eb1b9cb3dfe0">
+      <trans-unit id="8d3161d21c5f3a0ca454eb1b9cb3dfe0" approved="yes">
         <source>Тип оповещений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Тип сповіщень</target>
+        <target state="final">Тип сповіщень</target>
       </trans-unit>
-      <trans-unit id="dfd97193bf9c95b3bc431045e3a27c39">
+      <trans-unit id="dfd97193bf9c95b3bc431045e3a27c39" approved="yes">
         <source>&lt;div class="item"&gt;&lt;b&gt;Все&lt;/b&gt; - Отправляет буквально все отчёты и логи в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;div class="item"&gt;&lt;b&gt;Все&lt;/b&gt; - Відправляє буквально всі звіти та логи в канал&lt;/div&gt;</target>
+        <target state="final">&lt;div class="item"&gt;&lt;b&gt;Все&lt;/b&gt; - Відправляє буквально всі звіти та логи в канал&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="28f8c05e922e20a42b370b34bd6bb8b1">
+      <trans-unit id="28f8c05e922e20a42b370b34bd6bb8b1" approved="yes">
         <source>&lt;div class="item"&gt;&lt;b&gt;Ошибки&lt;/b&gt; - Отправляет только ошибки в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;div class="item"&gt;&lt;b&gt;Помилки&lt;/b&gt; - Відправляє тільки помилки в канал&lt;/div&gt;</target>
+        <target state="final">&lt;div class="item"&gt;&lt;b&gt;Помилки&lt;/b&gt; - Відправляє тільки помилки в канал&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="ccec57b509348ed0aadf5dcbf4d2089d">
+      <trans-unit id="ccec57b509348ed0aadf5dcbf4d2089d" approved="yes">
         <source>&lt;div class="item"&gt;&lt;b&gt;Информация&lt;/b&gt; - Отправляет только информационные отчёты в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;div class="item"&gt;&lt;b&gt;Інформація&lt;/b&gt; - Відправляє тільки інформаційні звіти в канал&lt;/div&gt;</target>
+        <target state="final">&lt;div class="item"&gt;&lt;b&gt;Інформація&lt;/b&gt; - Відправляє тільки інформаційні звіти в канал&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="a290c6697ae5bfca2ec2b73a828a77b1">
+      <trans-unit id="a290c6697ae5bfca2ec2b73a828a77b1" approved="yes">
         <source>&lt;div class="item"&gt;&lt;b&gt;Уведомления&lt;/b&gt; - Отправляет только уведомления в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;div class="item"&gt;&lt;b&gt;Сповіщення&lt;/b&gt; - Відправляє тільки сповіщення в канал&lt;/div&gt;</target>
+        <target state="final">&lt;div class="item"&gt;&lt;b&gt;Сповіщення&lt;/b&gt; - Відправляє тільки сповіщення в канал&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="f2b56d892888626e01951081d14a80b6">
+      <trans-unit id="f2b56d892888626e01951081d14a80b6" approved="yes">
         <source>&lt;div class="item"&gt;&lt;b&gt;Предупреждения&lt;/b&gt; - Отправляет только предупреждения в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;div class="item"&gt;&lt;b&gt;Попередження&lt;/b&gt; - Відправляє тільки попередження в канал&lt;/div&gt;</target>
+        <target state="final">&lt;div class="item"&gt;&lt;b&gt;Попередження&lt;/b&gt; - Відправляє тільки попередження в канал&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="0b20a126dfcc9da65d9c013ae7ffff35">
+      <trans-unit id="0b20a126dfcc9da65d9c013ae7ffff35" approved="yes">
         <source>&lt;div class="item"&gt;&lt;b&gt;Критические ошибки&lt;/b&gt; - Отправляет только критические ошибки в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;div class="item"&gt;&lt;b&gt;Критичні помилки&lt;/b&gt; - Відправляє тільки критичні помилки в канал&lt;/div&gt;</target>
+        <target state="final">&lt;div class="item"&gt;&lt;b&gt;Критичні помилки&lt;/b&gt; - Відправляє тільки критичні помилки в канал&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="54d9591fb3c4b3afc161c4c1017539c8">
+      <trans-unit id="54d9591fb3c4b3afc161c4c1017539c8" approved="yes">
         <source>&lt;div class="item"&gt;&lt;b&gt;Отладка&lt;/b&gt; - Отправляет только информацию об отладке в канал&lt;/div&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;div class="item"&gt;&lt;b&gt;Налагодження&lt;/b&gt; - Відправляє тільки інформацію про налагодження в канал&lt;/div&gt;</target>
+        <target state="final">&lt;div class="item"&gt;&lt;b&gt;Налагодження&lt;/b&gt; - Відправляє тільки інформацію про налагодження в канал&lt;/div&gt;</target>
       </trans-unit>
-      <trans-unit id="76bf59b6b8f230198e49fa2f282be094">
+      <trans-unit id="76bf59b6b8f230198e49fa2f282be094" approved="yes">
         <source>Если в плагине логирование не проставлено, то и сообщения этого рода тоже не будут отправлены.&lt;br&gt;Если выбрано "Все", то остальные выбранные параметры игнорируются</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Якщо в плагіні логування не встановлено, то і повідомлення цього роду також не будуть відправлені.&lt;br&gt;Якщо вибрано "Все", то інші обрані параметри ігноруються</target>
+        <target state="final">Якщо в плагіні логування не встановлено, то і повідомлення цього роду також не будуть відправлені.&lt;br&gt;Якщо вибрано "Все", то інші обрані параметри ігноруються</target>
       </trans-unit>
-      <trans-unit id="984bf1497dea9513aa66cf7b0e1eeb0e">
+      <trans-unit id="984bf1497dea9513aa66cf7b0e1eeb0e" approved="yes">
         <source>Все</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Все</target>
+        <target state="final">Все</target>
       </trans-unit>
-      <trans-unit id="b217306d86257f115db3addf1930bba4">
+      <trans-unit id="b217306d86257f115db3addf1930bba4" approved="yes">
         <source>Ошибки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Помилки</target>
+        <target state="final">Помилки</target>
       </trans-unit>
-      <trans-unit id="a7fd9bee17172ede11112e463b50d260">
+      <trans-unit id="a7fd9bee17172ede11112e463b50d260" approved="yes">
         <source>Информация</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Інформація</target>
+        <target state="final">Інформація</target>
       </trans-unit>
-      <trans-unit id="d2ed721d0c08f9f114598a084f24c784">
+      <trans-unit id="d2ed721d0c08f9f114598a084f24c784" approved="yes">
         <source>Уведомления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Повідомлення</target>
+        <target state="final">Повідомлення</target>
       </trans-unit>
-      <trans-unit id="d1253d0df47413f42f9df0569c52357f">
+      <trans-unit id="d1253d0df47413f42f9df0569c52357f" approved="yes">
         <source>Предупреждения</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Попередження</target>
+        <target state="final">Попередження</target>
       </trans-unit>
-      <trans-unit id="401a3c6078e28ab4ce3f3142722081ab">
+      <trans-unit id="401a3c6078e28ab4ce3f3142722081ab" approved="yes">
         <source>Критические ошибки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Критичні помилки</target>
+        <target state="final">Критичні помилки</target>
       </trans-unit>
-      <trans-unit id="4281acce7b355277f1bb8499fd0a56d4">
+      <trans-unit id="4281acce7b355277f1bb8499fd0a56d4" approved="yes">
         <source>Отладка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Налагодження</target>
+        <target state="final">Налагодження</target>
       </trans-unit>
-      <trans-unit id="1d4865eb11d75e95c66b5ceb02172789">
+      <trans-unit id="1d4865eb11d75e95c66b5ceb02172789" approved="yes">
         <source>Заменять иконки?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Замінювати іконки?</target>
+        <target state="final">Замінювати іконки?</target>
       </trans-unit>
-      <trans-unit id="d2a9738e199995a2c64501f5b1a9be8c">
+      <trans-unit id="d2a9738e199995a2c64501f5b1a9be8c" approved="yes">
         <source>При включении, в админпанеле DLE будут заменены старые иконки на обновлённые</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Під час увімкнення, в адмінпанелі DLE будуть замінені старі іконки на оновлені</target>
+        <target state="final">Під час увімкнення, в адмінпанелі DLE будуть замінені старі іконки на оновлені</target>
       </trans-unit>
-      <trans-unit id="9416adbf7597517b46866e1b204ea0b4">
+      <trans-unit id="9416adbf7597517b46866e1b204ea0b4" approved="yes">
         <source>Добавить кнопку с очищением кеша?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додати кнопку з очищенням кешу?</target>
+        <target state="final">Додати кнопку з очищенням кешу?</target>
       </trans-unit>
-      <trans-unit id="0d26b6e1c201904eba926a3222412a03">
+      <trans-unit id="0d26b6e1c201904eba926a3222412a03" approved="yes">
         <source>Тема оформления админки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Тема оформлення адмінки</target>
+        <target state="final">Тема оформлення адмінки</target>
       </trans-unit>
-      <trans-unit id="b64d4ca1bd6045fd5b1ec52334de2aa4">
+      <trans-unit id="b64d4ca1bd6045fd5b1ec52334de2aa4" approved="yes">
         <source>Пока можно выбирать между светлой (стандартной) и тёмной. Сохраните и обновите страницу</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Поки що можна вибирати між світлим (стандартним) і темним. Збережіть і оновіть сторінку</target>
+        <target state="final">Поки що можна вибирати між світлим (стандартним) і темним. Збережіть і оновіть сторінку</target>
       </trans-unit>
-      <trans-unit id="cc8596f1aaba8d13e52b92bafeb63bf0">
+      <trans-unit id="cc8596f1aaba8d13e52b92bafeb63bf0" approved="yes">
         <source>Светлая</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Світла</target>
+        <target state="final">Світла</target>
       </trans-unit>
-      <trans-unit id="d9b9bd22390c54a244a4739168409cc6">
+      <trans-unit id="d9b9bd22390c54a244a4739168409cc6" approved="yes">
         <source>Тёмная</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Темна</target>
+        <target state="final">Темна</target>
       </trans-unit>
-      <trans-unit id="74ea58b6a801f0dce4e5d34dbca034dc">
+      <trans-unit id="74ea58b6a801f0dce4e5d34dbca034dc" approved="yes">
         <source>Сохранить</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Зберегти</target>
+        <target state="final">Зберегти</target>
       </trans-unit>
-      <trans-unit id="ab456ba2305d7425f4b2c86f607eb912">
+      <trans-unit id="ab456ba2305d7425f4b2c86f607eb912" approved="yes">
         <source>Проверить обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Перевірити оновлення</target>
+        <target state="final">Перевірити оновлення</target>
       </trans-unit>
-      <trans-unit id="6058d86335703676aba7815b34efd496">
+      <trans-unit id="6058d86335703676aba7815b34efd496" approved="yes">
         <source>Идёт загрузка...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Йде завантаження...</target>
+        <target state="final">Йде завантаження...</target>
       </trans-unit>
-      <trans-unit id="d444887a3619451b01c75b2571b128d6">
+      <trans-unit id="d444887a3619451b01c75b2571b128d6" approved="yes">
         <source>Загружается:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Завантажується:</target>
+        <target state="final">Завантажується:</target>
       </trans-unit>
-      <trans-unit id="1fb96ed1ba6b192d83fe527974eb340b">
+      <trans-unit id="1fb96ed1ba6b192d83fe527974eb340b" approved="yes">
         <source>Загружено</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Завантажено</target>
+        <target state="final">Завантажено</target>
       </trans-unit>
-      <trans-unit id="21f4e2084cced0467d61c4fe6765d919">
+      <trans-unit id="21f4e2084cced0467d61c4fe6765d919" approved="yes">
         <source>Проверка обновлений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Перевірка оновлень</target>
+        <target state="final">Перевірка оновлень</target>
       </trans-unit>
-      <trans-unit id="6a3a4896e9c842c52873c8f4a039b4c1">
+      <trans-unit id="6a3a4896e9c842c52873c8f4a039b4c1" approved="yes">
         <source>Загружаем файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Завантажуємо файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат знаходиться в консолі браузера!</target>
+        <target state="final">Завантажуємо файл: &lt;b&gt;${file}&lt;/b&gt;!&lt;br&gt;Результат знаходиться в консолі браузера!</target>
       </trans-unit>
-      <trans-unit id="7774f772b2b9e2b7958851c430a925cf">
+      <trans-unit id="7774f772b2b9e2b7958851c430a925cf" approved="yes">
         <source>Информация!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Інформація!</target>
+        <target state="final">Інформація!</target>
       </trans-unit>
-      <trans-unit id="60ef1e001c00f0001a8472bda0ee9ec1">
+      <trans-unit id="60ef1e001c00f0001a8472bda0ee9ec1" approved="yes">
         <source>Обновлений нет</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Оновлень немає</target>
+        <target state="final">Оновлень немає</target>
       </trans-unit>
-      <trans-unit id="7ee04b2e85a78f02ef1d6cbd41fbd8f6">
+      <trans-unit id="7ee04b2e85a78f02ef1d6cbd41fbd8f6" approved="yes">
         <source>На сервере</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">На сервері</target>
+        <target state="final">На сервері</target>
       </trans-unit>
-      <trans-unit id="796ad137fc6074cdbb0896653805cf5b">
+      <trans-unit id="796ad137fc6074cdbb0896653805cf5b" approved="yes">
         <source>файлов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">{count, plural, one {файл} few {файли} many {файлів} other {файлів}}</target>
+        <target state="final">файлів</target>
       </trans-unit>
-      <trans-unit id="cbf687ba2ea2eb79eb526f596c232338">
+      <trans-unit id="cbf687ba2ea2eb79eb526f596c232338" approved="yes">
         <source>Загружено на сайт</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Завантажено на сайт</target>
+        <target state="final">Завантажено на сайт</target>
       </trans-unit>
-      <trans-unit id="11de90b8bd3c5ec77367e62c6c250de5">
+      <trans-unit id="11de90b8bd3c5ec77367e62c6c250de5" approved="yes">
         <source>Требуют установки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Потребують встановлення</target>
+        <target state="final">Потребують встановлення</target>
       </trans-unit>
-      <trans-unit id="947a01e04969876af12db78482a0102d">
+      <trans-unit id="947a01e04969876af12db78482a0102d" approved="yes">
         <source>Требуют обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Потребують оновлення</target>
+        <target state="final">Потребують оновлення</target>
       </trans-unit>
-      <trans-unit id="d5b618e738df38d79aee980279d73710">
+      <trans-unit id="d5b618e738df38d79aee980279d73710" approved="yes">
         <source>Установить всё</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Встановити все</target>
+        <target state="final">Встановити все</target>
       </trans-unit>
-      <trans-unit id="0cc652ed6a48058bb3c98a4681ac9ddd">
+      <trans-unit id="0cc652ed6a48058bb3c98a4681ac9ddd" approved="yes">
         <source>Установить недостающие</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Встановити відсутні</target>
+        <target state="final">Встановити відсутні</target>
       </trans-unit>
-      <trans-unit id="367a46ab970d44cfaa3bca9f4d68e6d8">
+      <trans-unit id="367a46ab970d44cfaa3bca9f4d68e6d8" approved="yes">
         <source>Установить обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Встановити оновлення</target>
+        <target state="final">Встановити оновлення</target>
       </trans-unit>
-      <trans-unit id="e1ca135ca2c83a071a7a37a18c5d8d4f">
+      <trans-unit id="e1ca135ca2c83a071a7a37a18c5d8d4f" approved="yes">
         <source>&lt;p&gt;Данные были сохранены!&lt;/p&gt;&lt;p&gt;Страница сейчас обновится!&lt;/p&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">&lt;p&gt;Дані було збережено!&lt;/p&gt;&lt;p&gt;Сторінка зараз оновиться!&lt;/p&gt;</target>
+        <target state="final">&lt;p&gt;Дані було збережено!&lt;/p&gt;&lt;p&gt;Сторінка зараз оновиться!&lt;/p&gt;</target>
       </trans-unit>
-      <trans-unit id="b475317d4d28461ae61ccf975b1c98f2">
+      <trans-unit id="b475317d4d28461ae61ccf975b1c98f2" approved="yes">
         <source>Настройки модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Налаштування модуля</target>
+        <target state="final">Налаштування модуля</target>
       </trans-unit>
-      <trans-unit id="f34e046d1b628a326e255e0b954670eb">
+      <trans-unit id="f34e046d1b628a326e255e0b954670eb" approved="yes">
         <source>[UPDATE] Минимальная версия PHP 8.3</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Мінімальна версія PHP 8.3</target>
+        <target state="final">[UPDATE] Мінімальна версія PHP 8.3</target>
       </trans-unit>
-      <trans-unit id="af37233050da967bbc7f59bba096b3fb">
+      <trans-unit id="af37233050da967bbc7f59bba096b3fb" approved="yes">
         <source>[UPDATE] Функционал обновлён до версий DLE 17.3</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Функціонал оновлений до версій DLE 17.3</target>
+        <target state="final">[UPDATE] Функціонал оновлений до версій DLE 17.3</target>
       </trans-unit>
-      <trans-unit id="4a7891903f6808b0948237386d73af6e">
+      <trans-unit id="4a7891903f6808b0948237386d73af6e" approved="yes">
         <source>[NEW] Добавлена поддержка Doctrine MhDB. Дальнейшие модели для базы данных будут работать через эту систему.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додана підтримка Doctrine MhDB. Подальші моделі для бази даних будуть працювати через цю систему.</target>
+        <target state="final">[NEW] Додана підтримка Doctrine MhDB. Подальші моделі для бази даних будуть працювати через цю систему.</target>
       </trans-unit>
-      <trans-unit id="c3db75eaf3921da9651f6f86b93ec4ac">
+      <trans-unit id="c3db75eaf3921da9651f6f86b93ec4ac" approved="yes">
         <source>[UPDATE] Функционал обновлён до версий DLE 17.0</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Функціонал оновлений до версій DLE 17.0</target>
+        <target state="final">[UPDATE] Функціонал оновлений до версій DLE 17.0</target>
       </trans-unit>
-      <trans-unit id="2403eac96342c79920159584ffa4e66c">
+      <trans-unit id="2403eac96342c79920159584ffa4e66c" approved="yes">
         <source>[NEW] Добавлена мультиязычная поддержка, перевод можно осуществить при помощи сервиса Crowdin. Ссылка в подвале каждого модуля.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додана мультимовна підтримка, переклад можна здійснити за допомогою сервісу Crowdin. Посилання у підвалі кожного модуля.</target>
+        <target state="final">[NEW] Додана мультимовна підтримка, переклад можна здійснити за допомогою сервісу Crowdin. Посилання у підвалі кожного модуля.</target>
       </trans-unit>
-      <trans-unit id="5a73af999a963fe7ab84e3575560e320">
+      <trans-unit id="5a73af999a963fe7ab84e3575560e320" approved="yes">
         <source>[NEW] Добавлена возможность выводов логов на отдельной странице.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додана можливість виводу логів на окремій сторінці.</target>
+        <target state="final">[NEW] Додана можливість виводу логів на окремій сторінці.</target>
       </trans-unit>
-      <trans-unit id="e6a61bbb3ae9b96267afebfa0950e4ff">
+      <trans-unit id="e6a61bbb3ae9b96267afebfa0950e4ff" approved="yes">
         <source>[UPDATE] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Встановник спрощений. Тепер залежності завантажуються та встановлюються при першому відкритті [будь-якого] модуля. Може зайняти кілька хвилин. Тепер встановник важить мало.</target>
+        <target state="final">[UPDATE] Встановник спрощений. Тепер залежності завантажуються та встановлюються при першому відкритті [будь-якого] модуля. Може зайняти кілька хвилин. Тепер встановник важить мало.</target>
       </trans-unit>
-      <trans-unit id="65e635bff3a9cad8a283b83e8e90cb33">
+      <trans-unit id="65e635bff3a9cad8a283b83e8e90cb33" approved="yes">
         <source>[UPDATE] Откат функций, которые использовали класс DLEFiles. Он не работает со сторонними разработками как надо. Либо работает, но документации к нему то нет.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Скасування функцій, які використовували клас DLEFiles. Він не працює зі сторонніми розробками як слід. Або працює, але документації до нього немає.</target>
+        <target state="final">[UPDATE] Скасування функцій, які використовували клас DLEFiles. Він не працює зі сторонніми розробками як слід. Або працює, але документації до нього немає.</target>
       </trans-unit>
-      <trans-unit id="021b86fbf34a8d2600f826b1c0ced362">
+      <trans-unit id="021b86fbf34a8d2600f826b1c0ced362" approved="yes">
         <source>[UPDATE] Функционал обновлён до версий PHP 8.1</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Функціонал оновлений до версій PHP 8.1</target>
+        <target state="final">[UPDATE] Функціонал оновлений до версій PHP 8.1</target>
       </trans-unit>
-      <trans-unit id="d90c67b6ef364b7ce43b7982528ca432">
+      <trans-unit id="d90c67b6ef364b7ce43b7982528ca432" approved="yes">
         <source>[UPDATE] Функционал обновлён до версий DLE 16.0</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Функціонал оновлений до версій DLE 16.0</target>
+        <target state="final">[UPDATE] Функціонал оновлений до версій DLE 16.0</target>
       </trans-unit>
-      <trans-unit id="47f79eee835adf2f608e8d6f09d7d985">
+      <trans-unit id="47f79eee835adf2f608e8d6f09d7d985" approved="yes">
         <source>[UPDATE] Решено было использовать стандартные классы DLE для работы с файлами</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Було вирішено використовувати стандартні класи DLE для роботи з файлами</target>
+        <target state="final">[UPDATE] Було вирішено використовувати стандартні класи DLE для роботи з файлами</target>
       </trans-unit>
-      <trans-unit id="0b7d7e25c8ff8a6a524eadc69ab56b38">
+      <trans-unit id="0b7d7e25c8ff8a6a524eadc69ab56b38" approved="yes">
         <source>[FIX] Исправлена ошибка: https://devcraft.club/tickets/http-error-500.6/</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлена помилка: https://devcraft.club/tickets/http-error-500.6/</target>
+        <target state="final">[FIX] Виправлена помилка: https://devcraft.club/tickets/http-error-500.6/</target>
       </trans-unit>
-      <trans-unit id="bf2b58e3a747f7ed8945303debd490ae">
+      <trans-unit id="bf2b58e3a747f7ed8945303debd490ae" approved="yes">
         <source>[NEW] Добавлен функционал проверки обновления плагина</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Доданий функціонал перевірки оновлення плагіна</target>
+        <target state="final">[NEW] Доданий функціонал перевірки оновлення плагіна</target>
       </trans-unit>
-      <trans-unit id="c6cc5a376e4bde5d5df403b02f02c9d9">
+      <trans-unit id="c6cc5a376e4bde5d5df403b02f02c9d9" approved="yes">
         <source>[UPDATE] Изменён подход к некоторым классам</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Змінено підхід до деяких класів</target>
+        <target state="final">[UPDATE] Змінено підхід до деяких класів</target>
       </trans-unit>
-      <trans-unit id="561a7ac5e990c748e3fea2fbbf32a1b2">
+      <trans-unit id="561a7ac5e990c748e3fea2fbbf32a1b2" approved="yes">
         <source>[FIX] Вернул поддержку PHP 7.2</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Відновлено підтримку PHP 7.2</target>
+        <target state="final">[FIX] Відновлено підтримку PHP 7.2</target>
       </trans-unit>
-      <trans-unit id="296f0fba2d5dd69fe58ea75e3344591b">
+      <trans-unit id="296f0fba2d5dd69fe58ea75e3344591b" approved="yes">
         <source>[FIX] Вернул поддержку PHP &gt;= 8</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Відновлено підтримку PHP &gt;= 8</target>
+        <target state="final">[FIX] Відновлено підтримку PHP &gt;= 8</target>
       </trans-unit>
-      <trans-unit id="ad626ba08326fa3fef97d4befdb3d60d">
+      <trans-unit id="ad626ba08326fa3fef97d4befdb3d60d" approved="yes">
         <source>[FIX] Удалены остаточные файлы (кеш, конфигурации, ...)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Видалені залишкові файли (кеш, конфігурації, ...)</target>
+        <target state="final">[FIX] Видалені залишкові файли (кеш, конфігурації, ...)</target>
       </trans-unit>
-      <trans-unit id="88a772164c82067037f269be0e4ecdbf">
+      <trans-unit id="88a772164c82067037f269be0e4ecdbf" approved="yes">
         <source>[FIX] Вернул нужные, но удалённые файлы</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Відновлено потрібні, але видалені файли</target>
+        <target state="final">[FIX] Відновлено потрібні, але видалені файли</target>
       </trans-unit>
-      <trans-unit id="1767bf81dc7bdb695ebecceca6e1d0a2">
+      <trans-unit id="1767bf81dc7bdb695ebecceca6e1d0a2" approved="yes">
         <source>[NEW] Добавлена функция отправки логов в телеграм [БЕТА]</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додана функція відправки логів у телеграм [БЕТА]</target>
+        <target state="final">[NEW] Додана функція відправки логів у телеграм [БЕТА]</target>
       </trans-unit>
-      <trans-unit id="e15f96c15c0fafb64f13cff6738c4f4c">
+      <trans-unit id="e15f96c15c0fafb64f13cff6738c4f4c" approved="yes">
         <source>[FIX] Исправил ошибку работы логирования</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлено помилку роботи логування</target>
+        <target state="final">[FIX] Виправлено помилку роботи логування</target>
       </trans-unit>
-      <trans-unit id="5db3e03c7155ba93757945543beabf8a">
+      <trans-unit id="5db3e03c7155ba93757945543beabf8a" approved="yes">
         <source>[FIX] Исправил работу моделей</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлено роботу моделей</target>
+        <target state="final">[FIX] Виправлено роботу моделей</target>
       </trans-unit>
-      <trans-unit id="d8096056bfe5c3567eb6e2e1756bfb18">
+      <trans-unit id="d8096056bfe5c3567eb6e2e1756bfb18" approved="yes">
         <source>[FIX] Исправил обработку кеша</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлено обробку кешу</target>
+        <target state="final">[FIX] Виправлено обробку кешу</target>
       </trans-unit>
-      <trans-unit id="cae51846fe44123590545efcc313b158">
+      <trans-unit id="cae51846fe44123590545efcc313b158" approved="yes">
         <source>[FIX] Обновил файлы для генерации модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Оновлено файли для генерації модуля</target>
+        <target state="final">[FIX] Оновлено файли для генерації модуля</target>
       </trans-unit>
-      <trans-unit id="e6424f12e7004e1a7e85303cb6fd66d1">
+      <trans-unit id="e6424f12e7004e1a7e85303cb6fd66d1" approved="yes">
         <source>[NEW] Добавлена возможность пользователю самому решать использовать ли в админпанели обновлённые иконки или нет</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додана можливість користувачу самостійно вирішувати використовувати оновлені іконки в адмінпанелі чи ні</target>
+        <target state="final">[NEW] Додана можливість користувачу самостійно вирішувати використовувати оновлені іконки в адмінпанелі чи ні</target>
       </trans-unit>
-      <trans-unit id="df3d71251490504f7b10bc6ca92c400a">
+      <trans-unit id="df3d71251490504f7b10bc6ca92c400a" approved="yes">
         <source>[NEW] Добавлена возможность пользователю самому решать подключать в админке глобальную кнопку по очистке кеша или нет</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додана можливість користувачу самостійно вирішувати підключати в адмінці глобальну кнопку для очищення кешу чи ні</target>
+        <target state="final">[NEW] Додана можливість користувачу самостійно вирішувати підключати в адмінці глобальну кнопку для очищення кешу чи ні</target>
       </trans-unit>
-      <trans-unit id="c2bcfa4d22fac8bfde827547e52474e0">
+      <trans-unit id="c2bcfa4d22fac8bfde827547e52474e0" approved="yes">
         <source>[NEW] Дальнейшая работа с базой данных будет происходить только через созданные мною модели. Для этого будет использоваться функционал классов Model и Table</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Подальша робота з базою даних буде здійснюватися лише через створені мною моделі. Для цього буде використовуватися функціонал класів Model та Table</target>
+        <target state="final">[NEW] Подальша робота з базою даних буде здійснюватися лише через створені мною моделі. Для цього буде використовуватися функціонал класів Model та Table</target>
       </trans-unit>
-      <trans-unit id="35c9398291b1379c65c54137802ec74c">
+      <trans-unit id="35c9398291b1379c65c54137802ec74c" approved="yes">
         <source>[UPDATE] Логирование ошибок будет происходить в дальнейшем через &lt;a href="https://seldaek.github.io/monolog/" target="_blank"&gt;Monolog - Logging for PHP&lt;/a&gt;. При включённом функционале - библиотека будет отправлять уведомления в консоль браузера, а так-же сохранять файлов в папку логов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Логування помилок буде здійснюватися далі через &lt;a href="https://seldaek.github.io/monolog/" target="_blank"&gt;Monolog - Logging for PHP&lt;/a&gt;. При увімкненому функціоналі - бібліотека буде відправляти повідомлення в консоль браузера, а також зберігати файли в папку логів</target>
+        <target state="final">[UPDATE] Логування помилок буде здійснюватися далі через &lt;a href="https://seldaek.github.io/monolog/" target="_blank"&gt;Monolog - Logging for PHP&lt;/a&gt;. При увімкненому функціоналі - бібліотека буде відправляти повідомлення в консоль браузера, а також зберігати файли в папку логів</target>
       </trans-unit>
-      <trans-unit id="2d136fe3afcac9f35dbe54fda63a4d26">
+      <trans-unit id="2d136fe3afcac9f35dbe54fda63a4d26" approved="yes">
         <source>[UPDATE] Обновление библиотек до последних версий с минимально возможной PHP версией &lt;b&gt;7.2.9&lt;/b&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Оновлення бібліотек до останніх версій з мінімально можливою версією PHP &lt;b&gt;7.2.9&lt;/b&gt;</target>
+        <target state="final">[UPDATE] Оновлення бібліотек до останніх версій з мінімально можливою версією PHP &lt;b&gt;7.2.9&lt;/b&gt;</target>
       </trans-unit>
-      <trans-unit id="75f1f1c1f22ff04e3e5affae3773c68b">
+      <trans-unit id="75f1f1c1f22ff04e3e5affae3773c68b" approved="yes">
         <source>[UPDATE] Подключены иконки FontAwesome 6.1.1 Pro, используется вариант light (о не достающих или пропавших иконок прошу сообщать)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Підключено іконки FontAwesome 6.1.1 Pro, використовується варіант light (про відсутні або зниклі іконки прошу повідомляти)</target>
+        <target state="final">[UPDATE] Підключено іконки FontAwesome 6.1.1 Pro, використовується варіант light (про відсутні або зниклі іконки прошу повідомляти)</target>
       </trans-unit>
-      <trans-unit id="629c2fad4296bde35eb498d8c4f707bd">
+      <trans-unit id="629c2fad4296bde35eb498d8c4f707bd" approved="yes">
         <source>[FIX] Путь до иконки модуля исправлен 🤦‍♂️</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Шлях до іконки модуля виправлено 🤦‍♂️</target>
+        <target state="final">[FIX] Шлях до іконки модуля виправлено 🤦‍♂️</target>
       </trans-unit>
-      <trans-unit id="d3c84be1c5d698c45fe2dc37d2ccbac4">
+      <trans-unit id="d3c84be1c5d698c45fe2dc37d2ccbac4" approved="yes">
         <source>[FIX] Продокументировал классы с небольшими объяснениями, что делает какая функция и для чего используется та или иная переменная</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Продокументовано класи з невеликими поясненнями, що робить яка функція і для чого використовується та чи інша змінна</target>
+        <target state="final">[FIX] Продокументовано класи з невеликими поясненнями, що робить яка функція і для чого використовується та чи інша змінна</target>
       </trans-unit>
-      <trans-unit id="37664b29316d3731efedac6eb641a69e">
+      <trans-unit id="37664b29316d3731efedac6eb641a69e" approved="yes">
         <source>[DEL] Удалён кошелёк WMR</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[DEL] Видалено гаманець WMR</target>
+        <target state="final">[DEL] Видалено гаманець WMR</target>
       </trans-unit>
-      <trans-unit id="a15d0ae522d4eba350070f70c8d924a6">
+      <trans-unit id="a15d0ae522d4eba350070f70c8d924a6" approved="yes">
         <source>FIX: Добавлена иконка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">FIX: Додано іконку</target>
+        <target state="final">FIX: Додано іконку</target>
       </trans-unit>
-      <trans-unit id="ba161a5d335518ae8267670e8f629d43">
+      <trans-unit id="ba161a5d335518ae8267670e8f629d43" approved="yes">
         <source>FIX: Исправлен файл AJAX</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">FIX: Виправлено файл AJAX</target>
+        <target state="final">FIX: Виправлено файл AJAX</target>
       </trans-unit>
-      <trans-unit id="b38e875caefc28421d7e9277943cc0f8">
+      <trans-unit id="b38e875caefc28421d7e9277943cc0f8" approved="yes">
         <source>В связи с некоторыми обстоятельствами пришлось отказаться от i18n модуля. Возможно он выйдет отдельным модулем.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">У зв'язку з деякими обставинами довелося відмовитися від модуля i18n. Можливо він вийде окремим модулем.</target>
+        <target state="final">У зв'язку з деякими обставинами довелося відмовитися від модуля i18n. Можливо він вийде окремим модулем.</target>
       </trans-unit>
-      <trans-unit id="4db51d86f277321d033302f663afad3b">
+      <trans-unit id="4db51d86f277321d033302f663afad3b" approved="yes">
         <source>Обновление зависимостей до минимально требуемой версии PHP 7.4</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Оновлення залежностей до мінімально необхідної версії PHP 7.4</target>
+        <target state="final">Оновлення залежностей до мінімально необхідної версії PHP 7.4</target>
       </trans-unit>
-      <trans-unit id="cb7b63d6ad1f9fb2c960d85c44e5d3b9">
+      <trans-unit id="cb7b63d6ad1f9fb2c960d85c44e5d3b9" approved="yes">
         <source>Улучшена реструктуризация классов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Поліпшено реструктуризацію класів</target>
+        <target state="final">Поліпшено реструктуризацію класів</target>
       </trans-unit>
-      <trans-unit id="469b806de2f5819090bedebb2b7ccf57">
+      <trans-unit id="469b806de2f5819090bedebb2b7ccf57" approved="yes">
         <source>Добавлена тёмная тема оформления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додано темну тему оформлення</target>
+        <target state="final">Додано темну тему оформлення</target>
       </trans-unit>
-      <trans-unit id="11d69f4eadc69c118552b0207ec595d3">
+      <trans-unit id="11d69f4eadc69c118552b0207ec595d3" approved="yes">
         <source>Для желающих создать модуль на основе моей админки была создана функция генерации путей и файлов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Для бажаючих створити модуль на основі моєї адмінки була створена функція генерації шляхів та файлів</target>
+        <target state="final">Для бажаючих створити модуль на основі моєї адмінки була створена функція генерації шляхів та файлів</target>
       </trans-unit>
-      <trans-unit id="fb060b22ea30a7008d2d54abad598987">
+      <trans-unit id="fb060b22ea30a7008d2d54abad598987" approved="yes">
         <source>Fontawesome были обновлены до 6ой версии</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Fontawesome було оновлено до 6-ї версії</target>
+        <target state="final">Fontawesome було оновлено до 6-ї версії</target>
       </trans-unit>
-      <trans-unit id="a24589f6b2c135e5cd6cb01375ac3db9">
+      <trans-unit id="a24589f6b2c135e5cd6cb01375ac3db9" approved="yes">
         <source>Добавлена проверка на целостность файлов и их обновления</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додано перевірку на цілісність файлів та їх оновлення</target>
+        <target state="final">Додано перевірку на цілісність файлів та їх оновлення</target>
       </trans-unit>
-      <trans-unit id="9285d3617aa4f84c862ef7658fc6e773">
+      <trans-unit id="9285d3617aa4f84c862ef7658fc6e773" approved="yes">
         <source>Полностью новая админпанель, которая не зависит от оформления и функционала самой DLE</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Повністю нова адміністративна панель, яка не залежить від оформлення та функціоналу самої DLE</target>
+        <target state="final">Повністю нова адміністративна панель, яка не залежить від оформлення та функціоналу самої DLE</target>
       </trans-unit>
-      <trans-unit id="741973b00f6f0fb8528425f6340d4c27">
+      <trans-unit id="741973b00f6f0fb8528425f6340d4c27" approved="yes">
         <source>За основу панели был взят движок Twig, создавать свои шаблоны будет проще</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Основою панелі був взятий движок Twig, створювати свої шаблони буде легше</target>
+        <target state="final">Основою панелі був взятий движок Twig, створювати свої шаблони буде легше</target>
       </trans-unit>
-      <trans-unit id="b93352e254776e8dc69d2eaffa4dc7fe">
+      <trans-unit id="b93352e254776e8dc69d2eaffa4dc7fe" approved="yes">
         <source>Очищать кеш в админке стало проще - кнопка была выведена в ряд с "Добавить новость" и "Редактировать новости</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Очищення кешу в адмінці стало простіше - кнопка була виведена в ряд із "Додати новину" та "Редагувати новини"</target>
+        <target state="final">Очищення кешу в адмінці стало простіше - кнопка була виведена в ряд із "Додати новину" та "Редагувати новини"</target>
       </trans-unit>
-      <trans-unit id="77dfb530f33da8ba775567f3f604fe93">
+      <trans-unit id="77dfb530f33da8ba775567f3f604fe93" approved="yes">
         <source>Внедрён i18n в систему DLE, это даёт возможность создавать мультиязычные сайты (модуль отдельно продаваться или делаться не будет)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Впроваджено i18n в систему DLE, це дає можливість створювати мультимовні сайти (модуль окремо продаватися або робитися не буде)</target>
+        <target state="final">Впроваджено i18n в систему DLE, це дає можливість створювати мультимовні сайти (модуль окремо продаватися або робитися не буде)</target>
       </trans-unit>
-      <trans-unit id="fd0159956edfff09c7103db5487c168e">
+      <trans-unit id="fd0159956edfff09c7103db5487c168e" approved="yes">
         <source>i18n: не зависит от базы данных, все фразы хранятся в файлах json</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">i18n: не залежить від бази даних, всі фрази зберігаються у файлах json</target>
+        <target state="final">i18n: не залежить від бази даних, всі фрази зберігаються у файлах json</target>
       </trans-unit>
-      <trans-unit id="3402446956c0cb8dd404237b650b7c7c">
+      <trans-unit id="3402446956c0cb8dd404237b650b7c7c" approved="yes">
         <source>i18n: в шаблонах достаточно использовать тег {trans text="сюда переводимый текст"}, чтобы перевести фразу</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">i18n: у шаблонах достатньо використовувати тег {trans text="сюди перекладений текст"}, щоб перекласти фразу</target>
+        <target state="final">i18n: у шаблонах достатньо використовувати тег {trans text="сюди перекладений текст"}, щоб перекласти фразу</target>
       </trans-unit>
-      <trans-unit id="86679731701083122c5fa1eaa9d8f4d5">
+      <trans-unit id="86679731701083122c5fa1eaa9d8f4d5" approved="yes">
         <source>i18n: в скриптах PHP достаточно использовать функцию translate("сюда переводимый текст"), чтобы перевести фразу</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">i18n: у скриптах PHP достатньо використовувати функцію translate("сюди перекладений текст"), щоб перекласти фразу</target>
+        <target state="final">i18n: у скриптах PHP достатньо використовувати функцію translate("сюди перекладений текст"), щоб перекласти фразу</target>
       </trans-unit>
-      <trans-unit id="f22e965c29ef73a6804e2e7b6d8b59fb">
+      <trans-unit id="f22e965c29ef73a6804e2e7b6d8b59fb" approved="yes">
         <source>сюда переводимый текст</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">сюди перекладений текст</target>
+        <target state="final">сюди перекладений текст</target>
       </trans-unit>
-      <trans-unit id="ab3f6a05b108fe72b613c1d45ff62168">
+      <trans-unit id="ab3f6a05b108fe72b613c1d45ff62168" approved="yes">
         <source>i18n: в скриптах JS достаточно использовать функцию translateJS("сюда переводимый текст"), чтобы перевести фразу. Желательно подгружать фразы при загруженной странице, т.к. async не доработан</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">i18n: у скриптах JS достатньо використовувати функцію translateJS("сюди перекладений текст"), щоб перекласти фразу. Бажано завантажувати фрази при завантаженій сторінці, оскільки async не доопрацьований</target>
+        <target state="final">i18n: у скриптах JS достатньо використовувати функцію translateJS("сюди перекладений текст"), щоб перекласти фразу. Бажано завантажувати фрази при завантаженій сторінці, оскільки async не доопрацьований</target>
       </trans-unit>
-      <trans-unit id="6113401d13bf82bd65f509da1e7d6c52">
+      <trans-unit id="6113401d13bf82bd65f509da1e7d6c52" approved="yes">
         <source>i18n: мультиязычность поддерживается в "Новости", "Баннеры", "Категории", "Электронная почта / Рассылки", "Метатеги", "Опросы", "Вопросы и ответы", "Статические страницы", "Группы пользователей", а так-же вывод новостей и статических страниц на сайте</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">i18n: мультимовність підтримується в "Новини", "Банери", "Категорії", "Електронна пошта / Розсилки", "Метатеги", "Опитування", "Питання та відповіді", "Статичні сторінки", "Групи користувачів", а також вивід новин та статичних сторінок на сайті</target>
+        <target state="final">i18n: мультимовність підтримується в "Новини", "Банери", "Категорії", "Електронна пошта / Розсилки", "Метатеги", "Опитування", "Питання та відповіді", "Статичні сторінки", "Групи користувачів", а також вивід новин та статичних сторінок на сайті</target>
       </trans-unit>
-      <trans-unit id="cf0aaa30951f70914b3f04574e5f351d">
+      <trans-unit id="cf0aaa30951f70914b3f04574e5f351d" approved="yes">
         <source>i18n: поддерживается машинный перевод через сервис RapidApi</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">i18n: підтримується машинний переклад через сервіс RapidApi</target>
+        <target state="final">i18n: підтримується машинний переклад через сервіс RapidApi</target>
       </trans-unit>
-      <trans-unit id="79556898523afbf4822fc27f018e142f">
+      <trans-unit id="79556898523afbf4822fc27f018e142f" approved="yes">
         <source>i18n: динамичное использование, не требующее массивов данных - достаточно указать текст</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">i18n: динамічне використання, не потребує масивів даних - достатньо вказати текст</target>
+        <target state="final">i18n: динамічне використання, не потребує масивів даних - достатньо вказати текст</target>
       </trans-unit>
-      <trans-unit id="55f819c4108f8a10034ca67872fc9468">
+      <trans-unit id="55f819c4108f8a10034ca67872fc9468" approved="yes">
         <source>небольшой фикс в языковом файле</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">невелике виправлення в мовному файлі</target>
+        <target state="final">невелике виправлення в мовному файлі</target>
       </trans-unit>
-      <trans-unit id="b89f70d536c077b672f42d341690a3bb">
+      <trans-unit id="b89f70d536c077b672f42d341690a3bb" approved="yes">
         <source>Обновление иконок от fontawesome глобально</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Оновлення іконок від FontAwesome глобально</target>
+        <target state="final">Оновлення іконок від FontAwesome глобально</target>
       </trans-unit>
-      <trans-unit id="f6599d4d87a19be32fbe65000ab73463">
+      <trans-unit id="f6599d4d87a19be32fbe65000ab73463" approved="yes">
         <source>Обновление многих функций</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Оновлення багатьох функцій</target>
+        <target state="final">Оновлення багатьох функцій</target>
       </trans-unit>
-      <trans-unit id="101965aa52d031d919606868539135fa">
+      <trans-unit id="101965aa52d031d919606868539135fa" approved="yes">
         <source>Добавление языковых файлов (в дальнейшем будет проще локализовать модули)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додавання мовних файлів (надалі буде простіше локалізувати модулі)</target>
+        <target state="final">Додавання мовних файлів (надалі буде простіше локалізувати модулі)</target>
       </trans-unit>
-      <trans-unit id="4ba56b674d6c2ca441a45ef75b3d623f">
+      <trans-unit id="4ba56b674d6c2ca441a45ef75b3d623f" approved="yes">
         <source>Добавлен немецкий язык к оболочке</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додано німецьку мову до оболонки</target>
+        <target state="final">Додано німецьку мову до оболонки</target>
       </trans-unit>
-      <trans-unit id="72481a6472758c6f3d94577e87a84ab4">
+      <trans-unit id="72481a6472758c6f3d94577e87a84ab4" approved="yes">
         <source>Фикс</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Виправлення</target>
+        <target state="final">Виправлення</target>
       </trans-unit>
-      <trans-unit id="ba81893e08e03e0c24e81627ebc47a49">
+      <trans-unit id="ba81893e08e03e0c24e81627ebc47a49" approved="yes">
         <source>Новые модальные и всплывающие окна</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Нові модальні та спливаючі вікна</target>
+        <target state="final">Нові модальні та спливаючі вікна</target>
       </trans-unit>
-      <trans-unit id="e1234047fb870b036bf8343a4cc9bf50">
+      <trans-unit id="e1234047fb870b036bf8343a4cc9bf50" approved="yes">
         <source>Улучшены некоторые функции</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Поліпшено деякі функції</target>
+        <target state="final">Поліпшено деякі функції</target>
       </trans-unit>
-      <trans-unit id="bc1ee4643ebd2d84ee265fddd3b2852a">
+      <trans-unit id="bc1ee4643ebd2d84ee265fddd3b2852a" approved="yes">
         <source>Добавлен скрипт DateTimePicker</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додано скрипт DateTimePicker</target>
+        <target state="final">Додано скрипт DateTimePicker</target>
       </trans-unit>
-      <trans-unit id="99dc695c02bacd4aef9a4251e494db36">
+      <trans-unit id="99dc695c02bacd4aef9a4251e494db36" approved="yes">
         <source>Добавлены несколько украшательств</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додано кілька прикрас</target>
+        <target state="final">Додано кілька прикрас</target>
       </trans-unit>
-      <trans-unit id="d5852f1ea99a2e818637ec8f54fc6891">
+      <trans-unit id="d5852f1ea99a2e818637ec8f54fc6891" approved="yes">
         <source>Вывод категорий</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Вивід категорій</target>
+        <target state="final">Вивід категорій</target>
       </trans-unit>
-      <trans-unit id="73405e6268270aef308df1ca0f7e0c91">
+      <trans-unit id="73405e6268270aef308df1ca0f7e0c91" approved="yes">
         <source>Автоматический вывод доп. полей в админке</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Автоматичний вивід додаткових полів в адмінці</target>
+        <target state="final">Автоматичний вивід додаткових полів в адмінці</target>
       </trans-unit>
-      <trans-unit id="c6c9bd15fb1ce85fd6db17db6c8b5cab">
+      <trans-unit id="c6c9bd15fb1ce85fd6db17db6c8b5cab" approved="yes">
         <source>Автоматический вывод пользователей</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Автоматичний вивід користувачів</target>
+        <target state="final">Автоматичний вивід користувачів</target>
       </trans-unit>
-      <trans-unit id="1c79cfb8a91a2e450625b0125dde3ce4">
+      <trans-unit id="1c79cfb8a91a2e450625b0125dde3ce4" approved="yes">
         <source>Исправлены баги в JS</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Виправлено баги в JS</target>
+        <target state="final">Виправлено баги в JS</target>
       </trans-unit>
-      <trans-unit id="def483d5c01c06f3156de844246ca931">
+      <trans-unit id="def483d5c01c06f3156de844246ca931" approved="yes">
         <source>Обновление до актуальных версий DLE</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Оновлення до актуальних версій DLE</target>
+        <target state="final">Оновлення до актуальних версій DLE</target>
       </trans-unit>
-      <trans-unit id="f4877e9cea055c8140cde26a462a2ded">
+      <trans-unit id="f4877e9cea055c8140cde26a462a2ded" approved="yes">
         <source>Мелкие правки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Мелкі виправлення</target>
+        <target state="final">Мелкі виправлення</target>
       </trans-unit>
-      <trans-unit id="1afbfb509050909fea9ac2ba73ac2366">
+      <trans-unit id="1afbfb509050909fea9ac2ba73ac2366" approved="yes">
         <source>Основной релиз</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Основний реліз</target>
+        <target state="final">Основний реліз</target>
       </trans-unit>
-      <trans-unit id="0de733bff24bb8215fb1f0cc839d8db3">
+      <trans-unit id="0de733bff24bb8215fb1f0cc839d8db3" approved="yes">
         <source>История изменений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Історія змін</target>
+        <target state="final">Історія змін</target>
       </trans-unit>
-      <trans-unit id="69df1f85b0abbce850b5feb29bddcb2a">
+      <trans-unit id="69df1f85b0abbce850b5feb29bddcb2a" approved="yes">
         <source>Новости</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Новини</target>
+        <target state="final">Новини</target>
       </trans-unit>
-      <trans-unit id="5364b1f4badca81af46082a23d5a3ef9">
+      <trans-unit id="5364b1f4badca81af46082a23d5a3ef9" approved="yes">
         <source>Страницы DLE</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Сторінки DLE</target>
+        <target state="final">Сторінки DLE</target>
       </trans-unit>
-      <trans-unit id="047f5653b183292396e67f14c8750b73">
+      <trans-unit id="047f5653b183292396e67f14c8750b73" approved="yes">
         <source>Главная</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Головна</target>
+        <target state="final">Головна</target>
       </trans-unit>
-      <trans-unit id="1b05f82d2098987727517e8c76c1db07">
+      <trans-unit id="1b05f82d2098987727517e8c76c1db07" approved="yes">
         <source>Модуль</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Модуль</target>
+        <target state="final">Модуль</target>
       </trans-unit>
-      <trans-unit id="4b34d55240c195e33a09d89b84b3d8e5">
+      <trans-unit id="4b34d55240c195e33a09d89b84b3d8e5" approved="yes">
         <source>Доп. ссылки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додаткові посилання</target>
+        <target state="final">Додаткові посилання</target>
       </trans-unit>
-      <trans-unit id="3f96aa21ab1aeb0551903291d561aee9">
+      <trans-unit id="3f96aa21ab1aeb0551903291d561aee9" approved="yes">
         <source>На сайте автора</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">На сайті автора</target>
+        <target state="final">На сайті автора</target>
       </trans-unit>
-      <trans-unit id="3d300329be2a963d8f95b23c95c406c9">
+      <trans-unit id="3d300329be2a963d8f95b23c95c406c9" approved="yes">
         <source>Документация</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Документація</target>
+        <target state="final">Документація</target>
       </trans-unit>
-      <trans-unit id="bdeb8fb02326bd4bc9f1736e31218913">
+      <trans-unit id="bdeb8fb02326bd4bc9f1736e31218913" approved="yes">
         <source>Пользовательское соглашение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Угода користувача</target>
+        <target state="final">Угода користувача</target>
       </trans-unit>
-      <trans-unit id="b93e8b66b6319a40df9884bb15e6f990">
+      <trans-unit id="b93e8b66b6319a40df9884bb15e6f990" approved="yes">
         <source>Перевод</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Переклад</target>
+        <target state="final">Переклад</target>
       </trans-unit>
-      <trans-unit id="3916327a0c9386d6910b07fa98edaedf">
+      <trans-unit id="3916327a0c9386d6910b07fa98edaedf" approved="yes">
         <source>Об авторе</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Про автора</target>
+        <target state="final">Про автора</target>
       </trans-unit>
-      <trans-unit id="d3cf9c892e43cf0a1e10db8910081ef5">
+      <trans-unit id="d3cf9c892e43cf0a1e10db8910081ef5" approved="yes">
         <source>Финансовая поддержка (добровольная)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Фінансова підтримка (добровільна)</target>
+        <target state="final">Фінансова підтримка (добровільна)</target>
       </trans-unit>
-      <trans-unit id="5a143863a498ca145db4fbd21a89f0ab">
+      <trans-unit id="5a143863a498ca145db4fbd21a89f0ab" approved="yes">
         <source>Текущее значение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Поточне значення</target>
+        <target state="final">Поточне значення</target>
       </trans-unit>
-      <trans-unit id="3a92eb91d4231b257e155f628ff13990">
+      <trans-unit id="3a92eb91d4231b257e155f628ff13990" approved="yes">
         <source>Данные были сохранены!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Данные были сохранены!</target>
+        <target state="final">Данные были сохранены!</target>
       </trans-unit>
-      <trans-unit id="0524e133f74588e0d969ff17078e9e47">
+      <trans-unit id="0524e133f74588e0d969ff17078e9e47" approved="yes">
         <source>Поисковая фраза</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Пошукова фраза</target>
+        <target state="final">Пошукова фраза</target>
       </trans-unit>
-      <trans-unit id="6ba3c79e6531621b070404943e9097aa">
+      <trans-unit id="6ba3c79e6531621b070404943e9097aa" approved="yes">
         <source>Искать</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Шукати</target>
+        <target state="final">Шукати</target>
       </trans-unit>
-      <trans-unit id="bfc95980634bf529e8a406db2c842b31">
+      <trans-unit id="bfc95980634bf529e8a406db2c842b31" approved="yes">
         <source>Поиск</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Пошук</target>
+        <target state="final">Пошук</target>
       </trans-unit>
-      <trans-unit id="5454466766d1f464ae212dcb14f164e6">
+      <trans-unit id="5454466766d1f464ae212dcb14f164e6" approved="yes">
         <source>Закрыть меню</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Закрити меню</target>
+        <target state="final">Закрити меню</target>
       </trans-unit>
-      <trans-unit id="ea5e087328834d5d3dda39b336fc1313">
+      <trans-unit id="ea5e087328834d5d3dda39b336fc1313" approved="yes">
         <source>Проверить на наличие новой версии</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Перевірити на наявність нової версії</target>
+        <target state="final">Перевірити на наявність нової версії</target>
       </trans-unit>
-      <trans-unit id="cb8d6810b27946f0295021fbcd48827e">
+      <trans-unit id="cb8d6810b27946f0295021fbcd48827e" approved="yes">
         <source>Подождите, идёт загрузка...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Зачекайте, йде завантаження...</target>
+        <target state="final">Зачекайте, йде завантаження...</target>
       </trans-unit>
-      <trans-unit id="7b3e8fbc28e8899bdb654dc95efa59ba">
+      <trans-unit id="7b3e8fbc28e8899bdb654dc95efa59ba" approved="yes">
         <source>Открыть меню</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Відкрити меню</target>
+        <target state="final">Відкрити меню</target>
       </trans-unit>
-      <trans-unit id="7bc2da188f98c166d3f88a56154b9e38">
+      <trans-unit id="7bc2da188f98c166d3f88a56154b9e38" approved="yes">
         <source>Ошибка при обработке данных!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Помилка при обробці даних!</target>
+        <target state="final">Помилка при обробці даних!</target>
       </trans-unit>
-      <trans-unit id="dcf473f838d8989397f02c2073b0b829">
+      <trans-unit id="dcf473f838d8989397f02c2073b0b829" approved="yes">
         <source>Успех!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Успіх!</target>
+        <target state="final">Успіх!</target>
       </trans-unit>
-      <trans-unit id="e39acab346131c0118de4a926e9520a9">
+      <trans-unit id="e39acab346131c0118de4a926e9520a9" approved="yes">
         <source>Уведомление</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Повідомлення</target>
+        <target state="final">Повідомлення</target>
       </trans-unit>
-      <trans-unit id="b64c7c6e626e249a083516b7919f4651">
+      <trans-unit id="b64c7c6e626e249a083516b7919f4651" approved="yes">
         <source>Дата и время</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Дата та час</target>
+        <target state="final">Дата та час</target>
       </trans-unit>
-      <trans-unit id="38ca0af80cd7bd241500e81ba2e6efff">
+      <trans-unit id="38ca0af80cd7bd241500e81ba2e6efff" approved="yes">
         <source>Описание</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Опис</target>
+        <target state="final">Опис</target>
       </trans-unit>
-      <trans-unit id="17b5c435f8cb7640ce5e3419fdd91d23">
+      <trans-unit id="17b5c435f8cb7640ce5e3419fdd91d23" approved="yes">
         <source>Все типы ошибок</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Всі типи помилок</target>
+        <target state="final">Всі типи помилок</target>
       </trans-unit>
-      <trans-unit id="7d9a8bdc1394f95791d379bd442cd3b4">
+      <trans-unit id="7d9a8bdc1394f95791d379bd442cd3b4" approved="yes">
         <source>Уведомление / К справке</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Повідомлення / До довідки</target>
+        <target state="final">Повідомлення / До довідки</target>
       </trans-unit>
-      <trans-unit id="ce2968f80c176f6ee6d198cfd7556305">
+      <trans-unit id="ce2968f80c176f6ee6d198cfd7556305" approved="yes">
         <source>Предупреждение</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Попередження</target>
+        <target state="final">Попередження</target>
       </trans-unit>
-      <trans-unit id="5c92d8d02ea4bcd422d4095875a1fec0">
+      <trans-unit id="5c92d8d02ea4bcd422d4095875a1fec0" approved="yes">
         <source>Критическая ошибка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Критична помилка</target>
+        <target state="final">Критична помилка</target>
       </trans-unit>
-      <trans-unit id="c49e1079ee06231ae1285caef2ec5797">
+      <trans-unit id="c49e1079ee06231ae1285caef2ec5797" approved="yes">
         <source>Требует срочного решения</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Потребує термінового вирішення</target>
+        <target state="final">Потребує термінового вирішення</target>
       </trans-unit>
-      <trans-unit id="082e55a73f10496681c84231dc1c88f7">
+      <trans-unit id="082e55a73f10496681c84231dc1c88f7" approved="yes">
         <source>E-Mail</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">E-Mail</target>
+        <target state="final">E-Mail</target>
       </trans-unit>
-      <trans-unit id="c915683f3ec888b8edcc7b06bd1428ec">
+      <trans-unit id="c915683f3ec888b8edcc7b06bd1428ec" approved="yes">
         <source>Telegram</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Telegram</target>
+        <target state="final">Telegram</target>
       </trans-unit>
-      <trans-unit id="e37b6e6ba0cd7549614bf0f00607fc70">
+      <trans-unit id="e37b6e6ba0cd7549614bf0f00607fc70" approved="yes">
         <source>Вебсайт</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Вебсайт</target>
+        <target state="final">Вебсайт</target>
       </trans-unit>
-      <trans-unit id="a5c072fa947c0f5677a599b14f3fd48c">
+      <trans-unit id="a5c072fa947c0f5677a599b14f3fd48c" approved="yes">
         <source>Русский</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Російська</target>
+        <target state="final">Російська</target>
       </trans-unit>
-      <trans-unit id="9321aedc04310439d064dbe6b6a0f0fd">
+      <trans-unit id="9321aedc04310439d064dbe6b6a0f0fd" approved="yes">
         <source>Английский</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Англійська</target>
+        <target state="final">Англійська</target>
       </trans-unit>
-      <trans-unit id="6f7e86adb01fd3fa66c2ae922d087aac">
+      <trans-unit id="6f7e86adb01fd3fa66c2ae922d087aac" approved="yes">
         <source>Немецкий</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Німецька</target>
+        <target state="final">Німецька</target>
       </trans-unit>
-      <trans-unit id="6ddd60c89784c0980e865472ad24ff5d">
+      <trans-unit id="6ddd60c89784c0980e865472ad24ff5d" approved="yes">
         <source>Украинский</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Українська</target>
+        <target state="final">Українська</target>
       </trans-unit>
-      <trans-unit id="009e33dcc551a5d3b8985fd470b4e45b">
+      <trans-unit id="009e33dcc551a5d3b8985fd470b4e45b" approved="yes">
         <source>Нужные данные не были заполнены</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Необхідні дані не були заповнені</target>
+        <target state="final">Необхідні дані не були заповнені</target>
       </trans-unit>
-      <trans-unit id="c4bea6420f5c077cad3e7134a065910f">
+      <trans-unit id="c4bea6420f5c077cad3e7134a065910f" approved="yes">
         <source>Ошибка во время создания папки</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Помилка під час створення папки</target>
+        <target state="final">Помилка під час створення папки</target>
       </trans-unit>
-      <trans-unit id="8e066842bb6ef69f1dcebfec71211fa5">
+      <trans-unit id="8e066842bb6ef69f1dcebfec71211fa5" approved="yes">
         <source>Такая папка уже существует</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Така папка вже існує</target>
+        <target state="final">Така папка вже існує</target>
       </trans-unit>
-      <trans-unit id="bcfc04c944f4dc82e441792eefebaf99">
+      <trans-unit id="bcfc04c944f4dc82e441792eefebaf99" approved="yes">
         <source>Данный файл уже существует.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Цей файл вже існує.</target>
+        <target state="final">Цей файл вже існує.</target>
       </trans-unit>
-      <trans-unit id="b875b093ee84744832875638a1d64e85">
+      <trans-unit id="b875b093ee84744832875638a1d64e85" approved="yes">
         <source>Плагин уже существует</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Плагін вже існує</target>
+        <target state="final">Плагін вже існує</target>
       </trans-unit>
-      <trans-unit id="56c9aca063e41b0a330412b25b32f371">
+      <trans-unit id="56c9aca063e41b0a330412b25b32f371" approved="yes">
         <source>Путь "%s" не был создан</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Шлях "%s" не було створено</target>
+        <target state="final">Шлях "%s" не було створено</target>
       </trans-unit>
-      <trans-unit id="ad69e733ebae8d264bccaa38d68830e8">
+      <trans-unit id="ad69e733ebae8d264bccaa38d68830e8" approved="yes">
         <source>PayPal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">PayPal</target>
+        <target state="final">PayPal</target>
       </trans-unit>
-      <trans-unit id="0961d69be215554fda13b1375ac757d2">
+      <trans-unit id="0961d69be215554fda13b1375ac757d2" approved="yes">
         <source>Ko-Fi</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Ko-Fi</target>
+        <target state="final">Ko-Fi</target>
       </trans-unit>
-      <trans-unit id="4af90d43c2b7b70f1bdc9cc8837429c6">
+      <trans-unit id="4af90d43c2b7b70f1bdc9cc8837429c6" approved="yes">
         <source>YooMoney</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">YooMoney</target>
+        <target state="final">YooMoney</target>
       </trans-unit>
-      <trans-unit id="c4d40f3c2b8cd7f2a7faea76c293c020">
+      <trans-unit id="c4d40f3c2b8cd7f2a7faea76c293c020" approved="yes">
         <source>DonationAlerts</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">DonationAlerts</target>
+        <target state="final">DonationAlerts</target>
       </trans-unit>
-      <trans-unit id="affde2ec889c1ce288e348b4bec6de1e">
+      <trans-unit id="affde2ec889c1ce288e348b4bec6de1e" approved="yes">
         <source>Файл '{file}' не был сохранён!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Файл '{file}' не був збережений!</target>
+        <target state="final">Файл '{file}' не був збережений!</target>
       </trans-unit>
-      <trans-unit id="733e186aac7d1a23fba073f6a87bc06f">
+      <trans-unit id="733e186aac7d1a23fba073f6a87bc06f" approved="yes">
         <source>ID ресурса не было указано</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">ID ресурсу не було вказано</target>
+        <target state="final">ID ресурсу не було вказано</target>
       </trans-unit>
-      <trans-unit id="d0e838f22012ee2d366ae74235a7ae0c">
+      <trans-unit id="d0e838f22012ee2d366ae74235a7ae0c" approved="yes">
         <source>[NEW] Добавлено моделирование таблиц в базе данных при помощи &lt;a href="https://cycle-orm.dev" target="_blank"&gt;Cycle ORM&lt;/a&gt;. Это поможет в дальнейшем создавать модули с более сложной структурой и работу с данными.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додано моделювання таблиць у базі даних за допомогою &lt;a href="https://cycle-orm.dev" target="_blank"&gt;Cycle ORM&lt;/a&gt;. Це допоможе в подальшому створювати модулі з більш складною структурою та працювати з даними.</target>
+        <target state="final">[NEW] Додано моделювання таблиць у базі даних за допомогою &lt;a href="https://cycle-orm.dev" target="_blank"&gt;Cycle ORM&lt;/a&gt;. Це допоможе в подальшому створювати модулі з більш складною структурою та працювати з даними.</target>
       </trans-unit>
-      <trans-unit id="9dbfab1169ee10bf792ef3c755094874">
+      <trans-unit id="9dbfab1169ee10bf792ef3c755094874" approved="yes">
         <source>[NEW] Все изменения в таблицах будут храниться в отдельной таблице "migrations" и в папке "_migrations". Это позволит легко сделать откат изменений.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Усі зміни в таблицях зберігатимуться в окремій таблиці "migrations" та у папці "_migrations". Це дозволить легко відкотити зміни.</target>
+        <target state="final">[NEW] Усі зміни в таблицях зберігатимуться в окремій таблиці "migrations" та у папці "_migrations". Це дозволить легко відкотити зміни.</target>
       </trans-unit>
-      <trans-unit id="539de4d79d9629eac22eeface0255da8">
+      <trans-unit id="539de4d79d9629eac22eeface0255da8" approved="yes">
         <source>[NEW] Добавлена возможность сортировать и фильтровать данные таблиц на страницах административной панели (где такие есть, пример: Логи).</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додано можливість сортувати та фільтрувати дані таблиць на сторінках адміністративної панелі (де доступно, наприклад: Логи).</target>
+        <target state="final">[NEW] Додано можливість сортувати та фільтрувати дані таблиць на сторінках адміністративної панелі (де доступно, наприклад: Логи).</target>
       </trans-unit>
-      <trans-unit id="0af38e94123ee4567f2c6b3a3a1ade85">
+      <trans-unit id="0af38e94123ee4567f2c6b3a3a1ade85" approved="yes">
         <source>[NEW] Добавлена возможность проверять на обновление плагина на сайте &lt;a href="https://devcraft.club" target="_blank"&gt;devcraft.club&lt;/a&gt;. Используется гостевой ключ.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[NEW] Додано можливість перевіряти оновлення плагіна на сайті &lt;a href="https://devcraft.club" target="_blank"&gt;devcraft.club&lt;/a&gt;. Використовується гостьовий ключ.</target>
+        <target state="final">[NEW] Додано можливість перевіряти оновлення плагіна на сайті &lt;a href="https://devcraft.club" target="_blank"&gt;devcraft.club&lt;/a&gt;. Використовується гостьовий ключ.</target>
       </trans-unit>
-      <trans-unit id="7044f9c96df5106e1146f573b7195ea1">
+      <trans-unit id="7044f9c96df5106e1146f573b7195ea1" approved="yes">
         <source>[UPDATE][BETA] Установщик упрощён. Теперь зависимости загружаются и устанавливаются при первом открытии [любого] модуля. Может занять несколько минут. Теперь установщик весит мало.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE][BETA] Встановник спрощений. Тепер залежності завантажуються та встановлюються при першому відкритті [будь-якого] модуля. Може зайняти кілька хвилин. Тепер встановник важить мало.</target>
+        <target state="final">[UPDATE][BETA] Встановник спрощений. Тепер залежності завантажуються та встановлюються при першому відкритті [будь-якого] модуля. Може зайняти кілька хвилин. Тепер встановник важить мало.</target>
       </trans-unit>
-      <trans-unit id="8884d8a660699d3cc06abc694ce205b4">
+      <trans-unit id="8884d8a660699d3cc06abc694ce205b4" approved="yes">
         <source>[UPDATE] Изменена структура файлов админпанели. Теперь все файлы модуля находятся в папке "_modules", a шаблоны в папке "_templates".</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[UPDATE] Змінена структура файлів адміністративної панелі. Тепер всі файли модуля знаходяться в папці "_modules", а шаблони в папці "_templates".</target>
+        <target state="final">[UPDATE] Змінена структура файлів адміністративної панелі. Тепер всі файли модуля знаходяться в папці "_modules", а шаблони в папці "_templates".</target>
       </trans-unit>
-      <trans-unit id="49b027a0c2aa6dc2527983cfd24b1ba0">
+      <trans-unit id="49b027a0c2aa6dc2527983cfd24b1ba0" approved="yes">
         <source>[DELETE] Удалены устаревшие и ненужные методы логирования.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[DELETE] Видалено застарілі та непотрібні методи логування.</target>
+        <target state="final">[DELETE] Видалено застарілі та непотрібні методи логування.</target>
       </trans-unit>
-      <trans-unit id="bad9786e67d28e56b86e49b835eebe73">
+      <trans-unit id="bad9786e67d28e56b86e49b835eebe73" approved="yes">
         <source>[DELETE] Удалена замена иконок в админпанели DLE.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[DELETE] Видалено заміну іконок у адміністративній панелі DLE.</target>
+        <target state="final">[DELETE] Видалено заміну іконок у адміністративній панелі DLE.</target>
       </trans-unit>
-      <trans-unit id="593c9576a2a5b74de0d875b0af564132">
+      <trans-unit id="593c9576a2a5b74de0d875b0af564132" approved="yes">
         <source>Журнал изменений</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Журнал змін</target>
+        <target state="final">Журнал змін</target>
       </trans-unit>
-      <trans-unit id="dae8fb8c179d00f95149522bbe3b7c09">
+      <trans-unit id="dae8fb8c179d00f95149522bbe3b7c09" approved="yes">
         <source>Название модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Назва модуля</target>
+        <target state="final">Назва модуля</target>
       </trans-unit>
-      <trans-unit id="2d2289a0c7ae4b7f88b11c1dad44d634">
+      <trans-unit id="2d2289a0c7ae4b7f88b11c1dad44d634" approved="yes">
         <source>Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Введіть назву модуля, скрипт сам створить усі шляхи та файли і налаштує до них необхідні права доступу.</target>
+        <target state="final">Введіть назву модуля, скрипт сам створить усі шляхи та файли і налаштує до них необхідні права доступу.</target>
       </trans-unit>
-      <trans-unit id="a5b2b570a9e09574f1d5600c8ede66e9">
+      <trans-unit id="a5b2b570a9e09574f1d5600c8ede66e9" approved="yes">
         <source>Название модуля на латинице</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Назва модуля латиницею</target>
+        <target state="final">Назва модуля латиницею</target>
       </trans-unit>
-      <trans-unit id="82cde3eaf417cbcafdf3bfe9c2de76d6">
+      <trans-unit id="82cde3eaf417cbcafdf3bfe9c2de76d6" approved="yes">
         <source>Введите название модуля на латинице, иначе будет использована стандартная функция DLE для преобразования названия.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Введіть назву модуля латиницею, інакше буде використана стандартна функція DLE для перетворення назви.</target>
+        <target state="final">Введіть назву модуля латиницею, інакше буде використана стандартна функція DLE для перетворення назви.</target>
       </trans-unit>
-      <trans-unit id="ee1db21efaf4fd6aadfdaefbb56b4b46">
+      <trans-unit id="ee1db21efaf4fd6aadfdaefbb56b4b46" approved="yes">
         <source>Описание модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Опис модуля</target>
+        <target state="final">Опис модуля</target>
       </trans-unit>
-      <trans-unit id="cb37d3100e92a6c2f87da9464a833539">
+      <trans-unit id="cb37d3100e92a6c2f87da9464a833539" approved="yes">
         <source>Введите описание модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Введіть опис модуля</target>
+        <target state="final">Введіть опис модуля</target>
       </trans-unit>
-      <trans-unit id="dc322280a46ad9961f7ebdf9f708649f">
+      <trans-unit id="dc322280a46ad9961f7ebdf9f708649f" approved="yes">
         <source>Версия модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Версія модуля</target>
+        <target state="final">Версія модуля</target>
       </trans-unit>
-      <trans-unit id="27d80cfc70ed59e6133048e7d7c7d242">
+      <trans-unit id="27d80cfc70ed59e6133048e7d7c7d242" approved="yes">
         <source>Введите версию модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Введіть версію модуля</target>
+        <target state="final">Введіть версію модуля</target>
       </trans-unit>
-      <trans-unit id="c4ebe2a6a11c026fa24531cda2f4034d">
+      <trans-unit id="c4ebe2a6a11c026fa24531cda2f4034d" approved="yes">
         <source>Иконка</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Іконка</target>
+        <target state="final">Іконка</target>
       </trans-unit>
-      <trans-unit id="32be99fedb7db9bbaf1e6c9ed31801df">
+      <trans-unit id="32be99fedb7db9bbaf1e6c9ed31801df" approved="yes">
         <source>Класс иконки. К сайту подключены FontAwesome PRO.&lt;br&gt;По умолчанию: &lt;i class="fad fa-cogs"&gt;&lt;/i&gt; (fad fa-cogs)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Клас іконки. До сайту підключено FontAwesome PRO.&lt;br&gt;За замовчуванням: &lt;i class="fad fa-cogs"&gt;&lt;/i&gt; (fad fa-cogs)</target>
+        <target state="final">Клас іконки. До сайту підключено FontAwesome PRO.&lt;br&gt;За замовчуванням: &lt;i class="fad fa-cogs"&gt;&lt;/i&gt; (fad fa-cogs)</target>
       </trans-unit>
-      <trans-unit id="a5f73e4023032634299f9ddc12534ab0">
+      <trans-unit id="a5f73e4023032634299f9ddc12534ab0" approved="yes">
         <source>Иконка плагина</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Іконка плагіна</target>
+        <target state="final">Іконка плагіна</target>
       </trans-unit>
-      <trans-unit id="dbbaa893bc6e8065804fd11776536052">
+      <trans-unit id="dbbaa893bc6e8065804fd11776536052" approved="yes">
         <source>Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Вкажіть повний шлях до іконки плагіна, починаючи від кореня вашого сайту. Наприклад, engine/skins/images/my_icon.png</target>
+        <target state="final">Вкажіть повний шлях до іконки плагіна, починаючи від кореня вашого сайту. Наприклад, engine/skins/images/my_icon.png</target>
       </trans-unit>
-      <trans-unit id="5b7360fd29269f895534dab04d205968">
+      <trans-unit id="5b7360fd29269f895534dab04d205968" approved="yes">
         <source>Название проекта на CrowdIn</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Назва проекту на CrowdIn</target>
+        <target state="final">Назва проекту на CrowdIn</target>
       </trans-unit>
-      <trans-unit id="1166e1af75bcad7fc7441c29ff30ab29">
+      <trans-unit id="1166e1af75bcad7fc7441c29ff30ab29" approved="yes">
         <source>Укажите URL наимование Вашего проекта на CrowdIn. Пример: Из https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ берём mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;По умолчанию: Название на латинице&lt;/i&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Вкажіть назву URL вашого проекту на CrowdIn. Приклад: З https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ беремо mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;За замовчуванням: Назва латиницею&lt;/i&gt;</target>
+        <target state="final">Вкажіть назву URL вашого проекту на CrowdIn. Приклад: З https://crowdin.com/project/&lt;b&gt;mhadmin&lt;/b&gt;/ беремо mhadmin.&lt;br&gt;&lt;br&gt;&lt;i&gt;За замовчуванням: Назва латиницею&lt;/i&gt;</target>
       </trans-unit>
-      <trans-unit id="c4c9439680c67b924172379eb85947a7">
+      <trans-unit id="c4c9439680c67b924172379eb85947a7" approved="yes">
         <source>ID статистики перевода на CrowdIn</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">ID статистики перекладів на CrowdIn</target>
+        <target state="final">ID статистики перекладів на CrowdIn</target>
       </trans-unit>
-      <trans-unit id="a533eb1d9daa630105d46624652f0774">
+      <trans-unit id="a533eb1d9daa630105d46624652f0774" approved="yes">
         <source>Укажите ID статистики перевода на CrowdIn из дополнения &lt;a href="https://crowdin.com/store/apps/bds" target="_blank"&gt;Badges &amp; Status Images&lt;/a&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Вкажіть ID статистики перекладів на CrowdIn з доповнення &lt;a href="https://crowdin.com/store/apps/bds" target="_blank"&gt;Badges &amp; Status Images&lt;/a&gt;</target>
+        <target state="final">Вкажіть ID статистики перекладів на CrowdIn з доповнення &lt;a href="https://crowdin.com/store/apps/bds" target="_blank"&gt;Badges &amp; Status Images&lt;/a&gt;</target>
       </trans-unit>
-      <trans-unit id="e52b48b0c65e9e51553bcd5eefe27daf">
+      <trans-unit id="e52b48b0c65e9e51553bcd5eefe27daf" approved="yes">
         <source>Ссылка на модуль автора</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Посилання на модуль автора</target>
+        <target state="final">Посилання на модуль автора</target>
       </trans-unit>
-      <trans-unit id="d3fc0aa0dce18e10f146e4c86d899994">
+      <trans-unit id="d3fc0aa0dce18e10f146e4c86d899994" approved="yes">
         <source>Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Введіть посилання на модуль на сайті автора (технічна підтримка, GitHub тощо)</target>
+        <target state="final">Введіть посилання на модуль на сайті автора (технічна підтримка, GitHub тощо)</target>
       </trans-unit>
-      <trans-unit id="3f214bf719a5f9c1722198a50a55536e">
+      <trans-unit id="3f214bf719a5f9c1722198a50a55536e" approved="yes">
         <source>Ссылка на документацию модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Посилання на документацію модуля</target>
+        <target state="final">Посилання на документацію модуля</target>
       </trans-unit>
-      <trans-unit id="7bf9b47db9de01fdce4a6e7cd366fb66">
+      <trans-unit id="7bf9b47db9de01fdce4a6e7cd366fb66" approved="yes">
         <source>Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Введіть посилання на документацію модуля на сайті автора (технічна підтримка, GitHub тощо)</target>
+        <target state="final">Введіть посилання на документацію модуля на сайті автора (технічна підтримка, GitHub тощо)</target>
       </trans-unit>
-      <trans-unit id="0735feab3fe30bf09fdd0ab6bc01d087">
+      <trans-unit id="0735feab3fe30bf09fdd0ab6bc01d087" approved="yes">
         <source>Добавить в плагины?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Додати до плагінів?</target>
+        <target state="final">Додати до плагінів?</target>
       </trans-unit>
-      <trans-unit id="0d8aa5f4110f4a618bf8b7c9a6ee20ec">
+      <trans-unit id="0d8aa5f4110f4a618bf8b7c9a6ee20ec" approved="yes">
         <source>Скрипт создаст начальный плагин и добавит его в базу данных</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Скрипт створить початковий плагін і додасть його до бази даних</target>
+        <target state="final">Скрипт створить початковий плагін і додасть його до бази даних</target>
       </trans-unit>
-      <trans-unit id="1d7d0d7736730be57d00bbfe7ac1cdb8">
+      <trans-unit id="1d7d0d7736730be57d00bbfe7ac1cdb8" approved="yes">
         <source>Перезаписать файлы?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Перезаписати файли?</target>
+        <target state="final">Перезаписати файли?</target>
       </trans-unit>
-      <trans-unit id="5e290726fed1dcd3b5bcbcdfaab6f43e">
+      <trans-unit id="5e290726fed1dcd3b5bcbcdfaab6f43e" approved="yes">
         <source>Скрипт перезапишет существующие файлы шаблонами.&lt;br&gt;&lt;span class="ui red text"&gt;На свой страх и риск!&lt;/span&gt;</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Скрипт перезапише існуючі файли шаблонами.&lt;br&gt;&lt;span class="ui red text"&gt;На свій страх і ризик!&lt;/span&gt;</target>
+        <target state="final">Скрипт перезапише існуючі файли шаблонами.&lt;br&gt;&lt;span class="ui red text"&gt;На свій страх і ризик!&lt;/span&gt;</target>
       </trans-unit>
-      <trans-unit id="b059f7e15df06e3f864e61040ae3caba">
+      <trans-unit id="b059f7e15df06e3f864e61040ae3caba" approved="yes">
         <source>Создать</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Создать</target>
+        <target state="final">Создать</target>
       </trans-unit>
-      <trans-unit id="a07c90a23592a3abf56088ca8c1d0aac">
+      <trans-unit id="a07c90a23592a3abf56088ca8c1d0aac" approved="yes">
         <source>Файл :file: создан</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Файл :file: створено</target>
+        <target state="final">Файл :file: створено</target>
       </trans-unit>
-      <trans-unit id="9898efd3dc89fb35faca42e823552887">
+      <trans-unit id="9898efd3dc89fb35faca42e823552887" approved="yes">
         <source>Плагин "&lt;b&gt;:name:&lt;/b&gt;" был создан</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Плагін "&lt;b&gt;:name:&lt;/b&gt;" було створено</target>
+        <target state="final">Плагін "&lt;b&gt;:name:&lt;/b&gt;" було створено</target>
       </trans-unit>
-      <trans-unit id="27059278a7af90ca2004a9f8a1be9212">
+      <trans-unit id="27059278a7af90ca2004a9f8a1be9212" approved="yes">
         <source>Плагин не был создан!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Плагін не був створений!</target>
+        <target state="final">Плагін не був створений!</target>
       </trans-unit>
-      <trans-unit id="53adaa33ec172554dc46764129f74c03">
+      <trans-unit id="53adaa33ec172554dc46764129f74c03" approved="yes">
         <source>Модуль был создан!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Модуль створено!</target>
+        <target state="final">Модуль створено!</target>
       </trans-unit>
-      <trans-unit id="602bdcebe181fdd835e044b9bfb57777">
+      <trans-unit id="602bdcebe181fdd835e044b9bfb57777" approved="yes">
         <source>Произошла ошибка!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Сталася помилка!</target>
+        <target state="final">Сталася помилка!</target>
       </trans-unit>
-      <trans-unit id="f8cd1cc3fe15d4de1c79e224639c4f87">
+      <trans-unit id="f8cd1cc3fe15d4de1c79e224639c4f87" approved="yes">
         <source>Загружаем файл: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;Результат находится в консоли браузера!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Завантажуємо файл: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;Результат знаходиться в консолі браузера!</target>
+        <target state="final">Завантажуємо файл: &lt;b&gt;:file:&lt;/b&gt;!&lt;br&gt;Результат знаходиться в консолі браузера!</target>
       </trans-unit>
-      <trans-unit id="b45800beb2701e85bfadc8f464c7e8db">
+      <trans-unit id="b45800beb2701e85bfadc8f464c7e8db" approved="yes">
         <source>Обновлениям быть!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Оновлень немає!</target>
+        <target state="final">Оновлень немає!</target>
       </trans-unit>
-      <trans-unit id="d9440e590c2dd630773dbd7a3960772d">
+      <trans-unit id="d9440e590c2dd630773dbd7a3960772d" approved="yes">
         <source>Создание модуля</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Створення модуля</target>
+        <target state="final">Створення модуля</target>
       </trans-unit>
-      <trans-unit id="591f731f89bbb3412d12cbd45a66b11c">
+      <trans-unit id="591f731f89bbb3412d12cbd45a66b11c" approved="yes">
         <source>[FIX] Исправлена работа с composer</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлена робота з composer</target>
+        <target state="final">[FIX] Виправлена робота з composer</target>
       </trans-unit>
-      <trans-unit id="d515de9b319d30a5388299ee7a88d0d7">
+      <trans-unit id="d515de9b319d30a5388299ee7a88d0d7" approved="yes">
         <source>[FIX] Исправлена проблема цикличности в классе переводов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлено циклічну залежність у класі перекладів</target>
+        <target state="final">[FIX] Виправлено циклічну залежність у класі перекладів</target>
       </trans-unit>
-      <trans-unit id="5d5c8767e8d61fba94cd994e9f5ba3b0">
+      <trans-unit id="5d5c8767e8d61fba94cd994e9f5ba3b0" approved="yes">
         <source>[FIX] По неопределённой причине закинул старую версию поверх новой при мёрдже</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] З невідомих причин стара версія була злита поверх нової при злитті</target>
+        <target state="final">[FIX] З невідомих причин стара версія була злита поверх нової при злитті</target>
       </trans-unit>
-      <trans-unit id="793618af35302e91cb7c45489cfae7e3">
+      <trans-unit id="793618af35302e91cb7c45489cfae7e3" approved="yes">
         <source>[FIX] Исправлена загрузка скриптов при помощи composer</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлено завантаження скриптів за допомогою composer</target>
+        <target state="final">[FIX] Виправлено завантаження скриптів за допомогою composer</target>
       </trans-unit>
-      <trans-unit id="59b330095cf775befbfcaa2abf0021fe">
+      <trans-unit id="59b330095cf775befbfcaa2abf0021fe" approved="yes">
         <source>[FIX] Исправлены мелкие ошибки в коде</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Виправлено невеликі помилки в коді</target>
+        <target state="final">[FIX] Виправлено невеликі помилки в коді</target>
       </trans-unit>
-      <trans-unit id="4de7ed316658eee17ffdaec4b9add550">
+      <trans-unit id="4de7ed316658eee17ffdaec4b9add550" approved="yes">
         <source>[FIX] Добавлены placeholder для стилей и скриптов</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">[FIX] Додано заповнювачі для стилів і скриптів</target>
+        <target state="final">[FIX] Додано заповнювачі для стилів і скриптів</target>
       </trans-unit>
-      <trans-unit id="60217e68e8ab2a5ec48f9a50bab7109b">
+      <trans-unit id="60217e68e8ab2a5ec48f9a50bab7109b" approved="yes">
         <source>Не удалось сохранить файл блокировки обновлений: {{path}}</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Не вдалося зберегти файл блокування оновлень: {{path}}</target>
+        <target state="final">Не вдалося зберегти файл блокування оновлень: {{path}}</target>
       </trans-unit>
-      <trans-unit id="5cab6ac6a4a93ad3b7c75210c40a01b5">
+      <trans-unit id="5cab6ac6a4a93ad3b7c75210c40a01b5" approved="yes">
         <source>Не удалось выставить права на запись файла блокировки обновлений: {{path}}</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Не вдалося встановити права на запис файлу блокування оновлень: {{path}}</target>
+        <target state="final">Не вдалося встановити права на запис файлу блокування оновлень: {{path}}</target>
       </trans-unit>
-      <trans-unit id="a4deab4ed3b9d4042025141b2a0a7723">
+      <trans-unit id="a4deab4ed3b9d4042025141b2a0a7723" approved="yes">
         <source>Не удалось обновить содержимое файла блокировки обновлений: {{path}}</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Не вдалося оновити вміст файлу блокування оновлень: {{path}}</target>
+        <target state="final">Не вдалося оновити вміст файлу блокування оновлень: {{path}}</target>
       </trans-unit>
-      <trans-unit id="5afff1cec344aadc9edb8bb07a5744f7">
+      <trans-unit id="5afff1cec344aadc9edb8bb07a5744f7" approved="yes">
         <source>Метод запроса не установлен!</source>
-        <target state="needs-translation">Метод запроса не установлен!</target>
+        <target state="final">Метод запиту не встановлено!</target>
       </trans-unit>
-      <trans-unit id="ffef9f9189f2d92f1f0317b3144a63a0">
+      <trans-unit id="ffef9f9189f2d92f1f0317b3144a63a0" approved="yes">
         <source>Файл "%s" не был создан</source>
-        <target state="needs-translation">Файл "%s" не был создан</target>
+        <target state="final">Файл "%s" не було створено</target>
       </trans-unit>
-      <trans-unit id="d9d48250871fa2c499e50466390d77e3">
+      <trans-unit id="d9d48250871fa2c499e50466390d77e3" approved="yes">
         <source>Невозможно записать файл "%s</source>
-        <target state="needs-translation">Невозможно записать файл "%s</target>
+        <target state="final">Не вдається записати файл "%s</target>
       </trans-unit>
-      <trans-unit id="4d77ed7c1743bf32810d85e0823bb088">
+      <trans-unit id="4d77ed7c1743bf32810d85e0823bb088" approved="yes">
         <source>Ссылка на плагин</source>
-        <target state="needs-translation">Ссылка на плагин</target>
+        <target state="final">Посилання на плагін</target>
       </trans-unit>
-      <trans-unit id="70879eb185fef108cc40b83809be6ff8">
+      <trans-unit id="70879eb185fef108cc40b83809be6ff8" approved="yes">
         <source>Плагин "{plugin}" был создан!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Плагін "{plugin}" було створено!</target>
+        <target state="final">Плагін "{plugin}" було створено!</target>
       </trans-unit>
-      <trans-unit id="8629cb8101b00d94e02f177a78980021">
+      <trans-unit id="8629cb8101b00d94e02f177a78980021" approved="yes">
         <source>Не авторизованный пользователь</source>
-        <target state="needs-translation">Не авторизованный пользователь</target>
+        <target state="final">Неавторизований користувач</target>
       </trans-unit>
-      <trans-unit id="c3bf8b8ce41370beaa28d9a1d9aafaa0">
+      <trans-unit id="c3bf8b8ce41370beaa28d9a1d9aafaa0" approved="yes">
         <source>Авторизованный пользователь не имеет права на данную операцию!</source>
-        <target state="needs-translation">Авторизованный пользователь не имеет права на данную операцию!</target>
+        <target state="final">Авторизований користувач не має права на цю операцію!</target>
       </trans-unit>
-      <trans-unit id="ded6ae755ed21d181bf4e4df52c8e901">
+      <trans-unit id="ded6ae755ed21d181bf4e4df52c8e901" approved="yes">
         <source>Метод запроса неверен!</source>
-        <target state="needs-translation">Метод запроса неверен!</target>
+        <target state="final">Метод запиту невірний!</target>
       </trans-unit>
-      <trans-unit id="d9998098379223b39f7fb69920bcd7f8">
+      <trans-unit id="d9998098379223b39f7fb69920bcd7f8" approved="yes">
         <source>Начальная дата</source>
-        <target state="needs-translation">Начальная дата</target>
+        <target state="final">Початкова дата</target>
       </trans-unit>
-      <trans-unit id="2fc6f042edd70764cf6ce2a0452b80d0">
+      <trans-unit id="2fc6f042edd70764cf6ce2a0452b80d0" approved="yes">
         <source>Конечная дата</source>
-        <target state="needs-translation">Конечная дата</target>
+        <target state="final">Кінцева дата</target>
       </trans-unit>
-      <trans-unit id="0b4733f76a6cedfbd3557330ed3fa754">
+      <trans-unit id="0b4733f76a6cedfbd3557330ed3fa754" approved="yes">
         <source>Метаданные</source>
-        <target state="needs-translation">Метаданные</target>
+        <target state="final">Метадані</target>
       </trans-unit>
-      <trans-unit id="9e96e967df3bd927da0e0ed613acd9eb">
+      <trans-unit id="9e96e967df3bd927da0e0ed613acd9eb" approved="yes">
         <source>Создатель</source>
-        <target state="needs-translation">Создатель</target>
+        <target state="final">Творець</target>
       </trans-unit>
-      <trans-unit id="7e2554f86f1c02efe1b063981afad801">
+      <trans-unit id="7e2554f86f1c02efe1b063981afad801" approved="yes">
         <source>Редактор</source>
-        <target state="needs-translation">Редактор</target>
+        <target state="final">Редактор</target>
       </trans-unit>
-      <trans-unit id="4656e6ff1e1d30a44c450410344eb050">
+      <trans-unit id="4656e6ff1e1d30a44c450410344eb050" approved="yes">
         <source>Ошибка записи кэша в файл: {error}</source>
-        <target state="needs-translation">Ошибка записи кэша в файл: {error}</target>
+        <target state="final">Помилка запису кешу в файл: {error}</target>
       </trans-unit>
-      <trans-unit id="e086d0f86118e0947ea759542e242455">
+      <trans-unit id="e086d0f86118e0947ea759542e242455" approved="yes">
         <source>Код ошибки; {code}</source>
-        <target state="needs-translation">Код ошибки; {code}</target>
+        <target state="final">Код помилки; {code}</target>
       </trans-unit>
-      <trans-unit id="6e66589cfad329d9e86930b10db713e6">
+      <trans-unit id="6e66589cfad329d9e86930b10db713e6" approved="yes">
         <source>Путь "{path}" не был создан.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Шлях "{path}" не було створено.</target>
+        <target state="final">Шлях "{path}" не було створено.</target>
       </trans-unit>
-      <trans-unit id="1f8d5dd3986817b355ae0d46382f94d3">
+      <trans-unit id="1f8d5dd3986817b355ae0d46382f94d3" approved="yes">
         <source>Ошибка: {error}</source>
-        <target state="needs-translation">Ошибка: {error}</target>
+        <target state="final">Помилка: {error}</target>
       </trans-unit>
-      <trans-unit id="30b7eae5c1ce4a8eee97b429fd724464">
+      <trans-unit id="30b7eae5c1ce4a8eee97b429fd724464" approved="yes">
         <source>[FIX] Исправление путей и проверки кеша класса ComposerAction</source>
-        <target state="needs-translation">[FIX] Исправление путей и проверки кеша класса ComposerAction</target>
+        <target state="final">[FIX] Виправлення шляхів та перевірки кеша класу ComposerAction</target>
       </trans-unit>
-      <trans-unit id="a2daac40e3fb956976c1376e39a5a9fe">
+      <trans-unit id="a2daac40e3fb956976c1376e39a5a9fe" approved="yes">
         <source>[NEW] Добавлен метод сохранения конфигурации плагина, &lt;kbd&gt;saveConfig&lt;/kbd&gt; в классе &lt;kbd&gt;DataManager&lt;/kbd&gt;</source>
-        <target state="needs-translation">[NEW] Добавлен метод сохранения конфигурации плагина, &lt;kbd&gt;saveConfig&lt;/kbd&gt; в классе &lt;kbd&gt;DataManager&lt;/kbd&gt;</target>
+        <target state="final">[НОВИЙ] Додано метод збереження конфігурації плагіна, &lt;kbd&gt;saveConfig&lt;/kbd&gt; в класі &lt;kbd&gt;DataManager&lt;/kbd&gt;</target>
       </trans-unit>
-      <trans-unit id="1eb24782ef916da40daf7211fcebb85f">
+      <trans-unit id="1eb24782ef916da40daf7211fcebb85f" approved="yes">
         <source>[FIX] Исправлена функция &lt;kbd&gt;joinPaths&lt;/kbd&gt; для корректной обработки путей, особенно в средах Windows</source>
-        <target state="needs-translation">[FIX] Исправлена функция &lt;kbd&gt;joinPaths&lt;/kbd&gt; для корректной обработки путей, особенно в средах Windows</target>
+        <target state="final">[FIX] Виправлено функцію &lt;kbd&gt;joinPaths&lt;/kbd&gt; для коректної обробки шляхів, особливо в середовищах Windows</target>
       </trans-unit>
-      <trans-unit id="3aa2a921a373f3002166d0c814ada350">
+      <trans-unit id="3aa2a921a373f3002166d0c814ada350" approved="yes">
         <source>[FIX] Исправлены проблемы с переменными при генерации новых модулей.</source>
-        <target state="needs-translation">[FIX] Исправлены проблемы с переменными при генерации новых модулей.</target>
+        <target state="final">[FIX] Виправлено проблеми з змінними при генерації нових модулів.</target>
       </trans-unit>
-      <trans-unit id="348ca06c45c1d215d321b73ea1681b0a">
+      <trans-unit id="348ca06c45c1d215d321b73ea1681b0a" approved="yes">
         <source>[FIX] Исправлены проблемы системой кеширования.</source>
-        <target state="needs-translation">[FIX] Исправлены проблемы системой кеширования.</target>
+        <target state="final">[FIX] Виправлено проблеми з системою кешування.</target>
       </trans-unit>
-      <trans-unit id="74bda60b2113cef047604dfbf8f9b3a8">
+      <trans-unit id="74bda60b2113cef047604dfbf8f9b3a8" approved="yes">
         <source>[NEW] Новый вид в input.twig: date, time и datetime</source>
-        <target state="needs-translation">[NEW] Новый вид в input.twig: date, time и datetime</target>
+        <target state="final">[NEW] Новий вид в input.twig: date, time та datetime</target>
       </trans-unit>
-      <trans-unit id="07cd8ad07f916d9b5eca4c1fd8242549">
+      <trans-unit id="07cd8ad07f916d9b5eca4c1fd8242549" approved="yes">
         <source>[NEW] Добавление новых фильтров (rangeFilter и dateRangeFilter) для TwigFilter</source>
-        <target state="needs-translation">[NEW] Добавление новых фильтров (rangeFilter и dateRangeFilter) для TwigFilter</target>
+        <target state="final">[НОВИЙ] Додавання нових фільтрів (rangeFilter та dateRangeFilter) для TwigFilter</target>
       </trans-unit>
-      <trans-unit id="a4a8db92eb8cd24ff4ec539fcfcb2c31">
+      <trans-unit id="a4a8db92eb8cd24ff4ec539fcfcb2c31" approved="yes">
         <source>[NEW] Добавлена функция `getFullUserGroups()` в трейте `DleData` для вывода информации о всех группах</source>
-        <target state="needs-translation">[NEW] Добавлена функция `getFullUserGroups()` в трейте `DleData` для вывода информации о всех группах</target>
+        <target state="final">[НОВИЙ] Додано функцію `getFullUserGroups()` в трейті `DleData` для виведення інформації про всі групи</target>
       </trans-unit>
-      <trans-unit id="ad882f587bf2c622ca3117465b4940e7">
+      <trans-unit id="ad882f587bf2c622ca3117465b4940e7" approved="yes">
         <source>[NEW] Добавлена функция `userGroup()` для вывода определённой группы пользователей в шаблонах Twig</source>
-        <target state="needs-translation">[NEW] Добавлена функция `userGroup()` для вывода определённой группы пользователей в шаблонах Twig</target>
+        <target state="final">[НОВИЙ] Додано функцію `userGroup()` для виведення певної групи користувачів у шаблонах Twig</target>
       </trans-unit>
-      <trans-unit id="94d92e40ad06ddd8a08a2e4c44b88fb1">
+      <trans-unit id="94d92e40ad06ddd8a08a2e4c44b88fb1" approved="yes">
         <source>[NEW] Добавлены переменная `current_user` для вывода массива информации о текущем пользователе и функция `userInfo()` для вывода определённого пользователя в шаблонах Twig</source>
-        <target state="needs-translation">[NEW] Добавлены переменная `current_user` для вывода массива информации о текущем пользователе и функция `userInfo()` для вывода определённого пользователя в шаблонах Twig</target>
+        <target state="final">[NEW] Додано змінну `current_user` для виведення масиву інформації про поточного користувача і функцію `userInfo()` для виведення певного користувача в шаблонах Twig</target>
       </trans-unit>
-      <trans-unit id="ce5fe358d8681293f35fa7e9159732b7">
+      <trans-unit id="ce5fe358d8681293f35fa7e9159732b7" approved="yes">
         <source>[NEW] Добавлены поля "Кто создал" и "Кто изменил" в базовую модель (BasisModel). Данные можно увидеть в самой базе данных, либо в просмотре самой сущности.</source>
-        <target state="needs-translation">[NEW] Добавлены поля "Кто создал" и "Кто изменил" в базовую модель (BasisModel). Данные можно увидеть в самой базе данных, либо в просмотре самой сущности.</target>
+        <target state="final">[NEW] Додано поля "Хто створив" і "Хто змінив" у базову модель (BasisModel). Дані можна побачити в самій базі даних, або в перегляді самої сутності.</target>
       </trans-unit>
-      <trans-unit id="a36f349b29e48695b829782488786792">
+      <trans-unit id="a36f349b29e48695b829782488786792" approved="yes">
         <source>[UPDATE] Обновлён редактор для больших полей, где редактор подключается. Используется TinyMCE с конфигурацией от DLE. Пока без загрузки файлов.</source>
-        <target state="needs-translation">[UPDATE] Обновлён редактор для больших полей, где редактор подключается. Используется TinyMCE с конфигурацией от DLE. Пока без загрузки файлов.</target>
+        <target state="final">[ОНОВЛЕННЯ] Оновлено редактор для великих полів, де редактор підключається. Використовується TinyMCE з конфігурацією від DLE. Поки без завантаження файлів.</target>
       </trans-unit>
-      <trans-unit id="a1264c3c504a0a97f8700d9efd6d9036">
+      <trans-unit id="a1264c3c504a0a97f8700d9efd6d9036" approved="yes">
         <source>[UPDATE] Обновлена документация методов getGlobals и getFunctions в AdminUrlExtension</source>
-        <target state="needs-translation">[UPDATE] Обновлена документация методов getGlobals и getFunctions в AdminUrlExtension</target>
+        <target state="final">[ОНОВЛЕННЯ] Оновлено документацію методів getGlobals та getFunctions у AdminUrlExtension</target>
       </trans-unit>
-      <trans-unit id="0440bd2a2eb8ab1fc0f375ed921759e3">
+      <trans-unit id="0440bd2a2eb8ab1fc0f375ed921759e3" approved="yes">
         <source>[UPDATE] Добавлен новый метод createOrUpdate для класса MhDB</source>
-        <target state="needs-translation">[UPDATE] Добавлен новый метод createOrUpdate для класса MhDB</target>
+        <target state="final">[ОНОВЛЕННЯ] Додано новий метод createOrUpdate для класу MhDB</target>
       </trans-unit>
-      <trans-unit id="07a6772358450756b8813f32eff2e3d7">
+      <trans-unit id="07a6772358450756b8813f32eff2e3d7" approved="yes">
         <source>[FIX] Исправлены мелкие ошибки</source>
-        <target state="needs-translation">[FIX] Исправлены мелкие ошибки</target>
+        <target state="final">[FIX] Виправлено невеликі помилки в коді</target>
       </trans-unit>
-      <trans-unit id="2db281c93395da574576e224c17375a2">
+      <trans-unit id="2db281c93395da574576e224c17375a2" approved="yes">
         <source>Страница %page%</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Сторінка %page%</target>
+        <target state="final">Сторінка %page%</target>
       </trans-unit>
-      <trans-unit id="d7888de83951b22778f9030fe1ab254a">
+      <trans-unit id="d7888de83951b22778f9030fe1ab254a" approved="yes">
         <source>&gt;На свой страх и риск!&lt;/span&gt;</source>
-        <target state="needs-translation">&gt;На свой страх и риск!&lt;/span&gt;</target>
+        <target state="final">&gt;На свій страх і ризик!&lt;/span&gt;</target>
       </trans-unit>
     </body>
   </file>

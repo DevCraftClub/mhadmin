@@ -18,7 +18,9 @@ ON DUPLICATE KEY UPDATE title = 'MH Admin v180.3.5.1';]]></mysqlupgrade>
 VALUES('maharder', 'MH Admin v180.3.5.1', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
 ON DUPLICATE KEY UPDATE title = 'MH Admin v180.3.5.1';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
-	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
+	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';
+DROP TABLE {prefix}_maharder_logs;
+DROP TABLE {prefix}_maharder_migrations;]]></mysqldelete>
 	<phpinstall><![CDATA[]]></phpinstall>
 	<phpupgrade><![CDATA[]]></phpupgrade>
 	<phpenable><![CDATA[]]></phpenable>

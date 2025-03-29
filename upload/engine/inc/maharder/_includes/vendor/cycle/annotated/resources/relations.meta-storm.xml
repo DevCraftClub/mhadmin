@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<meta-storm xmlns="meta-storm">
+    <definitions>
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\BelongsTo" argument="0">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\HasMany" argument="0">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\HasOne" argument="0">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\RefersTo" argument="0">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\ManyToMany" argument="0">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\ManyToMany" argument="1">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\BelongsToMorphed" argument="1">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\MorphedHasMany" argument="1">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\MorphedHasOne" argument="1">
+            <collection name="cycle/orm:entity-class" argument="0" />
+            <collection name="cycle/orm:entity-role" argument="0" />
+        </classConstructor>
+
+        <classConstructor class="\Cycle\Annotated\Annotation\Relation\Embedded" argument="0">
+            <collection name="cycle/orm:entity-embeddable-class" argument="0" />
+        </classConstructor>
+    </definitions>
+</meta-storm>

@@ -13,13 +13,6 @@ upload/engine/inc/maharder/_logs/**/
 upload/engine/inc/maharder/_logs/**/*
 upload/engine/inc/maharder/_migrations
 upload/engine/inc/maharder/_migrations/*
-upload/engine/inc/maharder/_includes/vendor
-upload/engine/inc/maharder/_includes/vendor/*
-upload/engine/inc/maharder/_includes/vendor/**/*
-upload/engine/inc/maharder/_includes/composer
-upload/engine/inc/maharder/_includes/composer/*
-upload/engine/inc/maharder/_includes/composer/**/
-upload/engine/inc/maharder/_includes/composer/**/*
 
 upload/engine/inc/maharder/_includes/assets.json
 upload/engine/inc/maharder/admin/composer.lock

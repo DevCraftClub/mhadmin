@@ -1,5 +1,9 @@
 /nbproject
 .idea/*
+.cursor
+.cursor/*
+.specify/
+.specify/*
 
 upload/engine/inc/maharder/_cache
 upload/engine/inc/maharder/_cache/*

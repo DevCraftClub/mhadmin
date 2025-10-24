@@ -22,3 +22,6 @@ upload/engine/inc/maharder/_includes/assets.json
 upload/engine/inc/maharder/admin/composer.lock
 upload/engine/inc/maharder/admin/composer.phar
 !upload/engine/inc/maharder/_cache/.htaccess
+
+mhadmin_install.zip
+temp/

@@ -23,5 +23,36 @@ upload/engine/inc/maharder/admin/composer.lock
 upload/engine/inc/maharder/admin/composer.phar
 !upload/engine/inc/maharder/_cache/.htaccess
 
-mhadmin_install.zip
-temp/
+# Analysis tool specific
+analysis/
+analysis/*
+analysis/**/
+analysis/**/*
+vendor/
+vendor/*
+vendor/**/
+vendor/**/*
+composer.lock
+*.log
+*.cache
+.env
+.env.*
+!.env.example
+
+# PHP specific
+*.php~
+*.php.bak
+*.php.orig
+*.php.swp
+*.php.swo
+*~
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+# Analysis tool output
+*.md.bak
+*.md.tmp

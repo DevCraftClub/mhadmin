@@ -1,0 +1,23 @@
+{
+    "name": "mhadmin/dle-version-comparison",
+    "description": "DLE 18.1 vs 19.0 Structural Analysis Tool",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.3",
+        "nikic/php-parser": "^5.0",
+        "symfony/finder": "^7.0",
+        "symfony/console": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Analysis\\": "src/Analysis/"
+        }
+    },
+    "bin": [
+        "cli/analyze-dle-versions.php"
+    ],
+    "scripts": {
+        "analyze": "php cli/analyze-dle-versions.php"
+    }
+}

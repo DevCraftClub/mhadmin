@@ -1,0 +1,15 @@
+{% if breadcrumbs is defined and breadcrumbs|length > 0 %}
+<ul class="breadcrumbs arrow mb-2" aria-label="{{ 'Навигация'|trans }}">
+    {% for crumb in breadcrumbs %}
+        <li class="m-0{% if loop.last %} active{% endif %}">
+            {% if loop.first and crumb.url %}
+                <a href="{{ crumb.url }}"><span class="icon mif-home"></span></a>
+            {% elseif crumb.url and not loop.last %}
+                <a href="{{ crumb.url }}"><span class="caption">{{ crumb.title }}</span></a>
+            {% else %}
+                <a><span class="caption">{{ crumb.title }}</span></a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}

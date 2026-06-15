@@ -1,0 +1,24 @@
+{% macro switch(id, label, descr, value, opts) %}
+    {% set merged = opts|default({})|merge({ style: 'segrow' }) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/switch.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: merged,
+        widget_label: ''
+    } %}
+{% endmacro %}
+
+{% macro metro_switch(id, label, descr, value, opts) %}
+    {% set merged = opts|default({})|merge({ style: 'metro' }) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/switch.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: merged
+    } %}
+{% endmacro %}

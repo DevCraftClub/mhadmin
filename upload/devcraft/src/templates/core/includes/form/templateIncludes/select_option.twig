@@ -1,0 +1,6 @@
+<option
+    value="{{ option_value }}"
+    {% if option_selected %}selected{% endif %}
+    {% if option_icon is defined and option_icon != '' %}data-icon="{{ option_icon }}"{% endif %}
+    {% if option_display is defined and option_display != '' %}data-display="{{ option_display }}"{% endif %}
+>{{ option_label }}</option>

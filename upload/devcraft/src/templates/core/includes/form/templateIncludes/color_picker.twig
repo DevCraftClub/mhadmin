@@ -1,0 +1,20 @@
+{# Metro color-picker — examples/color-picker.html #}
+{% set opts = opts|default({}) %}
+{% if opts.size is not defined %}
+    {% set opts = opts|merge({ size: 'medium' }) %}
+{% endif %}
+{% set classes = [] %}
+{% if opts.size != '' %}{% set classes = classes|merge([opts.size]) %}{% endif %}
+{% if opts.pill is defined and opts.pill %}{% set classes = classes|merge(['pill-input']) %}{% endif %}
+{% if opts.class is defined %}{% set classes = classes|merge([opts.class]) %}{% endif %}
+<input
+    type="text"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ value|default('') }}"
+    data-role="color-picker"
+    {% if classes|length > 0 %}class="{{ classes|join(' ') }}"{% endif %}
+    {% if opts.show_values is defined %}data-show-values="{{ opts.show_values }}"{% endif %}
+    {% if opts.return_value_type is defined %}data-return-value-type="{{ opts.return_value_type }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

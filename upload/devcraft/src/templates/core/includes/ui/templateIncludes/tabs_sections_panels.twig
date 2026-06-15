@@ -1,0 +1,9 @@
+{# Панели вкладок секций — внутри контейнера формы #}
+{% set tabsId = id|default('settings-tabs') %}
+<div class="tabs-targets dc-tabs-targets">
+    {% for section in sections|default([]) %}
+        <div id="{{ tabsId }}_panel_{{ loop.index }}">
+            {% include 'core/includes/form/section_fields.twig' with { section: section } only %}
+        </div>
+    {% endfor %}
+</div>

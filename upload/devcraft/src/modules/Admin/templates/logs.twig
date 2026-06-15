@@ -1,0 +1,31 @@
+<h2>{{ 'Вывод логов'|trans }}</h2>
+
+{% include 'core/includes/form/filter_bar.twig' with {
+    mod: mod,
+    action: action,
+    filter_catalog: filter_catalog,
+    filter_rules: filter_rules,
+    filter_chips: filter_chips,
+    order: order,
+    sort: sort
+} only %}
+
+<p class="text-small" id="dc-logs-total" data-records-suffix="{{ 'записей'|trans }}">{{ total }} {{ 'записей'|trans }}</p>
+
+<table id="{{ table_id|default('dc-logs-table') }}"
+       class="table striped row-hover border responsive-md fixed-header mt-2"
+       data-role="table"
+       data-rows="{{ per_page|default(10) }}"
+       data-rows-steps="5, 10, 50, 100"
+       data-show-activity="false"
+       data-source="{{ table_initial_source_url|e('html_attr') }}"
+       data-show-skip="true"
+       data-pagination-wrapper="#dc-logs-pagination"
+       data-check="true"
+       data-show-inspector-button="true"
+       data-horizontal-scroll="true"
+       data-cell-wrapper="true">
+    <thead></thead>
+    <tbody></tbody>
+</table>
+<div id="dc-logs-pagination"></div>

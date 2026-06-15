@@ -1,0 +1,6 @@
+<div class="frame{% if active|default(false) %} active{% endif %}">
+    <div class="heading">{{ heading }}</div>
+    <div class="content">
+        <div class="p-2">{{ content|raw }}</div>
+    </div>
+</div>

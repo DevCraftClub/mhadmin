@@ -1,0 +1,46 @@
+{
+    "name": "devcraft/club-plugin",
+    "description": "DevCraft — DLE 20.0 admin plugin (MHAdmin successor)",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "ext-curl": "*",
+        "ext-intl": "*",
+        "ext-simplexml": "*",
+        "analog/analog": "^1.0",
+        "cycle/annotated": "^4.1",
+        "cycle/database": "^2.8",
+        "cycle/entity-behavior-uuid": "^1.2",
+        "cycle/migrations": "^4.2",
+        "cycle/orm": "^2.9",
+        "cycle/schema-migrations-generator": "^2.3",
+        "ramsey/uuid": "^4.7",
+        "spiral/pagination": "^3.0",
+        "symfony/dependency-injection": "^7.0",
+        "symfony/finder": "^7.0",
+        "symfony/translation": "^7.4",
+        "symfony/twig-bridge": "^7.0",
+        "twig/cache-extra": "^3.24",
+        "twig/twig": "^3.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "DevCraft\\Core\\Abstracts\\": "src/classes/Abstracts/",
+            "DevCraft\\Core\\Interfaces\\": "src/classes/Interfaces/",
+            "DevCraft\\Core\\": "src/classes/",
+            "DevCraft\\Form\\": "src/classes/Form/",
+            "DevCraft\\Modules\\": "src/modules/",
+            "DevCraft\\Enums\\": "src/classes/Enums/",
+            "DevCraft\\Types\\": "src/classes/Types/",
+            "DevCraft\\Utils\\": "src/classes/Utils/",
+            "Migration\\": "src/database/migrations/"
+        },
+        "files": [
+            "src/bootstrap/functions.php"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

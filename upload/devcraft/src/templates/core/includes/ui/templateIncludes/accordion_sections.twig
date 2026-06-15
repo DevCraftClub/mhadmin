@@ -1,0 +1,18 @@
+{# Accordion для секций настроек #}
+{% set opts = opts|default({}) %}
+<div
+    id="{{ id|default('settings-accordion') }}"
+    data-role="accordion"
+    {% if opts.save_state is not defined or opts.save_state %}data-save-state="true"{% endif %}
+>
+    {% for section in sections|default([]) %}
+        <div class="frame{% if loop.first %} active{% endif %}">
+            <div class="heading">{{ section.title }}</div>
+            <div class="content">
+                <div class="p-2">
+                    {% include 'core/includes/form/section_fields.twig' with { section: section } only %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

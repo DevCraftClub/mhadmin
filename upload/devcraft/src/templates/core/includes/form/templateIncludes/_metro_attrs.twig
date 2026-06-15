@@ -1,0 +1,12 @@
+{# Общие Metro-атрибуты из opts.attrs, opts.size, opts.pill, disabled, readonly, required #}
+{% set opts = opts|default({}) %}
+{% if opts.disabled is defined and opts.disabled %} disabled{% endif %}
+{% if opts.readonly is defined and opts.readonly %} readonly{% endif %}
+{% if opts.required is defined and opts.required %} required{% endif %}
+{% for attrName, attrVal in opts.attrs|default({}) %}
+    {% if attrVal is same as(true) %}
+        data-{{ attrName }}="true"
+    {% elseif attrVal is not same as(false) and attrVal is not null %}
+        data-{{ attrName }}="{{ attrVal }}"
+    {% endif %}
+{% endfor %}

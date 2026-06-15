@@ -1,0 +1,12 @@
+{# Metro color-selector — examples/color-selector.html #}
+{% set opts = opts|default({}) %}
+<input
+    type="text"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ value|default('') }}"
+    data-role="color-selector"
+    {% if opts.user_colors is defined %}data-user-colors="{{ opts.user_colors }}"{% endif %}
+    {% if opts.show_alpha_channel is defined and opts.show_alpha_channel %}data-show-alpha-channel="true"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

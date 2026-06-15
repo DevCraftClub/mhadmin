@@ -1,0 +1,35 @@
+{# Общий фрагмент тела страницы ошибки #}
+{% if code is defined and code is not empty %}
+    {% include 'core/errors/includes/error-code.twig' with { code: code } %}
+{% endif %}
+{% if header_icon is defined and header_icon is not empty %}
+<div class="display4">
+    <span class="{{ header_icon }}"></span>
+</div>
+{% endif %}
+<h2 class="text-center">{{ title }}</h2>
+<div class="row flex-justify-content-center">
+    <div class="text-leader2 text-center cell-md-8">
+        {{ message }}
+        {% if extra_message is defined and extra_message is not empty %}
+        <p class="text-small fg-gray mt-2">{{ extra_message }}</p>
+        {% endif %}
+    </div>
+</div>
+{% if detail %}
+    <div class="w-75 mt-6">
+        <div class="row flex-justify-content-center">
+            <div class="cell-md-8">
+                <div class="remark {{ detail_remark_class|default('alert') }} dc-error-detail">
+                    <strong>{{ detail_label|default('Описание ошибки:'|trans) }}</strong>
+                    <pre class="m-0 mt-1">{{ detail }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<div class="mt-10">
+    <a href="{{ dashboard_url }}" class="button alert">
+        <span class="mif-arrow-left mr-2"></span> {{ 'На главную'|trans }}
+    </a>
+</div>

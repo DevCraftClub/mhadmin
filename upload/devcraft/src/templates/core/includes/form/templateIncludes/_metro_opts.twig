@@ -1,0 +1,4 @@
+{# Размер medium по умолчанию; подключать через {% with { opts: opts } %} без only #}
+{% if opts.size is not defined %}
+    {% set opts = opts|merge({ size: 'medium' }) %}
+{% endif %}

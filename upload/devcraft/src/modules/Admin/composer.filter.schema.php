@@ -25,6 +25,12 @@ return [
 					'metro' => ['db_column' => 'package'],
 				],
 				[
+					'id'    => 'app_code',
+					'type'  => 'multi',
+					'label' => __('Код приложения'),
+					'metro' => ['db_column' => 'appCode'],
+				],
+				[
 					'id'    => 'required',
 					'type'  => 'multi',
 					'label' => __('Обязательный пакет'),

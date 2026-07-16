@@ -3,7 +3,7 @@
 {% set app = d.app %}
 
 <div class="dc-dashboard"
-     data-site-id="{{ app.site_id }}"
+     data-site-id="{{ app.site_id|default(0) }}"
      data-version="{{ app.version }}">
     <div class="remark info dc-dashboard-card dc-dashboard-hero mb-4">
         <div class="dc-dashboard-app-header">
@@ -29,38 +29,31 @@
                     <span class="mif-library mr-1"></span> {{ 'Документация'|trans }}
                 </a>
             {% endif %}
-            <button type="button" class="button outline small mr-1 js-check-assets">
-                <span class="mif-loop2 mr-1 js-check-assets-icon"></span> {{ 'Проверить ресурсы'|trans }}
-                <span class="badge inline bg-red fg-white ml-1 dc-assets-badge d-none" id="dc-assets-badge">0</span>
-            </button>
-            {% if app.site_id > 0 %}
-                <button type="button" class="button outline small js-check-update">
-                    <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
+            {% if d.show_assets|default(false) %}
+                <button type="button" class="button outline small mr-1 js-check-assets">
+                    <span class="mif-loop2 mr-1 js-check-assets-icon"></span> {{ 'Проверить ресурсы'|trans }}
+                    <span class="badge inline bg-red fg-white ml-1 dc-assets-badge d-none" id="dc-assets-badge">0</span>
                 </button>
-            {% else %}
-                <button type="button" class="button outline small" disabled title="{{ 'ID ресурса не настроен в manifest.php'|trans }}">
-                    <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
-                </button>
+            {% endif %}
+            {% if d.show_update|default(false) %}
+                {% if app.site_id|default(0) > 0 %}
+                    <button type="button" class="button outline small js-check-update">
+                        <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
+                    </button>
+                {% else %}
+                    <button type="button" class="button outline small" disabled title="{{ 'ID ресурса не настроен в manifest.php'|trans }}">
+                        <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
+                    </button>
+                {% endif %}
             {% endif %}
         </div>
     </div>
 
-    <div id="dc-assets-status" class="remark info dc-assets-status mb-4 d-none" data-auto-check="1"></div>
-    <div class="remark warning dc-dashboard-card mb-4">
-        <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Composer'|trans }}</h4>
-        <p class="mb-2">
-            {{ 'Отсутствует обязательных пакетов:'|trans }}
-            <strong>{{ d.composer.missing_required|default(0) }}</strong>
-        </p>
-        <div class="d-flex flex-wrap gap-1 mt-2">
-            <a href="{{ d.composer.url }}" class="button small primary">
-                <span class="mif-tools mr-1"></span>{{ 'Открыть Composer'|trans }}
-            </a>
-            <button type="button" class="button small warning js-dump-autoload">
-                <span class="mif-loop2 mr-1"></span>{{ 'dump-autoload'|trans }}
-            </button>
-        </div>
-    </div>
+    {% if d.show_assets|default(false) %}
+        <div id="dc-assets-status" class="remark info dc-assets-status mb-4 d-none" data-auto-check="1"></div>
+    {% endif %}
+
+    {% include 'core/includes/dashboard/composer_panel.twig' %}
 
     {% if d.crowdin %}
         <div class="remark dc-dashboard-card mb-4">

@@ -228,6 +228,7 @@ final class Application {
 		}
 
 		$errorRenderer = new AdminErrorRenderer();
+		$plugin        = NULL;
 
 		try {
 			$plugin = $this->registry()->forModuleDir($moduleDir, $mod);
@@ -251,6 +252,8 @@ final class Application {
 				__('Ошибка'),
 				$exception->getMessage(),
 				403,
+				NULL,
+				$plugin,
 			);
 		} catch(\Throwable $exception) {
 			$errorRenderer->render(
@@ -259,6 +262,7 @@ final class Application {
 				__('Что-то пошло не так. Повторите попытку позже.'),
 				500,
 				$exception->getMessage(),
+				$plugin,
 			);
 		}
 	}

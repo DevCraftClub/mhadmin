@@ -154,9 +154,11 @@ final class Router {
 		$data['action']         = $action;
 		$data['mod']            = $mod;
 		$data['asset_base']     = Application::instance()->public_asset_url();
-		$devcraftJsPath         = Paths::templates() . '/core/assets/js/devcraft.js';
-		$data['asset_js_mtime'] = is_file($devcraftJsPath)? (string) filemtime($devcraftJsPath) : (string) ($meta['version'] ?? '1.0.0');
-		$data['page_title']     = $data['page_title'] ?? (string) ($meta['name'] ?? 'DevCraft');
+		$devcraftJsPath           = Paths::templates() . '/core/assets/js/devcraft.js';
+		$composerJsPath           = Paths::templates() . '/core/assets/js/composer.js';
+		$data['asset_js_mtime']   = is_file($devcraftJsPath) ? (string) filemtime($devcraftJsPath) : (string) ($meta['version'] ?? '1.0.0');
+		$data['composer_js_mtime'] = is_file($composerJsPath) ? (string) filemtime($composerJsPath) : $data['asset_js_mtime'];
+		$data['page_title']       = $data['page_title'] ?? (string) ($meta['name'] ?? 'DevCraft');
 		$data['dle_login_hash'] = $dle_login_hash ?? '';
 		$data['ajax_base_url']  = Paths::ajaxBase();
 

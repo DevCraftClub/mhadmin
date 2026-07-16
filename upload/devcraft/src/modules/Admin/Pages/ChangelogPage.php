@@ -43,7 +43,7 @@ final class ChangelogPage extends AbstractPage {
 		$this->addBreadcrumb($pageName);
 
 		return [
-			'view' => 'admin/changelog.twig',
+			'view' => 'pages/changelog.twig',
 			'data' => [
 				'page_title' => $pageName,
 			],

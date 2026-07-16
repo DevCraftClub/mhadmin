@@ -583,44 +583,6 @@
     }
   }
 
-  function runComposerAction(actionType, packageName) {
-    DevCraftAjax.post('composer_action', {
-      actionType: actionType,
-      packageName: packageName,
-    })
-      .then(function (payload) {
-        DevCraftAjax.handleNotice(payload);
-        if (payload.success) {
-          const table = getComposerTablePlugin();
-          if (table && typeof table.reload === 'function') {
-            table.reload();
-          }
-        } else if (payload.error && payload.error.detail && payload.error.detail.output) {
-          DevCraftMetro.dialogCreate({
-            title: t('Ошибка Composer'),
-            content: '<pre class="text-small">' + escapeHtml(String(payload.error.detail.output)) + '</pre>',
-            customButtons: [
-              { text: t('Повторить'), cls: 'warning', onclick: function () { runComposerAction(actionType, packageName); } },
-              { text: t('Закрыть'), cls: 'js-dialog-close', onclick: function () {} },
-            ],
-          });
-        }
-      })
-      .catch(function (err) {
-        DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось выполнить Composer-действие'), err);
-      });
-  }
-
-  function runDumpAutoload() {
-    DevCraftAjax.post('dump_autoload', {})
-      .then(function (payload) {
-        DevCraftAjax.handleNotice(payload);
-      })
-      .catch(function (err) {
-        DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось выполнить dump-autoload'), err);
-      });
-  }
-
   function runComposerSync() {
     DevCraftAjax.post('composer_sync', {})
       .then(function (payload) {
@@ -2229,18 +2191,6 @@
         return;
       }
 
-      const composerActionBtn = event.target.closest('.js-composer-action');
-      if (composerActionBtn) {
-        runComposerAction(composerActionBtn.dataset.actionType || '', composerActionBtn.dataset.package || '');
-        return;
-      }
-
-      const dumpAutoloadBtn = event.target.closest('.js-dump-autoload');
-      if (dumpAutoloadBtn) {
-        runDumpAutoload();
-        return;
-      }
-
       const composerSyncBtn = event.target.closest('.js-composer-sync');
       if (composerSyncBtn) {
         runComposerSync();
@@ -2388,8 +2338,6 @@
   DevCraftDashboard.newModuleListItem = newModuleListItem;
   DevCraftDashboard.bindDocumentClick = _bindDocumentClick;
   DevCraftComposer.initTable = initComposerTable;
-  DevCraftComposer.runAction = runComposerAction;
-  DevCraftComposer.runDumpAutoload = runDumpAutoload;
   DevCraftComposer.runSync = runComposerSync;
 
   const DevCraftAdmin = {
@@ -2414,6 +2362,7 @@
   global.DevCraft.Filter = DevCraftAdmin.Filter;
   global.DevCraft.Assets = DevCraftAdmin.Assets;
   global.DevCraft.Dashboard = DevCraftAdmin.Dashboard;
-  global.DevCraft.Composer = DevCraftAdmin.Composer;
+  global.DevCraft.Composer = global.DevCraft.Composer || {};
+  Object.assign(global.DevCraft.Composer, DevCraftAdmin.Composer);
 
 })(window);

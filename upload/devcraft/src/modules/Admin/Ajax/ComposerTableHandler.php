@@ -58,19 +58,6 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 				);
 			}
 
-			// Если после автосинка всё ещё пусто, пробуем без фильтров.
-			if((int) ($listResult['total'] ?? 0) === 0 && $criteria !== []) {
-				$listResult = $repository->findFiltered(
-					[],
-					1,
-					$perPage,
-					$schema->defaultOrder,
-					'ASC',
-					$allowedSortColumns,
-					$schema->defaultOrder,
-				);
-			}
-
 			$rows = [];
 			foreach($listResult['items'] as $item) {
 				if(!$item instanceof ComposerData) {
@@ -84,7 +71,7 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 					$item->required ? __('Да') : __('Нет'),
 					$item->installed ? __('Да') : __('Нет'),
 					$item->appCode,
-					$this->actionsCell($item->package),
+					$this->actionsCell($item),
 				];
 			}
 
@@ -131,8 +118,15 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 		}
 	}
 
-	private function actionsCell(string $name): string {
-		$safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	private function actionsCell(ComposerData $item): string {
+		$safeName    = htmlspecialchars($item->package, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		$safeVersion = htmlspecialchars((string) $item->version, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+		if(!$item->installed) {
+			return '<div class="d-flex flex-wrap gap-1">'
+				. '<button type="button" class="button small primary js-composer-action" data-action-type="install" data-package="' . $safeName . '" data-version="' . $safeVersion . '">' . __('Установить') . '</button>'
+				. '</div>';
+		}
 
 		return '<div class="d-flex flex-wrap gap-1">'
 			. '<button type="button" class="button small success js-composer-action" data-action-type="update" data-package="' . $safeName . '">' . __('Обновить') . '</button>'

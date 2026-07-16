@@ -56,6 +56,7 @@ final class DashboardPage extends AbstractPage {
 		$menu = [];
 		$composerUrl = '?mod=devcraft&action=composer';
 		$crowdin     = $this->buildCrowdinDisplay($plugin);
+		$metrics     = new DashboardPackageMetricService();
 
 		foreach($context->menu() as $link) {
 			if($link->type !== 'link' || $link->action === NULL || $link->action === 'dashboard') {
@@ -71,7 +72,7 @@ final class DashboardPage extends AbstractPage {
 		}
 
 		return [
-			'view' => 'admin/dashboard.twig',
+			'view' => 'pages/dashboard.twig',
 			'data' => [
 				'page_title' => (string) ($meta['name'] ?? 'DevCraft'),
 				'dashboard'  => [
@@ -90,10 +91,13 @@ final class DashboardPage extends AbstractPage {
 					'menu'             => $menu,
 					'changelog_latest' => $latest,
 					'changelog_url'    => '?mod=devcraft&action=changelog',
+					'show_assets'      => true,
+					'show_update'      => true,
 					'composer'         => [
-						'url'                => $composerUrl,
-						'missing_required'   => (new DashboardPackageMetricService())->missingRequiredCount(),
-						'dump_autoload_url'  => 'dump_autoload',
+						'url'               => $composerUrl,
+						'missing_required'  => $metrics->missingRequiredCount(),
+						'packages'          => $metrics->packagesForDashboard(),
+						'dump_autoload_url' => 'dump_autoload',
 					],
 					'crowdin'          => $crowdin,
 				],

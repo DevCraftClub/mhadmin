@@ -148,6 +148,39 @@ final class FilterFormService {
 	}
 
 	/**
+	 * Формирует URL Ajax-запроса таблицы с параметрами фильтра.
+	 *
+	 * @param   array<string, mixed>  $query     Текущие query-параметры.
+	 * @param   string                $userHash  CSRF-хеш пользователя DLE.
+	 * @param   string                $order     Колонка сортировки.
+	 * @param   string                $sort      Направление сортировки.
+	 * @param   string                $method    Ajax-метод (logs_table, composer_table, …).
+	 *
+	 * @return string Полный URL ajax-контроллера.
+	 */
+	public function buildTableAjaxUrl(
+		array $query,
+		string $userHash,
+		string $order,
+		string $sort,
+		string $method,
+	): string {
+		$params = [
+			'controller' => 'admin',
+			'method'     => $method,
+			'user_hash'  => $userHash,
+			'order'      => $order,
+			'sort'       => $sort,
+		];
+
+		if(isset($query['filter_rules']) && is_array($query['filter_rules'])) {
+			$params['filter_rules'] = $query['filter_rules'];
+		}
+
+		return Paths::ajaxBase() . '?' . http_build_query($params);
+	}
+
+	/**
 	 * Формирует URL Ajax-запроса таблицы журнала с параметрами фильтра.
 	 *
 	 * @since 200.4.0
@@ -163,19 +196,7 @@ final class FilterFormService {
 	 *     $url = $service->buildLogsTableAjaxUrl($query, $hash, 'time', 'DESC');
 	 */
 	public function buildLogsTableAjaxUrl(array $query, string $userHash, string $order, string $sort): string {
-		$params = [
-			'controller' => 'admin',
-			'method'     => 'logs_table',
-			'user_hash'  => $userHash,
-			'order'      => $order,
-			'sort'       => $sort,
-		];
-
-		if(isset($query['filter_rules']) && is_array($query['filter_rules'])) {
-			$params['filter_rules'] = $query['filter_rules'];
-		}
-
-		return Paths::ajaxBase() . '?' . http_build_query($params);
+		return $this->buildTableAjaxUrl($query, $userHash, $order, $sort, 'logs_table');
 	}
 
 	/**

@@ -1,0 +1,30 @@
+{#
+  Универсальная форма multipart-загрузки (Metro drop-zone + progress).
+  Параметры:
+    form_class, form_attrs (hash), input_name, accept, multiple, drop_title,
+    upload_label, progress_class, progress_label_class, hint (html/text)
+#}
+{% set input_name = input_name|default('file') %}
+{% set progress_class = progress_class|default('js-dc-upload-progress') %}
+{% set progress_label_class = progress_label_class|default('js-dc-upload-progress-label') %}
+
+<form class="{{ form_class|default('js-dc-upload-form') }} mb-3"{% if form_attrs is defined %}{% for k, v in form_attrs %} {{ k }}="{{ v|e('html_attr') }}"{% endfor %}{% endif %}>
+    <input type="file"
+           name="{{ input_name }}"
+           {% if accept|default('') %}accept="{{ accept|e('html_attr') }}"{% endif %}
+           {% if multiple|default(false) %}multiple{% endif %}
+           data-role="file"
+           data-mode="drop"
+           data-drop-title="{{ drop_title|default('Перетащите файлы сюда'|trans)|e('html_attr') }}"
+           required>
+    {% if hint|default('') %}
+        <p class="text-small fg-gray mt-1">{{ hint|raw }}</p>
+    {% endif %}
+    <div class="{{ progress_class }} d-none mb-2"
+         data-role="progress"
+         data-value="0"
+         data-show-value="true"
+         data-small="true"></div>
+    <span class="{{ progress_label_class }} text-small fg-gray d-none"></span>
+    <button type="submit" class="button primary mt-2">{{ upload_label|default('Загрузить файл'|trans) }}</button>
+</form>

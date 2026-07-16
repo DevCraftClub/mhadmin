@@ -45,13 +45,13 @@ final class ComposerPage extends AbstractPage {
 				'filter_chips'             => $filterService->buildChipViewModel($rules, $schema),
 				'filter_catalog'           => $filterService->buildCatalogViewModel($schema, $repository),
 				'table_source_url'         => Paths::ajaxUrl('composer_table', 'admin', 'devcraft'),
-				'table_initial_source_url' => Paths::ajaxBase() . '?' . http_build_query([
-					'controller' => 'admin',
-					'method'     => 'composer_table',
-					'user_hash'  => $dle_login_hash ?? '',
-					'order'      => $order,
-					'sort'       => $sort,
-				]),
+				'table_initial_source_url' => $filterService->buildTableAjaxUrl(
+					$query,
+					(string) ($dle_login_hash ?? ''),
+					$order,
+					$sort,
+					'composer_table',
+				),
 				'table_id'                 => 'dc-composer-table',
 			],
 		];

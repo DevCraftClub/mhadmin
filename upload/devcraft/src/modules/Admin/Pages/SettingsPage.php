@@ -43,7 +43,7 @@ final class SettingsPage extends AbstractPage implements SettingsPageInterface {
 		$this->addBreadcrumb(__('Настройки'));
 
 		return [
-			'view' => 'admin/settings.twig',
+			'view' => 'pages/settings.twig',
 			'data' => [
 				'page_title' => __('Настройки'),
 			],

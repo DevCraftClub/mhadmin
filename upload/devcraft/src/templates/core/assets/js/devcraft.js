@@ -473,6 +473,59 @@
         }).then(parseJsonResponse);
     }
 
+    /**
+     * Multipart POST (FormData). URL задаёт вызывающий код через DevCraftAjax.url(...).
+     * user_hash добавляется, если ещё нет в FormData.
+     */
+    function postMultipart(url, formData, onProgress) {
+        if (!(formData instanceof FormData)) {
+            return Promise.reject(new Error(t('Ожидался FormData')));
+        }
+
+        if (!formData.has('user_hash')) {
+            formData.append('user_hash', getUserHash());
+        }
+
+        return new Promise(function (resolve, reject) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url);
+
+            xhr.upload.addEventListener('progress', function (event) {
+                if (typeof onProgress === 'function' && event.lengthComputable) {
+                    onProgress(event.loaded, event.total);
+                }
+            });
+
+            xhr.addEventListener('load', function () {
+                let payload;
+
+                try {
+                    payload = JSON.parse(xhr.responseText || '{}');
+                } catch (e) {
+                    reject(new Error(t('Не удалось разобрать JSON-ответ')));
+                    return;
+                }
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve(payload);
+                    return;
+                }
+
+                if (payload && payload.success === false) {
+                    handleApiNotice(payload);
+                }
+
+                reject(payload || new Error('HTTP ' + xhr.status));
+            });
+
+            xhr.addEventListener('error', function () {
+                reject(new Error(t('Сетевая ошибка')));
+            });
+
+            xhr.send(formData);
+        });
+    }
+
     DevCraftMetro.toast = dcToast;
     DevCraftMetro.notify = dcNotify;
     DevCraftMetro.notifyError = dcNotifyError;
@@ -484,6 +537,7 @@
     DevCraftMetro.dialogPluginElement = dcMetroDialogPluginElement;
     DevCraftAjax.parseResponse = parseJsonResponse;
     DevCraftAjax.post = postAjax;
+    DevCraftAjax.postMultipart = postMultipart;
     DevCraftAjax.url = ajaxUrl;
     DevCraftAjax.baseUrl = ajaxBaseUrl;
     DevCraftAjax.getUserHash = getUserHash;

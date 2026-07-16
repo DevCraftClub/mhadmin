@@ -52,7 +52,7 @@ abstract class AbstractPage implements PageInterface {
 	 *     $key = AbstractPage::resolveViewKey('admin/logs.twig');
 	 */
 	public static function resolveViewKey(string $view): string {
-		if(str_starts_with($view, '@') || str_starts_with($view, 'core/')) {
+		if(str_starts_with($view, '@') || str_starts_with($view, 'core/') || str_starts_with($view, 'pages/')) {
 			return $view;
 		}
 

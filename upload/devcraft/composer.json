@@ -15,6 +15,7 @@
         "cycle/migrations": "^4.2",
         "cycle/orm": "^2.9",
         "cycle/schema-migrations-generator": "^2.3",
+        "fakerphp/faker": "^1.23",
         "ramsey/uuid": "^4.7",
         "spiral/pagination": "^3.0",
         "symfony/dependency-injection": "^7.0",

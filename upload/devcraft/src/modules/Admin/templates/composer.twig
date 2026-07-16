@@ -1,0 +1,37 @@
+<h2>{{ 'Composer'|trans }}</h2>
+
+<div class="mb-2">
+    <button type="button" class="button small warning js-composer-sync">
+        <span class="mif-loop2 mr-1"></span>{{ 'Синхронизировать с composer.lock'|trans }}
+    </button>
+</div>
+
+{% include 'core/includes/form/filter_bar.twig' with {
+    mod: mod,
+    action: action,
+    filter_catalog: filter_catalog,
+    filter_rules: filter_rules,
+    filter_chips: filter_chips,
+    order: order,
+    sort: sort
+} only %}
+
+<div class="remark info mb-2">
+    {{ 'В таблице отображаются пакеты из composer.json и manifest модулей. Обязательные пакеты (hardRequired) помечены в колонке «Обязательный».'|trans }}
+</div>
+
+<table id="{{ table_id|default('dc-composer-table') }}"
+       class="table striped row-hover border responsive-md fixed-header mt-2"
+       data-role="table"
+       data-rows="{{ per_page|default(25) }}"
+       data-rows-steps="10, 25, 50, 100"
+       data-show-activity="false"
+       data-source="{{ table_initial_source_url|e('html_attr') }}"
+       data-show-skip="true"
+       data-pagination-wrapper="#dc-composer-pagination"
+       data-horizontal-scroll="true"
+       data-cell-wrapper="true">
+    <thead></thead>
+    <tbody></tbody>
+</table>
+<div id="dc-composer-pagination"></div>

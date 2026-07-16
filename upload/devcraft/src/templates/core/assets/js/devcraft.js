@@ -53,6 +53,7 @@
     class DevCraftFilter {}
     class DevCraftAssets {}
     class DevCraftDashboard {}
+    class DevCraftSettings {}
 
     const DevCraftDebug = {
         FORCE: null,
@@ -88,9 +89,12 @@
         static Filter = DevCraftFilter;
         static Assets = DevCraftAssets;
         static Dashboard = DevCraftDashboard;
+        static Settings = DevCraftSettings;
         static Debug = DevCraftDebug;
 
         static boot() {
+            DevCraftSettings.bind();
+
             if (global.DevCraftAdmin && typeof global.DevCraftAdmin.boot === 'function') {
                 global.DevCraftAdmin.boot();
             }
@@ -296,7 +300,10 @@
         dcNotify(notice.title || t('Уведомление'), notice.message, notice.type || 'info');
     }
 
-    function serializeForm(form) {
+    /**
+     * CRUD формы настроек модуля (сериализация, валидация, сохранение).
+     */
+    DevCraftSettings.serialize = function (form) {
         const data = {};
         const elements = form.querySelectorAll('input, select, textarea');
 
@@ -323,9 +330,9 @@
         });
 
         return data;
-    }
+    };
 
-    function showFieldErrors(form, fields) {
+    DevCraftSettings.showFieldErrors = function (form, fields) {
         form.querySelectorAll('.invalid_feedback').forEach(function (el) {
             el.textContent = '';
         });
@@ -341,7 +348,72 @@
                 target.textContent = fields[fieldId];
             }
         });
-    }
+    };
+
+    DevCraftSettings.resolveSaveUrl = function (form) {
+        let saveUrl = form.dataset.saveUrl || '';
+
+        if (saveUrl === '' || saveUrl.indexOf('mod=') !== -1) {
+            return saveUrl;
+        }
+
+        const mod = document.body.dataset.mod;
+
+        if (!mod) {
+            return saveUrl;
+        }
+
+        return saveUrl + (saveUrl.indexOf('?') === -1 ? '?' : '&') + 'mod=' + encodeURIComponent(mod);
+    };
+
+    DevCraftSettings.save = function (form) {
+        const saveUrl = DevCraftSettings.resolveSaveUrl(form);
+        const data = DevCraftSettings.serialize(form);
+        const userHashInput = form.querySelector('input[name="user_hash"]');
+        const userHash = userHashInput ? userHashInput.value : getUserHash();
+
+        return fetch(saveUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                user_hash: userHash,
+                data: JSON.stringify(data),
+            }).toString(),
+        })
+            .then(parseJsonResponse)
+            .then(function (payload) {
+                DevCraftSettings.showFieldErrors(form, payload.error && payload.error.fields ? payload.error.fields : null);
+                handleApiNotice(payload);
+
+                return payload;
+            });
+    };
+
+    DevCraftSettings.bind = function () {
+        if (global.__dcSettingsBound) {
+            return;
+        }
+
+        global.__dcSettingsBound = true;
+
+        document.addEventListener('click', function (event) {
+            const saveBtn = event.target.closest('.js-settings-save');
+
+            if (!saveBtn) {
+                return;
+            }
+
+            const form = saveBtn.closest('.js-settings-form');
+
+            if (!form) {
+                return;
+            }
+
+            DevCraftSettings.save(form).catch(function (err) {
+                dcNotifyError(t('Ошибка'), t('Сеть или сервер недоступен'), err);
+            });
+        });
+    };
 
     function ajaxUrl(base, params) {
         const url = new URL(base, window.location.origin);
@@ -416,8 +488,15 @@
     DevCraftAjax.baseUrl = ajaxBaseUrl;
     DevCraftAjax.getUserHash = getUserHash;
     DevCraftAjax.handleNotice = handleApiNotice;
-    DevCraftAjax.serializeForm = serializeForm;
-    DevCraftAjax.showFieldErrors = showFieldErrors;
+    DevCraftAjax.serializeForm = function (form) {
+        return DevCraftSettings.serialize(form);
+    };
+    DevCraftAjax.showFieldErrors = function (form, fields) {
+        DevCraftSettings.showFieldErrors(form, fields);
+    };
+    DevCraftAjax.saveSettings = function (form) {
+        return DevCraftSettings.save(form);
+    };
 
     global.DevCraft = DevCraft;
     DevCraft.__ = typeof global.__ === 'function' ? global.__ : function (phrase) { return phrase; };

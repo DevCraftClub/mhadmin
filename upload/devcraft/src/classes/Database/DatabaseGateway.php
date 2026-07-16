@@ -21,6 +21,7 @@ use Cycle\Schema;
 use Cycle\Annotated;
 use Cycle\Migrations;
 use Cycle\Database\Config;
+use Cycle\Migrations\State;
 use Cycle\Schema\Compiler;
 use Cycle\Schema\Generator;
 use Cycle\ORM\EntityManager;
@@ -40,6 +41,9 @@ use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Annotated\Locator\TokenizerEntityLocator;
 use Symfony\Component\DependencyInjection\Container;
 use Cycle\Annotated\Locator\TokenizerEmbeddingLocator;
+use Cycle\Schema\Generator\Migrations\Strategy\SingleFileStrategy;
+use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
+
 
 /**
  * Шлюз доступа к базе данных через Cycle ORM.
@@ -390,6 +394,7 @@ final class DatabaseGateway {
 			commandGenerator: $command_generator,
 		);
 
+		$this->skipCreateMigrationsForExistingTables($migrator);
 		$migrator->run(new Capsule($this->generateManager()->database()));
 
 		$this->setManager();
@@ -518,12 +523,97 @@ final class DatabaseGateway {
 				new Schema\Generator\Migrations\GenerateMigrations(
 					$migrator->getRepository(),
 					$migrator->getConfig(),
+					new SingleFileStrategy(
+						$migrator->getConfig(),
+						new NameBasedOnChangesGenerator(),
+					),
 				),
 				new Generator\GenerateTypecast(),
 			],
 		);
 
 		return [$schemas, $migrator];
+	}
+
+	/**
+	 * Помечает create-миграции как выполненные, если целевая таблица уже существует.
+	 *
+	 * Это предотвращает повторный CREATE существующих таблиц и конфликты
+	 * вида "column already exists" для исторических миграций.
+	 *
+	 * @since 200.4.0
+	 */
+	private function skipCreateMigrationsForExistingTables(Migrations\Migrator $migrator): void {
+		$migrationTable = PREFIX . '_devcraft_migrations';
+
+		if(!$this->tableExists($migrationTable)) {
+			return;
+		}
+
+		foreach($migrator->getMigrations() as $migration) {
+			$state = $migration->getState();
+
+			if($state->getStatus() === State::STATUS_EXECUTED) {
+				continue;
+			}
+
+			$migrationName = $state->getName();
+			$tableKey      = '';
+
+			if(preg_match('/_create_dle_(.+?)(?:_change_|$)/', $migrationName, $matches) === 1) {
+				$tableKey = (string) ($matches[1] ?? '');
+			}
+
+			if($tableKey === '') {
+				continue;
+			}
+
+			$tableName = PREFIX . '_' . $tableKey;
+
+			if(!$this->tableExists($tableName)) {
+				continue;
+			}
+
+			$this->markMigrationAsExecuted($migrationTable, $migrationName);
+		}
+	}
+
+	/**
+	 * Проверяет существование таблицы в текущей БД.
+	 */
+	private function tableExists(string $tableName): bool {
+		$result = $this->query(
+			'SELECT COUNT(*) AS total FROM information_schema.tables WHERE table_schema = :schema AND table_name = :table',
+			[
+				'schema' => DBNAME,
+				'table'  => $tableName,
+			],
+		)->fetchAll();
+
+		$total = isset($result[0]['total']) ? (int) $result[0]['total'] : 0;
+
+		return $total > 0;
+	}
+
+	/**
+	 * Регистрирует миграцию как выполненную, если её нет в журнале.
+	 */
+	private function markMigrationAsExecuted(string $migrationTable, string $migrationName): void {
+		$existsResult = $this->query(
+			"SELECT COUNT(*) AS total FROM `{$migrationTable}` WHERE `migration` = :migration",
+			['migration' => $migrationName],
+		)->fetchAll();
+
+		$exists = isset($existsResult[0]['total']) ? (int) $existsResult[0]['total'] : 0;
+
+		if($exists > 0) {
+			return;
+		}
+
+		$this->query(
+			"INSERT INTO `{$migrationTable}` (`migration`, `time_executed`, `created_at`) VALUES (:migration, NOW(), NOW())",
+			['migration' => $migrationName],
+		);
 	}
 
 	/**

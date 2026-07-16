@@ -17,6 +17,11 @@ if (!defined('DATALIFEENGINE') || !defined('LOGGED_IN')) {
 
 require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
 
+if (defined('DEVCRAFT_VENDOR_MISSING')) {
+    require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/bootstrap.php');
+    return;
+}
+
 if (!defined('DEVCRAFT_BOOTSTRAPPED')) {
     return;
 }

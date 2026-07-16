@@ -19,12 +19,18 @@ use DevCraft\Modules\Admin\Pages\LogsPage;
 use DevCraft\Modules\Admin\Pages\SettingsPage;
 use DevCraft\Modules\Admin\Pages\ChangelogPage;
 use DevCraft\Modules\Admin\Pages\DashboardPage;
+use DevCraft\Modules\Admin\Pages\ComposerPage;
 use DevCraft\Modules\Admin\Pages\NewModulePage;
+use DevCraft\Modules\Admin\Ajax\DumpAutoloadHandler;
 use DevCraft\Modules\Admin\Ajax\SettingsHandler;
 use DevCraft\Modules\Admin\Ajax\DeleteLogHandler;
 use DevCraft\Modules\Admin\Ajax\NewModuleHandler;
 use DevCraft\Modules\Admin\Ajax\SaveAssetHandler;
 use DevCraft\Modules\Admin\Ajax\LogsTableHandler;
+use DevCraft\Modules\Admin\Ajax\ComposerTableHandler;
+use DevCraft\Modules\Admin\Ajax\ComposerActionHandler;
+use DevCraft\Modules\Admin\Ajax\ComposerPolicyHandler;
+use DevCraft\Modules\Admin\Ajax\ComposerSyncHandler;
 use DevCraft\Modules\Admin\Ajax\SyncAssetsHandler;
 use DevCraft\Modules\Admin\Ajax\CheckAssetsHandler;
 use DevCraft\Modules\Admin\Ajax\CheckUpdateHandler;
@@ -39,12 +45,14 @@ use DevCraft\Modules\Admin\Ajax\CheckUpdateHandler;
 return [
 	'mod'       => 'devcraft',
 	'code'      => 'devcraft',
+	'crowdinName'   => 'mhadmin',
+	'crowdinStatId' => '16830581-755131',
 	'meta'      => [
 		'name'        => 'DevCraft Admin',
 		'version'     => '200.4.0',
 		'description' => __('DevCraft — админ-оболочка для плагинов DLE'),
 		'icon'        => 'mif-construction',
-		'docsLink'    => 'https://readme.devcraft.club/latest/dev/mhadmin/install/',
+		'docsLink'    => 'https://readme.devcraft.club/latest/dev/devcraft_admin/install/',
 		'siteLink'    => 'https://devcraft.club/',
 		'siteId'      => 4,
 		'licLink'     => 'https://devcraft.club/pages/licence-agreement/',
@@ -66,6 +74,7 @@ return [
 		AdminLink::page(__('Главная'), 'dashboard', DashboardPage::class, 'mif-home'),
 		AdminLink::page(__('Настройки'), 'settings', SettingsPage::class, 'mif-cog'),
 		AdminLink::page(__('Вывод логов'), 'logs', LogsPage::class, 'mif-list'),
+		AdminLink::page(__('Composer'), 'composer', ComposerPage::class, 'mif-tools'),
 		AdminLink::page(__('История изменений'), 'changelog', ChangelogPage::class, 'mif-library'),
 		AdminLink::page(__('Генератор модулей'), 'generator', NewModulePage::class, 'mif-plus'),
 	],
@@ -80,10 +89,20 @@ return [
 			'check_update' => CheckUpdateHandler::class,
 			'logs_table'   => LogsTableHandler::class,
 			'new_module'   => NewModuleHandler::class,
+			'composer_table' => ComposerTableHandler::class,
+			'composer_action' => ComposerActionHandler::class,
+			'composer_policy' => ComposerPolicyHandler::class,
+			'composer_sync'   => ComposerSyncHandler::class,
+			'dump_autoload'   => DumpAutoloadHandler::class,
 		],
 	],
+	'composer_required' => [
+		['name' => 'twig/twig', 'minVersion' => '3.14', 'hardRequired' => true],
+		['name' => 'cycle/orm', 'minVersion' => '2.9', 'hardRequired' => true],
+		['name' => 'symfony/translation', 'minVersion' => '7.4', 'hardRequired' => true],
+	],
 	/** Подключает данные истории изменений модуля Admin. */
-	'changelog' => require __DIR__ . '/changelog.data.php',
+	'changelog' => require DLEPlugins::Check(__DIR__ . '/changelog.data.php'),
 	'assets'    => [
 		'js' => ['admin.js'],
 	],

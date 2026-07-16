@@ -18,9 +18,13 @@ namespace DevCraft\Core\Support;
 
 use Throwable;
 use JsonException;
+use DLEPlugins;
 use FilesystemIterator;
 use RecursiveIteratorIterator;
+use DevCraft\Types\ModuleData;
 use DevCraft\Core\Config\Paths;
+use DevCraft\Core\Http\JsonResponse;
+use DevCraft\Core\Http\JsonResponseException;
 use RecursiveDirectoryIterator;
 use DevCraft\Core\Logging\LogGenerator;
 
@@ -34,6 +38,130 @@ use DevCraft\Core\Logging\LogGenerator;
  * @subpackage Core.Support
  */
 final class DataManager {
+
+	/**
+	 * Возвращает карту манифестов модулей, индексированную по `mod`.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @return array<string, ModuleData> Метаданные модулей с валидным manifest.php.
+	 *
+	 * @example
+	 *     $manifests = DataManager::readManifest();
+	 */
+	public static function readManifest(): array {
+		return self::loadManifests();
+	}
+
+	/**
+	 * Возвращает метаданные модуля по `mod` или `code`.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $codename  Идентификатор mod или code из manifest.php.
+	 *
+	 * @return ?ModuleData Метаданные найденного модуля.
+	 *
+	 * @throws JsonResponseException Если модуль не найден или код пустой.
+	 * @throws \JsonException
+	 *
+	 * @example
+	 *     $admin = DataManager::getManifest('devcraft');
+	 */
+	public static function getManifest(string $codename): ?ModuleData {
+		$codename = trim($codename);
+
+		if($codename === '') {
+			JsonResponse::fail(
+				__('Ошибка'),
+				__('Код модуля не указан'),
+				'manifest_code_missing',
+				400,
+			)->send();
+		}
+
+		$manifests = self::readManifest();
+
+		if(isset($manifests[$codename])) {
+			return $manifests[$codename];
+		}
+
+		foreach($manifests as $module) {
+			if($module->code === $codename) {
+				return $module;
+			}
+		}
+
+		JsonResponse::fail(
+			__('Ошибка'),
+			__('Модуль не найден: {code}', ['{code}' => $codename]),
+			'manifest_not_found',
+			404,
+		)->send();
+
+		return NULL;
+	}
+
+
+	/**
+	 * Загружает манифесты всех модулей из каталога modules.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @return array<string, ModuleData> Карта mod → метаданные.
+	 */
+	private static function loadManifests(): array {
+		$modulesRoot = Paths::modules();
+
+		if(!is_dir($modulesRoot)) {
+			return [];
+		}
+
+		$entries = self::scanDirectory($modulesRoot);
+
+		if($entries === []) {
+			return [];
+		}
+
+		$manifests = [];
+
+		foreach($entries as $entry => $subtree) {
+			if(!is_string($entry)) {
+				continue;
+			}
+
+			$modulePath   = self::normalizePath($modulesRoot . '/' . $entry);
+			$manifestFile = $modulePath . '/manifest.php';
+
+			if(!is_dir($modulePath) || !is_file($manifestFile)) {
+				continue;
+			}
+
+			try {
+				/** @var array<string, mixed> $manifest */
+				$manifest = require DLEPlugins::Check($manifestFile);
+
+				if(!is_array($manifest)) {
+					continue;
+				}
+
+				$mod = (string) ($manifest['mod'] ?? '');
+
+				if($mod === '') {
+					continue;
+				}
+
+				$manifests[$mod] = ModuleData::fromManifest($mod, $manifest, $modulePath);
+			} catch(Throwable $throwable) {
+				LogGenerator::for(self::class)->log($throwable->getMessage());
+			}
+		}
+
+		ksort($manifests);
+
+		return $manifests;
+	}
+
 
 	/**
 	 * Формирует аббревиатуру из слов строки с суффиксом длины.

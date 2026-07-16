@@ -129,7 +129,7 @@ final class AdminContext {
 			is_array($meta['author'] ?? NULL) ? $meta['author'] : ($appConfig['author'] ?? []),
 		);
 		$this->licenseAgreementLink =
-			(string) ($meta['licenseAgreementLink'] ?? $appConfig['licenseAgreementLink'] ?? 'https://devcraft.club/pages/licence-agreement/');
+			(string) ($meta['licenseAgreementLink'] ?? $meta['licLink'] ?? $appConfig['licenseAgreementLink'] ?? 'https://devcraft.club/pages/licence-agreement/');
 		$this->url                  = $this->resolveSiteUrl();
 		$this->menu                 = (new MenuComposer())->compose(new DleMenuBuilder(), $plugin, $options, $lang);
 		$this->cssUrls              = $this->baseCssUrls();

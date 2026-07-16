@@ -56,6 +56,11 @@ final class EntityPathResolver {
 	public function entityModelDirectories(): array {
 		$directories = [];
 
+		$coreComposerModels = Paths::src() . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Composer' . DIRECTORY_SEPARATOR . 'Models';
+		if(is_dir($coreComposerModels) && $this->hasConcreteEntityFiles($coreComposerModels)) {
+			$directories[] = $coreComposerModels;
+		}
+
 		foreach($this->registry->modules() as $module) {
 			if($module->path === '' || !is_dir($module->path)) {
 				continue;

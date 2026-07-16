@@ -42,13 +42,9 @@ final class DleDataService {
 	/**
 	 * @since 200.4.0
 	 *
-	 * @param   DataLoaderService  $loader      Сервис загрузки таблиц DLE.
-	 * @param   int                $cacheTimer  TTL кеша xfields в секундах.
+	 * @param   DataLoaderService  $loader  Сервис загрузки таблиц DLE.
 	 */
-	public function __construct(
-		private readonly DataLoaderService $loader,
-		private readonly int               $cacheTimer = 3600,
-	) {}
+	public function __construct(private readonly DataLoaderService $loader) {}
 
 	/**
 	 * Возвращает список пользователей DLE с основными полями.
@@ -350,7 +346,7 @@ final class DleDataService {
 	}
 
 	/**
-	 * Читает закешированные xfields, если TTL не истёк.
+	 * Читает закешированные xfields.
 	 *
 	 * @since 173.3.0
 	 *
@@ -361,22 +357,19 @@ final class DleDataService {
 	private function readJsonCache(string $cacheName): ?array {
 		$cached = CacheControl::getCache(self::CACHE_TYPE, $cacheName);
 
-		if($cached === false || !is_array($cached)) {
+		if($cached === false) {
 			return NULL;
 		}
 
-		$storedAt = (int) ($cached['_stored_at'] ?? 0);
-		$fields   = $cached['fields'] ?? NULL;
+		if(is_array($cached) && isset($cached['fields']) && is_array($cached['fields'])) {
+			return $cached['fields'];
+		}
 
-		if(!is_array($fields)) {
+		if(!is_array($cached)) {
 			return NULL;
 		}
 
-		if($storedAt > 0 && (time() - $storedAt) >= $this->cacheTimer) {
-			return NULL;
-		}
-
-		return $fields;
+		return $cached;
 	}
 
 	/**
@@ -388,10 +381,7 @@ final class DleDataService {
 	 * @param   array<string, array<string, mixed>>  $fields     Поля xfields.
 	 */
 	private function writeJsonCache(string $cacheName, array $fields): void {
-		CacheControl::setCache(self::CACHE_TYPE, $cacheName, [
-			'_stored_at' => time(),
-			'fields'     => $fields,
-		]);
+		CacheControl::setCache(self::CACHE_TYPE, $cacheName, $fields);
 	}
 
 }

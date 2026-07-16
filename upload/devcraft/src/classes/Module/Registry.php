@@ -20,6 +20,7 @@ use DLEPlugins;
 use DevCraft\Types\ModuleData;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Core\Http\JsonResponseException;
 
 /**
  * Реестр модулей DevCraft и фабрика контекстов плагинов.
@@ -44,19 +45,7 @@ final class Registry {
 	 *
 	 */
 	public function modules(): array {
-		$active = [];
-
-		foreach($this->listModuleDirectories() as $dirName) {
-			$context = $this->forModuleDir($dirName);
-
-			if($context === NULL) {
-				continue;
-			}
-
-			$active[$context->mod()] = $context->moduleData();
-		}
-
-		return $active;
+		return DataManager::readManifest();
 	}
 
 	/**
@@ -72,7 +61,11 @@ final class Registry {
 	 *
 	 */
 	public function module(string $module_id): ?ModuleData {
-		return $this->modules()[$module_id] ?? NULL;
+		try {
+			return DataManager::getManifest($module_id);
+		} catch(JsonResponseException) {
+			return NULL;
+		}
 	}
 
 	/**

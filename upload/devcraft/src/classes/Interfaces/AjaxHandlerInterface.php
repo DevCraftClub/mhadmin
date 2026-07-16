@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace DevCraft\Core\Interfaces;
 
 use DevCraft\Core\Http\AjaxRequest;
-use DevCraft\Core\Http\JsonResponse;
+use DevCraft\Core\Interfaces\ResponseInterface;
 
 /**
  * Контракт обработчика AJAX-запроса модуля DevCraft.
@@ -29,18 +29,18 @@ use DevCraft\Core\Http\JsonResponse;
 interface AjaxHandlerInterface {
 
 	/**
-	 * Обрабатывает входящий AJAX-запрос и формирует JSON-ответ.
+	 * Обрабатывает входящий AJAX-запрос и формирует HTTP-ответ.
 	 *
 	 * @since 200.4.0
 	 *
 	 * @param   AjaxRequest  $request  Нормализованный объект входящего запроса.
 	 *
-	 * @return JsonResponse Ответ для отправки клиенту.
+	 * @return ResponseInterface Ответ для отправки клиенту (JSON или файл).
 	 *
 	 * @example
 	 *     $response = $handler->handle(AjaxRequest::fromGlobals());
 	 *     $response->send();
 	 */
-	public function handle(AjaxRequest $request): JsonResponse;
+	public function handle(AjaxRequest $request): ResponseInterface;
 
 }

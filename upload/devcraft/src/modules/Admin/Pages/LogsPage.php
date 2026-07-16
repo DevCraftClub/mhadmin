@@ -2,15 +2,7 @@
 //===============================================================
 // Файл: LogsPage.php                                           =
 // Путь: devcraft/src/modules/Admin/Pages/LogsPage.php          =
-// Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
-// Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
-// Сайт: https://devcraft.club                                  =
-// Телеграм: http://t.me/MaHarder                               =
-// ==============================================================
-// Менять на свой страх и риск!                                 =
-// Код распространяется по лицензии MIT                         =
-//===============================================================
 
 declare(strict_types=1);
 
@@ -24,29 +16,26 @@ use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Core\Admin\FilterFormService;
 use DevCraft\Modules\Admin\Models\LogRecord;
 use DevCraft\Modules\Admin\Repositories\LogRecordRepository;
+use DevCraft\Modules\Admin\Services\LogMessagePresenter;
 
 /**
  * Страница просмотра и фильтрации журнала событий DevCraft.
- *
- * @package    DevCraft
- * @since      200.4.0
- * @subpackage Modules.Admin
  */
 final class LogsPage extends AbstractPage {
 
-	/**
-	 * Формирует представление и данные страницы журнала с фильтрами и таблицей.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @global string $dle_login_hash Хеш сессии DLE для AJAX-запросов таблицы.
-	 *
-	 * @return array{view: string, data: array<string, mixed>} Ключ шаблона и данные для Twig.
-	 *
-	 * @example
-	 *     $result = (new LogsPage())->handle();
-	 */
 	public function handle(): array {
+		$uuid = trim((string) ($_GET['uuid'] ?? ''));
+		if($uuid !== '') {
+			return $this->viewPage($uuid);
+		}
+
+		return $this->listPage();
+	}
+
+	/**
+	 * @return array{view: string, data: array<string, mixed>}
+	 */
+	private function listPage(): array {
 		$filterService = new FilterFormService();
 		$query         = $filterService->parseRequestQuery();
 		$schema        = $this->loadFilterSchema();
@@ -85,7 +74,7 @@ final class LogsPage extends AbstractPage {
 				'filter_chips'             => $chips,
 				'filter_catalog'           => $catalog,
 				'query'                    => $query,
-				'table_source_url'         => Paths::ajaxUrl('logs_table'),
+				'table_source_url'         => Paths::ajaxUrl('logs_table', 'admin', 'devcraft'),
 				'table_initial_source_url' => $filterService->buildLogsTableAjaxUrl(
 					$query,
 					$dle_login_hash ?? '',
@@ -98,20 +87,70 @@ final class LogsPage extends AbstractPage {
 	}
 
 	/**
-	 * Загружает схему фильтра журнала из файла модуля Admin.
+	 * Readonly-деталь записи журнала по UUID.
 	 *
-	 * @since 200.4.0
-	 *
-	 * @return FilterSchema Нормализованная схема фильтрации и сортировки.
+	 * @return array{view: string, data: array<string, mixed>}
 	 */
+	private function viewPage(string $uuid): array {
+		$this->addBreadcrumb(__('Вывод логов'), $this->buildBackUrl());
+		$backUrl = $this->buildBackUrl();
+
+		/** @var LogRecordRepository $repository */
+		$repository = Application::instance()->database()->repository(LogRecord::class);
+		$record     = $repository->findByUuid($uuid);
+
+		if($record === null) {
+			$this->addBreadcrumb(__('Запись не найдена'));
+
+			return [
+				'view' => 'admin/logs_view.twig',
+				'data' => [
+					'page_title' => __('Запись не найдена'),
+					'error'      => __('Запись журнала не найдена или UUID указан неверно.'),
+					'back_url'   => $backUrl,
+				],
+			];
+		}
+
+		$presenter    = new LogMessagePresenter();
+		$presentation = $presenter->present($record->message);
+		$pageTitle    = __('Запись #{id}', ['{id}' => (string) $record->id()]);
+		$this->addBreadcrumb($pageTitle);
+
+		return [
+			'view' => 'admin/logs_view.twig',
+			'data' => [
+				'page_title'   => $pageTitle,
+				'record'       => [
+					'id'       => $record->id(),
+					'log_type' => $record->log_type,
+					'plugin'   => $record->plugin,
+					'fn_name'  => $record->fn_name,
+					'time'     => $record->time->format('Y-m-d H:i:s'),
+					'uuid'     => $record->uuid?->toString() ?? '',
+					'message'  => $record->message,
+				],
+				'presentation' => $presentation,
+				'back_url'     => $backUrl,
+			],
+		];
+	}
+
+	private function buildBackUrl(): string {
+		$params = $_GET;
+		unset($params['uuid']);
+		$params['mod']    = 'devcraft';
+		$params['action'] = 'logs';
+
+		return '?' . http_build_query($params);
+	}
+
 	private function loadFilterSchema(): FilterSchema {
 		$schemaFile = Paths::modules() . '/Admin/logs.filter.schema.php';
 
-		/** Подключает схему фильтра журнала модуля Admin. */
 		/** @var array<string, mixed> $raw */
 		$raw = require DLEPlugins::Check($schemaFile);
 
 		return FilterSchema::fromArray($raw);
 	}
-
 }

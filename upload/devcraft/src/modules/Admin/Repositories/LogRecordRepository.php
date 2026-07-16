@@ -18,6 +18,7 @@ namespace DevCraft\Modules\Admin\Repositories;
 
 use Ramsey\Uuid\Uuid;
 use DevCraft\Core\Abstracts\AbstractRepository;
+use DevCraft\Modules\Admin\Models\LogRecord;
 
 /**
  * Репозиторий записей журнала DevCraft (`devcraft_logs`).
@@ -48,6 +49,22 @@ class LogRecordRepository extends AbstractRepository {
 		}
 
 		return $this->deleteByColumn('uuid', $uuidObj);
+	}
+
+	/**
+	 * Возвращает запись журнала по UUID или null.
+	 */
+	public function findByUuid(string $uuid): ?LogRecord {
+		try {
+			$uuidObj = Uuid::fromString($uuid);
+		} catch(\Throwable) {
+			return null;
+		}
+
+		/** @var LogRecord|null $entity */
+		$entity = $this->select()->where('uuid', $uuidObj)->fetchOne();
+
+		return $entity;
 	}
 
 }

@@ -86,6 +86,8 @@ final class LogsTableHandler implements AjaxHandlerInterface {
 
 			$uuid      = $record->uuid?->toString() ?? '';
 			$message   = htmlspecialchars($record->message, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8');
+			$viewUrl   = htmlspecialchars($this->buildViewUrl($uuid, $query), ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8');
+			$viewBtn   = '<a class="button small primary" href="' . $viewUrl . '">' . __('Просмотр') . '</a>';
 			$deleteBtn = '<button type="button" class="button small alert js-delete-log" data-uuid="'
 			             . htmlspecialchars($uuid, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8')
 			             . '">' . __('Удалить') . '</button>';
@@ -97,7 +99,7 @@ final class LogsTableHandler implements AjaxHandlerInterface {
 				$record->fn_name,
 				$record->time->format('Y-m-d H:i:s'),
 				'<div class="text-ellipsis" style="max-width: 420px;" title="' . $message . '">' . $message . '</div>',
-				$deleteBtn,
+				'<div class="d-flex flex-wrap gap-1">' . $viewBtn . $deleteBtn . '</div>',
 				$uuid,
 			];
 		}
@@ -130,7 +132,7 @@ final class LogsTableHandler implements AjaxHandlerInterface {
 			['name' => 'fn_name', 'title' => $labels['fn_name'] ?? __('Функция'), 'sortable' => true],
 			['name' => 'time', 'title' => $labels['time'] ?? __('Время'), 'size' => 160, 'sortable' => true],
 			['name' => 'message', 'title' => $labels['message'] ?? __('Сообщение'), 'sortable' => true],
-			['name' => 'actions', 'title' => '', 'size' => 100, 'sortable' => false],
+			['name' => 'actions', 'title' => '', 'size' => 180, 'sortable' => false],
 			['name' => 'uuid', 'title' => '', 'show' => false, 'sortable' => false],
 		];
 
@@ -159,6 +161,29 @@ final class LogsTableHandler implements AjaxHandlerInterface {
 		$raw = require DLEPlugins::Check($schemaFile);
 
 		return FilterSchema::fromArray($raw);
+	}
+
+	/**
+	 * @param array<string, mixed> $query
+	 */
+	private function buildViewUrl(string $uuid, array $query): string {
+		$params = [
+			'mod'    => 'devcraft',
+			'action' => 'logs',
+			'uuid'   => $uuid,
+		];
+
+		foreach(['order', 'sort', 'page'] as $key) {
+			if(isset($query[$key]) && $query[$key] !== '') {
+				$params[$key] = $query[$key];
+			}
+		}
+
+		if(isset($query['filter_rules']) && is_array($query['filter_rules'])) {
+			$params['filter_rules'] = $query['filter_rules'];
+		}
+
+		return '?' . http_build_query($params);
 	}
 
 }

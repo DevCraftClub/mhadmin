@@ -67,7 +67,12 @@ final class PageOrchestrator {
 			}
 
 			$vars['settings'] = DataManager::getConfig($schema->codename);
-			$vars['form']     = $this->formService->buildViewModel($schema);
+			$vars['form']     = $this->formService->buildViewModel(
+				$schema,
+				$page->supplementFormData(),
+				$plugin->mod(),
+				$plugin->ajaxController(),
+			);
 			$vars['modInfo']  = $plugin->meta();
 		}
 

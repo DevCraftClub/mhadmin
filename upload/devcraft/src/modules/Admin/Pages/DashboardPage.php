@@ -18,6 +18,8 @@ namespace DevCraft\Modules\Admin\Pages;
 
 use DevCraft\Core\Application;
 use DevCraft\Core\Abstracts\AbstractPage;
+use DevCraft\Core\Module\PluginContext;
+use DevCraft\Modules\Admin\Services\DashboardPackageMetricService;
 
 /**
  * Главная страница (панель) модуля DevCraft Admin.
@@ -52,6 +54,8 @@ final class DashboardPage extends AbstractPage {
 		}
 
 		$menu = [];
+		$composerUrl = '?mod=devcraft&action=composer';
+		$crowdin     = $this->buildCrowdinDisplay($plugin);
 
 		foreach($context->menu() as $link) {
 			if($link->type !== 'link' || $link->action === NULL || $link->action === 'dashboard') {
@@ -86,8 +90,40 @@ final class DashboardPage extends AbstractPage {
 					'menu'             => $menu,
 					'changelog_latest' => $latest,
 					'changelog_url'    => '?mod=devcraft&action=changelog',
+					'composer'         => [
+						'url'                => $composerUrl,
+						'missing_required'   => (new DashboardPackageMetricService())->missingRequiredCount(),
+						'dump_autoload_url'  => 'dump_autoload',
+					],
+					'crowdin'          => $crowdin,
 				],
 			],
+		];
+	}
+
+	/**
+	 * Формирует данные для статического Crowdin-бейджа на панели.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   PluginContext|null  $plugin  Контекст модуля из реестра.
+	 *
+	 * @return  array<string, string>|null  URL и идентификаторы или null без конфигурации.
+	 */
+	private function buildCrowdinDisplay(?PluginContext $plugin): ?array {
+		$data   = $plugin?->moduleData();
+		$name   = $data?->crowdinName !== NULL? trim($data->crowdinName) : '';
+		$statId = $data?->crowdinStatId !== NULL? trim($data->crowdinStatId) : '';
+
+		if($name === '' || $statId === '') {
+			return NULL;
+		}
+
+		return [
+			'name'        => $name,
+			'stat_id'     => $statId,
+			'badge_url'   => 'https://d322cqt584bo4o.cloudfront.net/' . rawurlencode($statId) . '.png',
+			'project_url' => 'https://crowdin.com/project/' . rawurlencode($name),
 		];
 	}
 

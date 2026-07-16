@@ -8,6 +8,16 @@
 
 Административная панель для моих модулей для движка DLE. Основная часть функционала будет основана на JS/CSS framework [Metro UI](https://metroui.org.ua/) и шаблонизаторе [Twig](https://twig.symfony.com/).
 
+## ⚠️ Несовместимость с MH Admin (legacy)
+
+Эта версия DevCraft Admin (**200.4.0**) **не обратно совместима** с MH Admin (legacy maharder).
+
+- Composer-сервисы перенесены в `devcraft/src/classes/Composer/` (Core API)
+- Внутренние Composer-сервисы модуля Admin удалены
+- Детальный просмотр лога: `?mod=devcraft&action=logs&uuid=…`
+- Документация: https://readme.devcraft.club/
+- Миграция: см. раздел Migration в документации
+
 
 **Установка / Обновление**
 

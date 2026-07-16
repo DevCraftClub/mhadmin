@@ -233,6 +233,35 @@ final class JsonResponse implements ResponseInterface {
 	}
 
 	/**
+	 * Прерывает выполнение с JSON-ответом об ошибке (для Ajax и сервисного слоя).
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string                $title    Заголовок ошибки.
+	 * @param   string                $message  Текст ошибки.
+	 * @param   string                $code     Машиночитаемый код ошибки.
+	 * @param   int                   $status   HTTP-статус.
+	 * @param   array<string, mixed>  $extra    Дополнительные ключи: fields, detail, data.
+	 *
+	 * @throws JsonResponseException Всегда — носитель готового JsonResponse.
+	 *
+	 * @example
+	 *     JsonResponse::abort(__('Ошибка'), __('Модуль не найден'), 'manifest_not_found', 404);
+	 */
+	public static function abort(
+		string $title,
+		string $message,
+		string $code,
+		int    $status = 400,
+		array  $extra = [],
+	): never {
+		$response = self::fail($title, $message, $code, $status, $extra);
+
+		throw new JsonResponseException($response, $message);
+	}
+
+
+	/**
 	 * Собирает структуру notice для toast или notify.
 	 *
 	 * @since 200.4.0

@@ -32,6 +32,7 @@
   }
 
   class DevCraftDashboard {}
+  class DevCraftComposer {}
 
   function shiftNewModuleField(fieldId, hasError) {
     const input = document.getElementById(fieldId) || document.querySelector('[name="' + fieldId + '"]');
@@ -333,6 +334,7 @@
       status.classList.add('info');
       status.innerHTML = '<span class="mif-loop2 mr-1 rotating"></span><strong>' + t('Проверка ресурсов…') + '</strong>'
         + '<span class="text-small fg-gray ml-2">' + t('Сравнение локальных файлов с сервером разработчика') + '</span>';
+      status.classList.remove('d-none');
       return;
     }
 
@@ -340,6 +342,7 @@
       status.classList.add('alert');
       status.innerHTML = '<span class="mif-warning mr-1"></span><strong>' + t('Не удалось проверить ресурсы') + '</strong>'
         + '<span class="text-small ml-2">' + (report || t('Повторите попытку позже')) + '</span>';
+      status.classList.remove('d-none');
       return;
     }
 
@@ -350,6 +353,7 @@
           remote: report ? report.remote_count : 0,
           local: report ? report.local_count : 0,
         }) + '</span>';
+      status.classList.add('d-none');
       return;
     }
 
@@ -361,6 +365,7 @@
         local: report.local_count,
       }) + '</span>'
       + ' <button type="button" class="button small ml-2 js-assets-status-details">' + t('Подробнее') + '</button>';
+    status.classList.remove('d-none');
   }
 
   function showAssetsDialog(report) {
@@ -554,6 +559,84 @@
       })
       .catch(function (err) {
         DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось проверить версию'), err);
+      });
+  }
+
+  function getComposerTablePlugin() {
+    const tableEl = document.getElementById('dc-composer-table');
+    if (!tableEl || !DevCraft.Metro.lib() || typeof DevCraft.Metro.lib().getPlugin !== 'function') {
+      return null;
+    }
+
+    return DevCraft.Metro.getPlugin(tableEl, 'table');
+  }
+
+  function initComposerTable() {
+    const tableEl = document.getElementById('dc-composer-table');
+    if (!tableEl) {
+      return;
+    }
+
+    const plugin = getComposerTablePlugin();
+    if (!plugin) {
+      DevCraft.Metro.makePlugin(tableEl, 'table');
+    }
+  }
+
+  function runComposerAction(actionType, packageName) {
+    DevCraftAjax.post('composer_action', {
+      actionType: actionType,
+      packageName: packageName,
+    })
+      .then(function (payload) {
+        DevCraftAjax.handleNotice(payload);
+        if (payload.success) {
+          const table = getComposerTablePlugin();
+          if (table && typeof table.reload === 'function') {
+            table.reload();
+          }
+        } else if (payload.error && payload.error.detail && payload.error.detail.output) {
+          DevCraftMetro.dialogCreate({
+            title: t('Ошибка Composer'),
+            content: '<pre class="text-small">' + escapeHtml(String(payload.error.detail.output)) + '</pre>',
+            customButtons: [
+              { text: t('Повторить'), cls: 'warning', onclick: function () { runComposerAction(actionType, packageName); } },
+              { text: t('Закрыть'), cls: 'js-dialog-close', onclick: function () {} },
+            ],
+          });
+        }
+      })
+      .catch(function (err) {
+        DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось выполнить Composer-действие'), err);
+      });
+  }
+
+  function runDumpAutoload() {
+    DevCraftAjax.post('dump_autoload', {})
+      .then(function (payload) {
+        DevCraftAjax.handleNotice(payload);
+      })
+      .catch(function (err) {
+        DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось выполнить dump-autoload'), err);
+      });
+  }
+
+  function runComposerSync() {
+    DevCraftAjax.post('composer_sync', {})
+      .then(function (payload) {
+        DevCraftAjax.handleNotice(payload);
+
+        if (payload.success) {
+          const table = getComposerTablePlugin();
+          if (table && typeof table.reload === 'function') {
+            table.reload();
+          } else {
+            initComposerTable();
+          }
+        }
+      })
+      .catch(function (err) {
+        DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось синхронизировать пакеты с БД'), err);
       });
   }
 
@@ -2146,36 +2229,46 @@
         return;
       }
 
-      const saveBtn = event.target.closest('.js-settings-save');
+      const composerActionBtn = event.target.closest('.js-composer-action');
+      if (composerActionBtn) {
+        runComposerAction(composerActionBtn.dataset.actionType || '', composerActionBtn.dataset.package || '');
+        return;
+      }
 
-      if (saveBtn) {
-        const form = saveBtn.closest('.js-settings-form');
+      const dumpAutoloadBtn = event.target.closest('.js-dump-autoload');
+      if (dumpAutoloadBtn) {
+        runDumpAutoload();
+        return;
+      }
 
-        if (!form) {
-          return;
-        }
+      const composerSyncBtn = event.target.closest('.js-composer-sync');
+      if (composerSyncBtn) {
+        runComposerSync();
+        return;
+      }
 
-        const saveUrl = form.dataset.saveUrl;
-        const data = DevCraftAjax.serializeForm(form);
-        const userHashInput = form.querySelector('input[name="user_hash"]');
-        const userHash = userHashInput ? userHashInput.value : '';
+      const copyLogBtn = event.target.closest('.js-copy-log-text');
+      if (copyLogBtn) {
+        const targetId = copyLogBtn.dataset.target || 'dc-log-copy-text';
+        const textarea = document.getElementById(targetId);
+        const text = textarea ? textarea.value : '';
 
-        fetch(saveUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            user_hash: userHash,
-            data: JSON.stringify(data),
-          }).toString(),
-        })
-          .then(DevCraftAjax.parseResponse)
-          .then(function (payload) {
-            DevCraftAjax.showFieldErrors(form, payload.error && payload.error.fields ? payload.error.fields : null);
-            DevCraftAjax.handleNotice(payload);
-          })
-          .catch(function (err) {
-            DevCraftMetro.notifyError(t('Ошибка'), t('Сеть или сервер недоступен'), err);
+        if (text && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          navigator.clipboard.writeText(text).then(function () {
+            DevCraftMetro.notifySuccess(t('Готово'), t('Текст скопирован в буфер обмена'));
+          }).catch(function () {
+            if (textarea) {
+              textarea.focus();
+              textarea.select();
+              DevCraftMetro.notifySuccess(t('Готово'), t('Текст выделен — используйте Ctrl+C'));
+            }
           });
+        } else if (textarea) {
+          textarea.focus();
+          textarea.select();
+          DevCraftMetro.notifySuccess(t('Готово'), t('Текст выделен — используйте Ctrl+C'));
+        }
+        return;
       }
 
       const deleteBtn = event.target.closest('.js-delete-log');
@@ -2294,18 +2387,24 @@
   DevCraftDashboard.shiftNewModuleField = shiftNewModuleField;
   DevCraftDashboard.newModuleListItem = newModuleListItem;
   DevCraftDashboard.bindDocumentClick = _bindDocumentClick;
+  DevCraftComposer.initTable = initComposerTable;
+  DevCraftComposer.runAction = runComposerAction;
+  DevCraftComposer.runDumpAutoload = runDumpAutoload;
+  DevCraftComposer.runSync = runComposerSync;
 
   const DevCraftAdmin = {
     Filter: DevCraftFilter,
     Assets: DevCraftAssets,
     Dashboard: DevCraftDashboard,
+    Composer: DevCraftComposer,
     boot() {
       DevCraftAdmin.Dashboard.init();
       DevCraftAdmin.Filter.initBar();
       DevCraftAdmin.Filter.initLogsTable();
+      DevCraftAdmin.Composer.initTable();
       DevCraftAdmin.Filter.initPopstate();
       if (DevCraft.Debug.isEnabled()) {
-        DevCraft.Debug.log('Filter', 'boot', { message: 'Admin-Modul initialisiert' });
+        DevCraft.Debug.log('Filter', 'boot', { message: t('Модуль Admin инициализирован') });
       }
     },
   };
@@ -2315,5 +2414,6 @@
   global.DevCraft.Filter = DevCraftAdmin.Filter;
   global.DevCraft.Assets = DevCraftAdmin.Assets;
   global.DevCraft.Dashboard = DevCraftAdmin.Dashboard;
+  global.DevCraft.Composer = DevCraftAdmin.Composer;
 
 })(window);

@@ -251,25 +251,30 @@ final class Paths {
 	}
 
 	/**
-	 * Формирует полный URL AJAX-запроса с параметрами controller и method.
+	 * Формирует полный URL AJAX-запроса с параметрами mod, controller и method.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param   string  $method      Имя AJAX-метода.
-	 * @param   string  $controller  Идентификатор контроллера (по умолчанию «admin»).
+	 * @param   string       $method      Имя AJAX-метода.
+	 * @param   string       $controller  Идентификатор контроллера (по умолчанию «admin»).
+	 * @param   string|null  $mod         Код модуля DLE (mod); для сателлитных плагинов обязателен.
 	 *
-	 * @return string URL с query-параметрами controller и method.
+	 * @return string URL с query-параметрами.
 	 * @example
-	 *        $url = Paths::ajaxUrl('saveSettings', 'admin');
+	 *        $url = Paths::ajaxUrl('settings', 'admin', 'db_manager');
 	 *
 	 */
-	public static function ajaxUrl(string $method, string $controller = 'admin'): string {
-		$query = http_build_query([
+	public static function ajaxUrl(string $method, string $controller = 'admin', ?string $mod = NULL): string {
+		$params = [
 			'controller' => $controller,
 			'method'     => $method,
-		]);
+		];
 
-		return self::ajaxBase() . '?' . $query;
+		if($mod !== NULL && $mod !== '') {
+			$params['mod'] = $mod;
+		}
+
+		return self::ajaxBase() . '?' . http_build_query($params);
 	}
 
 }

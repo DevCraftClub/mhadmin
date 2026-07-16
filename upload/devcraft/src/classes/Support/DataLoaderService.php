@@ -55,10 +55,9 @@ final class DataLoaderService {
 	 *
 	 * @since 173.3.0
 	 *
-	 * @param   DatabaseGateway  $db          Шлюз базы данных.
-	 * @param   int              $cacheTimer  Время жизни кеша в секундах.
+	 * @param   DatabaseGateway  $db  Шлюз базы данных.
 	 */
-	public function __construct(private readonly DatabaseGateway $db, private readonly int $cacheTimer = 3600) {}
+	public function __construct(private readonly DatabaseGateway $db) {}
 
 	/**
 	 * Загружает данные таблицы DLE с кешированием (legacy load_data).
@@ -290,33 +289,30 @@ final class DataLoaderService {
 	}
 
 	/**
-	 * Читает закешированные строки, если TTL не истёк.
+	 * Читает закешированные строки.
 	 *
 	 * @since 173.3.0
 	 *
 	 * @param   string  $cacheKey  Ключ записи кеша.
 	 *
-	 * @return array<int, array<string, mixed>>|null Строки или null при промахе/истечении.
+	 * @return array<int, array<string, mixed>>|null Строки или null при промахе.
 	 */
 	private function readCache(string $cacheKey): ?array {
 		$cached = CacheControl::getCache(self::CACHE_TYPE, $cacheKey);
 
-		if($cached === false || !is_array($cached)) {
+		if($cached === false) {
 			return NULL;
 		}
 
-		$storedAt = (int) ($cached['_stored_at'] ?? 0);
-		$rows     = $cached['rows'] ?? NULL;
+		if(is_array($cached) && isset($cached['rows']) && is_array($cached['rows'])) {
+			return $cached['rows'];
+		}
 
-		if(!is_array($rows)) {
+		if(!is_array($cached)) {
 			return NULL;
 		}
 
-		if($storedAt > 0 && (time() - $storedAt) >= $this->cacheTimer) {
-			return NULL;
-		}
-
-		return $rows;
+		return $cached;
 	}
 
 	/**
@@ -329,10 +325,7 @@ final class DataLoaderService {
 	 */
 	private function writeCache(string $cacheKey, array $rows): void {
 		try {
-			CacheControl::setCache(self::CACHE_TYPE, $cacheKey, [
-				'_stored_at' => time(),
-				'rows'       => $rows,
-			]);
+			CacheControl::setCache(self::CACHE_TYPE, $cacheKey, $rows);
 		} catch(Throwable $exception) {
 			LogGenerator::for('DataLoaderService')->log($exception->getMessage());
 		}

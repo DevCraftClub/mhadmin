@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset_base }}css/devcraft.css">
     <style>.navview-content { padding-top: 52px; } #page-content { padding: 1rem; }</style>
 </head>
-<body data-ajax-base="{{ ajax_base_url }}" data-debug="{{ devcraft_debug ? '1' : '0' }}">
+<body data-ajax-base="{{ ajax_base_url }}" data-mod="{{ mod|default('devcraft') }}" data-debug="{{ devcraft_debug ? '1' : '0' }}">
 <input type="hidden" name="user_hash" value="{{ dle_login_hash }}">
 <div data-role="navview" data-expand-point="md">
     <div class="navview-pane">
@@ -44,6 +44,7 @@
 </script>
 <script src="{{ devcraft_translation_url }}"></script>
 <script src="{{ asset_base }}js/i18n/translator.js"></script>
+{# devcraft.js — обязательное ядро для всех модулей DevCraft Admin (настройки, AJAX, уведомления) #}
 <script src="{{ asset_base }}js/devcraft.js?v={{ asset_js_mtime|default(version) }}"></script>
 {% for js_url in module_js_urls|default([]) %}
 <script src="{{ js_url }}"></script>

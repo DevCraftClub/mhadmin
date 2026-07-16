@@ -45,11 +45,31 @@
         </div>
     </div>
 
-    <div id="dc-assets-status" class="remark info dc-assets-status mb-4" data-auto-check="1">
-        <span class="mif-loop2 mr-1 rotating"></span>
-        <strong>{{ 'Проверка ресурсов…'|trans }}</strong>
-        <span class="text-small fg-gray ml-2">{{ 'Сравнение локальных файлов с сервером разработчика'|trans }}</span>
+    <div id="dc-assets-status" class="remark info dc-assets-status mb-4 d-none" data-auto-check="1"></div>
+    <div class="remark warning dc-dashboard-card mb-4">
+        <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Composer'|trans }}</h4>
+        <p class="mb-2">
+            {{ 'Отсутствует обязательных пакетов:'|trans }}
+            <strong>{{ d.composer.missing_required|default(0) }}</strong>
+        </p>
+        <div class="d-flex flex-wrap gap-1 mt-2">
+            <a href="{{ d.composer.url }}" class="button small primary">
+                <span class="mif-tools mr-1"></span>{{ 'Открыть Composer'|trans }}
+            </a>
+            <button type="button" class="button small warning js-dump-autoload">
+                <span class="mif-loop2 mr-1"></span>{{ 'dump-autoload'|trans }}
+            </button>
+        </div>
     </div>
+
+    {% if d.crowdin %}
+        <div class="remark dc-dashboard-card mb-4">
+            <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Переводы Crowdin'|trans }}</h4>
+            <a href="{{ d.crowdin.project_url }}" target="_blank" rel="noopener">
+                <img src="{{ d.crowdin.badge_url }}" alt="Crowdin" />
+            </a>
+        </div>
+    {% endif %}
 
     <div class="grid dc-dashboard-grid">
         <div class="row">

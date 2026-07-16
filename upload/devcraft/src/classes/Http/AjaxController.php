@@ -19,6 +19,7 @@ namespace DevCraft\Core\Http;
 use DevCraft\Core\Application;
 use DevCraft\Core\I18n\Translation;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Interfaces\ResponseInterface;
 
 /**
  * Диспетчер AJAX-запросов DevCraft: аутентификация, маршрутизация, ответ.
@@ -30,7 +31,7 @@ use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 final class AjaxController {
 
 	/**
-	 * Обрабатывает текущий AJAX-запрос и отправляет JSON-ответ.
+	 * Обрабатывает текущий AJAX-запрос и отправляет ответ (JSON или файл).
 	 *
 	 * @since 200.4.0
 	 *
@@ -94,9 +95,13 @@ final class AjaxController {
 
 		try {
 			if($handler instanceof AjaxHandlerInterface) {
-				$handler->handle($request)->send();
+				$response = $handler->handle($request);
 
-				return;
+				if($response instanceof ResponseInterface) {
+					$response->send();
+
+					return;
+				}
 			}
 
 			if(method_exists($handler, 'handle')) {
@@ -104,6 +109,10 @@ final class AjaxController {
 
 				return;
 			}
+		} catch(JsonResponseException $e) {
+			$e->response()->send();
+
+			return;
 		} catch(\Throwable $e) {
 			$this->sendInternalError($e);
 

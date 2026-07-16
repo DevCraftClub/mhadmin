@@ -276,10 +276,7 @@ final class Application {
 	public function dataLoader(): DataLoaderService {
 		$this->boot();
 
-		$config = DevCraftConfig::all();
-		$timer  = (int) ($config['cache_timer'] ?? 3600);
-
-		return $this->dataLoader ??= new DataLoaderService($this->database(), $timer);
+		return $this->dataLoader ??= new DataLoaderService($this->database());
 	}
 
 	/**
@@ -295,10 +292,7 @@ final class Application {
 	public function dleData(): DleDataService {
 		$this->boot();
 
-		$config = DevCraftConfig::all();
-		$timer  = (int) ($config['cache_timer'] ?? 3600);
-
-		return $this->dleData ??= new DleDataService($this->dataLoader(), $timer);
+		return $this->dleData ??= new DleDataService($this->dataLoader());
 	}
 
 	/**

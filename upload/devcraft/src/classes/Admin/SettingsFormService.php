@@ -39,15 +39,21 @@ final class SettingsFormService {
 	 * @global array<string, mixed>                   $config       Глобальная конфигурация DLE.
 	 *
 	 * @param   array<string, array<string, string>>  $supplements  Дополнительные options по id поля.
-	 *
 	 * @param   FormSchema                            $schema       Схема полей настроек.
+	 * @param   string|null                           $mod          Код модуля DLE для save_url.
+	 * @param   string                                $controller   AJAX-контроллер из manifest.
 	 *
 	 * @return array<string, mixed> Данные формы: codename, layout, sections, save_url.
 	 *
 	 * @example
-	 *     $form = (new SettingsFormService())->buildViewModel($schema);
+	 *     $form = (new SettingsFormService())->buildViewModel($schema, [], 'db_manager');
 	 */
-	public function buildViewModel(FormSchema $schema, array $supplements = []): array {
+	public function buildViewModel(
+		FormSchema $schema,
+		array      $supplements = [],
+		?string    $mod = NULL,
+		string     $controller = 'admin',
+	): array {
 		global $config;
 
 		$settings = DataManager::getConfig($schema->codename);
@@ -110,7 +116,7 @@ final class SettingsFormService {
 			'codename' => $schema->codename,
 			'layout'   => strtolower($schema->layout->name),
 			'sections' => $sections,
-			'save_url' => Paths::ajaxUrl('settings'),
+			'save_url' => Paths::ajaxUrl('settings', $controller, $mod),
 		];
 	}
 

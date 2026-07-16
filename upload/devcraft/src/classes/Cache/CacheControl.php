@@ -20,6 +20,7 @@ use Exception;
 use Throwable;
 use JsonException;
 use DevCraft\Core\Config\Paths;
+use DevCraft\Types\CacheInputType;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Config\DevCraftConfig;
@@ -33,6 +34,13 @@ use DevCraft\Core\Abstracts\AbstractType;
  * @subpackage Core.Cache
  */
 final class CacheControl {
+
+	/**
+	 * Время жизни кэша по умолчанию (минуты): 1 сутки.
+	 *
+	 * @since 200.4.0
+	 */
+	private const int DEFAULT_CACHE_TIMER_MINUTES = 1440;
 
 	/**
 	 * Корневой каталог файлового кэша.
@@ -57,7 +65,7 @@ final class CacheControl {
 		$cachePath = $path ?? (string) (DevCraftConfig::raw()['cache_path'] ?? '');
 
 		if($cachePath === '') {
-			$cachePath = Paths::root() . '/cache';
+			$cachePath = Paths::cache();
 		} elseif(!str_starts_with($cachePath, '/') && !preg_match('#^[A-Za-z]:[\\\\/]#', $cachePath)) {
 			$cachePath = ROOT_DIR . $cachePath;
 		}
@@ -94,6 +102,17 @@ final class CacheControl {
 	}
 
 	/**
+	 * Возвращает TTL файлового кэша в секундах из настроек DevCraft.
+	 *
+	 * @since 200.4.0
+	 */
+	public static function cacheTimer(): int {
+		$minutes = (int) (DevCraftConfig::raw()['cache_timer'] ?? self::DEFAULT_CACHE_TIMER_MINUTES);
+
+		return max(0, $minutes) * 60;
+	}
+
+	/**
 	 * Сохраняет данные в файловый кэш по типу и имени.
 	 *
 	 * @since 200.4.0
@@ -106,32 +125,24 @@ final class CacheControl {
 	 *     CacheControl::setCache('dataloader', 'users_list', ['id' => 1]);
 	 */
 	public static function setCache(string $type, string $name, mixed $data): void {
-		if(self::$path === NULL) {
-			self::init();
-		}
+		self::ensureInitialized();
 
-		$fileName  = DataManager::toTranslit($name);
-		$fileType  = DataManager::toTranslit($type);
-		$cacheData = $data;
+		$normalizedData = self::normalizeCacheValue($data);
+		$envelope       = CacheInputType::wrap($normalizedData);
+		$cacheData      = '';
 
-		$directoryPath = DataManager::normalizePath(self::$path . DIRECTORY_SEPARATOR . $fileType);
+		$directoryPath = self::cacheDirectoryPath($type);
 		DataManager::createDir($directoryPath);
 
-		$filePath = DataManager::normalizePath($directoryPath . DIRECTORY_SEPARATOR . $fileName . '.cache');
+		$filePath = self::cacheFilePath($type, $name);
 
-		if($data instanceof AbstractType || (is_object($data) && $data->hasMethod('toArray'))) {
-			$cacheData = $data->toArray();
-		}
-
-		if(is_array($cacheData)) {
-			try {
-				$cacheData = json_encode(
-					$data,
-					JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES,
-				);
-			} catch(JsonException $e) {
-				LogGenerator::for('CacheControl')->log($e->getMessage());
-			}
+		try {
+			$cacheData = json_encode(
+				$envelope->toArray(),
+				JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES,
+			);
+		} catch(JsonException $e) {
+			LogGenerator::for('CacheControl')->log($e->getMessage());
 		}
 
 		try {
@@ -148,6 +159,65 @@ final class CacheControl {
 	}
 
 	/**
+	 * Приводит данные к сериализуемому виду для JSON-кеша.
+	 *
+	 * Защищён от циклических ссылок объектов и чрезмерной глубины вложенности.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<int, true>  $visited  Уже обработанные object_id.
+	 */
+	private static function normalizeCacheValue(mixed $value, array &$visited = [], int $depth = 0): mixed {
+		if($depth > 32) {
+			return NULL;
+		}
+
+		if($value === NULL) {
+			return NULL;
+		}
+
+		if(is_array($value)) {
+			return self::normalizeCacheArray($value, $visited, $depth + 1);
+		}
+
+		if($value instanceof AbstractType) {
+			return self::normalizeCacheValue($value->toArray(), $visited, $depth + 1);
+		}
+
+		if(is_object($value)) {
+			$objectId = spl_object_id($value);
+
+			if(isset($visited[$objectId])) {
+				return NULL;
+			}
+
+			$visited[$objectId] = true;
+
+			if(method_exists($value, 'toArray')) {
+				return self::normalizeCacheValue($value->toArray(), $visited, $depth + 1);
+			}
+
+			return self::normalizeCacheArray(get_object_vars($value), $visited, $depth + 1);
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Приводит массив к сериализуемому виду с общей картой посещённых объектов.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<mixed>       $value
+	 * @param   array<int, true>   $visited
+	 *
+	 * @return array<mixed>
+	 */
+	private static function normalizeCacheArray(array $value, array &$visited, int $depth): array {
+		return array_map(function($item) use ($depth, $visited) { return self::normalizeCacheValue($item, $visited, $depth); }, $value);
+	}
+
+	/**
 	 * Читает данные из файлового кэша по типу и имени.
 	 *
 	 * @since 200.4.0
@@ -161,17 +231,13 @@ final class CacheControl {
 	 *     $data = CacheControl::getCache('dataloader', 'users_list');
 	 */
 	public static function getCache(string $type, string $name): mixed {
-		if(self::$path === NULL) {
-			self::init();
-		}
+		self::ensureInitialized();
 
 		if((DevCraftConfig::raw()['debug'] ?? false)) {
 			return false;
 		}
 
-		$fileName = DataManager::toTranslit($name);
-		$fileType = DataManager::toTranslit($type);
-		$filePath = DataManager::normalizePath(sprintf('%s/%s/%s.cache', self::$path, $fileType, $fileName));
+		$filePath = self::cacheFilePath($type, $name);
 
 		try {
 			$data = @file_get_contents($filePath);
@@ -180,18 +246,109 @@ final class CacheControl {
 				return false;
 			}
 
+			$decoded = NULL;
+
 			try {
-				return json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+				$decoded = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
 			} catch(Exception) {
 				return $data;
 			}
-		} catch(JsonException|Exception $e) {
+
+			if(!is_array($decoded)) {
+				return $decoded;
+			}
+
+			if(self::isCacheEnvelope($decoded)) {
+				$envelope = CacheInputType::fromArray($decoded);
+
+				if(!self::isStoredAtFresh($envelope->storedAt)) {
+					self::deleteCacheFile($filePath);
+
+					return false;
+				}
+
+				return $envelope->cacheData;
+			}
+
+			if(!self::isFileFresh($filePath)) {
+				self::deleteCacheFile($filePath);
+
+				return false;
+			}
+
+			return $decoded;
+		} catch(Exception $e) {
 			LogGenerator::for('CacheControl')->log(
 				["Ошибка декодирования JSON: {$e->getMessage()}"],
 			);
 		}
 
 		return false;
+	}
+
+	/**
+	 * Проверяет, что массив соответствует формату CacheInputType.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<string, mixed>  $data
+	 */
+	private static function isCacheEnvelope(array $data): bool {
+		return array_key_exists('cacheData', $data) && array_key_exists('storedAt', $data);
+	}
+
+	/**
+	 * Проверяет актуальность записи по Unix-времени сохранения.
+	 *
+	 * @since 200.4.0
+	 */
+	private static function isStoredAtFresh(int $storedAt): bool {
+		if($storedAt <= 0) {
+			return false;
+		}
+
+		return self::isTimestampFresh($storedAt);
+	}
+
+	/**
+	 * Проверяет актуальность legacy-записи по mtime файла кэша.
+	 *
+	 * @since 200.4.0
+	 */
+	private static function isFileFresh(string $filePath): bool {
+		$mtime = @filemtime($filePath);
+
+		if($mtime === false) {
+			return false;
+		}
+
+		return self::isTimestampFresh($mtime);
+	}
+
+	/**
+	 * Проверяет timestamp с учётом общего TTL кэша.
+	 *
+	 * @since 200.4.0
+	 */
+	private static function isTimestampFresh(int $timestamp): bool {
+		$timer = self::cacheTimer();
+
+		if($timer <= 0) {
+			return true;
+		}
+
+		return (time() - $timestamp) < $timer;
+	}
+
+	/**
+	 * Удаляет устаревший файл кэша.
+	 *
+	 * @since 200.4.0
+	 */
+	private static function deleteCacheFile(string $filePath): void {
+		if(is_file($filePath)) {
+			@unlink($filePath);
+		}
 	}
 
 	/**
@@ -205,9 +362,7 @@ final class CacheControl {
 	 *     CacheControl::clearCache('dataloader');
 	 */
 	public static function clearCache(string|array $type = 'all'): void {
-		if(self::getPath() === NULL) {
-			self::init();
-		}
+		self::ensureInitialized();
 
 		if(is_array($type)) {
 			foreach($type as $cacheType) {
@@ -223,8 +378,38 @@ final class CacheControl {
 			return;
 		}
 
-		$cacheDirectory = self::$path . '/' . DataManager::toTranslit($type);
-		DataManager::deleteDir($cacheDirectory);
+		DataManager::deleteDir(self::cacheDirectoryPath($type));
+	}
+
+	/**
+	 * Инициализирует путь к кэшу при первом обращении.
+	 *
+	 * @since 200.4.0
+	 */
+	private static function ensureInitialized(): void {
+		if(self::$path === NULL) {
+			self::init();
+		}
+	}
+
+	/**
+	 * Возвращает путь к каталогу типа кэша.
+	 *
+	 * @since 200.4.0
+	 */
+	private static function cacheDirectoryPath(string $type): string {
+		return DataManager::normalizePath((string) self::$path . DIRECTORY_SEPARATOR . DataManager::toTranslit($type));
+	}
+
+	/**
+	 * Возвращает путь к файлу записи кэша.
+	 *
+	 * @since 200.4.0
+	 */
+	private static function cacheFilePath(string $type, string $name): string {
+		return DataManager::normalizePath(
+			self::cacheDirectoryPath($type) . DIRECTORY_SEPARATOR . DataManager::toTranslit($name) . '.cache',
+		);
 	}
 
 }

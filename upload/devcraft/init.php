@@ -27,19 +27,14 @@
 declare(strict_types=1);
 
 if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
-	define('DEVCRAFT_BOOTSTRAPPED', true);
-
 	$vendor_autoload = __DIR__ . '/vendor/autoload.php';
 
 	if(!is_file($vendor_autoload)) {
-		if(defined('DATALIFEENGINE')) {
-			echo '<div class="alert alert-danger" style="margin:1em">'
-			     . 'DevCraft: отсутствует <code>vendor/</code>. Выполните <code>composer install</code> в каталоге <code>devcraft/</code>.'
-			     . '</div>';
-		}
-
+		define('DEVCRAFT_VENDOR_MISSING', true);
 		return;
 	}
+
+	define('DEVCRAFT_BOOTSTRAPPED', true);
 
 	/** Подключает автозагрузчик Composer (исключение: без DLEPlugins::Check()). */
 	require_once $vendor_autoload;

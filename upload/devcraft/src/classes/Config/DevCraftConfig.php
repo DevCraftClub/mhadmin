@@ -119,7 +119,7 @@ final class DevCraftConfig {
 	 * @return array<string, mixed> Разрешённые настройки плагина.
 	 * @example
 	 *        $config = DevCraftConfig::all();
-	 *        $timer  = (int) ($config['cache_timer'] ?? 3600);
+	 *        $timer  = CacheControl::cacheTimer(); // секунды, cache_timer в минутах
 	 *
 	 */
 	public static function all(): array {

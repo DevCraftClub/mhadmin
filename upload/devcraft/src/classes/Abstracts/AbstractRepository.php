@@ -16,35 +16,35 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Abstracts;
 
+use DevCraft\Core\Application;
+use Cycle\ORM\Select\Repository;
+use Cycle\ORM\RepositoryInterface;
 use Cycle\Database\Injection\Parameter;
 use DevCraft\Core\Admin\FilterFormService;
-use DevCraft\Core\Application;
 use DevCraft\Core\Interfaces\FilterableRepositoryInterface;
-use Cycle\ORM\RepositoryInterface;
-use Cycle\ORM\Select\Repository;
 
 /**
  * Базовый Cycle ORM-репозиторий с фильтрацией, пагинацией и метаданными колонок.
  *
- * @package DevCraft
+ * @package    DevCraft
+ * @since      200.4.0
  * @subpackage Core.Abstracts
- * @since 200.4.0
  */
 abstract class AbstractRepository extends Repository implements RepositoryInterface, FilterableRepositoryInterface {
 
 	/**
 	 * Кэш уникальных значений колонок для фильтров.
 	 *
-	 * @var array<string, list<string>>
 	 * @since 200.4.0
+	 * @var array<string, list<string>>
 	 */
 	private array $distinctCache = [];
 
 	/**
 	 * Кэш минимальных и максимальных значений колонок.
 	 *
-	 * @var array<string, array{min: mixed, max: mixed}>
 	 * @since 200.4.0
+	 * @var array<string, array{min: mixed, max: mixed}>
 	 */
 	private array $boundsCache = [];
 
@@ -81,8 +81,8 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param int $total Количество записей.
-	 * @param int $start Смещение от начала выборки.
+	 * @param   int  $total  Количество записей.
+	 * @param   int  $start  Смещение от начала выборки.
 	 *
 	 * @return array<int, object> Список сущностей.
 	 *
@@ -112,13 +112,13 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param list<array{column: string, op: string, value: mixed}> $criteria           Критерии фильтрации.
-	 * @param int                                                  $page                Номер страницы (начиная с 1).
-	 * @param int                                                  $perPage             Записей на странице.
-	 * @param string                                               $order               Колонка сортировки.
-	 * @param string                                               $sort                Направление (`asc` или `desc`).
-	 * @param list<string>                                         $allowedOrderColumns Допустимые колонки сортировки.
-	 * @param string                                               $defaultOrder        Колонка сортировки по умолчанию.
+	 * @param   list<array{column: string, op: string, value: mixed}>  $criteria             Критерии фильтрации.
+	 * @param   int                                                    $page                 Номер страницы (начиная с 1).
+	 * @param   int                                                    $perPage              Записей на странице.
+	 * @param   string                                                 $order                Колонка сортировки.
+	 * @param   string                                                 $sort                 Направление (`asc` или `desc`).
+	 * @param   list<string>                                           $allowedOrderColumns  Допустимые колонки сортировки.
+	 * @param   string                                                 $defaultOrder         Колонка сортировки по умолчанию.
 	 *
 	 * @return array{items: object[], total: int} Элементы текущей страницы и общее количество.
 	 *
@@ -126,12 +126,12 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *     $result = $repository->findFiltered($criteria, 1, 25, 'created_at', 'desc', ['created_at', 'level']);
 	 */
 	public function findFiltered(
-		array $criteria,
-		int $page,
-		int $perPage,
+		array  $criteria,
+		int    $page,
+		int    $perPage,
 		string $order,
 		string $sort,
-		array $allowedOrderColumns,
+		array  $allowedOrderColumns,
 		string $defaultOrder = 'created_at',
 	): array {
 		$select = $this->select();
@@ -139,7 +139,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 
 		$total = $select->count();
 		$page  = max(1, $page);
-		$order = in_array($order, $allowedOrderColumns, true) ? $order : $defaultOrder;
+		$order = in_array($order, $allowedOrderColumns, true)? $order : $defaultOrder;
 
 		/** @var object[] $items */
 		$items = $select
@@ -159,7 +159,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string $column Имя колонки в таблице сущности.
+	 * @param   string  $column  Имя колонки в таблице сущности.
 	 *
 	 * @return list<string> Отсортированный список уникальных строковых значений.
 	 *
@@ -171,7 +171,8 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 			return $this->distinctCache[$column];
 		}
 
-		$rows = $this->select()
+		$rows = $this
+			->select()
 			->columns([$column])
 			->groupBy($column)
 			->orderBy($column)
@@ -197,7 +198,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string $column Имя колонки в таблице сущности.
+	 * @param   string  $column  Имя колонки в таблице сущности.
 	 *
 	 * @return array{min: mixed, max: mixed} Границы диапазона или `null` при отсутствии данных.
 	 *
@@ -209,13 +210,14 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 			return $this->boundsCache[$column];
 		}
 
-		$rows = $this->select()
+		$rows = $this
+			->select()
 			->columns([$column])
 			->orderBy($column)
 			->fetchAll();
 
 		if($rows === []) {
-			return $this->boundsCache[$column] = ['min' => null, 'max' => null];
+			return $this->boundsCache[$column] = ['min' => NULL, 'max' => NULL];
 		}
 
 		return $this->boundsCache[$column] = [
@@ -225,11 +227,31 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	}
 
 	/**
+	 * Сохраняет сущность (INSERT или UPDATE) через DatabaseGateway::run.
+	 *
+	 * Вызывает `beforeSave()` у сущности, если метод есть.
+	 *
+	 * @since 200.4.1
+	 *
+	 * @param   object  $entity  Экземпляр сущности для сохранения.
+	 *
+	 * @return object Та же сущность после persist.
+	 *
+	 * @example
+	 *     $repository->saveEntity($logEntry);
+	 */
+	public function saveEntity(object $entity): object {
+		Application::instance()->database()->run($entity);
+
+		return $entity;
+	}
+
+	/**
 	 * Удаляет сущность из базы данных.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param object $entity Экземпляр сущности для удаления.
+	 * @param   object  $entity  Экземпляр сущности для удаления.
 	 *
 	 * @return bool Всегда `true` при успешном вызове менеджера ORM.
 	 *
@@ -247,8 +269,8 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string $column Имя колонки для поиска.
-	 * @param mixed  $value  Значение для сравнения.
+	 * @param   string  $column  Имя колонки для поиска.
+	 * @param   mixed   $value   Значение для сравнения.
 	 *
 	 * @return bool `true`, если запись найдена и удалена; иначе `false`.
 	 *
@@ -258,7 +280,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	public function deleteByColumn(string $column, mixed $value): bool {
 		$record = $this->select()->where($column, $value)->fetchOne();
 
-		if($record === null) {
+		if($record === NULL) {
 			return false;
 		}
 
@@ -270,24 +292,24 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param mixed                                                  $select  Объект выборки Cycle ORM.
-	 * @param list<array{column: string, op: string, value: mixed}> $criteria Критерии фильтрации.
+	 * @param   mixed                                                  $select    Объект выборки Cycle ORM.
+	 * @param   list<array{column: string, op: string, value: mixed}>  $criteria  Критерии фильтрации.
 	 */
 	protected function applyCriteria(mixed $select, array $criteria): void {
 		foreach($criteria as $criterion) {
 			$column = (string) ($criterion['column'] ?? '');
 			$op     = (string) ($criterion['op'] ?? '');
-			$value  = $criterion['value'] ?? null;
+			$value  = $criterion['value'] ?? NULL;
 
 			if($column === '' || $op === '') {
 				continue;
 			}
 
 			match ($op) {
-				'in' => $select->where($column, 'in', new Parameter((array) $value)),
-				'like' => $select->where($column, 'like', "%{$value}%"),
-				'between' => $this->applyBetween($select, $column, is_array($value) ? $value : []),
-				default => null,
+				'in'      => $select->where($column, 'in', new Parameter((array) $value)),
+				'like'    => $select->where($column, 'like', "%{$value}%"),
+				'between' => $this->applyBetween($select, $column, is_array($value)? $value : []),
+				default   => NULL,
 			};
 		}
 	}
@@ -297,9 +319,9 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param mixed                $select Объект выборки Cycle ORM.
-	 * @param string               $column Имя колонки.
-	 * @param array<string, mixed> $value  Границы диапазона с ключами `from` и `to`.
+	 * @param   mixed                 $select  Объект выборки Cycle ORM.
+	 * @param   string                $column  Имя колонки.
+	 * @param   array<string, mixed>  $value   Границы диапазона с ключами `from` и `to`.
 	 */
 	protected function applyBetween(mixed $select, string $column, array $value): void {
 		$from = (string) ($value['from'] ?? '');
@@ -318,8 +340,8 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param mixed  $row    Строка результата (сущность, массив или объект).
-	 * @param string $column Имя колонки.
+	 * @param   mixed   $row     Строка результата (сущность, массив или объект).
+	 * @param   string  $column  Имя колонки.
 	 *
 	 * @return string Строковое представление значения или пустая строка.
 	 */
@@ -327,7 +349,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 		if($row instanceof AbstractEntity) {
 			$value = $row->getColumnVal($column);
 
-			return $value === null ? '' : (string) $value;
+			return $value === NULL? '' : (string) $value;
 		}
 
 		if(is_array($row)) {
@@ -344,7 +366,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 			if(method_exists($row, 'getColumnVal')) {
 				$value = $row->getColumnVal($column);
 
-				return $value === null ? '' : (string) $value;
+				return $value === NULL? '' : (string) $value;
 			}
 
 			if(isset($row->{$column})) {
@@ -360,7 +382,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param mixed $value Исходное значение.
+	 * @param   mixed  $value  Исходное значение.
 	 *
 	 * @return string Строковое представление.
 	 */

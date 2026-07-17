@@ -8,10 +8,10 @@
  * - string $full_link
  * - string $mode ('short'|'full')
  *
- * @var \dle_template $tpl
+ * @var \dle_template        $tpl
  * @var array<string, mixed> $row
- * @var string $full_link
- * @var string $mode
+ * @var string               $full_link
+ * @var string               $mode
  */
 
 declare(strict_types=1);
@@ -22,11 +22,11 @@ if(!defined('DATALIFEENGINE')) {
 
 global $config, $cat_info, $lang, $member_id, $user_group, $category_id, $is_logged;
 
-$cat_info     = is_array($cat_info ?? null) ? $cat_info : [];
-$member_id    = is_array($member_id ?? null) ? $member_id : ['user_group' => 4, 'name' => '', 'user_id' => 0];
-$user_group   = is_array($user_group ?? null) ? $user_group : [];
-$is_logged    = !empty($is_logged);
-$short_news_cache = false;
+$cat_info              = is_array($cat_info ?? NULL)? $cat_info : [];
+$member_id             = is_array($member_id ?? NULL)? $member_id : ['user_group' => 4, 'name' => '', 'user_id' => 0];
+$user_group            = is_array($user_group ?? NULL)? $user_group : [];
+$is_logged             = !empty($is_logged);
+$short_news_cache      = false;
 $allow_comments_in_cat = true;
 
 $tpl->set_block("'{banner_(.*?)}'si", '');
@@ -65,20 +65,20 @@ if(empty($row['category']) || $row['category'] === '0') {
 	} else {
 		foreach($cat_list as $element) {
 			if($element && !empty($cat_info[$element]['id'])) {
-				$my_cat[] = $cat_info[$element]['name'];
+				$my_cat[]      = $cat_info[$element]['name'];
 				$my_cat_link[] = '<a href="' . \DLEUrl::BuildUrl('category', [
-					'category' => function_exists('get_url') ? get_url($element) : '',
-				]) . '">' . $cat_info[$element]['name'] . '</a>';
+						'category' => function_exists('get_url')? get_url($element) : '',
+					]) . '">' . $cat_info[$element]['name'] . '</a>';
 
 				if(!empty($cat_info[$element]['disable_comments'])) {
 					$allow_comments_in_cat = false;
 				}
 			}
 		}
-		$my_cat_link = count($my_cat_link) ? implode($config['category_separator'] ?? ' &raquo;', $my_cat_link) : '---';
+		$my_cat_link = count($my_cat_link)? implode($config['category_separator'] ?? ' &raquo;', $my_cat_link) : '---';
 	}
 
-	$my_cat = count($my_cat) ? implode($config['category_separator'] ?? ' &raquo;', $my_cat) : '---';
+	$my_cat = count($my_cat)? implode($config['category_separator'] ?? ' &raquo;', $my_cat) : '---';
 }
 
 $url_cat = $category_id ?? 0;
@@ -115,7 +115,7 @@ $category_id = $url_cat;
 
 if(!empty($row['category']) && $row['category'] !== '0') {
 	$tpl->set('{category-url}', \DLEUrl::BuildUrl('category', [
-		'category' => function_exists('get_url') ? get_url($row['category']) : '',
+		'category' => function_exists('get_url')? get_url($row['category']) : '',
 	]));
 } else {
 	$tpl->set('{category-url}', '#');
@@ -139,30 +139,47 @@ $tpl->set('', [
 	'{alt-name}'      => (string) ($row['alt_name'] ?? ''),
 ]);
 
-$compare_date = function_exists('compare_days_date') ? compare_days_date($row['date'], $short_news_cache) : 2;
+// В public AJAX ($langdate часто не загружен) langdate() из functions.inc.php
+// падает: strtr(..., string). Используем langdate только при валидном массиве.
+$dcLangDateOk = isset($GLOBALS['langdate']) && is_array($GLOBALS['langdate']);
+$dcFormatDate = static function(int $stamp, string $format, bool $servertime = false) use ($dcLangDateOk): string {
+	if($dcLangDateOk && function_exists('langdate')) {
+		return (string) langdate($format, $stamp, $servertime);
+	}
+
+	return date('d.m.Y H:i', $stamp);
+};
+
+$compare_date = function_exists('compare_days_date')? compare_days_date($row['date'], $short_news_cache) : 2;
 $langHeute    = $lang['time_heute'] ?? '';
 $langGestern  = $lang['time_gestern'] ?? '';
 
-if(!$compare_date && function_exists('langdate')) {
-	$tpl->set('{date}', $langHeute . langdate(', H:i', $row['date'], $short_news_cache));
-} elseif($compare_date == 1 && function_exists('langdate')) {
-	$tpl->set('{date}', $langGestern . langdate(', H:i', $row['date'], $short_news_cache));
-} elseif(function_exists('langdate')) {
-	$tpl->set('{date}', langdate($config['timestamp_active'] ?? 'j F Y H:i', $row['date'], $short_news_cache));
+if(!$compare_date) {
+	$tpl->set('{date}', $langHeute . $dcFormatDate((int) $row['date'], ', H:i', (bool) $short_news_cache));
+} elseif($compare_date == 1) {
+	$tpl->set('{date}', $langGestern . $dcFormatDate((int) $row['date'], ', H:i', (bool) $short_news_cache));
 } else {
-	$tpl->set('{date}', date('d.m.Y H:i', (int) $row['date']));
+	$tpl->set('{date}', $dcFormatDate((int) $row['date'], (string) ($config['timestamp_active'] ?? 'j F Y H:i'), (bool) $short_news_cache));
 }
 
 $news_date = $row['date'];
 
-if(function_exists('formdate')) {
-	$tpl->copy_template = preg_replace_callback('#\{date=(.+?)\}#i', 'formdate', $tpl->copy_template);
+if(str_contains((string) $tpl->copy_template, '{date=')) {
+	if($dcLangDateOk && function_exists('formdate')) {
+		$tpl->copy_template = preg_replace_callback('#\{date=(.+?)\}#i', 'formdate', $tpl->copy_template);
+	} else {
+		$tpl->copy_template = preg_replace_callback(
+			'#\{date=(.+?)\}#i',
+			static fn(array $m): string => date('d.m.Y H:i', (int) $news_date),
+			(string) $tpl->copy_template,
+		);
+	}
 }
 
 if(strpos($tpl->copy_template, '[new]') !== false || strpos($tpl->copy_template, '[not-new]') !== false) {
 	$isNew = !empty($config['post_new'])
-		&& function_exists('compare_days_date')
-		&& compare_days_date($row['date'], $short_news_cache, true) < $config['post_new'];
+	         && function_exists('compare_days_date')
+	         && compare_days_date($row['date'], $short_news_cache, true) < $config['post_new'];
 
 	if($isNew) {
 		$tpl->set('[new]', '');
@@ -177,11 +194,11 @@ if(strpos($tpl->copy_template, '[new]') !== false || strpos($tpl->copy_template,
 
 if(strpos($tpl->copy_template, '[updated]') !== false || strpos($tpl->copy_template, '[not-updated]') !== false) {
 	$isUpdated = !empty($config['post_updated'])
-		&& !empty($row['editdate'])
-		&& !empty($row['view_edit'])
-		&& function_exists('compare_days_date')
-		&& compare_days_date($row['date'], $short_news_cache, true) > ($config['post_new'] ?? 0)
-		&& compare_days_date($row['editdate'], $short_news_cache, true) < $config['post_updated'];
+	             && !empty($row['editdate'])
+	             && !empty($row['view_edit'])
+	             && function_exists('compare_days_date')
+	             && compare_days_date($row['date'], $short_news_cache, true) > ($config['post_new'] ?? 0)
+	             && compare_days_date($row['editdate'], $short_news_cache, true) < $config['post_updated'];
 
 	if($isUpdated) {
 		$tpl->set('[updated]', '');
@@ -231,22 +248,28 @@ if(!empty($row['votes'])) {
 }
 
 if(!empty($row['view_edit']) && !empty($row['editdate'])) {
-	$compare_date = function_exists('compare_days_date') ? compare_days_date($row['editdate'], $short_news_cache) : 2;
+	$compare_date = function_exists('compare_days_date')? compare_days_date($row['editdate'], $short_news_cache) : 2;
 
-	if(!$compare_date && function_exists('langdate')) {
-		$tpl->set('{edit-date}', $langHeute . langdate(', H:i', $row['editdate'], $short_news_cache));
-	} elseif($compare_date == 1 && function_exists('langdate')) {
-		$tpl->set('{edit-date}', $langGestern . langdate(', H:i', $row['editdate'], $short_news_cache));
-	} elseif(function_exists('langdate')) {
-		$tpl->set('{edit-date}', langdate($config['timestamp_active'] ?? 'j F Y H:i', $row['editdate'], $short_news_cache));
+	if(!$compare_date) {
+		$tpl->set('{edit-date}', $langHeute . $dcFormatDate((int) $row['editdate'], ', H:i', (bool) $short_news_cache));
+	} elseif($compare_date == 1) {
+		$tpl->set('{edit-date}', $langGestern . $dcFormatDate((int) $row['editdate'], ', H:i', (bool) $short_news_cache));
 	} else {
-		$tpl->set('{edit-date}', date('d.m.Y H:i', (int) $row['editdate']));
+		$tpl->set('{edit-date}', $dcFormatDate((int) $row['editdate'], (string) ($config['timestamp_active'] ?? 'j F Y H:i'), (bool) $short_news_cache));
 	}
 
 	$news_date = $row['editdate'];
 
-	if(function_exists('formdate')) {
-		$tpl->copy_template = preg_replace_callback('#\{edit-date=(.+?)\}#i', 'formdate', $tpl->copy_template);
+	if(str_contains((string) $tpl->copy_template, '{edit-date=')) {
+		if($dcLangDateOk && function_exists('formdate')) {
+			$tpl->copy_template = preg_replace_callback('#\{edit-date=(.+?)\}#i', 'formdate', $tpl->copy_template);
+		} else {
+			$tpl->copy_template = preg_replace_callback(
+				'#\{edit-date=(.+?)\}#i',
+				static fn(array $m): string => date('d.m.Y H:i', (int) $news_date),
+				(string) $tpl->copy_template,
+			);
+		}
 	}
 
 	$tpl->set('{editor}', (string) $row['editor']);
@@ -282,7 +305,7 @@ if(!empty($config['allow_tags']) && !empty($row['tags'])) {
 		}
 
 		$url_tag = str_replace(['&#039;', '&quot;', '&amp;', '/'], ["'", '"', '&', '&frasl;'], $value);
-		$tagEnc  = function_exists('dle_strtolower') ? dle_strtolower($url_tag) : mb_strtolower($url_tag);
+		$tagEnc  = function_exists('dle_strtolower')? dle_strtolower($url_tag) : mb_strtolower($url_tag);
 		$tags[]  = '<a href="' . \DLEUrl::BuildUrl('tags', ['tag' => rawurlencode($tagEnc)]) . '">' . $value . '</a>';
 	}
 
@@ -333,10 +356,10 @@ if($ratingType === '1') {
 }
 
 if(!empty($row['allow_rate']) && function_exists('ShowRating')) {
-	$ug = $member_id['user_group'] ?? 4;
+	$ug          = $member_id['user_group'] ?? 4;
 	$allowRating = !empty($user_group[$ug]['allow_rating']);
-	$tpl->set('{rating}', ShowRating($row['id'], $row['rating'], $row['vote_num'], $allowRating ? 1 : 0));
-	$ratingscore = $row['vote_num'] ? str_replace(',', '.', (string) round($row['rating'] / $row['vote_num'], 1)) : '0';
+	$tpl->set('{rating}', ShowRating($row['id'], $row['rating'], $row['vote_num'], $allowRating? 1 : 0));
+	$ratingscore = $row['vote_num']? str_replace(',', '.', (string) round($row['rating'] / $row['vote_num'], 1)) : '0';
 	$dislikes    = ($row['vote_num'] - $row['rating']) / 2;
 	$likes       = $row['vote_num'] - $dislikes;
 	$tpl->set('{ratingscore}', $ratingscore);
@@ -361,11 +384,12 @@ if(!empty($row['allow_rate']) && function_exists('ShowRating')) {
 $config['rating_type'] = $temp_rating;
 
 $go_page = \DLEUrl::BuildUrl('user', ['user' => rawurlencode((string) $row['autor'])]);
-$tpl->set('[day-news]', '<a href="' . \DLEUrl::BuildUrl('date.day', [
-	'year'  => date('Y', (int) $row['date']),
-	'month' => date('m', (int) $row['date']),
-	'day'   => date('d', (int) $row['date']),
-]) . '">');
+$tpl->set('[day-news]',
+	'<a href="' . \DLEUrl::BuildUrl('date.day', [
+		'year'  => date('Y', (int) $row['date']),
+		'month' => date('m', (int) $row['date']),
+		'day'   => date('d', (int) $row['date']),
+	]) . '">');
 $tpl->set('[/day-news]', '</a>');
 $tpl->set('[profile]', '<a href="' . $go_page . '">');
 $tpl->set('[/profile]', '</a>');
@@ -423,7 +447,8 @@ if(stripos($tpl->copy_template, 'image-') !== false) {
 
 		if(isset($info['extension'])) {
 			if(($info['filename'] ?? '') === 'spoiler-plus' || ($info['filename'] ?? '') === 'spoiler-minus'
-				|| str_contains((string) ($info['dirname'] ?? ''), 'public/emoticons')) {
+			   || str_contains((string) ($info['dirname'] ?? ''), 'public/emoticons')
+			) {
 				continue;
 			}
 
@@ -443,7 +468,8 @@ if(stripos($tpl->copy_template, 'image-') !== false) {
 			$tpl->copy_template = str_replace('{image-' . $i_count . '}', $url, $tpl->copy_template);
 			$tpl->copy_template = str_replace('[image-' . $i_count . ']', '', $tpl->copy_template);
 			$tpl->copy_template = str_replace('[/image-' . $i_count . ']', '', $tpl->copy_template);
-			$tpl->copy_template = preg_replace("#\[not-image-{$i_count}\](.+?)\[/not-image-{$i_count}\]#is", '', $tpl->copy_template) ?? $tpl->copy_template;
+			$tpl->copy_template =
+				preg_replace("#\[not-image-{$i_count}\](.+?)\[/not-image-{$i_count}\]#is", '', $tpl->copy_template) ?? $tpl->copy_template;
 		}
 	}
 
@@ -460,7 +486,7 @@ if(preg_match("#\\{short-story limit=['\"](.+?)['\"]\\}#i", $tpl->copy_template,
 }
 
 if($mode === 'full' || str_contains($tpl->copy_template, '{full-story}')) {
-	$fullStory = $row['full_story'] !== '' ? $row['full_story'] : $row['short_story'];
+	$fullStory = $row['full_story'] !== ''? $row['full_story'] : $row['short_story'];
 	$tpl->set('{full-story}', $fullStory);
 
 	if(preg_match("#\\{full-story limit=['\"](.+?)['\"]\\}#i", $tpl->copy_template, $matches) && function_exists('clear_content')) {
@@ -479,7 +505,7 @@ if(count($xfields_in_news) && stripos((string) ($tpl->result['dc_parse'] ?? ''),
 }
 
 if(stripos((string) ($tpl->result['dc_parse'] ?? ''), '[hide') !== false) {
-	$ugId = $member_id['user_group'] ?? 4;
+	$ugId                    = $member_id['user_group'] ?? 4;
 	$tpl->result['dc_parse'] = preg_replace_callback(
 		'#\[hide(.*?)\](.+?)\[/hide\]#is',
 		static function(array $matches) use ($member_id, $user_group, $lang, $ugId): string {

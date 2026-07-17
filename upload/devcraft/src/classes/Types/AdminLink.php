@@ -29,7 +29,7 @@ use DevCraft\Core\Abstracts\AbstractType;
  * @subpackage Core.Types
  * @property string      $name      Отображаемое имя пункта меню.
  * @property string|null $link      URL или query-string ссылки.
- * @property string      $type      Тип элемента (`link`, `dropdown`, `divider`, `data`).
+ * @property string      $type      Тип элемента (`link`, `dropdown`, `divider`, `data`, `hidden`).
  * @property string|null $parent    Идентификатор родительского элемента.
  * @property string|null $extra     Дополнительные атрибуты или data-значение.
  * @property AdminLink[] $children  Вложенные пункты меню.
@@ -45,7 +45,7 @@ final class AdminLink extends AbstractType {
 	 *
 	 * @param   string       $name       Отображаемое имя пункта меню.
 	 * @param   string|null  $link       URL или query-string ссылки.
-	 * @param   string       $type       Тип элемента (`link`, `dropdown`, `divider`, `data`).
+	 * @param   string       $type       Тип элемента (`link`, `dropdown`, `divider`, `data`, `hidden`).
 	 * @param   string|null  $parent     Идентификатор родительского элемента.
 	 * @param   string|null  $extra      Дополнительные атрибуты или data-значение.
 	 * @param   AdminLink[]  $children   Вложенные пункты меню.
@@ -94,6 +94,28 @@ final class AdminLink extends AbstractType {
 			link     : '?mod=' . rawurlencode($mod) . '&action=' . rawurlencode($action),
 			type     : 'link',
 			extra    : $extra,
+			action   : $action,
+			pageClass: $pageClass,
+		);
+	}
+
+	/**
+	 * Регистрирует страницу без пункта в боковом меню.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $action     Ключ action страницы.
+	 * @param   string  $pageClass  Полное имя класса страницы.
+	 *
+	 * @return self Элемент типа `hidden` (роутинг есть, в navview не показывается).
+	 *
+	 * @example
+	 *     $link = AdminLink::hidden('edit', EditSuggestionPage::class);
+	 */
+	public static function hidden(string $action, string $pageClass): self {
+		return new self(
+			name     : '',
+			type     : 'hidden',
 			action   : $action,
 			pageClass: $pageClass,
 		);

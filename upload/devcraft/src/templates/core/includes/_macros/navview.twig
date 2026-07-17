@@ -1,6 +1,6 @@
 {#
     Metro UI navview menu — based on metroui/examples/navview.html
-    Renders AdminLink[] (type: link|dropdown|divider|data).
+    Renders AdminLink[] (type: link|dropdown|divider|data|hidden).
 #}
 
 {% macro icon(extra) %}
@@ -12,7 +12,9 @@
 {% macro items(menu, current, show_icons) %}
     {% import _self as nav %}
     {% for item in menu %}
-        {% if item.type == 'divider' %}
+        {% if item.type == 'hidden' %}
+            {# Роут без пункта меню #}
+        {% elseif item.type == 'divider' %}
             {% if item.name %}
                 <li class="item-header">{{ item.name }}</li>
             {% else %}

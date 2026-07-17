@@ -2,14 +2,8 @@
 //===============================================================
 // Файл: AjaxController.php                                     =
 // Путь: devcraft/src/classes/Http/AjaxController.php           =
-// Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
-// Сайт: https://devcraft.club                                  =
-// Телеграм: http://t.me/MaHarder                               =
-// ==============================================================
-// Менять на свой страх и риск!                                 =
-// Код распространяется по лицензии MIT                         =
 //===============================================================
 
 declare(strict_types=1);
@@ -36,26 +30,19 @@ final class AjaxController {
 	 * @since 200.4.0
 	 *
 	 * @global string $dle_login_hash Хеш сессии DLE для CSRF-проверки.
-	 * @global bool   $is_loged_in    Флаг авторизации пользователя в DLE.
+	 * @global bool   $is_loged_in    Флаг авторизации администратора DLE.
+	 * @global bool   $is_logged      Флаг авторизации участника сайта.
 	 *
 	 * @example
 	 *     (new AjaxController())->run();
 	 */
 	public function run(): void {
-		global $dle_login_hash, $is_loged_in;
+		global $dle_login_hash, $is_loged_in, $is_logged;
 
 		Translation::setTranslator();
 
-		if(!$is_loged_in) {
-			JsonResponse::fail(
-				__('Ошибка'),
-				__('Требуется аутентификация'),
-				'auth_failed',
-				403,
-			)->send();
-
-			return;
-		}
+		$request  = AjaxRequest::fromGlobals();
+		$isPublic = $request->controller === 'public';
 
 		$requestHash = (string) ($_REQUEST['user_hash'] ?? '');
 
@@ -70,7 +57,17 @@ final class AjaxController {
 			return;
 		}
 
-		$request  = AjaxRequest::fromGlobals();
+		if(!$isPublic && empty($is_loged_in)) {
+			JsonResponse::fail(
+				__('Ошибка'),
+				__('Требуется аутентификация'),
+				'auth_failed',
+				403,
+			)->send();
+
+			return;
+		}
+
 		$registry = new AjaxRouteRegistry();
 		$plugin   = Application::instance()->registry()->forMod($request->mod);
 
@@ -83,9 +80,24 @@ final class AjaxController {
 		if($handlerClass === NULL || !class_exists($handlerClass)) {
 			JsonResponse::fail(
 				__('Ошибка'),
-				__('Неизвестный AJAX-метод'),
+				__('Неизвестный AJAX-метод: {method} (mod={mod}, controller={controller})', [
+					'{method}'     => $request->method,
+					'{mod}'        => $request->mod,
+					'{controller}' => $request->controller,
+				]),
 				'unknown_method',
 				404,
+			)->send();
+
+			return;
+		}
+
+		if($isPublic && !$registry->allowsGuest($request->controller, $request->method) && empty($is_logged)) {
+			JsonResponse::fail(
+				__('Ошибка'),
+				__('Требуется авторизация на сайте'),
+				'auth_failed',
+				403,
 			)->send();
 
 			return;
@@ -121,7 +133,11 @@ final class AjaxController {
 
 		JsonResponse::fail(
 			__('Ошибка'),
-			__('Обработчик недоступен для вызова'),
+			__('Обработчик недоступен для вызова: {method} (mod={mod}, controller={controller})', [
+				'{method}'     => $request->method,
+				'{mod}'        => $request->mod,
+				'{controller}' => $request->controller,
+			]),
 			'unknown_method',
 			500,
 		)->send();

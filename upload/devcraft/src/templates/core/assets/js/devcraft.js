@@ -460,10 +460,17 @@
     }
 
     function postAjax(method, data) {
-        return fetch(ajaxUrl(ajaxBaseUrl(), {
+        const params = {
             controller: 'admin',
             method: method
-        }), {
+        };
+        const mod = document.body.dataset.mod;
+
+        if (mod) {
+            params.mod = mod;
+        }
+
+        return fetch(ajaxUrl(ajaxBaseUrl(), params), {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="{{ devcraft_html_lang|default('ru') }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap">
+    {% for css_url in css_urls %}
+        <link rel="stylesheet" href="{{ css_url }}">
+    {% endfor %}
+    {# clip-path aus SVG — in CSS-Datei lädt Firefox die Referenz unzuverlässig (Codrops-Demo) #}
+    <style>
+        .error-code::before {
+            -webkit-clip-path: url(#cp_up);
+            clip-path: url(#cp_up);
+        }
+        .error-code::after {
+            -webkit-clip-path: url(#cp_down);
+            clip-path: url(#cp_down);
+        }
+    </style>
+</head>
+<body class="dc-error-body">
+<svg class="dc-error-clip-svg" viewBox="0 0 515 320" aria-hidden="true" focusable="false">
+    <defs>
+        <clipPath id="cp_up">
+            <polygon points="0,0 515,0 515,320" />
+        </clipPath>
+        <clipPath id="cp_down">
+            <polygon points="0,0 0,320 515,320" />
+        </clipPath>
+    </defs>
+</svg>
+<main id="page-content">
+    <div class="dc-error-stage h-100 d-flex flex-column flex-center">
+        {{ content|raw }}
+        {% include 'core/errors/includes/cogs.twig' %}
+    </div>
+</main>
+</body>
+</html>

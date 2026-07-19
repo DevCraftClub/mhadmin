@@ -1,0 +1,15 @@
+{# Маршрутизатор раскладки секций: stack | accordion (tabs — в settings_page) #}
+{% set layoutMode = layout|default('stack') %}
+{% if layoutMode not in ['stack', 'tabs', 'accordion'] %}
+    {% set layoutMode = 'stack' %}
+{% endif %}
+
+{% if layoutMode == 'accordion' %}
+    {% import 'core/includes/ui/_macros/accordion.twig' as accordion %}
+    {{ accordion.accordion_sections('settings-accordion', sections, { save_state: true }) }}
+{% else %}
+    {% for section in sections %}
+        <h4 class="border-bottom bd-default pb-2 mb-3{% if loop.first %} mt-0{% else %} mt-4{% endif %}">{{ section.title }}</h4>
+        {% include 'core/includes/form/section_fields.twig' with { section: section } only %}
+    {% endfor %}
+{% endif %}

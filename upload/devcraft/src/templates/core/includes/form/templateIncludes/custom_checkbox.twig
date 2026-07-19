@@ -1,0 +1,15 @@
+{# Metro custom-checkbox — examples/custom-checkbox.html #}
+{% set opts = opts|default({}) %}
+<input
+    type="checkbox"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ opts.value|default('1') }}"
+    data-role="custom-checkbox"
+    {% if opts.caption_on is defined %}data-caption-on="{{ opts.caption_on }}"{% endif %}
+    {% if opts.caption_off is defined %}data-caption-off="{{ opts.caption_off }}"{% endif %}
+    {% if opts.state_on is defined %}data-state-on="{{ opts.state_on }}"{% endif %}
+    {% if opts.state_off is defined %}data-state-off="{{ opts.state_off }}"{% endif %}
+    {% if value %}checked{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

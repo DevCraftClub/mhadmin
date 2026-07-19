@@ -1,0 +1,28 @@
+{% macro select(id, label, descr, value, opts, options) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/select.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({}),
+        selected: value,
+        options: options|default({}),
+        multiple: false
+    } %}
+{% endmacro %}
+
+{% macro multi(id, label, descr, value, opts, options) %}
+    {% set selected = value is iterable ? value : [] %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/select.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({}),
+        selected: selected,
+        options: options|default({}),
+        multiple: true
+    } %}
+{% endmacro %}

@@ -1,0 +1,16 @@
+{# Metro accordion — examples/accordion.html #}
+{% set opts = opts|default({}) %}
+<div
+    id="{{ id|default('accordion') }}"
+    data-role="accordion"
+    {% if opts.save_state is defined and opts.save_state %}data-save-state="true"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>
+    {% for frame in frames|default([]) %}
+        {% include 'core/includes/ui/templateIncludes/accordion_frame.twig' with {
+            heading: frame.heading,
+            content: frame.content|default(''),
+            active: frame.active|default(loop.first)
+        } only %}
+    {% endfor %}
+</div>

@@ -10,13 +10,13 @@ cp -r upload/* temp/
 cd temp || exit 1
 
 # Упаковать содержимое в ZIP без сжатия (аналог -mx0 в 7-Zip)
-zip -0 -r -o mhadmin.zip *
+zip -0 -r -o temp_install.zip *
 
 # Вернуться в родительскую директорию
 cd ..
 
 # Копировать файл в нужное место с перезаписью
-cp -f temp/mhadmin.zip mhadmin_install.zip
+cp -f temp/temp_install.zip install.zip
 
 # Удаление временной директории
 rm -rf temp

@@ -1,0 +1,44 @@
+{% import 'core/includes/form/_macros/input.twig' as input %}
+{% import 'core/includes/form/_macros/checkbox.twig' as checkbox %}
+
+<h2>{{ 'Генератор модулей'|trans }}</h2>
+
+<form id="new-module-form" class="form" data-default-version="{{ default_version }}">
+    <div class="remark dc-settings-body">
+        <h4 class="mt-0">{{ 'Создание модуля'|trans }}</h4>
+        <div class="grid no-gap dc-field-table">
+            <div class="row border-bottom bd-default dc-field-head">
+                <div class="cell-md-5 dc-field-descr">{{ 'Описание'|trans }}</div>
+                <div class="cell-md-7 dc-field-widget">{{ 'Параметр'|trans }}</div>
+            </div>
+
+            {{ input.input('name', 'Название модуля'|trans, 'Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.'|trans, variable.name|default(''), {}) }}
+            {{ input.input('translit', 'Название модуля на латинице'|trans, 'Введите название модуля на латинице, иначе будет использована стандартная функция DLE для преобразования названия.'|trans, variable.translit|default(''), {}) }}
+            {{ input.input('description', 'Описание модуля'|trans, 'Введите описание модуля'|trans, variable.description|default(''), {}) }}
+            {{ input.input('version', 'Версия модуля'|trans, 'Введите версию модуля.<br>По умолчанию: ВерсияDLE.1.0 -> 200.1.0'|trans, variable.version|default(''), {}) }}
+            {{ input.input('icon', 'Иконка'|trans, 'Класс иконки Metro UI.<br>По умолчанию: <span class="mif-cog"></span> (mif-cog)'|trans, variable.icon|default(''), {}) }}
+            {{ input.input('plugin_icon', 'Иконка плагина'|trans, 'Укажите полный путь к иконке плагина начиная от корня вашего сайта. Например engine/skins/images/my_icon.png'|trans, variable.plugin_icon|default(''), {}) }}
+            {{ input.input('crowdin_name', 'Название проекта на CrowdIn'|trans, 'Укажите URL наименование Вашего проекта на CrowdIn. Пример: Из https://crowdin.com/project/<b>mhadmin</b>/ берём mhadmin.<br><br><i>По умолчанию: Название на латинице</i>'|trans, variable.crowdin_name|default(''), {}) }}
+            {{ input.input('crowdin_state_id', 'ID статистики перевода на CrowdIn'|trans, 'Укажите ID статистики перевода на CrowdIn из дополнения <a href="https://crowdin.com/store/apps/bds" target="_blank" rel="noopener">Badges &amp; Status Images</a>'|trans, variable.crowdin_state_id|default(''), {}) }}
+            {{ input.input('link', 'Ссылка на модуль автора'|trans, 'Введите ссылку модуля на сайте автора (тех. поддержка, гитхаб, ..)'|trans, variable.link|default(''), {}) }}
+            {{ input.input('docs', 'Ссылка на документацию модуля'|trans, 'Введите ссылку документации модуля на сайте автора (тех. поддержка, гитхаб, ..)'|trans, variable.docs|default(''), {}) }}
+            {{ checkbox.checkbox('db', 'Добавить в плагины?'|trans, 'Скрипт создаст начальный плагин и добавит его в базу данных'|trans, variable.db|default(true), { caption: '' }) }}
+            {{ checkbox.checkbox('override', 'Перезаписать файлы?'|trans, 'Скрипт перезапишет существующие файлы шаблонами.<br><span class="fg-red">На свой страх и риск!</span>'|trans, variable.override|default(false), { caption: '' }) }}
+        </div>
+    </div>
+</form>
+
+<div class="remark mt-4" id="lists" style="display:none">
+    <div class="list" id="dirs_success" style="display:none"></div>
+    <div class="list" id="dirs_failed" style="display:none"></div>
+    <div class="list" id="files_success" style="display:none"></div>
+    <div class="list" id="files_failed" style="display:none"></div>
+    <div class="list" id="plugin_success" style="display:none"></div>
+    <div class="list" id="plugin_failed" style="display:none"></div>
+</div>
+
+<div class="form-actions mt-4">
+    <button type="button" class="button primary create js-new-module" tabindex="0">{{ 'Создать'|trans }}</button>
+</div>
+
+<div id="new-module-result" class="mt-2"></div>

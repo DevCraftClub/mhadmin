@@ -1,0 +1,67 @@
+{% macro input(id, label, descr, value, opts) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/input.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    } %}
+{% endmacro %}
+
+{% macro number(id, label, descr, value, opts) %}
+    {% set merged = opts|default({})|merge({ type: 'number' }) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/input.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: merged
+    } %}
+{% endmacro %}
+
+{% macro hidden(id, label, descr, value, opts) %}
+    {% set merged = opts|default({})|merge({ type: 'hidden' }) %}
+    {% include 'core/includes/form/templateIncludes/input.twig' with {
+        id: id,
+        name: id,
+        value: value,
+        opts: merged
+    } only %}
+{% endmacro %}
+
+{% macro file(id, label, descr, value, opts) %}
+    {% set merged = opts|default({})|merge({ type: 'file', role: 'file' }) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/input.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: merged
+    } %}
+{% endmacro %}
+
+{% macro spinner(id, label, descr, value, opts) %}
+    {% set merged = opts|default({})|merge({ type: 'text', role: 'spinner' }) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/input.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: merged
+    } %}
+{% endmacro %}
+
+{% macro input_mask(id, label, descr, value, opts) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/input_mask.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    } %}
+{% endmacro %}

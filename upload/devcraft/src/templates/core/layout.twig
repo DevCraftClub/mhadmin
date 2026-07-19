@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="{{ devcraft_html_lang|default('ru') }}"{% if devcraft_theme|default('light') == 'dark' %} class="dark-side"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ asset_base }}css/metro.css">
+    <link rel="stylesheet" href="{{ asset_base }}css/icons.css">
+    <link rel="stylesheet" href="{{ asset_base }}css/devcraft.css">
+    <style>.navview-content { padding-top: 52px; } #page-content { padding: 1rem; }</style>
+</head>
+<body data-ajax-base="{{ ajax_base_url }}" data-mod="{{ mod|default('devcraft') }}" data-debug="{{ devcraft_debug ? '1' : '0' }}">
+<input type="hidden" name="user_hash" value="{{ dle_login_hash }}">
+<div data-role="navview" data-expand-point="md">
+    <div class="navview-pane">
+        <div class="logo-container p-2">
+            <strong>{{ brand_name|default('DevCraft') }}</strong>
+            <span class="text-small fg-gray">v{{ version }}</span>
+        </div>
+        {% include 'core/includes/menu.twig' with { menu: admin.menu, current: admin.current_action } %}
+    </div>
+    <div class="navview-content">
+        <div id="page-content">
+            {% include 'core/includes/breadcrumbs.twig' with { breadcrumbs: admin.breadcrumbs } %}
+            {{ content|raw }}
+        </div>
+    </div>
+</div>
+<div id="dc-filter-dialog"
+     data-role="dialog"
+     data-overlay="true"
+     data-close-button="true"
+     data-overlay-click-close="true"
+     data-default-actions="false"
+     data-width="640"></div>
+<script src="{{ asset_base }}js/metro.js"></script>
+{% if devcraft_metro_i18n_url %}
+<script src="{{ devcraft_metro_i18n_url }}"></script>
+{% endif %}
+<script>
+    if (window.Metro && Metro.i18n && typeof Metro.i18n.load === 'function') {
+        Metro.i18n.load('{{ devcraft_metro_locale|default('en')|e('js') }}');
+    }
+</script>
+<script src="{{ devcraft_translation_url }}"></script>
+<script src="{{ asset_base }}js/i18n/translator.js"></script>
+{# devcraft.js — обязательное ядро для всех модулей DevCraft Admin (настройки, AJAX, уведомления) #}
+<script src="{{ asset_base }}js/devcraft.js?v={{ asset_js_mtime|default(version) }}"></script>
+<script src="{{ asset_base }}js/filter.js?v={{ filter_js_mtime|default(asset_js_mtime)|default(version) }}"></script>
+{% for js_url in module_js_urls|default([]) %}
+    <script src="{{ js_url }}"></script>
+{% endfor %}
+</body>
+</html>

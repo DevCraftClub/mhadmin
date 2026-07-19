@@ -1,0 +1,9 @@
+{% import 'core/includes/_macros/navview.twig' as nav %}
+
+{% if menu is defined and menu|length > 0 %}
+<div class="navview-menu-container">
+    <ul class="navview-menu">
+        {{ nav.items(menu, current|default(''), true) }}
+    </ul>
+</div>
+{% endif %}

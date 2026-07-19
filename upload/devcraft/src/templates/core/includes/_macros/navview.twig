@@ -1,0 +1,46 @@
+{#
+    Metro UI navview menu — based on metroui/examples/navview.html
+    Renders AdminLink[] (type: link|dropdown|divider|data|hidden).
+#}
+
+{% macro icon(extra) %}
+    {% if extra %}
+        <span class="icon"><span class="{{ extra }}"></span></span>
+    {% endif %}
+{% endmacro %}
+
+{% macro items(menu, current, show_icons) %}
+    {% import _self as nav %}
+    {% for item in menu %}
+        {% if item.type == 'hidden' %}
+            {# Роут без пункта меню #}
+        {% elseif item.type == 'divider' %}
+            {% if item.name %}
+                <li class="item-header">{{ item.name }}</li>
+            {% else %}
+                <li class="item-separator"></li>
+            {% endif %}
+        {% elseif item.type == 'data' %}
+            <li class="item-header"{% if item.extra %} data-value="{{ item.extra }}"{% endif %}>
+                {{ item.name }}
+            </li>
+        {% elseif item.type == 'dropdown' %}
+            <li>
+                <a href="#" class="dropdown-toggle">
+                    {% if show_icons %}{{ nav.icon(item.extra) }}{% endif %}
+                    <span class="caption">{{ item.name }}</span>
+                </a>
+                <ul class="navview-menu" data-role="collapse" data-collapsed="true">
+                    {{ nav.items(item.children|default([]), current, false) }}
+                </ul>
+            </li>
+        {% else %}
+            <li{% if item.action is defined and item.action == current %} class="active"{% endif %}>
+                <a href="{{ item.link }}">
+                    {% if show_icons %}{{ nav.icon(item.extra) }}{% endif %}
+                    <span class="caption">{{ item.name }}</span>
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

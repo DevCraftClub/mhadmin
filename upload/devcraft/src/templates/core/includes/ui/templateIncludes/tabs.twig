@@ -1,0 +1,32 @@
+{# Metro tabs — examples/tabs.html #}
+{% set opts = opts|default({}) %}
+{% set tabsId = id|default('tabs') %}
+<ul
+    id="{{ tabsId }}"
+    data-role="tabs"
+    {% if opts.expand is not defined or opts.expand %}data-expand="true"{% endif %}
+    {% if opts.type is defined %}data-type="{{ opts.type }}"{% endif %}
+    {% if opts.link is defined %}data-link="{{ opts.link }}"{% endif %}
+    {% if opts.update_uri is defined and opts.update_uri %}data-update-uri="true"{% endif %}
+    {% if opts.class is defined %}class="{{ opts.class }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>
+    {% for item in items|default([]) %}
+        {% include 'core/includes/ui/templateIncludes/tab_nav_item.twig' with {
+            panel_id: tabsId ~ '_panel_' ~ loop.index,
+            label: item.label,
+            active: item.active|default(loop.first),
+            icon: item.icon|default(''),
+            item_id: item.id|default('')
+        } only %}
+    {% endfor %}
+</ul>
+<div class="tabs-targets">
+    {% for item in items|default([]) %}
+        {% include 'core/includes/ui/templateIncludes/tab_panel.twig' with {
+            panel_id: tabsId ~ '_panel_' ~ loop.index,
+            content: item.content|default(''),
+            active: item.active|default(loop.first)
+        } only %}
+    {% endfor %}
+</div>

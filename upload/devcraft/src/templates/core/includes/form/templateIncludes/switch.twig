@@ -1,0 +1,44 @@
+{# Metro switch — examples/switch.html (сохраняем label.switch для настроек) #}
+{% set opts = opts|default({}) %}
+{% if opts.style|default('label') == 'segrow' %}
+<label class="switch">
+    <input
+        type="checkbox"
+        id="{{ id }}"
+        name="{{ name|default(id) }}"
+        value="{{ opts.value|default('1') }}"
+        {% if value %}checked{% endif %}
+        {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+    >
+    <span class="check"></span>
+</label>
+{% elseif opts.style|default('label') == 'label' %}
+<label class="switch">
+    <input
+        type="checkbox"
+        id="{{ id }}"
+        name="{{ name|default(id) }}"
+        value="{{ opts.value|default('1') }}"
+        {% if value %}checked{% endif %}
+        {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+    >
+    <span class="check"></span>
+    <span class="caption">{{ label|default('') }}</span>
+</label>
+{% else %}
+<input
+    type="checkbox"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ opts.value|default('1') }}"
+    data-role="switch"
+    {% if opts.prepend is defined %}data-prepend="{{ opts.prepend }}"{% endif %}
+    {% if opts.append is defined %}data-append="{{ opts.append }}"{% endif %}
+    {% if opts.onoff is defined and opts.onoff %}data-onoff="true"{% endif %}
+    {% if opts.on is defined %}data-on="{{ opts.on }}"{% endif %}
+    {% if opts.off is defined %}data-off="{{ opts.off }}"{% endif %}
+    {% if opts.material is defined and opts.material %}data-material="true"{% endif %}
+    {% if value %}checked{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>
+{% endif %}

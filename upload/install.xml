@@ -1,172 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dleplugin>
-	<name>MH Admin</name>
-	<description>Универсальная административная панель для модификаций от MaHarder</description>
-	<icon>engine/inc/maharder/_modules/admin/assets/icon.jpg</icon>
-	<version>180.3.5.1</version>
-	<dleversion>17</dleversion>
-	<versioncompare>greater</versioncompare>
-	<upgradeurl></upgradeurl>
-	<filedelete>1</filedelete>
-	<needplugin></needplugin>
-	<mnotice>0</mnotice>
-	<mysqlinstall><![CDATA[]]></mysqlinstall>
-	<mysqlupgrade><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MH Admin v180.3.5.1', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MH Admin v180.3.5.1';]]></mysqlupgrade>
-	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('maharder', 'MH Admin v180.3.5.1', 'Настройка административной панели от MaHarder', DEFAULT, '1, 2')
-ON DUPLICATE KEY UPDATE title = 'MH Admin v180.3.5.1';]]></mysqlenable>
-	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldisable>
-	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'maharder';]]></mysqldelete>
-	<phpinstall><![CDATA[]]></phpinstall>
-	<phpupgrade><![CDATA[]]></phpupgrade>
-	<phpenable><![CDATA[]]></phpenable>
-	<phpdisable><![CDATA[]]></phpdisable>
-	<phpdelete><![CDATA[]]></phpdelete>
-	<notice><![CDATA[]]></notice>
-	<file name="engine/inc/include/functions.inc.php">
-		<operation action="after">
-			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
-			<replacecode><![CDATA[
-	// MH Admin
-	if (!defined('MH_INIT')) {
-	  $data = !$cache_areas ? 'all' : $cache_areas;
-	  CacheControl::clearCache($data);
-	}
-	// MH Admin]]></replacecode>
-			<searchcount>1</searchcount>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="after">
-			<searchcode><![CDATA[listdir( ENGINE_DIR . '/cache/system/plugins' );]]></searchcode>
-			<replacecode><![CDATA[	// MH Admin
-	listdir( ENGINE_DIR . '/inc/maharder/_cache' );
-	// MH Admin]]></replacecode>
-			<searchcount>1</searchcount>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="before">
-			<searchcode><![CDATA[if ( isset($config['auth_domain']) AND $config['auth_domain'] ) {]]></searchcode>
-			<replacecode><![CDATA[	// MH Admin
-	if (!defined('MH_INIT')) {
-		require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
-	}
-	// MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-	</file>
-	<file name="engine/skins/default.skin.php">
-		<operation action="before">
-			<searchcode><![CDATA[<a href="?mod=addnews&amp;action=addnews" class="btn btn-link btn-float text-size-small has-text"><i class="fa fa-file-text-o text-primary"></i> <span>{$lang['add_news']}</span></a>]]></searchcode>
-			<replacecode><![CDATA[								{$clear_cache}]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="before">
-			<searchcode><![CDATA[</body>]]></searchcode>
-			<replacecode><![CDATA[{$clear_cache_script}]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="after">
-			<searchcode><![CDATA[if(!defined('DATALIFEENGINE')) {
-	header( "HTTP/1.1 403 Forbidden" );
-	header ( 'Location: ../../' );
-	die( "Hacking attempt!" );
-}]]></searchcode>
-			<replacecode><![CDATA[
-global $clear_cache, $clear_cache_script; // MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-	</file>
-	<file name="engine/inc/include/init.php">
-		<operation action="before">
-			<searchcode><![CDATA[if ($is_loged_in AND isset($_SESSION['timeout_session']) AND $_SESSION['timeout_session'])]]></searchcode>
-			<replacecode><![CDATA[// MH Admin
-$mh_config = [
-	'cache_icon' => false
-];
-$clear_cache = '';
-$clear_cache_script = '';
-
-if(is_file(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json'))) {
-	$mh_config = json_decode(file_get_contents(DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_config/maharder.json')), true);
-
-
-	  if($mh_config['cache_icon']) {
-		$clear_cache = <<<HTML
-									<a rel="button" class="btn btn-link btn-float text-size-small has-text clear_cache">
-										<i class="fa fa-trash text-danger-600"></i>
-										<span class="text-danger-600">{$lang['btn_clearcache']}</span>
-									</a>
-HTML;
-		$clear_cache_script = <<<JS
-	<script>
-			$(function(){
-
-				$('.clear_cache').click(function() {
-					ShowLoading();
-
-					$.get("engine/ajax/controller.php?mod=adminfunction&action=clearcache&user_hash={$dle_login_hash}", function( data ){
-
-						Growl.info({
-							title: '{$lang['p_info']}',
-							text: data
-						});
-						HideLoading();
-
-					});
-					return false;
-				});
-			});
-	</script>
-
-JS;
-
-	}
-
-
-}
-// MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="before">
-			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php'));]]></searchcode>
-			<replacecode><![CDATA[// MH Admin
-require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
-// MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-	</file>
-	<file name="engine/modules/functions.php">
-		<operation action="after">
-			<searchcode><![CDATA[global $dlefastcache, $config;]]></searchcode>
-			<replacecode><![CDATA[
-
-	$data = !$cache_areas ? 'all' : $cache_areas;
-	// MH Admin
-	if (!defined('MH_INIT')) {
-		CacheControl::clearCache($data);
-	}
-	// MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-		<operation action="before">
-			<searchcode><![CDATA[if ( isset($config['auth_domain']) AND $config['auth_domain'] ) {]]></searchcode>
-			<replacecode><![CDATA[	// MH Admin
-	if (!defined('MH_INIT')) {
-		require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
-	}
-	// MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-	</file>
-	<file name="engine/init.php">
-		<operation action="before">
-			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));]]></searchcode>
-			<replacecode><![CDATA[	// MH Admin
-	require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/maharder/_includes/extras/paths.php'));
-	// MH Admin]]></replacecode>
-			<enabled>1</enabled>
-		</operation>
-	</file>
+  <name>DevCraft Admin</name>
+  <description>DevCraft Admin - панель администрирования для плагинов от DevCraft</description>
+  <icon>devcraft/src/modules/Admin/Public/devcraft-admin-icon.png</icon>
+  <version>200.4.0</version>
+  <dleversion>20</dleversion>
+  <versioncompare>greater</versioncompare>
+  <upgradeurl></upgradeurl>
+  <filedelete>1</filedelete>
+  <needplugin></needplugin>
+  <mnotice>0</mnotice>
+  <mysqlinstall><![CDATA[]]></mysqlinstall>
+  <mysqlupgrade><![CDATA[]]></mysqlupgrade>
+  <mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
+VALUES('devcraft', 'DevCraft Admin v200.4.0', 'Панель администрирования для плагинов от DevCraft', '', '1,2')
+ON DUPLICATE KEY UPDATE title = VALUES('title');]]></mysqlenable>
+  <mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';]]></mysqldisable>
+  <mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';
+DROP TABLE IF EXISTS {prefix}_devcraft_logs;
+DROP TABLE IF EXISTS {prefix}_devcraft_migrations;]]></mysqldelete>
+  <phpinstall><![CDATA[]]></phpinstall>
+  <phpupgrade><![CDATA[]]></phpupgrade>
+  <phpenable><![CDATA[]]></phpenable>
+  <phpdisable><![CDATA[]]></phpdisable>
+  <phpdelete><![CDATA[]]></phpdelete>
+  <notice><![CDATA[]]></notice>
 </dleplugin>

@@ -1,0 +1,72 @@
+<div class="dc-filter-bar mb-4" id="dc-filter-bar"
+     data-filter-catalog="{{ filter_catalog|json_encode|e('html_attr') }}"
+     data-filter-rules="{{ filter_rules|default([])|json_encode|e('html_attr') }}"
+     {% if table_id is defined and table_id != '' %}data-table-id="{{ table_id }}"{% endif %}
+     {% if table_total_id is defined and table_total_id != '' %}data-total-id="{{ table_total_id }}"{% endif %}>
+    <div class="d-flex flex-align-center flex-wrap">
+        <div class="dropdown-button place-right">
+            <button type="button" class="button" id="dc-filter-toggle">
+                <span class="mif-filter"></span>
+                {{ 'Фильтр'|trans }}
+            </button>
+            <ul id="dc-filter-menu" class="d-menu" data-role="dropdown" data-toggle-element="#dc-filter-toggle">
+                <li><a href="#" data-action="filter-create">{{ 'Новое правило фильтра'|trans }}</a></li>
+                <li><a href="#" data-action="filter-clear-all">{{ 'Очистить все фильтры'|trans }}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    {% if filter_chips is defined and filter_chips|length > 0 %}
+        <div class="dc-filter-chips mt-2 d-flex flex-wrap">
+            {% for chip in filter_chips %}
+                <div class="chip pill-chip m-1 dc-filter-chip"
+                     data-filter-index="{{ chip.index }}"
+                     data-filter-field="{{ chip.field }}"
+                     data-filter-type="{{ chip.type }}"
+                     tabindex="0">
+                    <div class="label">{{ chip.summary }}</div>
+                    <div class="action" role="button" tabindex="-1" title="{{ 'Удалить'|trans }}" aria-label="{{ 'Удалить'|trans }}"></div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="get" id="dc-filter-form" class="d-none"
+          data-mod="{{ mod }}"
+          data-action="{{ action|default('logs') }}">
+        <input type="hidden" name="mod" value="{{ mod }}">
+        <input type="hidden" name="action" value="{{ action|default('logs') }}">
+        {% if order is defined and order != '' %}
+            <input type="hidden" name="order" value="{{ order }}">
+        {% endif %}
+        {% if sort is defined and sort != '' %}
+            <input type="hidden" name="sort" value="{{ sort }}">
+        {% endif %}
+        <div id="dc-filter-hidden-rules">
+            {% for rule in filter_rules|default([]) %}
+                <input type="hidden" name="filter_rules[{{ loop.index0 }}][field]" value="{{ rule.field }}">
+                <input type="hidden" name="filter_rules[{{ loop.index0 }}][type]" value="{{ rule.type }}">
+                {% if rule.value is defined %}
+                    {% if rule.value is iterable %}
+                        {% for item in rule.value %}
+                            <input type="hidden" name="filter_rules[{{ loop.parent.loop.index0 }}][value][]" value="{{ item }}">
+                        {% endfor %}
+                    {% else %}
+                        <input type="hidden" name="filter_rules[{{ loop.index0 }}][value]" value="{{ rule.value }}">
+                    {% endif %}
+                {% endif %}
+                {% if rule.value_from is defined %}
+                    <input type="hidden" name="filter_rules[{{ loop.index0 }}][value_from]" value="{{ rule.value_from }}">
+                {% endif %}
+                {% if rule.value_to is defined %}
+                    <input type="hidden" name="filter_rules[{{ loop.index0 }}][value_to]" value="{{ rule.value_to }}">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+<ul id="dc-filter-chip-menu" class="d-menu d-none">
+    <li><a href="#" data-action="filter-chip-edit">{{ 'Редактировать'|trans }}</a></li>
+    <li><a href="#" data-action="filter-chip-remove">{{ 'Удалить'|trans }}</a></li>
+</ul>

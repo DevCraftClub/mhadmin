@@ -1,0 +1,23 @@
+{# Metro tag-input — examples/tag-input.html #}
+{% set opts = opts|default({}) %}
+{% if opts.size is not defined %}
+    {% set opts = opts|merge({ size: 'medium' }) %}
+{% endif %}
+{% set classes = [] %}
+{% if opts.size != '' %}{% set classes = classes|merge([opts.size]) %}{% endif %}
+{% if opts.pill is defined and opts.pill %}{% set classes = classes|merge(['pill-input']) %}{% endif %}
+{% if opts.class is defined %}{% set classes = classes|merge([opts.class]) %}{% endif %}
+<input
+    type="text"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ value|default('') }}"
+    data-role="tag-input"
+    {% if classes|length > 0 %}class="{{ classes|join(' ') }}"{% endif %}
+    {% if opts.random_color is defined and opts.random_color %}data-random-color="true"{% endif %}
+    {% if opts.autocomplete is defined %}data-autocomplete="{{ opts.autocomplete }}"{% endif %}
+    {% if opts.autocomplete_url is defined %}data-autocomplete-url="{{ opts.autocomplete_url }}"{% endif %}
+    {% if opts.autocomplete_url_key is defined %}data-autocomplete-url-key="{{ opts.autocomplete_url_key }}"{% endif %}
+    {% if opts.label is defined %}data-label="{{ opts.label }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

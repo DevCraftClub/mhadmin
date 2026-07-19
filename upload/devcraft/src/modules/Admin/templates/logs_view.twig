@@ -1,0 +1,56 @@
+<h2>{{ page_title|default('Запись журнала'|trans) }}</h2>
+
+{% if error is defined and error %}
+    <div class="remark alert">
+        {{ error|trans }}
+    </div>
+    <a class="button" href="{{ back_url|e('html_attr') }}">
+        <span class="mif-arrow-left mr-1"></span>{{ 'Назад'|trans }}
+    </a>
+{% else %}
+    <div class="grid">
+        <div class="row">
+            <div class="cell-md-6">
+                <label class="text-bold">{{ 'Тип'|trans }}</label>
+                <div class="border bd-default p-2 mb-2">{{ record.log_type|e }}</div>
+            </div>
+            <div class="cell-md-6">
+                <label class="text-bold">{{ 'Плагин'|trans }}</label>
+                <div class="border bd-default p-2 mb-2">{{ record.plugin|e }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell-md-6">
+                <label class="text-bold">{{ 'Функция'|trans }}</label>
+                <div class="border bd-default p-2 mb-2">{{ record.fn_name|e }}</div>
+            </div>
+            <div class="cell-md-6">
+                <label class="text-bold">{{ 'Время'|trans }}</label>
+                <div class="border bd-default p-2 mb-2">{{ record.time|e }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell-12">
+                <label class="text-bold">{{ 'UUID'|trans }}</label>
+                <div class="border bd-default p-2 mb-2 text-small">{{ record.uuid|e }}</div>
+            </div>
+        </div>
+    </div>
+
+    <label class="text-bold">{{ 'Сообщение'|trans }}</label>
+    <div class="border bd-default p-2 mb-2 log-view-html" style="max-height: 420px; overflow: auto; white-space: pre-wrap; word-break: break-word;">
+        {{ presentation.display_html|raw }}
+    </div>
+
+    <label class="text-bold">{{ 'Текст для копирования'|trans }}</label>
+    <textarea id="dc-log-copy-text" class="mb-2" readonly rows="8" style="width: 100%;">{{ presentation.copy_text|e }}</textarea>
+
+    <div class="d-flex flex-wrap gap-2 mt-2">
+        <button type="button" class="button primary js-copy-log-text" data-target="dc-log-copy-text">
+            <span class="mif-copy mr-1"></span>{{ 'Копировать'|trans }}
+        </button>
+        <a class="button" href="{{ back_url|e('html_attr') }}">
+            <span class="mif-arrow-left mr-1"></span>{{ 'Назад'|trans }}
+        </a>
+    </div>
+{% endif %}

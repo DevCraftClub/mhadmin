@@ -1,0 +1,2 @@
+{# Подключать только на страницах с Composer UI (панель / таблица). #}
+<script src="{{ asset_base }}js/composer.js?v={{ composer_js_mtime|default(asset_js_mtime)|default(version) }}" defer></script>

@@ -1,0 +1,42 @@
+{# Metro input — examples/input.html, form-elements.html, file.html, spinner.html #}
+{% set opts = opts|default({}) %}
+{% set inputType = opts.type|default('text') %}
+{% if inputType == 'hidden' %}
+<input
+    type="hidden"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ value|default('') }}"
+>
+{% else %}
+{% if opts.size is not defined %}
+    {% set opts = opts|merge({ size: 'medium' }) %}
+{% endif %}
+{% set metroRole = opts.role|default(opts.input_role|default('input')) %}
+{% set classes = inputType == 'file' ? [] : ['metro-input'] %}
+{% if opts.size != '' %}
+    {% set classes = classes|merge([opts.size]) %}
+{% endif %}
+{% if opts.pill is defined and opts.pill %}
+    {% set classes = classes|merge(['pill-input']) %}
+{% endif %}
+{% if opts.class is defined and opts.class != '' %}
+    {% set classes = classes|merge([opts.class]) %}
+{% endif %}
+<input
+    type="{{ inputType }}"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    {% if inputType != 'file' %}value="{{ value|default('') }}"{% endif %}
+    {% if classes|length > 0 %}class="{{ classes|join(' ') }}"{% endif %}
+    data-role="{{ metroRole }}"
+    {% if opts.placeholder is defined %}placeholder="{{ opts.placeholder }}"{% endif %}
+    {% if opts.label is defined %}data-label="{{ opts.label }}"{% endif %}
+    {% if opts.prepend is defined %}data-prepend="{{ opts.prepend }}"{% endif %}
+    {% if opts.prepend_options is defined %}data-prepend-options="{{ opts.prepend_options }}"{% endif %}
+    {% if opts.append_options is defined %}data-append-options="{{ opts.append_options }}"{% endif %}
+    {% if opts.search_button is defined and opts.search_button %}data-search-button="true"{% endif %}
+    {% if opts.file_mode is defined %}data-mode="{{ opts.file_mode }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>
+{% endif %}

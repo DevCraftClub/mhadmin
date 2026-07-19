@@ -1,0 +1,13 @@
+{# Metro double-slider — examples/double-slider.html #}
+{% set opts = opts|default({}) %}
+<input
+    type="text"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ value|default('') }}"
+    data-role="double-slider"
+    {% if opts.min is defined %}data-min="{{ opts.min }}"{% endif %}
+    {% if opts.max is defined %}data-max="{{ opts.max }}"{% endif %}
+    {% if opts.step is defined %}data-step="{{ opts.step }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

@@ -1,12 +1,12 @@
 {
-	"version": "180.3.5.1",
+	"version": "200.4.0",
 	"status": "Stable",
 	"dle": [
-		"18.x"
+		"20.x"
 	],
 	"php": [
 		"8.3"
 	],
-	"name": "MaHarder Assets",
+	"name": "DevCraft Admin",
 	"description": "Административная панель для DLE"
 }

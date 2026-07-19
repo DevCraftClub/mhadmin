@@ -1,0 +1,26 @@
+{# Совместимость с MHAdmin templateIncludes/segRow.html → Metro field_row #}
+{% set fieldId = id %}
+{% set fieldType = type|default('text') %}
+{% set fieldValue = variable[fieldId]|default('') %}
+{% set isHidden = fieldType == 'hidden_input' %}
+
+{% if fieldType == 'checkbox' %}
+    {% set checked = variable[fieldId]|default(settings.selected|default(false)) %}
+    {% import 'core/includes/form/_macros/checkbox.twig' as checkbox %}
+    {{ checkbox.checkbox(fieldId, name, descr, checked, { caption: '' }) }}
+{% elseif fieldType == 'text' or fieldType == 'input' %}
+    {% import 'core/includes/form/_macros/input.twig' as input %}
+    {{ input.input(fieldId, name, descr, fieldValue, {}) }}
+{% elseif fieldType == 'textarea' %}
+    {% import 'core/includes/form/_macros/input.twig' as input %}
+    {{ input.input(fieldId, name, descr, fieldValue, {}) }}
+{% elseif fieldType == 'hidden_input' %}
+    {% import 'core/includes/form/_macros/input.twig' as input %}
+    {{ input.hidden(fieldId, name, descr, fieldValue, {}) }}
+{% else %}
+    <div class="row dc-field-row border-bottom bd-default{% if isHidden %} d-none{% endif %}">
+        <div class="cell-md-12 dc-field-widget p-5">
+            {{ html|default('')|raw }}
+        </div>
+    </div>
+{% endif %}

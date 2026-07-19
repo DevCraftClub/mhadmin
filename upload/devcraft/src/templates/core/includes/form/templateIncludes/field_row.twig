@@ -1,0 +1,29 @@
+{# Строка поля — Metro grid 5+7: label + small | виджет #}
+{% set isHidden = opts.type|default('') == 'hidden' or opts.hidden|default(false) %}
+<div class="row dc-field-row border-bottom bd-default{% if isHidden %} d-none{% endif %}">
+    <div class="cell-md-5 dc-field-descr">
+        {% if label is defined and label != '' %}
+            <label for="{{ id }}">{{ label }}</label>
+        {% endif %}
+        {% if descr is defined and descr != '' %}
+            <br><small>{{ descr|raw }}</small>
+        {% endif %}
+    </div>
+    <div class="cell-md-7 dc-field-widget">
+        {% set widgetOpts = opts|default({}) %}
+        {% if widgetOpts.size is not defined %}
+            {% set widgetOpts = widgetOpts|merge({ size: 'medium' }) %}
+        {% endif %}
+        {% include widget with {
+            id: id,
+            name: name|default(id),
+            label: widget_label|default(''),
+            value: value|default(''),
+            opts: widgetOpts,
+            options: options|default({}),
+            selected: selected|default(null),
+            multiple: multiple|default(false)
+        } only %}
+        <span class="invalid_feedback" data-field="{{ id }}"></span>
+    </div>
+</div>

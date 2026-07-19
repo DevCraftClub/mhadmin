@@ -1,0 +1,7 @@
+{% include 'core/errors/includes/error_body.twig' with {
+    code: code,
+    title: title,
+    message: message,
+    extra_message: 'Запрошенная страница админки не существует или была перемещена.'|trans,
+    dashboard_url: dashboard_url
+} %}

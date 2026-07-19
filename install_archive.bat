@@ -3,8 +3,8 @@ mkdir temp
 robocopy upload temp /E
 cd temp
 set PATH=%PATH%;%ProgramFiles%\7-Zip\
-7z a -mx0 -r -tzip -aoa mhadmin.zip *
+7z a -mx10 -r -tzip -aoa temp.zip *
 cd ..
-copy /Y temp\mhadmin.zip install.zip
+copy /Y temp\temp.zip install.zip
 rd /s /q temp
 exit;

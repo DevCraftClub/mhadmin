@@ -55,7 +55,6 @@ return [
 		'docsLink'    => 'https://readme.devcraft.club/latest/dev/devcraft_admin/install/',
 		'siteLink'    => 'https://devcraft.club/',
 		'siteId'      => 4,
-		'licLink'     => 'https://devcraft.club/pages/licence-agreement/',
 	],
 	'menu'      => [
 		AdminLink::page(__('Главная'), 'dashboard', DashboardPage::class, 'mif-home'),

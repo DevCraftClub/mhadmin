@@ -45,8 +45,8 @@ final class FormSchema extends AbstractType {
 	 *     $schema = new FormSchema('settings', [$generalSection], layout: FormLayout::TABS);
 	 */
 	public function __construct(
-		public string $codename,
-		public array  $sections,
+		public string     $codename,
+		public array      $sections,
 		public FormLayout $layout = FormLayout::STACK,
 	) {}
 

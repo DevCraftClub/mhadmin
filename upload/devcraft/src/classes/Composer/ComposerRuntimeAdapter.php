@@ -31,14 +31,14 @@ final class ComposerRuntimeAdapter {
 		putenv('COMPOSER_HOME=' . $composerHome);
 	}
 
-	public function install(string $package, ?string $version = null): ComposerActionResult {
-		$target = $version !== null && $version !== '' ? $package . ':' . $version : $package;
+	public function install(string $package, ?string $version = NULL): ComposerActionResult {
+		$target = $version !== NULL && $version !== ''? $package . ':' . $version : $package;
 
 		return $this->run(['require', $target], 'Пакет успешно установлен');
 	}
 
-	public function update(string $package, ?string $version = null): ComposerActionResult {
-		if($version !== null && $version !== '') {
+	public function update(string $package, ?string $version = NULL): ComposerActionResult {
+		if($version !== NULL && $version !== '') {
 			return $this->run(['require', $package . ':' . $version], 'Пакет успешно обновлён');
 		}
 
@@ -66,7 +66,7 @@ final class ComposerRuntimeAdapter {
 	}
 
 	/**
-	 * @param list<string> $args
+	 * @param   list<string>  $args
 	 */
 	private function run(array $args, string $successMessage): ComposerActionResult {
 		$composerPhar = ROOT_DIR . '/devcraft/composer.phar';
@@ -105,4 +105,5 @@ final class ComposerRuntimeAdapter {
 			'output'  => implode(PHP_EOL, $output),
 		]);
 	}
+
 }

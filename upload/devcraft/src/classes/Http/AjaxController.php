@@ -12,8 +12,9 @@ namespace DevCraft\Core\Http;
 
 use DevCraft\Core\Application;
 use DevCraft\Core\I18n\Translation;
-use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Interfaces\ResponseInterface;
+use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Exception\JsonResponseException;
 
 /**
  * Диспетчер AJAX-запросов DevCraft: аутентификация, маршрутизация, ответ.
@@ -68,10 +69,16 @@ final class AjaxController {
 			return;
 		}
 
-		$registry = new AjaxRouteRegistry();
-		$plugin   = Application::instance()->registry()->forMod($request->mod);
+		$registry    = new AjaxRouteRegistry();
+		$adminPlugin = Application::instance()->registry()->forMod('devcraft');
 
-		if($plugin !== NULL) {
+		if($adminPlugin !== NULL) {
+			$registry->loadFromManifest($adminPlugin);
+		}
+
+		$plugin = Application::instance()->registry()->forMod($request->mod);
+
+		if($plugin !== NULL && $plugin !== $adminPlugin) {
 			$registry->loadFromManifest($plugin);
 		}
 

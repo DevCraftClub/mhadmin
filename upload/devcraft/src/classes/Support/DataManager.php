@@ -17,16 +17,16 @@ declare(strict_types=1);
 namespace DevCraft\Core\Support;
 
 use Throwable;
-use JsonException;
 use DLEPlugins;
+use JsonException;
 use FilesystemIterator;
 use RecursiveIteratorIterator;
-use DevCraft\Types\ModuleData;
+use DevCraft\Types\ModuleManifest;
 use DevCraft\Core\Config\Paths;
-use DevCraft\Core\Http\JsonResponse;
-use DevCraft\Core\Http\JsonResponseException;
 use RecursiveDirectoryIterator;
+use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Core\Exception\JsonResponseException;
 
 /**
  * Утилиты работы с файлами, конфигурацией JSON и санитизацией ввода DLE.
@@ -44,7 +44,7 @@ final class DataManager {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return array<string, ModuleData> Метаданные модулей с валидным manifest.php.
+	 * @return array<string, ModuleManifest> Метаданные модулей с валидным manifest.php.
 	 *
 	 * @example
 	 *     $manifests = DataManager::readManifest();
@@ -60,7 +60,7 @@ final class DataManager {
 	 *
 	 * @param   string  $codename  Идентификатор mod или code из manifest.php.
 	 *
-	 * @return ?ModuleData Метаданные найденного модуля.
+	 * @return ?ModuleManifest Метаданные найденного модуля.
 	 *
 	 * @throws JsonResponseException Если модуль не найден или код пустой.
 	 * @throws \JsonException
@@ -68,7 +68,7 @@ final class DataManager {
 	 * @example
 	 *     $admin = DataManager::getManifest('devcraft');
 	 */
-	public static function getManifest(string $codename): ?ModuleData {
+	public static function getManifest(string $codename): ?ModuleManifest {
 		$codename = trim($codename);
 
 		if($codename === '') {
@@ -102,13 +102,12 @@ final class DataManager {
 		return NULL;
 	}
 
-
 	/**
 	 * Загружает манифесты всех модулей из каталога modules.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return array<string, ModuleData> Карта mod → метаданные.
+	 * @return array<string, ModuleManifest> Карта mod → метаданные.
 	 */
 	private static function loadManifests(): array {
 		$modulesRoot = Paths::modules();
@@ -151,7 +150,7 @@ final class DataManager {
 					continue;
 				}
 
-				$manifests[$mod] = ModuleData::fromManifest($mod, $manifest, $modulePath);
+				$manifests[$mod] = ModuleManifest::fromManifest($mod, $manifest, $modulePath);
 			} catch(Throwable $throwable) {
 				LogGenerator::for(self::class)->log($throwable->getMessage());
 			}
@@ -161,7 +160,6 @@ final class DataManager {
 
 		return $manifests;
 	}
-
 
 	/**
 	 * Формирует аббревиатуру из слов строки с суффиксом длины.
@@ -676,6 +674,7 @@ final class DataManager {
 						: self::sanitizeInput($value, $flags),
 					$input,
 				),
+				static fn(mixed $value): bool => $value !== NULL && $value !== '',
 			);
 		}
 

@@ -87,7 +87,7 @@ final class AssetsCheckerService {
 			$metadata = $this->fileMetadata($absolutePath, $sourceMeta);
 
 			if($metadata !== NULL) {
-				$fileKey                = (string) ($metadata['file'] ?? $manifestKey);
+				$fileKey            = (string) ($metadata['file'] ?? $manifestKey);
 				$manifest[$fileKey] = $metadata;
 			}
 		}

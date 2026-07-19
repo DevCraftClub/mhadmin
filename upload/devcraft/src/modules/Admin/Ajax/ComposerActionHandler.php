@@ -6,10 +6,10 @@ namespace DevCraft\Modules\Admin\Ajax;
 
 use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
-use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Composer\PackagePolicyService;
 use DevCraft\Core\Composer\ComposerDbSyncService;
 use DevCraft\Core\Composer\ComposerRuntimeAdapter;
-use DevCraft\Core\Composer\PackagePolicyService;
+use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 
 final class ComposerActionHandler implements AjaxHandlerInterface {
 
@@ -23,8 +23,8 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 		}
 
 		$policyService = new PackagePolicyService();
-		$policyError   = $policyService->validateAction($actionType, $package, $version !== '' ? $version : null);
-		if($policyError !== null) {
+		$policyError   = $policyService->validateAction($actionType, $package, $version !== ''? $version : NULL);
+		if($policyError !== NULL) {
 			$status = $policyError->toArray();
 
 			return new JsonResponse([
@@ -47,13 +47,13 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 
 		$runtime = new ComposerRuntimeAdapter();
 		$result  = match ($actionType) {
-			'install' => $runtime->install($package, $version !== '' ? $version : null),
-			'update'  => $runtime->update($package, $version !== '' ? $version : null),
+			'install' => $runtime->install($package, $version !== ''? $version : NULL),
+			'update'  => $runtime->update($package, $version !== ''? $version : NULL),
 			'remove'  => $runtime->remove($package),
-			default   => null,
+			default   => NULL,
 		};
 
-		if($result === null) {
+		if($result === NULL) {
 			return JsonResponse::fail(__('Ошибка'), __('Неизвестный тип действия'), 'validation', 422);
 		}
 
@@ -80,9 +80,10 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 		(new ComposerDbSyncService())->applySuccessfulAction(
 			$actionType,
 			$package,
-			$version !== '' ? $version : null,
+			$version !== ''? $version : NULL,
 		);
 
 		return JsonResponse::ok($data, __('Операция Composer выполнена'));
 	}
+
 }

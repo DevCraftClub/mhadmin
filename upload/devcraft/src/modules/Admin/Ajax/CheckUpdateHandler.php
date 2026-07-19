@@ -71,7 +71,7 @@ final class CheckUpdateHandler implements AjaxHandlerInterface {
 			return JsonResponse::fail(
 				__('Ошибка'),
 				__('Требуется идентификатор ресурса'),
-				'validation'
+				'validation',
 			);
 		}
 

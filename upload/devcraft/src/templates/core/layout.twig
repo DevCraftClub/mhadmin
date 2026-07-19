@@ -14,7 +14,7 @@
 <div data-role="navview" data-expand-point="md">
     <div class="navview-pane">
         <div class="logo-container p-2">
-            <strong>DevCraft</strong>
+            <strong>{{ brand_name|default('DevCraft') }}</strong>
             <span class="text-small fg-gray">v{{ version }}</span>
         </div>
         {% include 'core/includes/menu.twig' with { menu: admin.menu, current: admin.current_action } %}
@@ -46,8 +46,9 @@
 <script src="{{ asset_base }}js/i18n/translator.js"></script>
 {# devcraft.js — обязательное ядро для всех модулей DevCraft Admin (настройки, AJAX, уведомления) #}
 <script src="{{ asset_base }}js/devcraft.js?v={{ asset_js_mtime|default(version) }}"></script>
+<script src="{{ asset_base }}js/filter.js?v={{ filter_js_mtime|default(asset_js_mtime)|default(version) }}"></script>
 {% for js_url in module_js_urls|default([]) %}
-<script src="{{ js_url }}"></script>
+    <script src="{{ js_url }}"></script>
 {% endfor %}
 </body>
 </html>

@@ -53,4 +53,5 @@ final class ManifestPackageReader {
 
 		return $result;
 	}
+
 }

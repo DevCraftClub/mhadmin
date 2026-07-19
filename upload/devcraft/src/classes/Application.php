@@ -16,12 +16,12 @@ declare(strict_types=1);
 
 namespace DevCraft\Core;
 
+use Throwable;
 use Twig\Environment;
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Admin\Router;
 use DevCraft\Enums\AdminErrorKind;
 use DevCraft\Core\Module\Registry;
-use DevCraft\Core\Config\DevCraftConfig;
 use DevCraft\Core\Support\DleDataService;
 use DevCraft\Core\Twig\EnvironmentFactory;
 use DevCraft\Core\Admin\AdminErrorRenderer;
@@ -128,41 +128,6 @@ final class Application {
 	}
 
 	/**
-	 * Выполняет однократную инициализацию путей, реестра модулей и Twig.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @example
-	 *     Application::instance()->boot();
-	 */
-	public function boot(): void {
-		if($this->booted) {
-			return;
-		}
-
-		Paths::register();
-		$this->registry = new Registry();
-		$this->twig     = EnvironmentFactory::create();
-		$this->booted   = true;
-	}
-
-	/**
-	 * Возвращает реестр модулей после автоматической инициализации ядра.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return Registry Реестр активных модулей.
-	 * @example
-	 *        $registry = Application::instance()->registry();
-	 *
-	 */
-	public function registry(): Registry {
-		$this->boot();
-
-		return $this->registry;
-	}
-
-	/**
 	 * Возвращает окружение Twig с подключённым расширением перевода.
 	 *
 	 * @since 200.4.0
@@ -180,25 +145,22 @@ final class Application {
 	}
 
 	/**
-	 * Возвращает шлюз базы данных, создавая его при первом обращении.
+	 * Выполняет однократную инициализацию путей, реестра модулей и Twig.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return DatabaseGateway Шлюз Cycle ORM для DevCraft.
-	 *
-	 * @throws DevCraftException Если реестр модулей не инициализирован.
 	 * @example
-	 *        $db = Application::instance()->database();
-	 *
+	 *     Application::instance()->boot();
 	 */
-	public function database(): DatabaseGateway {
-		$this->boot();
-
-		if($this->registry === NULL) {
-			throw new DevCraftException(__('Реестр DevCraft не инициализирован.'));
+	public function boot(): void {
+		if($this->booted) {
+			return;
 		}
 
-		return $this->database ??= new DatabaseGateway($this->registry);
+		Paths::register();
+		$this->registry = new Registry();
+		$this->twig     = EnvironmentFactory::create();
+		$this->booted   = true;
 	}
 
 	/**
@@ -255,7 +217,7 @@ final class Application {
 				NULL,
 				$plugin,
 			);
-		} catch(\Throwable $exception) {
+		} catch(Throwable $exception) {
 			$errorRenderer->render(
 				AdminErrorKind::ServerError,
 				__('Внутренняя ошибка'),
@@ -265,6 +227,38 @@ final class Application {
 				$plugin,
 			);
 		}
+	}
+
+	/**
+	 * Возвращает реестр модулей после автоматической инициализации ядра.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @return Registry Реестр активных модулей.
+	 * @example
+	 *        $registry = Application::instance()->registry();
+	 *
+	 */
+	public function registry(): Registry {
+		$this->boot();
+
+		return $this->registry;
+	}
+
+	/**
+	 * Возвращает сервис агрегированных данных DLE с кешированием.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @return DleDataService Сервис высокоуровневых данных DLE.
+	 * @example
+	 *        $users = Application::instance()->dleData()->users();
+	 *
+	 */
+	public function dleData(): DleDataService {
+		$this->boot();
+
+		return $this->dleData ??= new DleDataService($this->dataLoader());
 	}
 
 	/**
@@ -284,19 +278,25 @@ final class Application {
 	}
 
 	/**
-	 * Возвращает сервис агрегированных данных DLE с кешированием.
+	 * Возвращает шлюз базы данных, создавая его при первом обращении.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return DleDataService Сервис высокоуровневых данных DLE.
+	 * @return DatabaseGateway Шлюз Cycle ORM для DevCraft.
+	 *
+	 * @throws DevCraftException Если реестр модулей не инициализирован.
 	 * @example
-	 *        $users = Application::instance()->dleData()->users();
+	 *        $db = Application::instance()->database();
 	 *
 	 */
-	public function dleData(): DleDataService {
+	public function database(): DatabaseGateway {
 		$this->boot();
 
-		return $this->dleData ??= new DleDataService($this->dataLoader());
+		if($this->registry === NULL) {
+			throw new DevCraftException(__('Реестр DevCraft не инициализирован.'));
+		}
+
+		return $this->database ??= new DatabaseGateway($this->registry);
 	}
 
 	/**

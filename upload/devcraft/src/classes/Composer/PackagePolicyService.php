@@ -20,12 +20,12 @@ final class PackagePolicyService {
 		private readonly DefaultPackagePolicyStore $store = new DefaultPackagePolicyStore(),
 	) {}
 
-	public function validateAction(string $actionType, string $packageName, ?string $targetVersion = null): ?ComposerActionResult {
+	public function validateAction(string $actionType, string $packageName, ?string $targetVersion = NULL): ?ComposerActionResult {
 		$policies = $this->store->all();
-		$policy   = $policies[$packageName] ?? null;
+		$policy   = $policies[$packageName] ?? NULL;
 
-		if($policy === null) {
-			return null;
+		if($policy === NULL) {
+			return NULL;
 		}
 
 		if($actionType === 'remove' && (bool) ($policy['removeBlocked'] ?? false)) {
@@ -35,7 +35,7 @@ final class PackagePolicyService {
 		if(
 			$actionType === 'update'
 			&& (bool) ($policy['downgradeBlocked'] ?? false)
-			&& $targetVersion !== null
+			&& $targetVersion !== NULL
 			&& $targetVersion !== ''
 		) {
 			$minAllowedVersion = (string) ($policy['minAllowedVersion'] ?? '');
@@ -44,6 +44,7 @@ final class PackagePolicyService {
 			}
 		}
 
-		return null;
+		return NULL;
 	}
+
 }

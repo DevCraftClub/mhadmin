@@ -17,18 +17,34 @@ declare(strict_types=1);
 /**
  * Данные истории изменений модуля DevCraft Admin для страницы Changelog.
  *
+ * Гидрируется в `Changelog[]` через `Changelog::listFromManifest()` /
+ * `ModuleManifest::fromManifest()` — сам файл возвращает массив массивов.
+ *
  * @package    DevCraft
  * @since      200.4.0
  * @subpackage Modules.Admin
- * @return \DevCraft\Types\Changelog[]
+ *
+ * @return array<int, array{version: string, date?: string, changes?: array<string, list<string>>}>
  */
 return [
+	[
+		'version' => '200.4.1',
+		'date'    => '2026-07-17',
+		'changes' =>
+			[
+				'added' =>
+					[
+						__('Публичный клиент `dc_public.js` для шаблонов DLE и режим `controller=public` в `ajax.php` (сессия участника сайта).'),
+						__('Карточка справки по публичному JS на панели DevCraft Admin.'),
+					],
+			],
+	],
 	[
 		'version' => '200.4.0',
 		'date'    => '2026-06-15',
 		'changes' =>
 			[
-				'added' =>
+				'added'   =>
 					[
 						__('Плагин DevCraft — преемник MHAdmin: отдельный раздел в админке DLE (?mod=devcraft).'),
 						__('Поддержка DataLife Engine 20.0.'),
@@ -50,7 +66,7 @@ return [
 						__('Меню «Страницы DLE» — быстрый переход в стандартную админку DLE из боковой панели DevCraft.'),
 						__('История изменений: те же release notes, новый формат с группами «Добавлено», «Изменено» и т.д.'),
 					],
-				'fixed' =>
+				'fixed'   =>
 					[
 						__('Фильтры на странице логов (в том числе по дате) работают стабильнее.'),
 						__('Удаление записей лога и сохранение настроек сопровождаются понятным результатом на экране.'),

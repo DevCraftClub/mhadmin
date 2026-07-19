@@ -16,35 +16,35 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Abstracts;
 
-use DevCraft\Core\Admin\AdminContext;
-use DevCraft\Core\Application;
-use DevCraft\Core\Exception\DevCraftException;
-use DevCraft\Core\Interfaces\PageInterface;
 use Twig\Environment;
+use DevCraft\Core\Application;
+use DevCraft\Core\Admin\AdminContext;
+use DevCraft\Core\Interfaces\PageInterface;
+use DevCraft\Core\Exception\DevCraftException;
 
 /**
  * Базовый класс административной страницы с доступом к Twig и контексту админки.
  *
- * @package DevCraft
+ * @package    DevCraft
+ * @since      200.4.0
  * @subpackage Core.Abstracts
- * @since 200.4.0
  */
 abstract class AbstractPage implements PageInterface {
 
 	/**
 	 * Привязанный контекст административной панели.
 	 *
-	 * @var AdminContext|null
 	 * @since 200.4.0
+	 * @var AdminContext|null
 	 */
-	private ?AdminContext $adminContext = null;
+	private ?AdminContext $adminContext = NULL;
 
 	/**
 	 * Нормализует ключ представления для загрузчика Twig.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string $view Относительный или абсолютный ключ шаблона.
+	 * @param   string  $view  Относительный или абсолютный ключ шаблона.
 	 *
 	 * @return string Ключ, понятный загрузчику шаблонов DevCraft.
 	 *
@@ -68,7 +68,7 @@ abstract class AbstractPage implements PageInterface {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param AdminContext $adminContext Контекст текущего запроса админки.
+	 * @param   AdminContext  $adminContext  Контекст текущего запроса админки.
 	 *
 	 * @example
 	 *     $page->bindAdminContext($adminContext);
@@ -87,7 +87,7 @@ abstract class AbstractPage implements PageInterface {
 	 * @throws DevCraftException Если контекст не был привязан.
 	 */
 	protected function adminContext(): AdminContext {
-		if($this->adminContext === null) {
+		if($this->adminContext === NULL) {
 			throw new DevCraftException(__('AdminContext не привязан.'));
 		}
 
@@ -99,10 +99,10 @@ abstract class AbstractPage implements PageInterface {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string      $title Заголовок элемента.
-	 * @param string|null $url   URL элемента или `null` для текущей страницы.
+	 * @param   string       $title  Заголовок элемента.
+	 * @param   string|null  $url    URL элемента или `null` для текущей страницы.
 	 */
-	protected function addBreadcrumb(string $title, ?string $url = null): void {
+	protected function addBreadcrumb(string $title, ?string $url = NULL): void {
 		$this->adminContext()->addBreadcrumb($title, $url);
 	}
 
@@ -122,8 +122,8 @@ abstract class AbstractPage implements PageInterface {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string               $view Ключ или путь шаблона.
-	 * @param array<string, mixed> $data Данные для шаблона.
+	 * @param   string                $view  Ключ или путь шаблона.
+	 * @param   array<string, mixed>  $data  Данные для шаблона.
 	 *
 	 * @return string Сгенерированная HTML-разметка.
 	 */

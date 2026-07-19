@@ -19,9 +19,9 @@ namespace DevCraft\Enums;
 /**
  * Классификация ошибок административной панели для выбора шаблона ответа.
  *
- * @package DevCraft
+ * @package    DevCraft
+ * @since      200.4.0
  * @subpackage Core.Enums
- * @since 200.4.0
  */
 enum AdminErrorKind {
 

@@ -17,8 +17,8 @@ declare(strict_types=1);
 namespace DevCraft\Modules\Admin\Pages;
 
 use DevCraft\Core\Application;
-use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Core\Module\PluginContext;
+use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Modules\Admin\Services\DashboardPackageMetricService;
 
 /**
@@ -53,8 +53,9 @@ final class DashboardPage extends AbstractPage {
 			$latest['teaser_items'] = $changelog[0]->teaserItems(3);
 		}
 
-		$menu = [];
-		$composerUrl = '?mod=devcraft&action=composer';
+		$mod         = $plugin?->mod() ?? 'devcraft';
+		$menu        = [];
+		$composerUrl = '?mod=' . $mod . '&action=composer';
 		$crowdin     = $this->buildCrowdinDisplay($plugin);
 		$metrics     = new DashboardPackageMetricService();
 
@@ -84,13 +85,13 @@ final class DashboardPage extends AbstractPage {
 						'docs_link'   => (string) ($meta['docsLink'] ?? ''),
 						'site_link'   => (string) ($meta['siteLink'] ?? ''),
 						'site_id'     => (int) ($meta['siteId'] ?? 0),
-						'code'        => (string) ($meta['module_code'] ?? 'devcraft'),
+						'code'        => (string) ($meta['module_code'] ?? $mod),
 					],
 					'author'           => $context->author()->toArray(),
 					'lic_link'         => $context->licLink(),
 					'menu'             => $menu,
 					'changelog_latest' => $latest,
-					'changelog_url'    => '?mod=devcraft&action=changelog',
+					'changelog_url'    => '?mod=' . $mod . '&action=changelog',
 					'show_assets'      => true,
 					'show_update'      => true,
 					'composer'         => [
@@ -100,6 +101,10 @@ final class DashboardPage extends AbstractPage {
 						'dump_autoload_url' => 'dump_autoload',
 					],
 					'crowdin'          => $crowdin,
+					'public_js'        => [
+						'path'    => '/devcraft/src/templates/core/assets/js/dc_public.js',
+						'example' => '<script src="/devcraft/src/templates/core/assets/js/dc_public.js"></script>',
+					],
 				],
 			],
 		];

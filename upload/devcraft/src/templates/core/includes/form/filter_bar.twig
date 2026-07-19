@@ -1,6 +1,8 @@
 <div class="dc-filter-bar mb-4" id="dc-filter-bar"
      data-filter-catalog="{{ filter_catalog|json_encode|e('html_attr') }}"
-     data-filter-rules="{{ filter_rules|default([])|json_encode|e('html_attr') }}">
+     data-filter-rules="{{ filter_rules|default([])|json_encode|e('html_attr') }}"
+     {% if table_id is defined and table_id != '' %}data-table-id="{{ table_id }}"{% endif %}
+     {% if table_total_id is defined and table_total_id != '' %}data-total-id="{{ table_total_id }}"{% endif %}>
     <div class="d-flex flex-align-center flex-wrap">
         <div class="dropdown-button place-right">
             <button type="button" class="button" id="dc-filter-toggle">
@@ -29,7 +31,9 @@
         </div>
     {% endif %}
 
-    <form method="get" id="dc-filter-form" class="d-none">
+    <form method="get" id="dc-filter-form" class="d-none"
+          data-mod="{{ mod }}"
+          data-action="{{ action|default('logs') }}">
         <input type="hidden" name="mod" value="{{ mod }}">
         <input type="hidden" name="action" value="{{ action|default('logs') }}">
         {% if order is defined and order != '' %}

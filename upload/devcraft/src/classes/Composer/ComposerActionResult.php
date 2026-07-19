@@ -18,7 +18,7 @@ final readonly class ComposerActionResult {
 	public function __construct(
 		public string $status,
 		public string $message,
-		public array $details = [],
+		public array  $details = [],
 	) {}
 
 	public static function ok(string $message, array $details = []): self {
@@ -43,4 +43,5 @@ final readonly class ComposerActionResult {
 			'details' => $this->details,
 		];
 	}
+
 }

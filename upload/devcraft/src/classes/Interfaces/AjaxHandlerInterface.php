@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace DevCraft\Core\Interfaces;
 
 use DevCraft\Core\Http\AjaxRequest;
-use DevCraft\Core\Interfaces\ResponseInterface;
 
 /**
  * Контракт обработчика AJAX-запроса модуля DevCraft.

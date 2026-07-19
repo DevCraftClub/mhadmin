@@ -12,7 +12,7 @@ use RuntimeException;
 final class UploadedFile {
 
 	/**
-	 * @param array{name?: string, type?: string, tmp_name?: string, error?: int, size?: int} $file
+	 * @param   array{name?: string, type?: string, tmp_name?: string, error?: int, size?: int}  $file
 	 */
 	private function __construct(
 		private readonly array $file,
@@ -22,7 +22,7 @@ final class UploadedFile {
 	 * Создаёт экземпляр из ключа $_FILES.
 	 */
 	public static function fromFilesKey(string $key): self {
-		$file = $_FILES[$key] ?? null;
+		$file = $_FILES[$key] ?? NULL;
 
 		if(!is_array($file)) {
 			throw new RuntimeException(__('Файл не передан'));
@@ -67,13 +67,13 @@ final class UploadedFile {
 	}
 
 	/**
-	 * @param list<string> $allowed Расширения без точки, в нижнем регистре
+	 * @param   list<string>  $allowed  Расширения без точки, в нижнем регистре
 	 */
 	public function assertExtension(array $allowed): void {
 		$ext = strtolower(pathinfo($this->originalName(), PATHINFO_EXTENSION));
 
 		if($ext === '' || $allowed === [] || !in_array($ext, $allowed, true)) {
-			$list = $allowed !== [] ? implode(', ', $allowed) : __('нет');
+			$list = $allowed !== []? implode(', ', $allowed) : __('нет');
 
 			throw new RuntimeException(__('Недопустимое расширение файла. Разрешено: {ext}', ['{ext}' => $list]));
 		}

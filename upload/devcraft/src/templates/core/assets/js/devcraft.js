@@ -95,6 +95,10 @@
         static boot() {
             DevCraftSettings.bind();
 
+            if (global.DevCraft && global.DevCraft.Filter && typeof global.DevCraft.Filter.boot === 'function') {
+                global.DevCraft.Filter.boot();
+            }
+
             if (global.DevCraftAdmin && typeof global.DevCraftAdmin.boot === 'function') {
                 global.DevCraftAdmin.boot();
             }

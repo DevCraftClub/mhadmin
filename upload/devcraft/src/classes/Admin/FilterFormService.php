@@ -45,42 +45,6 @@ final class FilterFormService {
 	private array $catalogCache = [];
 
 	/**
-	 * Возвращает карту стандартных PHP-фильтров для query-параметров админки.
-	 *
-	 * @since 173.3.0
-	 *
-	 * @param   array<string|int, int|string|null>  $additionalFilters  Дополнительные фильтры id => filter_var.
-	 *
-	 * @return array<string, int> Объединённые фильтры без null-значений.
-	 *
-	 * @example
-	 *     $filters = FilterFormService::getDefaultFilters(['status' => FILTER_VALIDATE_INT]);
-	 */
-	public static function getDefaultFilters(array $additionalFilters = []): array {
-		$defaultFilters = [
-			'page'   => FILTER_VALIDATE_INT,
-			'mod'    => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
-			'action' => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
-			'sites'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
-			'order'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
-			'sort'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_FLAG_STRIP_LOW|FILTER_NULL_ON_FAILURE,
-		];
-
-		foreach($additionalFilters as $key => $value) {
-			if(is_int($key)) {
-				[$key, $value] = [$value, NULL];
-			}
-
-			$defaultFilters[(string) $key] = $value ?? FILTER_SANITIZE_FULL_SPECIAL_CHARS;
-		}
-
-		return array_filter(
-			$defaultFilters,
-			static fn(mixed $filter): bool => $filter !== NULL,
-		);
-	}
-
-	/**
 	 * Преобразует строку направления сортировки в константу SelectQuery.
 	 *
 	 * @since 173.3.0
@@ -94,8 +58,8 @@ final class FilterFormService {
 	 */
 	public static function getSort(string $sort): string {
 		return match (strtolower($sort)) {
-			'asc' => SelectQuery::SORT_ASC,
-			default      => SelectQuery::SORT_DESC,
+			'asc'   => SelectQuery::SORT_ASC,
+			default => SelectQuery::SORT_DESC,
 		};
 	}
 
@@ -148,6 +112,25 @@ final class FilterFormService {
 	}
 
 	/**
+	 * Формирует URL Ajax-запроса таблицы журнала с параметрами фильтра.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<string, mixed>  $query     Текущие query-параметры.
+	 * @param   string                $userHash  CSRF-хеш пользователя DLE.
+	 * @param   string                $order     Колонка сортировки.
+	 * @param   string                $sort      Направление сортировки.
+	 *
+	 * @return string Полный URL ajax-контроллера.
+	 *
+	 * @example
+	 *     $url = $service->buildLogsTableAjaxUrl($query, $hash, 'time', 'DESC');
+	 */
+	public function buildLogsTableAjaxUrl(array $query, string $userHash, string $order, string $sort): string {
+		return $this->buildTableAjaxUrl($query, $userHash, $order, $sort, 'logs_table');
+	}
+
+	/**
 	 * Формирует URL Ajax-запроса таблицы с параметрами фильтра.
 	 *
 	 * @param   array<string, mixed>  $query     Текущие query-параметры.
@@ -159,7 +142,7 @@ final class FilterFormService {
 	 * @return string Полный URL ajax-контроллера.
 	 */
 	public function buildTableAjaxUrl(
-		array $query,
+		array  $query,
 		string $userHash,
 		string $order,
 		string $sort,
@@ -178,25 +161,6 @@ final class FilterFormService {
 		}
 
 		return Paths::ajaxBase() . '?' . http_build_query($params);
-	}
-
-	/**
-	 * Формирует URL Ajax-запроса таблицы журнала с параметрами фильтра.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<string, mixed>  $query     Текущие query-параметры.
-	 * @param   string                $userHash  CSRF-хеш пользователя DLE.
-	 * @param   string                $order     Колонка сортировки.
-	 * @param   string                $sort      Направление сортировки.
-	 *
-	 * @return string Полный URL ajax-контроллера.
-	 *
-	 * @example
-	 *     $url = $service->buildLogsTableAjaxUrl($query, $hash, 'time', 'DESC');
-	 */
-	public function buildLogsTableAjaxUrl(array $query, string $userHash, string $order, string $sort): string {
-		return $this->buildTableAjaxUrl($query, $userHash, $order, $sort, 'logs_table');
 	}
 
 	/**
@@ -226,6 +190,42 @@ final class FilterFormService {
 		}
 
 		return $query;
+	}
+
+	/**
+	 * Возвращает карту стандартных PHP-фильтров для query-параметров админки.
+	 *
+	 * @since 173.3.0
+	 *
+	 * @param   array<string|int, int|string|null>  $additionalFilters  Дополнительные фильтры id => filter_var.
+	 *
+	 * @return array<string, int> Объединённые фильтры без null-значений.
+	 *
+	 * @example
+	 *     $filters = FilterFormService::getDefaultFilters(['status' => FILTER_VALIDATE_INT]);
+	 */
+	public static function getDefaultFilters(array $additionalFilters = []): array {
+		$defaultFilters = [
+			'page'   => FILTER_VALIDATE_INT,
+			'mod'    => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
+			'action' => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
+			'sites'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
+			'order'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_NULL_ON_FAILURE,
+			'sort'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS|FILTER_FLAG_STRIP_LOW|FILTER_NULL_ON_FAILURE,
+		];
+
+		foreach($additionalFilters as $key => $value) {
+			if(is_int($key)) {
+				[$key, $value] = [$value, NULL];
+			}
+
+			$defaultFilters[(string) $key] = $value ?? FILTER_SANITIZE_FULL_SPECIAL_CHARS;
+		}
+
+		return array_filter(
+			$defaultFilters,
+			static fn(mixed $filter): bool => $filter !== NULL,
+		);
 	}
 
 	/**
@@ -267,7 +267,9 @@ final class FilterFormService {
 			];
 
 			if(isset($rule['value'])) {
-				$normalized['value'] = $rule['value'];
+				$normalized['value'] = $type === 'multi'
+					? self::normalizeMultiValue($rule['value'])
+					: $rule['value'];
 			}
 
 			if(isset($rule['value_from'])) {
@@ -287,6 +289,49 @@ final class FilterFormService {
 		}
 
 		return $rules;
+	}
+
+	/**
+	 * Нормализует value multi-правила к непустому списку строк или [].
+	 *
+	 * @param   mixed  $value  Скаляр, список или null.
+	 *
+	 * @return list<string>
+	 */
+	public static function normalizeMultiValue(mixed $value): array {
+		if($value === NULL || $value === '') {
+			return [];
+		}
+
+		if(!is_array($value)) {
+			$value = [(string) $value];
+		}
+
+		return array_values(array_filter(
+			array_map(static fn(mixed $item): string => trim((string) $item), $value),
+			static fn(string $item): bool => $item !== '',
+		));
+	}
+
+	/**
+	 * Проверяет, содержит ли черновик правила все обязательные значения.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<string, mixed>  $rule  Нормализованное правило.
+	 *
+	 * @return bool true, если правило можно применить.
+	 */
+	private function isRuleComplete(array $rule): bool {
+		$type = (string) ($rule['type'] ?? '');
+
+		return match ($type) {
+			'multi'              => is_array($rule['value'] ?? NULL) && $rule['value'] !== [],
+			'text'               => trim((string) ($rule['value'] ?? '')) !== '',
+			'daterange', 'range' => trim((string) ($rule['value_from'] ?? '')) !== ''
+			                        && trim((string) ($rule['value_to'] ?? '')) !== '',
+			default              => false,
+		};
 	}
 
 	/**
@@ -332,43 +377,38 @@ final class FilterFormService {
 	}
 
 	/**
-	 * Формирует view-model чипов активных правил фильтра.
+	 * Обогащает поле каталога данными choices или границ диапазона.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param   list<array<string, mixed>>  $rules   Активные правила.
-	 * @param   FilterSchema                $schema  Схема фильтра.
+	 * @param   FormField                 $field   Поле схемы.
+	 * @param   RepositoryInterface|null  $repo    Репозиторий или null.
+	 * @param   FilterSchema              $schema  Схема фильтра.
 	 *
-	 * @return list<array{index: int, field: string, label: string, summary: string}> Чипы для UI.
-	 *
-	 * @example
-	 *     $chips = $service->buildChipViewModel($rules, $schema);
+	 * @return array<string, mixed> Данные поля для Twig.
 	 */
-	public function buildChipViewModel(array $rules, FilterSchema $schema): array {
-		$labels = [];
+	private function enrichCatalogField(FormField $field, ?RepositoryInterface $repo, FilterSchema $schema): array {
+		$column = (string) ($field->metro['db_column'] ?? $field->id);
+		$data   = [
+			'id'    => $field->id,
+			'type'  => $field->type,
+			'label' => $field->label,
+			'metro' => $field->metro,
+		];
 
-		foreach($schema->allFields() as $field) {
-			$labels[$field->id] = $field->label;
+		if($repo === NULL) {
+			return $data;
 		}
 
-		$chips = [];
-
-		foreach($rules as $index => $rule) {
-			$fieldId = (string) ($rule['field'] ?? '');
-			$type    = (string) ($rule['type'] ?? '');
-
-			$chips[] = [
-				'index'   => $index,
-				'field'   => $fieldId,
-				'label'   => $labels[$fieldId] ?? $fieldId,
-				'summary' => $this->formatRuleSummary($rule, $labels[$fieldId] ?? $fieldId),
-				'type'    => $type,
-			];
-		}
-
-		return $chips;
+		return match ($field->type) {
+			'multi'     => array_merge($data, [
+				'options' => $this->createFilterChoices($repo, $field->id, $column, $schema),
+			]),
+			'range'     => array_merge($data, $this->createRangeFilter($repo, $column, $field->label, $schema)[$column] ?? []),
+			'daterange' => array_merge($data, $this->createDateRangeFilter($repo, $column, $field->label, $schema)[$column] ?? []),
+			default     => $data,
+		};
 	}
-
 
 	/**
 	 * Создаёт список значений для multi-фильтра по distinct-колонке репозитория.
@@ -498,6 +538,66 @@ final class FilterFormService {
 	}
 
 	/**
+	 * Формирует view-model чипов активных правил фильтра.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   list<array<string, mixed>>  $rules   Активные правила.
+	 * @param   FilterSchema                $schema  Схема фильтра.
+	 *
+	 * @return list<array{index: int, field: string, label: string, summary: string}> Чипы для UI.
+	 *
+	 * @example
+	 *     $chips = $service->buildChipViewModel($rules, $schema);
+	 */
+	public function buildChipViewModel(array $rules, FilterSchema $schema): array {
+		$labels = [];
+
+		foreach($schema->allFields() as $field) {
+			$labels[$field->id] = $field->label;
+		}
+
+		$chips = [];
+
+		foreach($rules as $index => $rule) {
+			$fieldId = (string) ($rule['field'] ?? '');
+			$type    = (string) ($rule['type'] ?? '');
+
+			$chips[] = [
+				'index'   => $index,
+				'field'   => $fieldId,
+				'label'   => $labels[$fieldId] ?? $fieldId,
+				'summary' => $this->formatRuleSummary($rule, $labels[$fieldId] ?? $fieldId),
+				'type'    => $type,
+			];
+		}
+
+		return $chips;
+	}
+
+	/**
+	 * Формирует краткую текстовую сводку правила для чипа.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<string, mixed>  $rule   Правило фильтра.
+	 * @param   string                $label  Подпись поля.
+	 *
+	 * @return string Текстовая сводка.
+	 */
+	private function formatRuleSummary(array $rule, string $label): string {
+		$type = (string) ($rule['type'] ?? '');
+
+		return match ($type) {
+			'multi'              => $label . ': ' . implode(', ', array_map('strval', (array) ($rule['value'] ?? []))),
+			'text'               => $label . ': «' . ($rule['value'] ?? '') . '»',
+			'daterange', 'range' => $label . ': ' . ($rule['value_from'] ?? '')
+			                        . ' — ' . ($rule['value_to'] ?? ''),
+			default              => $label,
+		};
+	}
+
+	/**
 	 * Преобразует UI-правила в критерии запроса репозитория.
 	 *
 	 * @since 200.4.0
@@ -535,62 +635,6 @@ final class FilterFormService {
 		return $criteria;
 	}
 
-
-	/**
-	 * Проверяет, содержит ли черновик правила все обязательные значения.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<string, mixed>  $rule  Нормализованное правило.
-	 *
-	 * @return bool true, если правило можно применить.
-	 */
-	private function isRuleComplete(array $rule): bool {
-		$type = (string) ($rule['type'] ?? '');
-
-		return match ($type) {
-			'multi'              => is_array($rule['value'] ?? NULL) && $rule['value'] !== [],
-			'text'               => trim((string) ($rule['value'] ?? '')) !== '',
-			'daterange', 'range' => trim((string) ($rule['value_from'] ?? '')) !== ''
-			                        && trim((string) ($rule['value_to'] ?? '')) !== '',
-			default              => false,
-		};
-	}
-
-	/**
-	 * Обогащает поле каталога данными choices или границ диапазона.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   FormField                 $field   Поле схемы.
-	 * @param   RepositoryInterface|null  $repo    Репозиторий или null.
-	 * @param   FilterSchema              $schema  Схема фильтра.
-	 *
-	 * @return array<string, mixed> Данные поля для Twig.
-	 */
-	private function enrichCatalogField(FormField $field, ?RepositoryInterface $repo, FilterSchema $schema): array {
-		$column = (string) ($field->metro['db_column'] ?? $field->id);
-		$data   = [
-			'id'    => $field->id,
-			'type'  => $field->type,
-			'label' => $field->label,
-			'metro' => $field->metro,
-		];
-
-		if($repo === NULL) {
-			return $data;
-		}
-
-		return match ($field->type) {
-			'multi'     => array_merge($data, [
-				'options' => $this->createFilterChoices($repo, $field->id, $column, $schema),
-			]),
-			'range'     => array_merge($data, $this->createRangeFilter($repo, $column, $field->label, $schema)[$column] ?? []),
-			'daterange' => array_merge($data, $this->createDateRangeFilter($repo, $column, $field->label, $schema)[$column] ?? []),
-			default     => $data,
-		};
-	}
-
 	/**
 	 * Находит поле схемы по id.
 	 *
@@ -612,28 +656,6 @@ final class FilterFormService {
 	}
 
 	/**
-	 * Формирует краткую текстовую сводку правила для чипа.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<string, mixed>  $rule   Правило фильтра.
-	 * @param   string                $label  Подпись поля.
-	 *
-	 * @return string Текстовая сводка.
-	 */
-	private function formatRuleSummary(array $rule, string $label): string {
-		$type = (string) ($rule['type'] ?? '');
-
-		return match ($type) {
-			'multi'              => $label . ': ' . implode(', ', array_map('strval', (array) ($rule['value'] ?? []))),
-			'text'               => $label . ': «' . ($rule['value'] ?? '') . '»',
-			'daterange', 'range' => $label . ': ' . ($rule['value_from'] ?? '')
-			                        . ' — ' . ($rule['value_to'] ?? ''),
-			default              => $label,
-		};
-	}
-
-	/**
 	 * Добавляет критерий IN для multi-правила.
 	 *
 	 * @since 200.4.0
@@ -643,16 +665,7 @@ final class FilterFormService {
 	 * @param   array<string, mixed>                                   $rule      Правило фильтра.
 	 */
 	private function appendMultiCriterion(array &$criteria, string $column, array $rule): void {
-		$values = $rule['value'] ?? [];
-
-		if(!is_array($values)) {
-			$values = [(string) $values];
-		}
-
-		$values = array_values(array_filter(
-			array_map(static fn(mixed $value): string => trim((string) $value), $values),
-			static fn(string $value): bool => $value !== '',
-		));
+		$values = self::normalizeMultiValue($rule['value'] ?? []);
 
 		if($values === []) {
 			return;

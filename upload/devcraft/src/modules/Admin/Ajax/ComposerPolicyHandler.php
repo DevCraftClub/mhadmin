@@ -33,9 +33,11 @@ final class ComposerPolicyHandler implements AjaxHandlerInterface {
 
 		if($action === 'delete') {
 			$store->remove((string) ($request->data['packageName'] ?? ''));
+
 			return JsonResponse::ok(['policies' => array_values($store->all())], __('Политика удалена'));
 		}
 
 		return JsonResponse::fail(__('Ошибка'), __('Неизвестная операция политики'), 'validation', 422);
 	}
+
 }

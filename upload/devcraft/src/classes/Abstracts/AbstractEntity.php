@@ -16,17 +16,17 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Abstracts;
 
+use DateTimeImmutable;
+use Cycle\ORM\Entity\Behavior;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Table\Index;
-use Cycle\ORM\Entity\Behavior;
-use DateTimeImmutable;
 
 /**
  * Базовая ORM-сущность с аудитом создания и изменения записи.
  *
- * @package DevCraft
+ * @package    DevCraft
+ * @since      200.4.0
  * @subpackage Core.Abstracts
- * @since 200.4.0
  */
 #[Index(columns: ['created_at'])]
 #[Index(columns: ['creator'])]
@@ -37,24 +37,24 @@ abstract class AbstractEntity {
 	/**
 	 * Имя колонки даты создания записи.
 	 *
-	 * @var string
 	 * @since 200.4.0
+	 * @var string
 	 */
 	public const ATTR_CREATED_AT = 'created_at';
 
 	/**
 	 * Имя колонки даты последнего обновления записи.
 	 *
-	 * @var string
 	 * @since 200.4.0
+	 * @var string
 	 */
 	public const ATTR_UPDATED_AT = 'updated_at';
 
 	/**
 	 * Дата и время создания записи.
 	 *
-	 * @var DateTimeImmutable
 	 * @since 200.4.0
+	 * @var DateTimeImmutable
 	 */
 	#[Column(type: 'datetime', default: 'CURRENT_TIMESTAMP')]
 	public DateTimeImmutable $createdAt;
@@ -62,8 +62,8 @@ abstract class AbstractEntity {
 	/**
 	 * Идентификатор пользователя DLE, создавшего запись.
 	 *
-	 * @var int|null
 	 * @since 200.4.0
+	 * @var int|null
 	 */
 	#[Column(type: 'bigInteger', nullable: true, default: NULL)]
 	public ?int $creator = NULL;
@@ -71,8 +71,8 @@ abstract class AbstractEntity {
 	/**
 	 * Идентификатор пользователя DLE, последним изменившего запись.
 	 *
-	 * @var int|null
 	 * @since 200.4.0
+	 * @var int|null
 	 */
 	#[Column(type: 'bigInteger', nullable: true, default: NULL)]
 	public ?int $lastEditor = NULL;
@@ -80,8 +80,8 @@ abstract class AbstractEntity {
 	/**
 	 * Дата и время последнего обновления записи.
 	 *
-	 * @var DateTimeImmutable|null
 	 * @since 200.4.0
+	 * @var DateTimeImmutable|null
 	 */
 	#[Column(type: 'datetime', nullable: true, default: NULL)]
 	public ?DateTimeImmutable $updatedAt = NULL;
@@ -89,8 +89,8 @@ abstract class AbstractEntity {
 	/**
 	 * Первичный ключ записи.
 	 *
-	 * @var int
 	 * @since 200.4.0
+	 * @var int
 	 */
 	#[Column(type: 'bigPrimary', primary: true, autoincrement: true)]
 	protected int $id;
@@ -100,8 +100,8 @@ abstract class AbstractEntity {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @global bool                $is_logged  Флаг авторизации пользователя DLE.
-	 * @global array<string,mixed> $member_id  Данные текущего пользователя DLE.
+	 * @global bool                $is_logged Флаг авторизации пользователя DLE.
+	 * @global array<string,mixed> $member_id Данные текущего пользователя DLE.
 	 *
 	 * @example
 	 *     $entity->beforeSave();
@@ -157,7 +157,7 @@ abstract class AbstractEntity {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string $name Имя колонки или свойства.
+	 * @param   string  $name  Имя колонки или свойства.
 	 *
 	 * @return mixed Значение колонки.
 	 */
@@ -196,7 +196,7 @@ abstract class AbstractEntity {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param int|null $user_id ID пользователя DLE или `null`.
+	 * @param   int|null  $user_id  ID пользователя DLE или `null`.
 	 *
 	 * @example
 	 *     $entity->setCreator(42);
@@ -210,7 +210,7 @@ abstract class AbstractEntity {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param int|null $user_id ID пользователя DLE или `null`.
+	 * @param   int|null  $user_id  ID пользователя DLE или `null`.
 	 *
 	 * @example
 	 *     $entity->setLastEditor(42);

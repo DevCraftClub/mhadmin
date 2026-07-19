@@ -13,14 +13,14 @@ use DevCraft\Core\Composer\ManifestPackageReader;
 final class DashboardPackageMetricService {
 
 	public function __construct(
-		private readonly ComposerStateReader $stateReader = new ComposerStateReader(),
+		private readonly ComposerStateReader   $stateReader = new ComposerStateReader(),
 		private readonly ManifestPackageReader $manifestReader = new ManifestPackageReader(),
 	) {}
 
 	/**
 	 * Количество отсутствующих hardRequired-пакетов.
 	 *
-	 * @param string|null $appCode Код приложения / plugin; null — все модули.
+	 * @param   string|null  $appCode  Код приложения / plugin; null — все модули.
 	 */
 	public function missingRequiredCount(?string $appCode = NULL): int {
 		$missing = 0;
@@ -37,7 +37,7 @@ final class DashboardPackageMetricService {
 	/**
 	 * Список пакетов для панели Composer на dashboard.
 	 *
-	 * @param string|null $appCode Код приложения / plugin; null — все модули.
+	 * @param   string|null  $appCode  Код приложения / plugin; null — все модули.
 	 *
 	 * @return list<array{name: string, version: string, installed: bool, isHardRequired: bool}>
 	 */
@@ -66,4 +66,5 @@ final class DashboardPackageMetricService {
 
 		return $result;
 	}
+
 }

@@ -83,13 +83,13 @@ final class LogGenerator {
 	private static ?string $telegram_bot = NULL;
 
 	/**
-	 * Типы логов, допустимые для отправки в Telegram.
+	 * Типы логов, допустимые для сохранения (file / DB / Telegram).
 	 *
-	 * @since 173.3.0
+	 * @since 200.4.0
 	 *
 	 * @var string|null
 	 */
-	private static ?string $telegram_type = NULL;
+	private static ?string $logs_save_types = NULL;
 
 	/**
 	 * Флаг сохранения логов в базе данных.
@@ -115,7 +115,7 @@ final class LogGenerator {
 
 		$settings = DevCraftConfig::raw();
 		self::setLogs(array_key_exists('logs', $settings) && $settings['logs']);
-		self::setTelegramType($settings['logs_telegram_type'] ?? NULL);
+		self::setLogsSaveTypes($settings['logs_save_types'] ?? NULL);
 		self::setTelegramBot($settings['logs_telegram_api'] ?? NULL);
 		self::setTelegramChannel($settings['logs_telegram_channel'] ?? NULL);
 		self::setTelegramSend(array_key_exists('logs_telegram', $settings) && $settings['logs_telegram']);
@@ -214,6 +214,10 @@ final class LogGenerator {
 		}
 
 		if($plugin === '' || $functionName === '') {
+			return;
+		}
+
+		if(!self::isTypeAllowed($type)) {
 			return;
 		}
 
@@ -419,31 +423,53 @@ final class LogGenerator {
 	}
 
 	/**
-	 * Устанавливает фильтр типов логов для Telegram.
+	 * Устанавливает фильтр типов сохраняемых логов (file / DB / Telegram).
 	 *
-	 * @since 173.3.0
+	 * @since 200.4.0
 	 *
-	 * @param   string|null  $telegram_type  Строка типов через пробел или null.
-	 *
-	 * @example
-	 *     LogGenerator::setTelegramType('error critical');
+	 * @param   string|null  $types  Строка типов через пробел или null.
 	 */
-	public static function setTelegramType(?string $telegram_type): void {
-		self::$telegram_type = $telegram_type;
+	public static function setLogsSaveTypes(?string $types): void {
+		self::$logs_save_types = $types;
 	}
 
 	/**
-	 * Возвращает фильтр типов логов для Telegram.
+	 * Возвращает фильтр типов сохраняемых логов.
 	 *
-	 * @since 173.3.0
+	 * @since 200.4.0
 	 *
 	 * @return string Строка типов; по умолчанию all.
-	 *
-	 * @example
-	 *     $types = LogGenerator::telegramType();
 	 */
-	public static function telegramType(): string {
-		return self::$telegram_type? : 'all';
+	public static function logsSaveTypes(): string {
+		return self::$logs_save_types? : 'all';
+	}
+
+	/**
+	 * Разрешён ли тип для сохранения.
+	 * При debug — всегда true.
+	 *
+	 * @since 200.4.0
+	 */
+	public static function isTypeAllowed(string $type): bool {
+		if(self::isDebugEnabled()) {
+			return true;
+		}
+
+		$allowed = preg_split('/\s+/', trim(self::logsSaveTypes()), -1, PREG_SPLIT_NO_EMPTY)? : ['all'];
+
+		if(in_array('all', $allowed, true)) {
+			return true;
+		}
+
+		$aliases    = [
+			'warn'      => 'warning',
+			'crit'      => 'critical',
+			'emergency' => 'urgent',
+			'alert'     => 'urgent',
+		];
+		$normalized = $aliases[$type] ?? $type;
+
+		return in_array($type, $allowed, true) || in_array($normalized, $allowed, true);
 	}
 
 	/**
@@ -761,12 +787,6 @@ final class LogGenerator {
 			return;
 		}
 
-		$allowedTypes = explode(' ', self::telegramType());
-
-		if(!in_array('all', $allowedTypes, true) && !in_array($type, $allowedTypes, true)) {
-			return;
-		}
-
 		$typeDescription = self::allowedType($type);
 		$tgMessage       = [
 			'<b>' . __('Тип') . "</b>: {$typeDescription}",
@@ -798,6 +818,15 @@ final class LogGenerator {
 	}
 
 	/**
+	 * Флаг реентерабельности dbLog — не писать в БД, пока ORM ещё поднимается / уже внутри dbLog.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @var bool
+	 */
+	private static bool $dbLogBusy = false;
+
+	/**
 	 * Сохраняет лог в базу данных через LogRecord.
 	 *
 	 * @since 173.3.0
@@ -808,21 +837,23 @@ final class LogGenerator {
 	private static function dbLog(array $message, string $type): void {
 		self::init();
 
-		if(!self::isDbLogs()) {
+		if(!self::isDbLogs() || self::$dbLogBusy) {
 			return;
 		}
 
-		$formattedMessage = self::formatMessage($message['message'] ?? NULL);
-		$parsedTime       = DateTimeImmutable::createFromFormat('Y-m-d H:i', (string) ($message['datetime'] ?? ''));
-
-		$log           = new LogRecord();
-		$log->log_type = $type;
-		$log->plugin   = (string) ($message['plugin'] ?? 'unknown');
-		$log->fn_name  = (string) ($message['function_name'] ?? 'unknown');
-		$log->time     = $parsedTime !== false? $parsedTime : self::eventTime();
-		$log->message  = br2nl(htmlspecialchars((string) $formattedMessage, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'));
+		self::$dbLogBusy = true;
 
 		try {
+			$formattedMessage = self::formatMessage($message['message'] ?? NULL);
+			$parsedTime       = DateTimeImmutable::createFromFormat('Y-m-d H:i', (string) ($message['datetime'] ?? ''));
+
+			$log           = new LogRecord();
+			$log->log_type = $type;
+			$log->plugin   = (string) ($message['plugin'] ?? 'unknown');
+			$log->fn_name  = (string) ($message['function_name'] ?? 'unknown');
+			$log->time     = $parsedTime !== false? $parsedTime : self::eventTime();
+			$log->message  = br2nl(htmlspecialchars((string) $formattedMessage, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'));
+
 			Application::instance()->database()->create($log);
 		} catch(Throwable $e) {
 			self::fileLog(
@@ -835,6 +866,8 @@ final class LogGenerator {
 				],
 				Analog::ERROR,
 			);
+		} finally {
+			self::$dbLogBusy = false;
 		}
 	}
 

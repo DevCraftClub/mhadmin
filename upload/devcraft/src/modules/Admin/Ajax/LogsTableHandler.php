@@ -154,7 +154,7 @@ final class LogsTableHandler implements AjaxHandlerInterface {
 	 * @return FilterSchema Нормализованная схема фильтрации и сортировки.
 	 */
 	private function loadFilterSchema(): FilterSchema {
-		$schemaFile = DEVCRAFT_MODULES . '/Admin/logs.filter.schema.php';
+		$schemaFile = DEVCRAFT_MODULES . '/Admin/Filter/logs.filter.schema.php';
 
 		/** Подключает схему фильтра журнала модуля Admin. */
 		/** @var array<string, mixed> $raw */
@@ -164,7 +164,7 @@ final class LogsTableHandler implements AjaxHandlerInterface {
 	}
 
 	/**
-	 * @param array<string, mixed> $query
+	 * @param   array<string, mixed>  $query
 	 */
 	private function buildViewUrl(string $uuid, array $query): string {
 		$params = [

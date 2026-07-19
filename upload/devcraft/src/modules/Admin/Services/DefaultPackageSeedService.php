@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Services;
 
-use DevCraft\Core\Composer\ComposerStateReader;
 use DevCraft\Core\Composer\DefaultPackagePolicyStore;
-use DevCraft\Core\Composer\ManifestPackageReader;
 
 /**
  * Инициализирует default-политики из composer.json.
@@ -33,7 +31,7 @@ final class DefaultPackageSeedService {
 		}
 
 		$decoded = json_decode($raw, true);
-		$require = is_array($decoded) ? ($decoded['require'] ?? []) : [];
+		$require = is_array($decoded)? ($decoded['require'] ?? []) : [];
 		if(!is_array($require)) {
 			return;
 		}
@@ -55,4 +53,5 @@ final class DefaultPackageSeedService {
 
 		$this->store->markSeeded();
 	}
+
 }

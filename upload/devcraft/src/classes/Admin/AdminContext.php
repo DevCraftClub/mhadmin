@@ -20,7 +20,6 @@ use DevCraft\Types\Author;
 use DevCraft\Types\AdminLink;
 use DevCraft\Core\Application;
 use DevCraft\Types\BreadCrumb;
-use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Module\PluginContext;
 
 /**
@@ -122,14 +121,10 @@ final class AdminContext {
 		array         $options,
 		array         $lang,
 	) {
-		$appConfig = DataManager::getConfig('app');
-		$meta      = $plugin->meta();
+		$moduleData = $plugin->moduleData();
 
-		$this->author               = Author::fromArray(
-			is_array($meta['author'] ?? NULL) ? $meta['author'] : ($appConfig['author'] ?? []),
-		);
-		$this->licenseAgreementLink =
-			(string) ($meta['licenseAgreementLink'] ?? $meta['licLink'] ?? $appConfig['licenseAgreementLink'] ?? 'https://devcraft.club/pages/licence-agreement/');
+		$this->author               = $moduleData->author ?? Author::fromArray([]);
+		$this->licenseAgreementLink = $moduleData->licLink;
 		$this->url                  = $this->resolveSiteUrl();
 		$this->menu                 = (new MenuComposer())->compose(new DleMenuBuilder(), $plugin, $options, $lang);
 		$this->cssUrls              = $this->baseCssUrls();

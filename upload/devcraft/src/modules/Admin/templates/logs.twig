@@ -7,7 +7,9 @@
     filter_rules: filter_rules,
     filter_chips: filter_chips,
     order: order,
-    sort: sort
+    sort: sort,
+    table_id: table_id|default('dc-logs-table'),
+    table_total_id: 'dc-logs-total'
 } only %}
 
 <p class="text-small" id="dc-logs-total" data-records-suffix="{{ 'записей'|trans }}">{{ total }} {{ 'записей'|trans }}</p>
@@ -15,6 +17,10 @@
 <table id="{{ table_id|default('dc-logs-table') }}"
        class="table striped row-hover border responsive-md fixed-header mt-2"
        data-role="table"
+       data-dc-table-method="logs_table"
+       data-dc-table-controller="admin"
+       data-default-order="{{ order|default('time') }}"
+       data-default-sort="{{ sort|default('DESC') }}"
        data-rows="{{ per_page|default(10) }}"
        data-rows-steps="5, 10, 50, 100"
        data-show-activity="false"

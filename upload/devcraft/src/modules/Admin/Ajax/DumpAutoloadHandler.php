@@ -21,4 +21,5 @@ final class DumpAutoloadHandler implements AjaxHandlerInterface {
 
 		return JsonResponse::ok($result, __('Autoload успешно обновлён'));
 	}
+
 }

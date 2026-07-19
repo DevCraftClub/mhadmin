@@ -6,8 +6,8 @@ namespace DevCraft\Modules\Admin\Ajax;
 
 use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
-use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Composer\ComposerDbSyncService;
+use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 
 final class ComposerSyncHandler implements AjaxHandlerInterface {
 
@@ -16,4 +16,5 @@ final class ComposerSyncHandler implements AjaxHandlerInterface {
 
 		return JsonResponse::ok(['synced' => true], __('Синхронизация с composer.lock завершена'));
 	}
+
 }

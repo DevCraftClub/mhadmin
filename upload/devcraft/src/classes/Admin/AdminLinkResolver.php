@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace DevCraft\Core\Admin;
 
 use DevCraft\Types\AdminLink;
+use InvalidArgumentException;
 
 /**
  * Разрешает действия и классы страниц по дереву пунктов меню.
@@ -142,7 +143,7 @@ final class AdminLinkResolver {
 		$actions = self::collectActions($menu);
 
 		if(in_array('dashboard', $actions, true) && in_array('index', $actions, true)) {
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__('Меню манифеста не должно объявлять одновременно стартовые действия dashboard и index.'),
 			);
 		}

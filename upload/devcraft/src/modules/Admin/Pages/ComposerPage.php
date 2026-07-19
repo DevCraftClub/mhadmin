@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace DevCraft\Modules\Admin\Pages;
 
 use DLEPlugins;
-use DevCraft\Types\FilterSchema;
 use DevCraft\Core\Application;
 use DevCraft\Core\Config\Paths;
+use DevCraft\Types\FilterSchema;
 use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Core\Admin\FilterFormService;
 use DevCraft\Core\Composer\Models\ComposerData;
@@ -18,17 +18,17 @@ final class ComposerPage extends AbstractPage {
 	public function handle(): array {
 		(new DefaultPackageSeedService())->seedIfNeeded();
 
-		$filterService = new FilterFormService();
-		$query         = $filterService->parseRequestQuery();
-		$schema        = $this->loadFilterSchema();
-		$order         = FilterFormService::normalizeOrder((string) ($query['order'] ?? $schema->defaultOrder), $schema);
+		$filterService      = new FilterFormService();
+		$query              = $filterService->parseRequestQuery();
+		$schema             = $this->loadFilterSchema();
+		$order              = FilterFormService::normalizeOrder((string) ($query['order'] ?? $schema->defaultOrder), $schema);
 		$allowedSortColumns = $schema->sortColumnKeys();
 		if(!in_array($order, $allowedSortColumns, true)) {
-			$order = in_array('package', $allowedSortColumns, true) ? 'package' : $schema->defaultOrder;
+			$order = in_array('package', $allowedSortColumns, true)? 'package' : $schema->defaultOrder;
 		}
-		$sort          = strtoupper((string) ($query['sort'] ?? 'ASC'));
-		$rules         = $filterService->parseRules($query);
-		$repository    = Application::instance()->database()->repository(ComposerData::class);
+		$sort       = strtoupper((string) ($query['sort'] ?? 'ASC'));
+		$rules      = $filterService->parseRules($query);
+		$repository = Application::instance()->database()->repository(ComposerData::class);
 
 		$this->addBreadcrumb(__('Composer'));
 		global $dle_login_hash;
@@ -58,10 +58,11 @@ final class ComposerPage extends AbstractPage {
 	}
 
 	private function loadFilterSchema(): FilterSchema {
-		$schemaFile = Paths::modules() . '/Admin/composer.filter.schema.php';
+		$schemaFile = Paths::modules() . '/Admin/Filter/composer.filter.schema.php';
 		/** @var array<string, mixed> $raw */
 		$raw = require DLEPlugins::Check($schemaFile);
 
 		return FilterSchema::fromArray($raw);
 	}
+
 }

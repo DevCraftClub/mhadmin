@@ -2,14 +2,8 @@
 //===============================================================
 // Файл: AjaxRouteRegistry.php                                  =
 // Путь: devcraft/src/classes/Http/AjaxRouteRegistry.php        =
-// Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
-// Сайт: https://devcraft.club                                  =
-// Телеграм: http://t.me/MaHarder                               =
-// ==============================================================
-// Менять на свой страх и риск!                                 =
-// Код распространяется по лицензии MIT                         =
 //===============================================================
 
 declare(strict_types=1);
@@ -37,6 +31,13 @@ final class AjaxRouteRegistry {
 	private array $routes = [];
 
 	/**
+	 * Флаги allow_guest для публичных методов: controller → method → bool.
+	 *
+	 * @var array<string, array<string, bool>>
+	 */
+	private array $guestFlags = [];
+
+	/**
 	 * Регистрирует обработчик для пары controller/method.
 	 *
 	 * @since 200.4.0
@@ -44,12 +45,14 @@ final class AjaxRouteRegistry {
 	 * @param   string  $controller    Имя контроллера.
 	 * @param   string  $method        Имя метода.
 	 * @param   string  $handlerClass  FQCN класса-обработчика.
+	 * @param   bool    $allowGuest    Разрешить гостевой вызов (только public).
 	 *
 	 * @example
 	 *     $registry->register('admin', 'saveSettings', SaveSettingsHandler::class);
 	 */
-	public function register(string $controller, string $method, string $handlerClass): void {
-		$this->routes[$controller][$method] = $handlerClass;
+	public function register(string $controller, string $method, string $handlerClass, bool $allowGuest = false): void {
+		$this->routes[$controller][$method]     = $handlerClass;
+		$this->guestFlags[$controller][$method] = $allowGuest;
 	}
 
 	/**
@@ -70,6 +73,16 @@ final class AjaxRouteRegistry {
 	}
 
 	/**
+	 * Проверяет, разрешён ли гостевой вызов для маршрута.
+	 *
+	 * @param   string  $controller  Имя контроллера.
+	 * @param   string  $method      Имя метода.
+	 */
+	public function allowsGuest(string $controller, string $method): bool {
+		return (bool) ($this->guestFlags[$controller][$method] ?? false);
+	}
+
+	/**
 	 * Загружает маршруты из manifest плагина.
 	 *
 	 * @since 200.4.0
@@ -84,6 +97,10 @@ final class AjaxRouteRegistry {
 
 		foreach($context->ajaxMethods() as $method => $handler) {
 			$this->register($controller, $method, $handler);
+		}
+
+		foreach($context->ajaxPublicMethods() as $method => $meta) {
+			$this->register('public', $method, $meta['handler'], $meta['allow_guest']);
 		}
 	}
 

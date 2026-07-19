@@ -38,9 +38,22 @@ use DevCraft\Modules\Admin\Ajax\CheckUpdateHandler;
 /**
  * Манифест модуля DevCraft Admin: метаданные, меню, AJAX и ресурсы.
  *
+ * Гидрируется в `ModuleManifest` через `ModuleManifest::fromManifest()` — сам
+ * файл возвращает массив в форме, ожидаемой этим методом.
+ *
  * @package    DevCraft
  * @since      200.4.0
  * @subpackage Modules.Admin
+ *
+ * @return array{
+ *     mod: string,
+ *     code?: string,
+ *     meta?: array<string, mixed>,
+ *     menu?: list<AdminLink>,
+ *     ajax?: array{controller?: string, methods?: array<string, class-string>},
+ *     changelog?: array<int, array<string, mixed>>,
+ *     assets?: array<string, list<string>>,
+ * }
  */
 return [
 	'mod'       => 'devcraft',
@@ -49,7 +62,7 @@ return [
 	'crowdinStatId' => '16830581-755131',
 	'meta'      => [
 		'name'        => 'DevCraft Admin',
-		'version'     => '200.4.0',
+		'version'     => '200.4.1',
 		'description' => __('DevCraft — админ-оболочка для плагинов DLE'),
 		'icon'        => 'mif-construction',
 		'docsLink'    => 'https://readme.devcraft.club/latest/dev/devcraft_admin/install/',

@@ -15,8 +15,8 @@ use DevCraft\Types\FilterSchema;
 use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Core\Admin\FilterFormService;
 use DevCraft\Modules\Admin\Models\LogRecord;
-use DevCraft\Modules\Admin\Repositories\LogRecordRepository;
 use DevCraft\Modules\Admin\Services\LogMessagePresenter;
+use DevCraft\Modules\Admin\Repositories\LogRecordRepository;
 
 /**
  * Страница просмотра и фильтрации журнала событий DevCraft.
@@ -99,7 +99,7 @@ final class LogsPage extends AbstractPage {
 		$repository = Application::instance()->database()->repository(LogRecord::class);
 		$record     = $repository->findByUuid($uuid);
 
-		if($record === null) {
+		if($record === NULL) {
 			$this->addBreadcrumb(__('Запись не найдена'));
 
 			return [
@@ -146,11 +146,12 @@ final class LogsPage extends AbstractPage {
 	}
 
 	private function loadFilterSchema(): FilterSchema {
-		$schemaFile = Paths::modules() . '/Admin/logs.filter.schema.php';
+		$schemaFile = Paths::modules() . '/Admin/Filter/logs.filter.schema.php';
 
 		/** @var array<string, mixed> $raw */
 		$raw = require DLEPlugins::Check($schemaFile);
 
 		return FilterSchema::fromArray($raw);
 	}
+
 }

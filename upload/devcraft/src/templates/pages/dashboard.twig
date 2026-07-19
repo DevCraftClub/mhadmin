@@ -64,6 +64,16 @@
         </div>
     {% endif %}
 
+    {% if d.public_js is defined and d.public_js %}
+        <div class="remark info dc-dashboard-card mb-4">
+            <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Публичный JS для шаблонов DLE'|trans }}</h4>
+            <p class="mb-2">{{ 'Единый клиент для запросов модулей с сайта через'|trans }} <code>devcraft/ajax.php</code> (<code>controller=public</code>).</p>
+            <p class="mb-1"><strong>{{ 'Путь'|trans }}:</strong> <code>{{ d.public_js.path }}</code></p>
+            <p class="mb-0"><strong>{{ 'Подключение в теме'|trans }}:</strong></p>
+            <pre class="mt-2 mb-0"><code>{{ d.public_js.example }}</code></pre>
+        </div>
+    {% endif %}
+
     <div class="grid dc-dashboard-grid">
         <div class="row">
             <div class="cell-md-6">

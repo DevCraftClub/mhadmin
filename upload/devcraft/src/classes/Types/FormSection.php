@@ -21,10 +21,10 @@ use DevCraft\Core\Abstracts\AbstractType;
 /**
  * Секция декларативной формы с заголовком и набором полей.
  *
- * @package DevCraft
- * @subpackage Core.Types
- * @since 200.4.0
+ * @package    DevCraft
+ * @since      200.4.0
  *
+ * @subpackage Core.Types
  * @property string      $title  Заголовок секции.
  * @property FormField[] $fields Список полей секции.
  */
@@ -35,8 +35,8 @@ final class FormSection extends AbstractType {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string      $title  Заголовок секции.
-	 * @param FormField[] $fields Список полей секции.
+	 * @param   string       $title   Заголовок секции.
+	 * @param   FormField[]  $fields  Список полей секции.
 	 *
 	 * @example
 	 *     $section = new FormSection(__('Общие'), [$fieldA, $fieldB]);
@@ -51,7 +51,7 @@ final class FormSection extends AbstractType {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param array<string, mixed>  $data  Элемент схемы секции.
+	 * @param   array<string, mixed>  $data  Элемент схемы секции.
 	 *
 	 * @return static Новый экземпляр секции.
 	 *

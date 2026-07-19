@@ -65,23 +65,6 @@ final class ModuleAssets extends AbstractType {
 	}
 
 	/**
-	 * Преобразует описание ассетов в ассоциативный массив.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array{js: list<string>, css: list<string>} Сериализованные данные.
-	 *
-	 * @example
-	 *     $data = $assets->toArray();
-	 */
-	public function toArray(): array {
-		return [
-			'js'  => $this->js,
-			'css' => $this->css,
-		];
-	}
-
-	/**
 	 * Нормализует список имён файлов ассетов.
 	 *
 	 * @since 200.4.0
@@ -104,6 +87,23 @@ final class ModuleAssets extends AbstractType {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Преобразует описание ассетов в ассоциативный массив.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @return array{js: list<string>, css: list<string>} Сериализованные данные.
+	 *
+	 * @example
+	 *     $data = $assets->toArray();
+	 */
+	public function toArray(): array {
+		return [
+			'js'  => $this->js,
+			'css' => $this->css,
+		];
 	}
 
 }

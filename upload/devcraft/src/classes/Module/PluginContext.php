@@ -20,7 +20,7 @@ use DLEPlugins;
 use DevCraft\Types\AdminLink;
 use DevCraft\Types\Changelog;
 use DevCraft\Types\FormSchema;
-use DevCraft\Types\ModuleData;
+use DevCraft\Types\ModuleManifest;
 use DevCraft\Types\FilterSchema;
 use DevCraft\Core\Admin\AdminLinkResolver;
 
@@ -61,6 +61,14 @@ final class PluginContext {
 	private array $ajaxMethods;
 
 	/**
+	 * Публичные AJAX-методы сайта: method => [handler, allow_guest].
+	 *
+	 * @since 200.4.0
+	 * @var array<string, array{handler: class-string, allow_guest: bool}>
+	 */
+	private array $ajaxPublicMethods;
+
+	/**
 	 * Схема полей настроек модуля (если есть settings.schema.php).
 	 *
 	 * @since 200.4.0
@@ -94,9 +102,10 @@ final class PluginContext {
 		array                   $manifest,
 		private readonly string $modulePath,
 	) {
-		$this->manifest    = $manifest;
-		$this->menu        = $this->parseMenu($manifest['menu'] ?? []);
-		$this->ajaxMethods = $this->parseAjaxMethods($manifest['ajax']['methods'] ?? []);
+		$this->manifest          = $manifest;
+		$this->menu              = $this->parseMenu($manifest['menu'] ?? []);
+		$this->ajaxMethods       = $this->parseAjaxMethods($manifest['ajax']['methods'] ?? []);
+		$this->ajaxPublicMethods = $this->parseAjaxPublicMethods($manifest['ajax']['public'] ?? []);
 
 		AdminLinkResolver::validateStartActions($this->menu);
 
@@ -225,6 +234,17 @@ final class PluginContext {
 	}
 
 	/**
+	 * Возвращает карту публичных AJAX-методов (controller=public).
+	 *
+	 * @since 200.4.0
+	 *
+	 * @return array<string, array{handler: class-string, allow_guest: bool}>
+	 */
+	public function ajaxPublicMethods(): array {
+		return $this->ajaxPublicMethods;
+	}
+
+	/**
 	 * Возвращает идентификатор AJAX-контроллера из манифеста.
 	 *
 	 * @since 200.4.0
@@ -273,17 +293,17 @@ final class PluginContext {
 	}
 
 	/**
-	 * Формирует объект ModuleData для реестра и шаблонов.
+	 * Формирует объект ModuleManifest для реестра и шаблонов.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return ModuleData Агрегированные метаданные модуля.
+	 * @return ModuleManifest Агрегированные метаданные модуля.
 	 * @example
 	 *        $data = $plugin->moduleData();
 	 *
 	 */
-	public function moduleData(): ModuleData {
-		return ModuleData::fromManifest($this->mod, $this->manifest, $this->modulePath);
+	public function moduleData(): ModuleManifest {
+		return ModuleManifest::fromManifest($this->mod, $this->manifest, $this->modulePath);
 	}
 
 	/**
@@ -343,7 +363,48 @@ final class PluginContext {
 	}
 
 	/**
-	 * Загружает settings.schema.php и logs.filter.schema.php модуля при наличии.
+	 * Нормализует карту публичных AJAX-методов из манифеста.
+	 *
+	 * @param   array<string, mixed>  $rawMethods  Секция ajax.public.
+	 *
+	 * @return array<string, array{handler: class-string, allow_guest: bool}>
+	 */
+	private function parseAjaxPublicMethods(array $rawMethods): array {
+		$methods = [];
+
+		foreach($rawMethods as $method => $handler) {
+			if(!is_string($method) || $method === '') {
+				continue;
+			}
+
+			if(is_string($handler) && $handler !== '') {
+				$methods[$method] = [
+					'handler'     => $handler,
+					'allow_guest' => false,
+				];
+
+				continue;
+			}
+
+			if(is_array($handler)) {
+				$class = (string) ($handler['handler'] ?? $handler['class'] ?? '');
+
+				if($class === '') {
+					continue;
+				}
+
+				$methods[$method] = [
+					'handler'     => $class,
+					'allow_guest' => !empty($handler['allow_guest']),
+				];
+			}
+		}
+
+		return $methods;
+	}
+
+	/**
+	 * Загружает settings.schema.php и Filter/logs.filter.schema.php модуля при наличии.
 	 *
 	 * @since 200.4.0
 	 */
@@ -359,7 +420,7 @@ final class PluginContext {
 			}
 		}
 
-		$filterFile = $this->modulePath . '/logs.filter.schema.php';
+		$filterFile = $this->modulePath . '/Filter/logs.filter.schema.php';
 
 		if(is_file($filterFile)) {
 			/** Подключает схему фильтра журнала модуля. */

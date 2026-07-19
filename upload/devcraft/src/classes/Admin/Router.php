@@ -151,16 +151,21 @@ final class Router {
 
 		global $dle_login_hash;
 
-		$data['action']         = $action;
-		$data['mod']            = $mod;
-		$data['asset_base']     = Application::instance()->public_asset_url();
-		$devcraftJsPath           = Paths::templates() . '/core/assets/js/devcraft.js';
-		$composerJsPath           = Paths::templates() . '/core/assets/js/composer.js';
-		$data['asset_js_mtime']   = is_file($devcraftJsPath) ? (string) filemtime($devcraftJsPath) : (string) ($meta['version'] ?? '1.0.0');
-		$data['composer_js_mtime'] = is_file($composerJsPath) ? (string) filemtime($composerJsPath) : $data['asset_js_mtime'];
-		$data['page_title']       = $data['page_title'] ?? (string) ($meta['name'] ?? 'DevCraft');
-		$data['dle_login_hash'] = $dle_login_hash ?? '';
-		$data['ajax_base_url']  = Paths::ajaxBase();
+		$data['action']            = $action;
+		$data['mod']               = $mod;
+		$data['asset_base']        = Application::instance()->public_asset_url();
+		$devcraftJsPath            = Paths::templates() . '/core/assets/js/devcraft.js';
+		$filterJsPath              = Paths::templates() . '/core/assets/js/filter.js';
+		$composerJsPath            = Paths::templates() . '/core/assets/js/composer.js';
+		$devcraftMtime             = is_file($devcraftJsPath)? filemtime($devcraftJsPath) : 0;
+		$filterMtime               = is_file($filterJsPath)? filemtime($filterJsPath) : 0;
+		$data['asset_js_mtime']    = (string) max($devcraftMtime, $filterMtime, 0)? : (string) ($meta['version'] ?? '1.0.0');
+		$data['composer_js_mtime'] = is_file($composerJsPath)? (string) filemtime($composerJsPath) : $data['asset_js_mtime'];
+		$data['filter_js_mtime']   = $filterMtime > 0? (string) $filterMtime : $data['asset_js_mtime'];
+		$data['page_title']        = $data['page_title'] ?? (string) ($meta['name'] ?? 'DevCraft');
+		$data['brand_name']        = trim((string) ($meta['name'] ?? ''))? : 'DevCraft';
+		$data['dle_login_hash']    = $dle_login_hash ?? '';
+		$data['ajax_base_url']     = Paths::ajaxBase();
 
 		$locale      = (string) DevCraftConfig::get('language', 'ru_RU');
 		$theme       = (string) DevCraftConfig::get('theme', 'light');
@@ -184,6 +189,44 @@ final class Router {
 		]);
 
 		echo $this->layoutWrap($view, $data, $adminContext, (string) ($meta['version'] ?? '1.0.0'));
+	}
+
+	/**
+	 * Формирует URL локали Metro UI или null, если addon отсутствует.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $metroLocale  Код локали Metro.
+	 *
+	 * @return string|null URL JS-локали или null.
+	 */
+	private function buildMetroI18nUrl(string $metroLocale): ?string {
+		$addonPath = Translation::metroLocaleAddonPath($metroLocale);
+
+		if($addonPath === NULL) {
+			return NULL;
+		}
+
+		$mtime = filemtime($addonPath);
+
+		return Application::instance()->public_asset_url()
+		       . 'js/i18n/metro.' . rawurlencode($metroLocale) . '.js?v=' . ($mtime !== false? $mtime : time());
+	}
+
+	/**
+	 * Формирует URL JS-файла переводов DevCraft для локали.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $locale  Код локали DevCraft.
+	 *
+	 * @return string URL с параметром версии.
+	 */
+	private function buildTranslationJsUrl(string $locale): string {
+		$base  = Application::instance()->public_asset_url();
+		$mtime = Translation::jsTranslationFileMtime($locale);
+
+		return $base . 'js/i18n/translation.' . rawurlencode($locale) . '.js?v=' . ($mtime > 0? $mtime : time());
 	}
 
 	/**
@@ -211,44 +254,6 @@ final class Router {
 		}
 
 		return $urls;
-	}
-
-	/**
-	 * Формирует URL JS-файла переводов DevCraft для локали.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   string  $locale  Код локали DevCraft.
-	 *
-	 * @return string URL с параметром версии.
-	 */
-	private function buildTranslationJsUrl(string $locale): string {
-		$base  = Application::instance()->public_asset_url();
-		$mtime = Translation::jsTranslationFileMtime($locale);
-
-		return $base . 'js/i18n/translation.' . rawurlencode($locale) . '.js?v=' . ($mtime > 0? $mtime : time());
-	}
-
-	/**
-	 * Формирует URL локали Metro UI или null, если addon отсутствует.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   string  $metroLocale  Код локали Metro.
-	 *
-	 * @return string|null URL JS-локали или null.
-	 */
-	private function buildMetroI18nUrl(string $metroLocale): ?string {
-		$addonPath = Translation::metroLocaleAddonPath($metroLocale);
-
-		if($addonPath === NULL) {
-			return NULL;
-		}
-
-		$mtime = filemtime($addonPath);
-
-		return Application::instance()->public_asset_url()
-		       . 'js/i18n/metro.' . rawurlencode($metroLocale) . '.js?v=' . ($mtime !== false? $mtime : time());
 	}
 
 	/**

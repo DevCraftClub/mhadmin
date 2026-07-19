@@ -1,7 +1,7 @@
 <?php
 //===============================================================
-// Файл: ModuleData.php                                         =
-// Путь: devcraft/src/classes/Types/ModuleData.php              =
+// Файл: ModuleManifest.php                                     =
+// Путь: devcraft/src/classes/Types/ModuleManifest.php          =
 // Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
@@ -47,7 +47,7 @@ use DevCraft\Core\Types\ComposerType;
  * @property Changelog[]                 $changelog         Записи журнала изменений.
  * @property ComposerType[]              $composerRequired  Обязательные пакеты Composer.
  */
-final readonly class ModuleData {
+final readonly class ModuleManifest {
 
 	/**
 	 * Создаёт метаданные модуля.
@@ -77,7 +77,7 @@ final readonly class ModuleData {
 	 * @param   ComposerType[]               $composerRequired  Обязательные пакеты Composer.
 	 *
 	 * @example
-	 *     $module = new ModuleData('devcraft', 'DevCraft', '200.4.0', 'DevCraft\\Modules\\Admin', '/path/to/module');
+	 *     $module = new ModuleManifest('devcraft', 'DevCraft', '200.4.0', 'DevCraft\\Modules\\Admin', '/path/to/module');
 	 */
 	public function __construct(
 		public string           $id,
@@ -115,7 +115,7 @@ final readonly class ModuleData {
 	 * @return self Метаданные модуля.
 	 *
 	 * @example
-	 *     $module = ModuleData::fromManifest('devcraft', $manifest, DC_MODULES . '/Admin');
+	 *     $module = ModuleManifest::fromManifest('devcraft', $manifest, DC_MODULES . '/Admin');
 	 */
 	public static function fromManifest(string $mod, array $manifest, string $modulePath): self {
 		/** @var array<string, mixed> $meta */
@@ -140,10 +140,8 @@ final readonly class ModuleData {
 		$ajaxRaw   = is_array($manifest['ajax'] ?? NULL)? $manifest['ajax'] : [];
 		$assetsRaw = is_array($manifest['assets'] ?? NULL)? $manifest['assets'] : [];
 
-		$author = NULL;
-		if(isset($meta['author']) && is_array($meta['author'])) {
-			$author = Author::fromArray($meta['author']);
-		}
+		$authorData = is_array($meta['author'] ?? NULL)? $meta['author'] : self::defaultAuthorData();
+		$author     = Author::fromArray($authorData);
 
 		$dirName = basename(rtrim($modulePath, '/\\'));
 
@@ -160,7 +158,7 @@ final readonly class ModuleData {
 			icon            : isset($meta['icon'])? (string) $meta['icon'] : NULL,
 			siteLink        : isset($meta['siteLink'])? (string) $meta['siteLink'] : NULL,
 			docsLink        : isset($meta['docsLink'])? (string) $meta['docsLink'] : NULL,
-			licLink         : isset($meta['licLink'])? (string) $meta['licLink'] : NULL,
+			licLink         : isset($meta['licLink'])? (string) $meta['licLink'] : self::DEFAULT_LIC_LINK,
 			author          : $author,
 			menu            : $menu,
 			ajax            : ModuleAjaxConfig::fromArray($ajaxRaw),
@@ -168,6 +166,89 @@ final readonly class ModuleData {
 			changelog       : $changelog,
 			composerRequired: $composer,
 		);
+	}
+
+	/**
+	 * Извлекает пункты меню из сырого массива manifest.php.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<int, mixed>  $rawMenu  Элементы секции `menu`.
+	 *
+	 * @return AdminLink[] Только экземпляры AdminLink.
+	 */
+	private static function parseMenu(array $rawMenu): array {
+		$menu = [];
+
+		foreach($rawMenu as $item) {
+			if($item instanceof AdminLink) {
+				$menu[] = $item;
+			}
+		}
+
+		return $menu;
+	}
+
+	/**
+	 * Формирует карту страниц из пунктов меню.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   AdminLink[]  $menu  Пункты меню админки.
+	 *
+	 * @return array<string, class-string> Карта action → FQCN страницы.
+	 */
+	private static function pagesFromMenu(array $menu): array {
+		$pages = [];
+
+		foreach($menu as $item) {
+			if($item->action === NULL || $item->pageClass === NULL) {
+				continue;
+			}
+
+			$pages[$item->action] = $item->pageClass;
+		}
+
+		return $pages;
+	}
+
+	/**
+	 * Ссылка на лицензионное соглашение по умолчанию.
+	 *
+	 * Используется, если модуль не указал свой `licLink` в `meta` манифеста.
+	 *
+	 * @since 200.4.1
+	 */
+	private const DEFAULT_LIC_LINK = 'https://devcraft.club/pages/licence-agreement/';
+
+	/**
+	 * Возвращает данные автора DevCraft по умолчанию.
+	 *
+	 * Используется, если модуль не указал свой `author` в `meta` манифеста —
+	 * чтобы не дублировать один и тот же блок контактов/донатов в каждом manifest.php.
+	 *
+	 * @since 200.4.1
+	 *
+	 * @return array<string, mixed> Данные автора в формате, ожидаемом `Author::fromArray()`.
+	 */
+	private static function defaultAuthorData(): array {
+		return [
+			'name'      => 'Maxim Harder',
+			'contacts'  => [
+				['name' => __('E-Mail'), 'link' => 'mailto:dev@devcraft.club'],
+				['name' => __('Telegram'), 'link' => 'https://t.me/MaHarder'],
+				['name' => __('Сайт'), 'link' => 'https://devcraft.club/misc/contact'],
+			],
+			'donations' => [
+				['name' => 'PayPal', 'value' => 'paypal.me/MaximH', 'link' => 'https://paypal.me/MaximH'],
+				['name' => 'Ko-Fi', 'value' => 'ko-fi.com/devcraft', 'link' => 'https://ko-fi.com/J3J118N1C'],
+				['name' => 'YooMoney', 'value' => '41001454367103', 'link' => 'https://yoomoney.ru/to/41001454367103'],
+				['name' => 'DALink', 'value' => 'maharder', 'link' => 'https://dalink.to/maharder'],
+				['name' => 'Buy Me a Coffee', 'value' => 'maharder', 'link' => 'https://buymeacoffee.com/maharder'],
+				['name' => 'thanks.dev', 'value' => 'gh/gokujo', 'link' => 'https://thanks.dev/gh/gokujo'],
+				['name' => 'GitHub Sponsors', 'value' => 'sponsors/Gokujo', 'link' => 'https://github.com/sponsors/Gokujo'],
+			],
+		];
 	}
 
 	/**
@@ -181,7 +262,7 @@ final readonly class ModuleData {
 	 * @return self Метаданные модуля.
 	 *
 	 * @example
-	 *     $module = ModuleData::fromArray('devcraft', $registryEntry);
+	 *     $module = ModuleManifest::fromArray('devcraft', $registryEntry);
 	 */
 	public static function fromArray(string $id, array $config): self {
 		/** @var array<string, class-string> $pages */
@@ -232,6 +313,10 @@ final readonly class ModuleData {
 			}
 		}
 
+		if($author === NULL) {
+			$author = Author::fromArray(self::defaultAuthorData());
+		}
+
 		return new self(
 			id              : $id,
 			name            : (string) ($config['name'] ?? $id),
@@ -245,7 +330,7 @@ final readonly class ModuleData {
 			icon            : isset($config['icon'])? (string) $config['icon'] : NULL,
 			siteLink        : isset($config['siteLink'])? (string) $config['siteLink'] : NULL,
 			docsLink        : isset($config['docsLink'])? (string) $config['docsLink'] : NULL,
-			licLink         : isset($config['licLink'])? (string) $config['licLink'] : NULL,
+			licLink         : isset($config['licLink'])? (string) $config['licLink'] : self::DEFAULT_LIC_LINK,
 			crowdinName     : isset($config['crowdinName'])? (string) $config['crowdinName'] : NULL,
 			crowdinStatId   : isset($config['crowdinStatId'])? (string) $config['crowdinStatId'] : NULL,
 			author          : $author,
@@ -300,50 +385,6 @@ final readonly class ModuleData {
 				$this->composerRequired,
 			),
 		];
-	}
-
-	/**
-	 * Извлекает пункты меню из сырого массива manifest.php.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<int, mixed>  $rawMenu  Элементы секции `menu`.
-	 *
-	 * @return AdminLink[] Только экземпляры AdminLink.
-	 */
-	private static function parseMenu(array $rawMenu): array {
-		$menu = [];
-
-		foreach($rawMenu as $item) {
-			if($item instanceof AdminLink) {
-				$menu[] = $item;
-			}
-		}
-
-		return $menu;
-	}
-
-	/**
-	 * Формирует карту страниц из пунктов меню.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   AdminLink[]  $menu  Пункты меню админки.
-	 *
-	 * @return array<string, class-string> Карта action → FQCN страницы.
-	 */
-	private static function pagesFromMenu(array $menu): array {
-		$pages = [];
-
-		foreach($menu as $item) {
-			if($item->action === NULL || $item->pageClass === NULL) {
-				continue;
-			}
-
-			$pages[$item->action] = $item->pageClass;
-		}
-
-		return $pages;
 	}
 
 }

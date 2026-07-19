@@ -52,13 +52,35 @@ final class MenuComposer {
 		$menu = [$dle->buildDleSeiten($options, $lang)];
 
 		$pluginLinks = $plugin->menu();
+		$pluginMeta  = $plugin->meta();
+		$pluginName  = trim((string) ($pluginMeta['name'] ?? ''));
 
 		if($pluginLinks !== []) {
-			$menu[] = AdminLink::divider('DevCraft');
+			$menu[] = AdminLink::divider($pluginName !== ''? $pluginName : 'DevCraft');
 		}
 
 		foreach($pluginLinks as $link) {
 			$menu[] = $link;
+		}
+
+		if($plugin->mod() !== 'devcraft' && $pluginName !== '') {
+			$query = http_build_query([
+				'mod'          => 'devcraft',
+				'action'       => 'logs',
+				'order'        => 'time',
+				'sort'         => 'DESC',
+				'filter_rules' => [[
+					'field' => 'plugin',
+					'type'  => 'multi',
+					'value' => [$pluginName],
+				]],
+			]);
+			$menu[] = new AdminLink(
+				name: __('Логи'),
+				link: '?' . $query,
+				type: 'link',
+				extra: 'mif-list',
+			);
 		}
 
 		return $menu;

@@ -8,6 +8,17 @@ class ComposerType extends AbstractType {
 
 	public function __construct(public string $package, public string $version = '*', public bool $requires = false) {}
 
+	/**
+	 * @inheritDoc
+	 */
+	public static function fromArray(array $data): static {
+		return new self(
+			package : (string) ($data['name'] ?? $data['package'] ?? ''),
+			version : (string) ($data['minVersion'] ?? $data['version'] ?? '*'),
+			requires: (bool) ($data['hardRequired'] ?? $data['requires'] ?? false),
+		);
+	}
+
 	public function version(string $version): self {
 		$this->version = $version;
 
@@ -18,17 +29,6 @@ class ComposerType extends AbstractType {
 		$this->requires = $requires;
 
 		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function fromArray(array $data): static {
-		return new self(
-			package : (string) ($data['name'] ?? $data['package'] ?? ''),
-			version : (string) ($data['minVersion'] ?? $data['version'] ?? '*'),
-			requires: (bool) ($data['hardRequired'] ?? $data['requires'] ?? false),
-		);
 	}
 
 	/**

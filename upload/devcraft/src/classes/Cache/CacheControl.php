@@ -208,8 +208,8 @@ final class CacheControl {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param   array<mixed>       $value
-	 * @param   array<int, true>   $visited
+	 * @param   array<mixed>      $value
+	 * @param   array<int, true>  $visited
 	 *
 	 * @return array<mixed>
 	 */

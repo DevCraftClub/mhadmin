@@ -21,8 +21,8 @@ use Cycle\Schema;
 use Cycle\Annotated;
 use Cycle\Migrations;
 use Cycle\Database\Config;
-use Cycle\Migrations\State;
 use Cycle\Schema\Compiler;
+use Cycle\Migrations\State;
 use Cycle\Schema\Generator;
 use Cycle\ORM\EntityManager;
 use Cycle\Migrations\Capsule;
@@ -43,7 +43,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Cycle\Annotated\Locator\TokenizerEmbeddingLocator;
 use Cycle\Schema\Generator\Migrations\Strategy\SingleFileStrategy;
 use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
-
 
 /**
  * Шлюз доступа к базе данных через Cycle ORM.
@@ -394,8 +393,13 @@ final class DatabaseGateway {
 			commandGenerator: $command_generator,
 		);
 
+		$capsule = new Capsule($this->generateManager()->database());
+
 		$this->skipCreateMigrationsForExistingTables($migrator);
-		$migrator->run(new Capsule($this->generateManager()->database()));
+
+		while($migrator->run($capsule) !== NULL) {
+			$this->skipCreateMigrationsForExistingTables($migrator);
+		}
 
 		$this->setManager();
 
@@ -590,7 +594,7 @@ final class DatabaseGateway {
 			],
 		)->fetchAll();
 
-		$total = isset($result[0]['total']) ? (int) $result[0]['total'] : 0;
+		$total = isset($result[0]['total'])? (int) $result[0]['total'] : 0;
 
 		return $total > 0;
 	}
@@ -604,7 +608,7 @@ final class DatabaseGateway {
 			['migration' => $migrationName],
 		)->fetchAll();
 
-		$exists = isset($existsResult[0]['total']) ? (int) $existsResult[0]['total'] : 0;
+		$exists = isset($existsResult[0]['total'])? (int) $existsResult[0]['total'] : 0;
 
 		if($exists > 0) {
 			return;

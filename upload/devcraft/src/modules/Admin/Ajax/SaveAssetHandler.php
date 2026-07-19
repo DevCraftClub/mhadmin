@@ -50,7 +50,6 @@ final class SaveAssetHandler implements AjaxHandlerInterface {
 				__('Ошибка'),
 				__('Требуется путь к файлу ресурса'),
 				'validation',
-				400,
 			);
 		}
 

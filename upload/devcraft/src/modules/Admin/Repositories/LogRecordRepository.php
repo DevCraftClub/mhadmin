@@ -17,8 +17,8 @@ declare(strict_types=1);
 namespace DevCraft\Modules\Admin\Repositories;
 
 use Ramsey\Uuid\Uuid;
-use DevCraft\Core\Abstracts\AbstractRepository;
 use DevCraft\Modules\Admin\Models\LogRecord;
+use DevCraft\Core\Abstracts\AbstractRepository;
 
 /**
  * Репозиторий записей журнала DevCraft (`devcraft_logs`).
@@ -58,7 +58,7 @@ class LogRecordRepository extends AbstractRepository {
 		try {
 			$uuidObj = Uuid::fromString($uuid);
 		} catch(\Throwable) {
-			return null;
+			return NULL;
 		}
 
 		/** @var LogRecord|null $entity */

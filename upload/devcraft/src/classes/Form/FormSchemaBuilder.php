@@ -91,13 +91,13 @@ final class FormSchemaBuilder {
 	 * @return self Текущий строитель.
 	 *
 	 * @example
-	 *     $builder->layout('accordion');
+	 *     $builder->layout(FormLayout::ACCORDION);
 	 */
 	public function layout(FormLayout $layout): self {
-
 		if(!in_array($layout, FormLayout::cases(), true)) {
 			throw new InvalidArgumentException(
-				__('Недопустимый layout «{layout}». Допустимо: {variants}', ['{layout}' => $layout, '{variants}' => implode(', ', FormLayout::cases())]),
+				__('Недопустимый layout «{layout}». Допустимо: {variants}',
+					['{layout}' => $layout, '{variants}' => implode(', ', FormLayout::cases())]),
 			);
 		}
 

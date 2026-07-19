@@ -70,7 +70,7 @@ final class FileResponse implements ResponseInterface {
 		$this->downloadName = $downloadName !== NULL && $downloadName !== ''
 			? $downloadName
 			: basename($filePath);
-		$this->mimeType = $mimeType !== NULL && $mimeType !== ''
+		$this->mimeType     = $mimeType !== NULL && $mimeType !== ''
 			? $mimeType
 			: 'application/octet-stream';
 	}
@@ -125,7 +125,7 @@ final class FileResponse implements ResponseInterface {
 	private function escapeFilename(string $filename): string {
 		$sanitized = str_replace(['"', "\r", "\n"], '', $filename);
 
-		return $sanitized !== '' ? $sanitized : 'download.bin';
+		return $sanitized !== ''? $sanitized : 'download.bin';
 	}
 
 }

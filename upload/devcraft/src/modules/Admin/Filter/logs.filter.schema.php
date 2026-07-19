@@ -1,7 +1,7 @@
 <?php
 //===============================================================
 // Файл: logs.filter.schema.php                                 =
-// Путь: devcraft/src/modules/Admin/logs.filter.schema.php      =
+// Путь: devcraft/src/modules/Admin/Filter/logs.filter.schema.php =
 // Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
@@ -17,9 +17,17 @@ declare(strict_types=1);
 /**
  * Схема фильтрации и сортировки страницы журнала DevCraft Admin.
  *
+ * Гидрируется в `FilterSchema` через `FilterSchema::fromArray()` — сам файл
+ * возвращает массив в форме, ожидаемой этим методом.
+ *
  * @package    DevCraft
  * @since      200.4.0
  * @subpackage Modules.Admin
+ *
+ * @return array{
+ *     sort: array{default: string, columns: array<string, string>},
+ *     sections: list<array{title: string, fields: list<array{id: string, type: string, label: string, metro?: array<string, mixed>}>}>,
+ * }
  */
 return [
 	'sort'     => [

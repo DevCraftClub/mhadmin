@@ -39,7 +39,7 @@ class ComposerData extends AbstractEntity {
 	/**
 	 * Создаёт сущность ComposerData из доменного снимка пакета.
 	 *
-	 * @param array{name:string,version:string,installed:bool,required:bool,plugin?:string,appCode?:string} $payload
+	 * @param   array{name:string,version:string,installed:bool,required:bool,plugin?:string,appCode?:string}  $payload
 	 */
 	public static function fromArray(array $payload): self {
 		$entity            = new self();
@@ -70,14 +70,15 @@ class ComposerData extends AbstractEntity {
 
 	public function getColumnVal(string $name): mixed {
 		return match ($name) {
-			'id'               => $this->id(),
-			'package', 'name'  => $this->package,
-			'version'          => $this->version,
-			'installed'        => $this->installed ? '1' : '0',
-			'required'         => $this->required ? '1' : '0',
-			'plugin'           => $this->plugin,
-			'appCode'          => $this->appCode,
-			default            => NULL,
+			'id'              => $this->id(),
+			'package', 'name' => $this->package,
+			'version'         => $this->version,
+			'installed'       => $this->installed? '1' : '0',
+			'required'        => $this->required? '1' : '0',
+			'plugin'          => $this->plugin,
+			'appCode'         => $this->appCode,
+			default           => NULL,
 		};
 	}
+
 }

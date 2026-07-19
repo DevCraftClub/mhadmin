@@ -21,7 +21,7 @@ use DevCraft\Core\Composer\Repositories\ComposerDataRepository;
 final class ComposerDbSyncService {
 
 	public function __construct(
-		private readonly ComposerStateReader $stateReader = new ComposerStateReader(),
+		private readonly ComposerStateReader   $stateReader = new ComposerStateReader(),
 		private readonly ManifestPackageReader $manifestReader = new ManifestPackageReader(),
 	) {}
 
@@ -38,9 +38,9 @@ final class ComposerDbSyncService {
 		$snapshot = [];
 
 		foreach($allNames as $name) {
-			$lockEntry   = $installed[$name] ?? null;
-			$isInstalled = $lockEntry !== null && (bool) ($lockEntry['isInstalled'] ?? false);
-			$rule        = $required[$name] ?? null;
+			$lockEntry   = $installed[$name] ?? NULL;
+			$isInstalled = $lockEntry !== NULL && (bool) ($lockEntry['isInstalled'] ?? false);
+			$rule        = $required[$name] ?? NULL;
 
 			if($isInstalled) {
 				$version = (string) ($lockEntry['installedVersion'] ?? '');
@@ -50,8 +50,8 @@ final class ComposerDbSyncService {
 				$version = (string) ($rule['minVersion'] ?? '');
 			}
 
-			$plugin    = (string) ($rule['plugin'] ?? 'Admin');
-			$appCode   = (string) ($rule['appCode'] ?? 'devcraft');
+			$plugin     = (string) ($rule['plugin'] ?? 'Admin');
+			$appCode    = (string) ($rule['appCode'] ?? 'devcraft');
 			$isRequired = (bool) ($rule['isHardRequired'] ?? false);
 
 			$snapshot[] = [
@@ -72,28 +72,28 @@ final class ComposerDbSyncService {
 	/**
 	 * Обновляет БД после успешного Composer-действия с повторным чтением lock.
 	 */
-	public function applySuccessfulAction(string $actionType, string $packageName, ?string $targetVersion = null): void {
+	public function applySuccessfulAction(string $actionType, string $packageName, ?string $targetVersion = NULL): void {
 		/** @var ComposerDataRepository $repository */
 		$repository = Application::instance()->database()->repository(ComposerData::class);
 		$existing   = $repository->findByPackage($packageName);
 
-		$required  = $existing?->required ?? false;
-		$appCode   = $existing?->appCode ?? 'devcraft';
-		$plugin    = $existing?->plugin ?? 'Admin';
-		$installed = $this->stateReader->installedPackages();
-		$lockEntry = $installed[$packageName] ?? null;
-		$isInstalled = $lockEntry !== null && (bool) ($lockEntry['isInstalled'] ?? false);
+		$required    = $existing?->required ?? false;
+		$appCode     = $existing?->appCode ?? 'devcraft';
+		$plugin      = $existing?->plugin ?? 'Admin';
+		$installed   = $this->stateReader->installedPackages();
+		$lockEntry   = $installed[$packageName] ?? NULL;
+		$isInstalled = $lockEntry !== NULL && (bool) ($lockEntry['isInstalled'] ?? false);
 
 		if($isInstalled) {
 			$version = (string) ($lockEntry['installedVersion'] ?? ($existing?->version ?? ''));
-		} elseif($existing !== null) {
+		} elseif($existing !== NULL) {
 			$version = $existing->version;
 		} else {
 			$version = $targetVersion ?? '';
 		}
 
 		if(!$isInstalled) {
-			$version = $actionType === 'remove' ? '' : $version;
+			$version = $actionType === 'remove'? '' : $version;
 		}
 
 		$repository->upsertByPackage([
@@ -144,4 +144,5 @@ final class ComposerDbSyncService {
 
 		return $deps;
 	}
+
 }

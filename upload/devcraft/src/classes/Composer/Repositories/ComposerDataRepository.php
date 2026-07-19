@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Composer\Repositories;
 
-use DevCraft\Core\Abstracts\AbstractRepository;
 use DevCraft\Core\Application;
+use DevCraft\Core\Abstracts\AbstractRepository;
 use DevCraft\Core\Composer\Models\ComposerData;
 
 /**
@@ -24,13 +24,13 @@ class ComposerDataRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param array{name:string,version:string,installed:bool,required:bool,plugin?:string,appCode?:string} $payload
+	 * @param   array{name:string,version:string,installed:bool,required:bool,plugin?:string,appCode?:string}  $payload
 	 */
 	public function upsertByPackage(array $payload): ComposerData {
 		$package = (string) ($payload['name'] ?? '');
 		$entity  = $this->findByPackage($package);
 
-		if($entity === null) {
+		if($entity === NULL) {
 			$entity = ComposerData::fromArray($payload);
 		} else {
 			$entity->plugin    = (string) ($payload['plugin'] ?? $entity->plugin);
@@ -47,7 +47,7 @@ class ComposerDataRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param list<array{name:string,version:string,installed:bool,required:bool,plugin?:string,appCode?:string}> $snapshot
+	 * @param   list<array{name:string,version:string,installed:bool,required:bool,plugin?:string,appCode?:string}>  $snapshot
 	 */
 	public function replaceFromSnapshot(array $snapshot): void {
 		$manager = Application::instance()->database()->getManager();
@@ -64,4 +64,5 @@ class ComposerDataRepository extends AbstractRepository {
 
 		$manager->run();
 	}
+
 }

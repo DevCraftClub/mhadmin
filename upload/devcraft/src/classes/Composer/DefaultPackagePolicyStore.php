@@ -66,7 +66,7 @@ final class DefaultPackagePolicyStore {
 	}
 
 	public function remove(string $name): void {
-		$all                        = $this->all();
+		$all = $this->all();
 		unset($all[$name]);
 		$config                     = $this->readConfig();
 		$config['default_policies'] = array_values($all);
@@ -103,16 +103,17 @@ final class DefaultPackagePolicyStore {
 
 		$decoded = json_decode($raw, true);
 
-		return is_array($decoded) ? $decoded : [];
+		return is_array($decoded)? $decoded : [];
 	}
 
 	/**
-	 * @param array<string, mixed> $config
+	 * @param   array<string, mixed>  $config
 	 */
 	private function writeConfig(array $config): void {
 		file_put_contents(
 			self::CONFIG_FILE,
-			json_encode($config, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . PHP_EOL,
+			json_encode($config, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) . PHP_EOL,
 		);
 	}
+
 }

@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace DevCraft\Core\Http;
 
 use DevCraft\Core\Interfaces\ResponseInterface;
+use DevCraft\Core\Exception\JsonResponseException;
 
 /**
  * JSON-ответ AJAX с единым контрактом success/data/notice/error.
@@ -259,7 +260,6 @@ final class JsonResponse implements ResponseInterface {
 
 		throw new JsonResponseException($response, $message);
 	}
-
 
 	/**
 	 * Собирает структуру notice для toast или notify.

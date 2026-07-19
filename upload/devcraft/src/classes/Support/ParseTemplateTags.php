@@ -27,7 +27,7 @@ final class ParseTemplateTags {
 	/**
 	 * URL полной новости — как в show.full.php через DLEUrl::BuildUrl('showfull').
 	 *
-	 * @param array<string, mixed> $row Поля post (id, alt_name, category, date).
+	 * @param   array<string, mixed>  $row  Поля post (id, alt_name, category, date).
 	 */
 	public static function fullLink(array $row): string {
 		global $config;
@@ -44,7 +44,7 @@ final class ParseTemplateTags {
 		$ts = (int) $row['date'];
 
 		return (string) \DLEUrl::BuildUrl('showfull', [
-			'category'  => function_exists('get_url') ? get_url($row['category']) : '',
+			'category'  => function_exists('get_url')? get_url($row['category']) : '',
 			'year'      => date('Y', $ts),
 			'month'     => date('m', $ts),
 			'day'       => date('d', $ts),
@@ -56,7 +56,7 @@ final class ParseTemplateTags {
 	/**
 	 * Экранированный {title} как в DLE.
 	 *
-	 * @param array<string, mixed> $row
+	 * @param   array<string, mixed>  $row
 	 */
 	public static function title(array $row): string {
 		$title = stripslashes((string) ($row['title'] ?? ''));
@@ -67,9 +67,9 @@ final class ParseTemplateTags {
 	/**
 	 * Парсит строку шаблона всеми тегами новости DLE + модульными $extra.
 	 *
-	 * @param array<string, mixed>  $row     Строка post (+ extras при наличии)
-	 * @param array<string, string> $extra   Модульные плейсхолдеры (%user%, …)
-	 * @param array{mode?: string, globals?: bool} $options mode=short|full, globals=compile_global_tags
+	 * @param   array<string, mixed>                  $row      Строка post (+ extras при наличии)
+	 * @param   array<string, string>                 $extra    Модульные плейсхолдеры ({user}, {suggested_tags}, …)
+	 * @param   array{mode?: string, globals?: bool}  $options  mode=short|full, globals=compile_global_tags
 	 */
 	public static function apply(string $template, array $row, array $extra = [], array $options = []): string {
 		if($template === '') {
@@ -79,7 +79,7 @@ final class ParseTemplateTags {
 		self::ensureDleClasses();
 
 		$row       = self::normalizeRow($row);
-		$mode      = (($options['mode'] ?? 'short') === 'full') ? 'full' : 'short';
+		$mode      = (($options['mode'] ?? 'short') === 'full')? 'full' : 'short';
 		$full_link = self::fullLink($row);
 		$tpl       = self::createTemplateEngine($template);
 
@@ -114,7 +114,7 @@ final class ParseTemplateTags {
 	}
 
 	/**
-	 * @param array<string, mixed> $row
+	 * @param   array<string, mixed>  $row
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -148,35 +148,35 @@ final class ParseTemplateTags {
 		$row = array_merge($defaults, $row);
 
 		if(!is_numeric($row['date'])) {
-			$ts = strtotime((string) $row['date']);
-			$row['date'] = $ts !== false ? $ts : time();
+			$ts          = strtotime((string) $row['date']);
+			$row['date'] = $ts !== false? $ts : time();
 		} else {
 			$row['date'] = (int) $row['date'];
 		}
 
 		if(!empty($row['editdate']) && !is_numeric($row['editdate'])) {
-			$ts = strtotime((string) $row['editdate']);
-			$row['editdate'] = $ts !== false ? $ts : 0;
+			$ts              = strtotime((string) $row['editdate']);
+			$row['editdate'] = $ts !== false? $ts : 0;
 		} else {
 			$row['editdate'] = (int) ($row['editdate'] ?? 0);
 		}
 
-		$row['id']       = (int) $row['id'];
-		$row['category'] = (string) $row['category'];
-		$row['comm_num'] = (int) $row['comm_num'];
-		$row['news_read']= (int) $row['news_read'];
+		$row['id']         = (int) $row['id'];
+		$row['category']   = (string) $row['category'];
+		$row['comm_num']   = (int) $row['comm_num'];
+		$row['news_read']  = (int) $row['news_read'];
 		$row['allow_rate'] = (int) $row['allow_rate'];
-		$row['rating']   = (int) $row['rating'];
-		$row['vote_num'] = (int) $row['vote_num'];
-		$row['fixed']    = (int) $row['fixed'];
+		$row['rating']     = (int) $row['rating'];
+		$row['vote_num']   = (int) $row['vote_num'];
+		$row['fixed']      = (int) $row['fixed'];
 		$row['allow_comm'] = (int) $row['allow_comm'];
-		$row['view_edit']= (int) $row['view_edit'];
+		$row['view_edit']  = (int) $row['view_edit'];
 
 		return $row;
 	}
 
 	private static function createTemplateEngine(string $template): \dle_template {
-		$tpl = new \dle_template();
+		$tpl                = new \dle_template();
 		$tpl->template      = $template;
 		$tpl->copy_template = $template;
 		$tpl->data          = [];

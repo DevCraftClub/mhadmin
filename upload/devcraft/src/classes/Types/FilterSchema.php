@@ -59,7 +59,7 @@ final class FilterSchema extends AbstractType {
 	 * @return static Новый экземпляр схемы.
 	 *
 	 * @example
-	 *     $filter = FilterSchema::fromArray(require 'logs.filter.schema.php');
+	 *     $filter = FilterSchema::fromArray(require 'Filter/logs.filter.schema.php');
 	 */
 	public static function fromArray(array $data): static {
 		$sections = [];
@@ -121,25 +121,17 @@ final class FilterSchema extends AbstractType {
 	}
 
 	/**
-	 * Возвращает плоский список всех полей фильтра.
+	 * Возвращает ключи колонок сортировки.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return FormField[] Все поля всех секций.
+	 * @return list<string> Список имён колонок БД.
 	 *
 	 * @example
-	 *     $fields = $filter->allFields();
+	 *     $keys = $filter->sortColumnKeys();
 	 */
-	public function allFields(): array {
-		$fields = [];
-
-		foreach($this->sections as $section) {
-			foreach($section->fields as $field) {
-				$fields[] = $field;
-			}
-		}
-
-		return $fields;
+	public function sortColumnKeys(): array {
+		return array_keys($this->resolvedSortColumns());
 	}
 
 	/**
@@ -168,17 +160,25 @@ final class FilterSchema extends AbstractType {
 	}
 
 	/**
-	 * Возвращает ключи колонок сортировки.
+	 * Возвращает плоский список всех полей фильтра.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return list<string> Список имён колонок БД.
+	 * @return FormField[] Все поля всех секций.
 	 *
 	 * @example
-	 *     $keys = $filter->sortColumnKeys();
+	 *     $fields = $filter->allFields();
 	 */
-	public function sortColumnKeys(): array {
-		return array_keys($this->resolvedSortColumns());
+	public function allFields(): array {
+		$fields = [];
+
+		foreach($this->sections as $section) {
+			foreach($section->fields as $field) {
+				$fields[] = $field;
+			}
+		}
+
+		return $fields;
 	}
 
 	/**

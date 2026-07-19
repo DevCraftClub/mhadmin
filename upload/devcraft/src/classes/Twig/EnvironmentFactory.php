@@ -19,16 +19,16 @@ namespace DevCraft\Core\Twig;
 use Twig\Environment;
 use DevCraft\Core\Config\Paths;
 use Twig\Loader\FilesystemLoader;
+use Twig\Extra\Cache\CacheRuntime;
 use DevCraft\Core\I18n\Translation;
+use Twig\Extra\Cache\CacheExtension;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Config\DevCraftConfig;
 use DevCraft\Core\I18n\TwigTranslatorBridge;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\Adapter\TagAwareAdapter;
-use Twig\Extra\Cache\CacheRuntime;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Twig\Extra\Cache\CacheExtension;
 
 /**
  * Фабрика Twig Environment с путями модулей и расширением перевода.
@@ -96,7 +96,6 @@ final class EnvironmentFactory {
 		return rtrim($cachePath, '/\\') . '/twig';
 	}
 
-
 	/**
 	 * Подключает Symfony TranslationExtension (фильтр trans, тег {% trans %}).
 	 *
@@ -156,11 +155,13 @@ final class EnvironmentFactory {
 
 	private static function registerExtensions(Environment $twig): void {
 		$twig->addRuntimeLoader(new class implements RuntimeLoaderInterface {
+
 			public function load($class) {
-				if (CacheRuntime::class === $class) {
+				if(CacheRuntime::class === $class) {
 					return new CacheRuntime(new TagAwareAdapter(new FilesystemAdapter()));
 				}
 			}
+
 		});
 
 		$twig->addExtension(new CacheExtension());

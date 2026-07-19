@@ -17,16 +17,16 @@ declare(strict_types=1);
 namespace DevCraft\Core\Module;
 
 use DLEPlugins;
-use DevCraft\Types\ModuleData;
+use DevCraft\Types\ModuleManifest;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Logging\LogGenerator;
-use DevCraft\Core\Http\JsonResponseException;
+use DevCraft\Core\Exception\JsonResponseException;
 
 /**
  * Реестр модулей DevCraft и фабрика контекстов плагинов.
  *
  * Сканирует каталог DEVCRAFT_MODULES, загружает manifest.php
- * и предоставляет доступ к PluginContext и метаданным ModuleData.
+ * и предоставляет доступ к PluginContext и метаданным ModuleManifest.
  *
  * @package    DevCraft
  * @since      200.4.0
@@ -39,7 +39,7 @@ final class Registry {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return array<string, ModuleData> Метаданные модулей с валидным манифестом.
+	 * @return array<string, ModuleManifest> Метаданные модулей с валидным манифестом.
 	 * @example
 	 *        $modules = Application::instance()->registry()->modules();
 	 *
@@ -55,12 +55,12 @@ final class Registry {
 	 *
 	 * @param   string  $module_id  Идентификатор модуля из manifest.php.
 	 *
-	 * @return ModuleData|null Данные модуля или null, если модуль не найден.
+	 * @return ModuleManifest|null Данные модуля или null, если модуль не найден.
 	 * @example
 	 *        $admin = Application::instance()->registry()->module('devcraft');
 	 *
 	 */
-	public function module(string $module_id): ?ModuleData {
+	public function module(string $module_id): ?ModuleManifest {
 		try {
 			return DataManager::getManifest($module_id);
 		} catch(JsonResponseException) {

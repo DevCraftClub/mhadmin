@@ -19,9 +19,9 @@ namespace DevCraft\Core\Abstracts;
 /**
  * Базовый тип данных с сериализацией в массив и обратно.
  *
- * @package DevCraft
+ * @package    DevCraft
+ * @since      200.4.0
  * @subpackage Core.Abstracts
- * @since 200.4.0
  */
 abstract class AbstractType {
 
@@ -30,7 +30,7 @@ abstract class AbstractType {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param array<string, mixed> $data Исходные данные.
+	 * @param   array<string, mixed>  $data  Исходные данные.
 	 *
 	 * @return static Новый экземпляр типа.
 	 */

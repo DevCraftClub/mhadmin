@@ -43,4 +43,5 @@ final class BootstrapSetupService {
 			'logExcerpt'  => $log,
 		];
 	}
+
 }

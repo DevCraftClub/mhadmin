@@ -16,16 +16,17 @@ declare(strict_types=1);
 
 namespace DevCraft\Types;
 
+use InvalidArgumentException;
 use DevCraft\Core\Abstracts\AbstractType;
 use DevCraft\Core\Enums\ChangelogChangeType;
 
 /**
  * Одна запись изменения в журнале версий модуля.
  *
- * @package DevCraft
- * @subpackage Core.Types
- * @since 200.4.0
+ * @package    DevCraft
+ * @since      200.4.0
  *
+ * @subpackage Core.Types
  * @property ChangelogChangeType $type Тип изменения.
  * @property string              $text Текст записи.
  */
@@ -36,8 +37,8 @@ final class ChangelogChange extends AbstractType {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param ChangelogChangeType $type Тип изменения.
-	 * @param string              $text Текст записи.
+	 * @param   ChangelogChangeType  $type  Тип изменения.
+	 * @param   string               $text  Текст записи.
 	 *
 	 * @example
 	 *     $change = new ChangelogChange(ChangelogChangeType::FIXED, __('Исправлена ошибка сохранения'));
@@ -52,7 +53,7 @@ final class ChangelogChange extends AbstractType {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param array<string, mixed>|string $data Структурированные данные или строка legacy-формата.
+	 * @param   array<string, mixed>|string  $data  Структурированные данные или строка legacy-формата.
 	 *
 	 * @return static Новый экземпляр записи.
 	 *
@@ -84,7 +85,7 @@ final class ChangelogChange extends AbstractType {
 			return new self(ChangelogChangeType::fromKey($data['type']), $text);
 		}
 
-		throw new \InvalidArgumentException(__('Некорректные данные записи changelog'));
+		throw new InvalidArgumentException(__('Некорректные данные записи changelog'));
 	}
 
 	/**
@@ -92,7 +93,7 @@ final class ChangelogChange extends AbstractType {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param string $line Строка с префиксом `[TAG]` или `FIX:`.
+	 * @param   string  $line  Строка с префиксом `[TAG]` или `FIX:`.
 	 *
 	 * @return self Запись изменения с определённым типом.
 	 *

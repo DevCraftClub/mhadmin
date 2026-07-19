@@ -384,7 +384,52 @@ final class Translation {
 			return self::nonTranslator($phrase, $parameters);
 		}
 
-		return self::$translator->trans($phrase, $parameters);
+		$translated = self::$translator->trans($phrase, $parameters);
+		self::logMissingTranslation($phrase, $translated);
+
+		return $translated;
+	}
+
+	/**
+	 * Ключи фраз, для которых отсутствие перевода уже залогировано в текущем запросе.
+	 *
+	 * @since 200.4.1
+	 * @var array<string, true>
+	 */
+	private static array $loggedMissingKeys = [];
+
+	/**
+	 * Логирует отсутствие перевода фразы для текущей локали.
+	 *
+	 * Symfony Translator при отсутствии перевода молча возвращает исходную фразу —
+	 * без этого лога пропущенные ключи было бы невозможно обнаружить.
+	 *
+	 * @since 200.4.1
+	 *
+	 * @param   string  $phrase      Исходная фраза (ключ перевода).
+	 * @param   string  $translated  Результат перевода.
+	 *
+	 * @return void
+	 */
+	private static function logMissingTranslation(string $phrase, string $translated): void {
+		$locale = self::getLocale();
+
+		if($locale === 'ru_RU' || $phrase === '' || $translated !== $phrase) {
+			return;
+		}
+
+		$key = $locale . '|' . $phrase;
+
+		if(isset(self::$loggedMissingKeys[$key])) {
+			return;
+		}
+
+		self::$loggedMissingKeys[$key] = true;
+
+		LogGenerator::for('Translation')->log(
+			"Отсутствует перевод для локали \"{$locale}\": \"{$phrase}\"",
+			'notice',
+		);
 	}
 
 	/**
@@ -742,7 +787,8 @@ final class Translation {
 			return [];
 		}
 
-		$data = CacheControl::getCache('Translation', 'lang_' . $locale);
+		$cacheKey = 'lang_' . $locale . '_' . self::localeXliffMtime($locale);
+		$data     = CacheControl::getCache('Translation', $cacheKey);
 
 		if($data === false || !is_array($data)) {
 			$data = [];
@@ -758,7 +804,7 @@ final class Translation {
 					$data = [...$data, ...self::parseXliffFile($fileName, $directory)];
 				}
 
-				CacheControl::setCache('Translation', 'lang_' . $locale, $data);
+				CacheControl::setCache('Translation', $cacheKey, $data);
 			} catch(Exception $e) {
 				LogGenerator::for('Translation')->log(
 					"Ошибка чтения и обработки файлов перевода: {$e->getMessage()}",

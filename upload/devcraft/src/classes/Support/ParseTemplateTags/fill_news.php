@@ -255,7 +255,8 @@ if(!empty($row['view_edit']) && !empty($row['editdate'])) {
 	} elseif($compare_date == 1) {
 		$tpl->set('{edit-date}', $langGestern . $dcFormatDate((int) $row['editdate'], ', H:i', (bool) $short_news_cache));
 	} else {
-		$tpl->set('{edit-date}', $dcFormatDate((int) $row['editdate'], (string) ($config['timestamp_active'] ?? 'j F Y H:i'), (bool) $short_news_cache));
+		$tpl->set('{edit-date}',
+			$dcFormatDate((int) $row['editdate'], (string) ($config['timestamp_active'] ?? 'j F Y H:i'), (bool) $short_news_cache));
 	}
 
 	$news_date = $row['editdate'];

@@ -121,6 +121,33 @@ final class SettingsFormService {
 	}
 
 	/**
+	 * Преобразует значение multi-поля в список строк.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   mixed  $value  Сырые данные поля.
+	 *
+	 * @return list<string> Нормализованный список значений.
+	 */
+	private function multiValueToArray(mixed $value): array {
+		if(is_array($value)) {
+			return array_values(array_filter(
+				array_map(static fn(mixed $item): string => (string) $item, $value),
+				static fn(string $item): bool => $item !== '',
+			));
+		}
+
+		if(!is_string($value) || trim($value) === '') {
+			return [];
+		}
+
+		return array_values(array_filter(
+			preg_split('/[\s,]+/', trim($value))? : [],
+			static fn(string $item): bool => $item !== '',
+		));
+	}
+
+	/**
 	 * Собирает карту PHP-фильтров для полей схемы.
 	 *
 	 * @since 200.4.0
@@ -230,6 +257,32 @@ final class SettingsFormService {
 	}
 
 	/**
+	 * Применяет filter_var к значению поля согласно типу или явному фильтру.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   FormField  $field  Объект поля схемы.
+	 * @param   mixed      $raw    Сырое значение.
+	 *
+	 * @return mixed Отфильтрованное значение или false при ошибке.
+	 */
+	private function filterFieldValue(FormField $field, mixed $raw): mixed {
+		$filter = $field->filter ?? match ($field->type) {
+			'number'                     => FILTER_VALIDATE_INT,
+			'text', 'textarea', 'hidden' => FILTER_UNSAFE_RAW,
+			default                      => FILTER_UNSAFE_RAW,
+		};
+
+		if($field->type === 'textarea' || $field->type === 'text') {
+			$value = filter_var((string) $raw, $filter);
+
+			return is_string($value)? trim($value) : false;
+		}
+
+		return filter_var($raw, $filter);
+	}
+
+	/**
 	 * Подставляет значения по умолчанию и нормализует типы полей конфигурации.
 	 *
 	 * @since 200.4.0
@@ -263,59 +316,6 @@ final class SettingsFormService {
 		}
 
 		return $valid;
-	}
-
-	/**
-	 * Преобразует значение multi-поля в список строк.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   mixed  $value  Сырые данные поля.
-	 *
-	 * @return list<string> Нормализованный список значений.
-	 */
-	private function multiValueToArray(mixed $value): array {
-		if(is_array($value)) {
-			return array_values(array_filter(
-				array_map(static fn(mixed $item): string => (string) $item, $value),
-				static fn(string $item): bool => $item !== '',
-			));
-		}
-
-		if(!is_string($value) || trim($value) === '') {
-			return [];
-		}
-
-		return array_values(array_filter(
-			preg_split('/[\s,]+/', trim($value))? : [],
-			static fn(string $item): bool => $item !== '',
-		));
-	}
-
-	/**
-	 * Применяет filter_var к значению поля согласно типу или явному фильтру.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   FormField  $field  Объект поля схемы.
-	 * @param   mixed      $raw    Сырое значение.
-	 *
-	 * @return mixed Отфильтрованное значение или false при ошибке.
-	 */
-	private function filterFieldValue(FormField $field, mixed $raw): mixed {
-		$filter = $field->filter ?? match ($field->type) {
-			'number'                     => FILTER_VALIDATE_INT,
-			'text', 'textarea', 'hidden' => FILTER_UNSAFE_RAW,
-			default                      => FILTER_UNSAFE_RAW,
-		};
-
-		if($field->type === 'textarea' || $field->type === 'text') {
-			$value = filter_var((string) $raw, $filter);
-
-			return is_string($value)? trim($value) : false;
-		}
-
-		return filter_var($raw, $filter);
 	}
 
 }

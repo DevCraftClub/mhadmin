@@ -52,6 +52,32 @@ final class Changelog extends AbstractType {
 	) {}
 
 	/**
+	 * Создаёт список записей из массива манифеста модуля.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<int, array<string, mixed>>  $entries  Элементы `changelog` из manifest.php.
+	 *
+	 * @return self[] Список записей changelog.
+	 *
+	 * @example
+	 *     $changelog = Changelog::listFromManifest($manifest['changelog']);
+	 */
+	public static function listFromManifest(array $entries): array {
+		$result = [];
+
+		foreach($entries as $entry) {
+			if(!is_array($entry)) {
+				continue;
+			}
+
+			$result[] = self::fromArray($entry);
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Создаёт запись версии из ассоциативного массива.
 	 *
 	 * @since 200.4.0
@@ -105,30 +131,8 @@ final class Changelog extends AbstractType {
 		return new self($version, $date, $grouped);
 	}
 
-	/**
-	 * Создаёт список записей из массива манифеста модуля.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<int, array<string, mixed>>  $entries  Элементы `changelog` из manifest.php.
-	 *
-	 * @return self[] Список записей changelog.
-	 *
-	 * @example
-	 *     $changelog = Changelog::listFromManifest($manifest['changelog']);
-	 */
-	public static function listFromManifest(array $entries): array {
-		$result = [];
-
-		foreach($entries as $entry) {
-			if(!is_array($entry)) {
-				continue;
-			}
-
-			$result[] = self::fromArray($entry);
-		}
-
-		return $result;
+	public static function unreleasedLabel(): string {
+		return __('Неопубликованное');
 	}
 
 	/**
@@ -143,6 +147,34 @@ final class Changelog extends AbstractType {
 	 */
 	public function isUnreleased(): bool {
 		return strcasecmp($this->version, self::unreleasedLabel()) === 0;
+	}
+
+	/**
+	 * Возвращает первые записи для тизера на панели управления.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   int  $limit  Максимальное количество элементов (по умолчанию 3).
+	 *
+	 * @return array<int, array<string, string>> Список сериализованных изменений.
+	 *
+	 * @example
+	 *     $teaser = $entry->teaserItems(5);
+	 */
+	public function teaserItems(int $limit = 3): array {
+		$items = [];
+
+		foreach(ChangelogChangeType::orderedCases() as $type) {
+			foreach($this->groupedChanges[$type->key()] ?? [] as $change) {
+				$items[] = $change->toArray();
+
+				if(count($items) >= $limit) {
+					return $items;
+				}
+			}
+		}
+
+		return $items;
 	}
 
 	/**
@@ -183,38 +215,6 @@ final class Changelog extends AbstractType {
 			'date'     => $this->date?->format('Y-m-d'),
 			'sections' => $sections,
 		];
-	}
-
-	/**
-	 * Возвращает первые записи для тизера на панели управления.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   int  $limit  Максимальное количество элементов (по умолчанию 3).
-	 *
-	 * @return array<int, array<string, string>> Список сериализованных изменений.
-	 *
-	 * @example
-	 *     $teaser = $entry->teaserItems(5);
-	 */
-	public function teaserItems(int $limit = 3): array {
-		$items = [];
-
-		foreach(ChangelogChangeType::orderedCases() as $type) {
-			foreach($this->groupedChanges[$type->key()] ?? [] as $change) {
-				$items[] = $change->toArray();
-
-				if(count($items) >= $limit) {
-					return $items;
-				}
-			}
-		}
-
-		return $items;
-	}
-
-	public static function unreleasedLabel(): string {
-		return __('Неопубликованное');
 	}
 
 }

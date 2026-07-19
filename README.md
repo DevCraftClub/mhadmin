@@ -15,6 +15,7 @@
 - Composer-сервисы перенесены в `devcraft/src/classes/Composer/` (Core API)
 - Внутренние Composer-сервисы модуля Admin удалены
 - Детальный просмотр лога: `?mod=devcraft&action=logs&uuid=…`
+- Сайт: https://devcraft.club/
 - Документация: https://readme.devcraft.club/
 - Миграция: см. раздел Migration в документации
 

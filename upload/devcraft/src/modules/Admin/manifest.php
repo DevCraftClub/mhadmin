@@ -56,19 +56,6 @@ return [
 		'siteLink'    => 'https://devcraft.club/',
 		'siteId'      => 4,
 		'licLink'     => 'https://devcraft.club/pages/licence-agreement/',
-		'author'      => [
-			'name'      => 'Maxim Harder',
-			'contacts'  => [
-				['name' => __('E-Mail'), 'link' => 'mailto:dev@devcraft.club'],
-				['name' => __('Telegram'), 'link' => 'https://t.me/MaHarder'],
-				['name' => __('Website'), 'link' => 'https://devcraft.club/misc/contact'],
-			],
-			'donations' => [
-				['name' => 'PayPal', 'value' => 'paypal.me/MaximH', 'link' => 'https://paypal.me/MaximH'],
-				['name' => 'Ko-Fi', 'value' => 'ko-fi.com/devcraft', 'link' => 'https://ko-fi.com/J3J118N1C'],
-				['name' => 'YooMoney', 'value' => '41001454367103', 'link' => 'https://yoomoney.ru/to/41001454367103'],
-			],
-		],
 	],
 	'menu'      => [
 		AdminLink::page(__('Главная'), 'dashboard', DashboardPage::class, 'mif-home'),

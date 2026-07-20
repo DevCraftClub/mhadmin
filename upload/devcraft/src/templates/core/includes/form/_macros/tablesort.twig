@@ -1,0 +1,5 @@
+{% import 'core/includes/form/_macros/_field.twig' as field %}
+
+{% macro th(label, column, current_order, current_sort, sort_url) %}
+    {{ field.th(label, column, current_order, current_sort, sort_url) }}
+{% endmacro %}

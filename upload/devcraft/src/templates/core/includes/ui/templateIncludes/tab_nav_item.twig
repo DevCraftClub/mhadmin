@@ -1,0 +1,6 @@
+<li{% if active|default(false) %} class="active"{% endif %}{% if item_id is defined and item_id != '' %} id="{{ item_id }}"{% endif %}>
+    <a href="#{{ panel_id }}">
+        {% if icon is defined and icon != '' %}<span class="{{ icon }}"></span> {% endif %}
+        {{ label }}
+    </a>
+</li>

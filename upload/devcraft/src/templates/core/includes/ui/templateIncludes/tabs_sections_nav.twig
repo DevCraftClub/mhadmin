@@ -1,0 +1,17 @@
+{# Навигация вкладок секций — над контейнером формы #}
+{% set opts = opts|default({}) %}
+{% set tabsId = id|default('settings-tabs') %}
+<ul
+    id="{{ tabsId }}"
+    data-role="tabs"
+    {% if opts.expand is not defined or opts.expand %}data-expand="true"{% endif %}
+    {% if opts.type is defined %}data-type="{{ opts.type }}"{% endif %}
+>
+    {% for section in sections|default([]) %}
+        {% include 'core/includes/ui/templateIncludes/tab_nav_item.twig' with {
+            panel_id: tabsId ~ '_panel_' ~ loop.index,
+            label: section.title,
+            active: loop.first
+        } only %}
+    {% endfor %}
+</ul>

@@ -1,0 +1,2 @@
+{% import 'core/includes/form/_macros/switch.twig' as switch %}
+{{ switch.switch(field.id, field.label, field.description, field.value, field.metro|default({})) }}

@@ -1,0 +1,21 @@
+{# Metro date-picker — examples/date-picker.html #}
+{% set opts = opts|default({}) %}
+{% if opts.size is not defined %}
+    {% set opts = opts|merge({ size: 'medium' }) %}
+{% endif %}
+{% set classes = [] %}
+{% if opts.size != '' %}{% set classes = classes|merge([opts.size]) %}{% endif %}
+{% if opts.pill is defined and opts.pill %}{% set classes = classes|merge(['pill-input']) %}{% endif %}
+{% if opts.class is defined %}{% set classes = classes|merge([opts.class]) %}{% endif %}
+<input
+    type="text"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ value|default('') }}"
+    data-role="date-picker"
+    {% if classes|length > 0 %}class="{{ classes|join(' ') }}"{% endif %}
+    {% if opts.locale is defined %}data-locale="{{ opts.locale }}"{% endif %}
+    {% if opts.day is defined %}data-day="{{ opts.day ? 'true' : 'false' }}"{% endif %}
+    {% if opts.label is defined %}data-label="{{ opts.label }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

@@ -1,0 +1,21 @@
+{% macro checkbox(id, label, descr, value, opts) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/checkbox.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    } %}
+{% endmacro %}
+
+{% macro custom_checkbox(id, label, descr, value, opts) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/custom_checkbox.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    } %}
+{% endmacro %}

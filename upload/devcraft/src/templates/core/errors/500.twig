@@ -1,0 +1,9 @@
+{% include 'core/errors/includes/error_body.twig' with {
+    code: code,
+    title: title,
+    message: message,
+    detail: detail,
+    detail_label: 'Описание ошибки:'|trans,
+    detail_remark_class: 'alert',
+    dashboard_url: dashboard_url
+} %}

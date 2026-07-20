@@ -1,0 +1,9 @@
+{% include 'core/errors/includes/error_body.twig' with {
+    header_icon: 'mif-under-construction',
+    title: title,
+    message: message,
+    detail: detail,
+    detail_label: 'Подробности:'|trans,
+    detail_remark_class: 'warning',
+    dashboard_url: dashboard_url
+} %}

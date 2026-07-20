@@ -1,0 +1,2 @@
+{% import 'core/includes/form/_macros/select.twig' as select %}
+{{ select.select(field.id, field.label, field.description, field.value, field.metro|default({}), field.options|default({})) }}

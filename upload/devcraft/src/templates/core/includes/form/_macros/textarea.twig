@@ -1,0 +1,10 @@
+{% macro textarea(id, label, descr, value, opts) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/textarea.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    } %}
+{% endmacro %}

@@ -1,5 +1,9 @@
 /nbproject
 .idea/*
+.cursor
+.cursor/*
+.specify/
+.specify/*
 
 upload/engine/inc/maharder/_cache
 upload/engine/inc/maharder/_cache/*
@@ -13,15 +17,42 @@ upload/engine/inc/maharder/_logs/**/
 upload/engine/inc/maharder/_logs/**/*
 upload/engine/inc/maharder/_migrations
 upload/engine/inc/maharder/_migrations/*
-upload/engine/inc/maharder/_includes/vendor
-upload/engine/inc/maharder/_includes/vendor/*
-upload/engine/inc/maharder/_includes/vendor/**/*
-upload/engine/inc/maharder/_includes/composer
-upload/engine/inc/maharder/_includes/composer/*
-upload/engine/inc/maharder/_includes/composer/**/
-upload/engine/inc/maharder/_includes/composer/**/*
 
 upload/engine/inc/maharder/_includes/assets.json
 upload/engine/inc/maharder/admin/composer.lock
 upload/engine/inc/maharder/admin/composer.phar
 !upload/engine/inc/maharder/_cache/.htaccess
+
+# Analysis tool specific
+analysis/
+analysis/*
+analysis/**/
+analysis/**/*
+vendor/
+vendor/*
+vendor/**/
+vendor/**/*
+composer.lock
+*.log
+*.cache
+.env
+.env.*
+!.env.example
+
+# PHP specific
+*.php~
+*.php.bak
+*.php.orig
+*.php.swp
+*.php.swo
+*~
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+# Analysis tool output
+*.md.bak
+*.md.tmp

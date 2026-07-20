@@ -1,0 +1,15 @@
+{% macro accordion(id, frames, opts) %}
+    {% include 'core/includes/ui/templateIncludes/accordion.twig' with {
+        id: id,
+        frames: frames,
+        opts: opts|default({})
+    } %}
+{% endmacro %}
+
+{% macro accordion_sections(id, sections, opts) %}
+    {% include 'core/includes/ui/templateIncludes/accordion_sections.twig' with {
+        id: id,
+        sections: sections,
+        opts: opts|default({})
+    } %}
+{% endmacro %}

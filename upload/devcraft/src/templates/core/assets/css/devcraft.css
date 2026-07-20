@@ -1,0 +1,354 @@
+/**
+ * DevCraft-Admin-Basis-Assets (CSS)
+ * Version: 200.4.0
+ * Build: 100
+ */
+.dc-settings-tabs {
+  margin: 1rem 0 0;
+}
+.dc-settings-tabs .tabs {
+  margin-bottom: 0;
+}
+.dc-settings-tabs + .dc-settings-body.remark {
+  border-top: none;
+}
+
+.dc-settings-body {
+  overflow: visible;
+}
+.dc-settings-body.remark {
+  overflow: visible;
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.dc-tabs-targets,
+.dc-field-table,
+.dc-field-widget {
+  overflow: visible;
+}
+
+.dc-field-table {
+  border: 1px solid var(--border-color);
+}
+.dc-field-table > .dc-field-row:last-child {
+  border-bottom: none !important;
+}
+
+.dc-field-head {
+  background: var(--table-header-background, #f5f5f5);
+  font-weight: bold;
+}
+
+.dc-field-descr,
+.dc-field-widget {
+  padding: 0.75rem 1rem;
+}
+
+.dc-field-widget {
+  border-left: 1px solid var(--border-color);
+}
+@media (max-width: 768px) {
+  .dc-field-widget {
+    border-left: 0;
+    border-top: 1px solid var(--border-color);
+  }
+}
+
+.dc-field-row:nth-child(odd) {
+  background-color: var(--color-hover-default);
+}
+.dc-field-row:not(.dc-field-head):hover {
+  background: var(--color-light-gray);
+}
+
+.dc-settings-save-bar.form-actions {
+  margin-bottom: 0;
+}
+
+.dc-dashboard-grid > .row {
+  align-items: flex-start;
+}
+.dc-dashboard-grid .row + .row {
+  margin-top: 1rem;
+}
+
+.dc-dashboard .remark.dc-dashboard-card {
+  margin: 0;
+  justify-content: flex-start !important;
+  align-items: stretch;
+  align-content: flex-start;
+}
+
+.dc-dashboard-card {
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dc-dashboard-hero {
+  padding: 1.25rem 1.5rem;
+}
+
+.dc-dashboard-app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dc-dashboard-app-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.dc-dashboard-author .unstyled-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dc-dashboard-author .unstyled-list li + li {
+  margin-top: 0.35rem;
+}
+
+#page-content > .breadcrumbs.arrow {
+  margin-bottom: 1rem;
+}
+
+.dc-changelog-timeline .dc-changelog-section {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.dc-changelog-timeline .data ul {
+  margin: 0 0 0.5rem;
+  padding-left: 1.25rem;
+}
+.dc-changelog-timeline .data ul > li::before, .dc-changelog-timeline .data ul > li::after {
+  content: none !important;
+}
+.dc-changelog-timeline .time {
+  font-size: 1.3rem !important;
+}
+
+.dc-assets-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+}
+
+.dc-assets-badge {
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+.dc-assets-file-list {
+  margin: 0 0 0.75rem;
+  padding-left: 1.25rem;
+  max-height: 12rem;
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+.dc-assets-file-list code {
+  word-break: break-all;
+}
+
+.js-check-assets-icon.rotating,
+.dc-assets-status .rotating {
+  display: inline-block;
+  animation: dc-rotate 1s linear infinite;
+}
+
+@keyframes dc-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.dc-error-body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background, #f8f8f8);
+}
+.dc-error-body #page-content {
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 2rem 1rem;
+}
+
+.dc-error-stage {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 4rem);
+  z-index: 1;
+}
+
+.dc-error-code-wrap {
+  margin-bottom: 0.25rem;
+  line-height: 1;
+  display: inline-block;
+  padding: 0.1em 0.25em;
+  border-radius: 4px;
+}
+
+.dc-error-body .error-code {
+  outline: none;
+  text-decoration: none;
+  position: relative;
+  line-height: 1;
+  color: hsl(348, 88%, 46%) !important;
+  display: inline-block;
+  font-family: "Oswald", sans-serif;
+  transition: color 0s 0.5s;
+  font-size: 20em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.dc-error-body .error-code:hover {
+  cursor: pointer;
+}
+.dc-error-body .error-code:hover, .dc-error-body .error-code:focus-visible {
+  color: #fff !important;
+  transition: none;
+  text-shadow: 1px 1px hsl(348, 88%, 46%) !important;
+}
+.dc-error-body .error-code::before, .dc-error-body .error-code::after {
+  content: attr(data-letters);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: hsla(348, 89%, 76%, 0.15) !important;
+  overflow: hidden;
+  backface-visibility: hidden;
+  transition: color 0.5s, transform 0.5s;
+  font-size: 19rem;
+}
+.dc-error-body .error-code:hover::before, .dc-error-body .error-code:focus-visible::before, .dc-error-body .error-code:hover::after, .dc-error-body .error-code:focus-visible::after {
+  color: #fff;
+  transition: color 0.5s, transform 0.5s;
+}
+.dc-error-body .error-code:hover::before, .dc-error-body .error-code:focus-visible::before {
+  transform: translate3d(4px, 1px, 0);
+}
+.dc-error-body .error-code:hover::after, .dc-error-body .error-code:focus-visible::after {
+  transform: translate3d(-4px, -1px, 0);
+}
+@media screen and (max-width: 52em) {
+  .dc-error-body .error-code {
+    font-size: 10em;
+  }
+}
+
+.dc-error-clip-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dc-error-detail {
+  text-align: left;
+}
+.dc-error-detail pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.85rem;
+}
+
+.dc-error-cog {
+  position: absolute;
+  z-index: -1;
+  color: #fefefe;
+  pointer-events: none;
+  text-shadow: 1px 1px hsla(0, 0%, 0%, 0.17) !important;
+}
+
+#dc-cog1 {
+  top: 20px;
+  left: 20px;
+  font-size: 244px;
+}
+#dc-cog1 span {
+  animation-duration: 5s !important;
+}
+
+#dc-cog2 {
+  top: 180px;
+  left: 180px;
+  font-size: 244px;
+}
+#dc-cog2 span {
+  animation-duration: 5s !important;
+}
+
+#dc-cog3 {
+  top: 20px;
+  right: 80px;
+  font-size: 144px;
+}
+#dc-cog3 span {
+  animation-duration: 7s !important;
+}
+
+#dc-cog4 {
+  top: auto;
+  bottom: 20px;
+  left: 100px;
+  right: auto;
+  font-size: 144px;
+}
+#dc-cog4 span {
+  animation-duration: 15s !important;
+}
+
+#dc-cog5 {
+  right: 120px;
+  bottom: 200px;
+  font-size: 80px;
+}
+#dc-cog5 span {
+  animation-duration: 10s !important;
+}
+
+.dark-side .dc-error-cog {
+  color: #212225 !important;
+}
+
+.dc-filter-bar .dc-filter-chips {
+  gap: 0.25rem;
+}
+.dc-filter-bar .dc-filter-chip {
+  cursor: pointer;
+  max-width: 100%;
+}
+.dc-filter-bar .dc-filter-chip .action {
+  cursor: pointer;
+}
+
+.dc-filter-dialog-fields .select.input,
+.dc-filter-dialog-fields select[data-role=select] {
+  width: 100%;
+}
+
+#dc-logs-table thead th {
+  position: relative;
+  z-index: 1;
+}
+#dc-logs-table .dc-table-sort-link {
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+#dc-logs-table .dc-table-sort-link:hover {
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=devcraft.css.map */

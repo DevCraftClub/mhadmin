@@ -1,0 +1,58 @@
+{# Metro select — examples/select.html, select-{val|source|reset|data}.html #}
+{% set opts = opts|default({}) %}
+{% if opts.size is not defined %}
+    {% set opts = opts|merge({ size: 'medium' }) %}
+{% endif %}
+{% set isMultiple = multiple|default(false) %}
+{% set classes = [] %}
+{% if opts.size != '' %}
+    {% set classes = classes|merge([opts.size]) %}
+{% endif %}
+{% if opts.pill is defined and opts.pill %}
+    {% set classes = classes|merge(['pill-input']) %}
+{% endif %}
+{% if opts.class is defined and opts.class != '' %}
+    {% set classes = classes|merge([opts.class]) %}
+{% endif %}
+<select
+    id="{{ id }}"
+    name="{{ name|default(id) }}{% if isMultiple %}[]{% endif %}"
+    data-role="select"
+    {% if classes|length > 0 %}class="{{ classes|join(' ') }}"{% endif %}
+    {% if isMultiple %}multiple{% endif %}
+    {% if opts.filter is defined %}data-filter="{{ opts.filter ? 'true' : 'false' }}"{% endif %}
+    {% if opts.clear_button is defined and opts.clear_button %}data-clear-button="true"{% endif %}
+    {% if opts.show_group_name is defined and opts.show_group_name %}data-show-group-name="true"{% endif %}
+    {% if opts.source is defined %}data-source="{{ opts.source }}"{% endif %}
+    {% if opts.filter_source is defined %}data-filter-source="{{ opts.filter_source }}"{% endif %}
+    {% if opts.on_data is defined %}data-on-data="{{ opts.on_data }}"{% endif %}
+    {% if opts.cls_select is defined %}data-cls-select="{{ opts.cls_select }}"{% endif %}
+    {% if opts.cls_label is defined %}data-cls-label="{{ opts.cls_label }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>
+    {% if options is iterable %}
+        {% for key, label in options %}
+            {% if label is iterable %}
+                <optgroup label="{{ key }}">
+                    {% for subKey, subLabel in label %}
+                        {% include 'core/includes/form/templateIncludes/select_option.twig' with {
+                            option_value: subKey,
+                            option_label: subLabel,
+                            option_selected: isMultiple
+                                ? (selected is iterable and subKey in selected)
+                                : (selected == subKey)
+                        } only %}
+                    {% endfor %}
+                </optgroup>
+            {% else %}
+                {% include 'core/includes/form/templateIncludes/select_option.twig' with {
+                    option_value: key,
+                    option_label: label,
+                    option_selected: isMultiple
+                        ? (selected is iterable and key in selected)
+                        : (selected == key)
+                } only %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</select>

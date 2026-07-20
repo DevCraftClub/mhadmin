@@ -1,0 +1,13 @@
+{# Metro radio — examples/radio.html (один элемент группы) #}
+{% set opts = opts|default({}) %}
+<input
+    type="radio"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ opts.value|default(value|default('')) }}"
+    data-role="radio"
+    data-caption="{{ opts.caption|default(label|default('')) }}"
+    {% if opts.style is defined %}data-style="{{ opts.style }}"{% endif %}
+    {% if opts.checked is defined and opts.checked %}checked{% elseif value %}checked{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

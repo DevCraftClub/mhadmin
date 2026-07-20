@@ -1,0 +1,38 @@
+{# Макрос блока автора для dashboard и других экранов #}
+{% macro dashboard_card(author, lic_link) %}
+{% if author is defined and author.name is not empty %}
+<div class="dc-dashboard-author">
+    <div class="text-leader mb-2">{{ author.name }}</div>
+    {% if author.contacts is defined and author.contacts|length > 0 %}
+        <div class="mb-2">
+            <div class="text-small fg-gray mb-1">{{ 'Контакты'|trans }}</div>
+            <ul class="unstyled-list">
+                {% for contact in author.contacts %}
+                    <li><a href="{{ contact.link }}" target="_blank" rel="noopener">{{ contact.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if author.donations is defined and author.donations|length > 0 %}
+        <div class="mb-2">
+            <div class="text-small fg-gray mb-1">{{ 'Поддержка'|trans }}</div>
+            <ul class="unstyled-list">
+                {% for donation in author.donations %}
+                    <li>
+                        <a href="{{ donation.link }}" target="_blank" rel="noopener" title="{{ donation.value }}">
+                            {{ donation.name }}
+                        </a>
+                        {% if donation.value %}<span class="text-small fg-gray"> — {{ donation.value }}</span>{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if lic_link is defined and lic_link is not empty %}
+        <div>
+            <a href="{{ lic_link }}" target="_blank" rel="noopener">{{ 'Лицензионное соглашение'|trans }}</a>
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endmacro %}

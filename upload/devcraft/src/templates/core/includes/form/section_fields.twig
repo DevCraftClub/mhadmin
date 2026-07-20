@@ -1,0 +1,10 @@
+{# Поля секции — Metro grid (grid-new.html), 5+7, без table #}
+<div class="grid no-gap dc-field-table">
+    <div class="row border-bottom bd-default dc-field-head">
+        <div class="cell-md-5 dc-field-descr">{{ 'Описание'|trans }}</div>
+        <div class="cell-md-7 dc-field-widget">{{ 'Параметр'|trans }}</div>
+    </div>
+    {% for field in section.fields %}
+        {% include 'core/includes/form/field.twig' with { field: field } %}
+    {% endfor %}
+</div>

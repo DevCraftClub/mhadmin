@@ -1,0 +1,21 @@
+{% macro color_selector(id, label, descr, value, opts) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/color_selector.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    } %}
+{% endmacro %}
+
+{% macro color_picker(id, label, descr, value, opts) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/color_picker.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    } %}
+{% endmacro %}

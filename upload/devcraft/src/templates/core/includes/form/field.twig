@@ -1,0 +1,46 @@
+{% import 'core/includes/form/_macros/input.twig' as input %}
+{% import 'core/includes/form/_macros/switch.twig' as switch %}
+{% import 'core/includes/form/_macros/select.twig' as select %}
+{% import 'core/includes/form/_macros/textarea.twig' as textarea %}
+{% import 'core/includes/form/_macros/tag_input.twig' as tag_input %}
+{% import 'core/includes/form/_macros/date_picker.twig' as date_picker %}
+{% import 'core/includes/form/_macros/color.twig' as color %}
+{% import 'core/includes/form/_macros/radio.twig' as radio %}
+{% import 'core/includes/form/_macros/slider.twig' as slider %}
+{% import 'core/includes/form/_macros/checkbox.twig' as checkbox %}
+
+{% if field.type == 'number' %}
+    {{ input.number(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'checkbox' %}
+    {{ switch.switch(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'select' %}
+    {{ select.select(field.id, field.label, field.description, field.value, field.metro|default({}), field.options|default({})) }}
+{% elseif field.type == 'multi' %}
+    {{ select.multi(field.id, field.label, field.description, field.value, field.metro|default({}), field.options|default({})) }}
+{% elseif field.type == 'textarea' %}
+    {{ textarea.textarea(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'hidden' %}
+    {{ input.hidden(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'tag' %}
+    {{ tag_input.tag_input(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'date' %}
+    {{ date_picker.date_picker(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'color' %}
+    {{ color.color_picker(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'color_selector' %}
+    {{ color.color_selector(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'radio' %}
+    {{ radio.radio_group(field.id, field.label, field.description, field.value, field.metro|default({}), field.options|default({})) }}
+{% elseif field.type == 'slider' %}
+    {{ slider.double_slider(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'file' %}
+    {{ input.file(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'spinner' %}
+    {{ input.spinner(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'input_mask' %}
+    {{ input.input_mask(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% elseif field.type == 'custom_checkbox' %}
+    {{ checkbox.custom_checkbox(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% else %}
+    {{ input.input(field.id, field.label, field.description, field.value, field.metro|default({})) }}
+{% endif %}

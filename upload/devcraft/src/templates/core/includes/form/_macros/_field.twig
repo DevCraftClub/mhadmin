@@ -1,0 +1,32 @@
+{# Базовые макросы полей формы — делегирование из типовых _macros/*.twig #}
+{% macro row(widget, id, label, descr, value, opts, extra) %}
+    {% set extra = extra|default({}) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with extra|merge({
+        widget: widget,
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({})
+    }) %}
+{% endmacro %}
+
+{% macro widget_only(widget, params) %}
+    {% include widget with params only %}
+{% endmacro %}
+
+{% macro pages(page_urls, current_page) %}
+    {% if page_urls|length > 1 %}
+        <nav class="pagination mt-4" aria-label="Pagination">
+            {% for page_number, page_url in page_urls %}
+                <a href="?{{ page_url }}" class="button{% if page_number == current_page %} primary{% endif %}">{{ page_number }}</a>
+            {% endfor %}
+        </nav>
+    {% endif %}
+{% endmacro %}
+
+{% macro th(label, column, current_order, current_sort, sort_url) %}
+    <th data-name="{{ column }}" class="{% if current_order == column %} sort-{{ current_sort|lower }}{% endif %}">
+        <a href="?{{ sort_url }}" class="dc-table-sort-link" data-sort-column="{{ column }}">{{ label }}</a>
+    </th>
+{% endmacro %}

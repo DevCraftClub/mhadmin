@@ -1,0 +1,16 @@
+<h2>{{ 'Зарегистрированные модули'|trans }}</h2>
+<table class="table striped">
+    <thead>
+        <tr><th>ID</th><th>{{ 'Название'|trans }}</th><th>{{ 'Версия'|trans }}</th><th>{{ 'Активен'|trans }}</th></tr>
+    </thead>
+    <tbody>
+        {% for module in modules %}
+            <tr>
+                <td>{{ module.id }}</td>
+                <td>{{ module.title }}</td>
+                <td>{{ module.version }}</td>
+                <td>{{ module.enabled ? 'да'|trans : 'нет'|trans }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

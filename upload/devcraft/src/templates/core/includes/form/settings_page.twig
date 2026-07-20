@@ -1,0 +1,35 @@
+{% if schema_error is defined %}
+    <div class="alert alert-warning">{{ schema_error }}</div>
+{% else %}
+{% set layoutMode = form.layout|default('stack') %}
+<div class="dc-settings-form">
+<form class="js-settings-form form" data-save-url="{{ form.save_url }}">
+    <input type="hidden" name="user_hash" value="{{ dle_login_hash is defined ? dle_login_hash : '' }}">
+    {% if layoutMode == 'tabs' %}
+        <div class="dc-settings-tabs">
+            {% include 'core/includes/ui/templateIncludes/tabs_sections_nav.twig' with {
+                id: 'settings-tabs',
+                sections: form.sections,
+                opts: { expand: true }
+            } only %}
+        </div>
+    {% endif %}
+    <div class="remark dc-settings-body">
+        {% if layoutMode == 'tabs' %}
+            {% include 'core/includes/ui/templateIncludes/tabs_sections_panels.twig' with {
+                id: 'settings-tabs',
+                sections: form.sections
+            } only %}
+        {% else %}
+            {% include 'core/includes/ui/sections_layout.twig' with {
+                sections: form.sections,
+                layout: layoutMode
+            } %}
+        {% endif %}
+        <div class="form-actions dc-settings-save-bar">
+            <button type="button" class="button primary js-settings-save">{{ 'Сохранить'|trans }}</button>
+        </div>
+    </div>
+</form>
+</div>
+{% endif %}

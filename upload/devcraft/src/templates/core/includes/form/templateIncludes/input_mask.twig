@@ -1,0 +1,22 @@
+{# Metro input-mask — examples/input-mask.html #}
+{% set opts = opts|default({}) %}
+{% if opts.size is not defined %}
+    {% set opts = opts|merge({ size: 'medium' }) %}
+{% endif %}
+{% set classes = ['metro-input'] %}
+{% if opts.size != '' %}{% set classes = classes|merge([opts.size]) %}{% endif %}
+{% if opts.class is defined %}{% set classes = classes|merge([opts.class]) %}{% endif %}
+<input
+    type="text"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ value|default('') }}"
+    class="{{ classes|join(' ') }}"
+    data-role="input, input-mask"
+    {% if opts.mask is defined %}data-mask="{{ opts.mask }}"{% endif %}
+    {% if opts.mask_pattern is defined %}data-mask-pattern="{{ opts.mask_pattern }}"{% endif %}
+    {% if opts.mask_placeholder is defined %}data-mask-placeholder="{{ opts.mask_placeholder }}"{% endif %}
+    {% if opts.mask_editable_start is defined %}data-mask-editable-start="{{ opts.mask_editable_start }}"{% endif %}
+    {% if opts.label is defined %}data-label="{{ opts.label }}"{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

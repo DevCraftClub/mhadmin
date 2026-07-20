@@ -1,0 +1,12 @@
+{# Metro checkbox — examples/checkbox.html #}
+{% set opts = opts|default({}) %}
+<input
+    type="checkbox"
+    id="{{ id }}"
+    name="{{ name|default(id) }}"
+    value="{{ opts.value|default('1') }}"
+    data-role="checkbox"
+    data-caption="{{ opts.caption|default(label|default('')) }}"
+    {% if value %}checked{% endif %}
+    {% include 'core/includes/form/templateIncludes/_metro_attrs.twig' with { opts: opts } only %}
+>

@@ -1,0 +1,63 @@
+{#
+  Панель Composer для dashboard.
+  Ожидает d.composer: missing_required, url?, packages[] {name, version, installed}
+#}
+{% if d.composer is defined and d.composer %}
+    <div class="remark warning dc-dashboard-card mb-4">
+        <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Composer'|trans }}</h4>
+        <p class="mb-2">
+            {{ 'Отсутствует обязательных пакетов:'|trans }}
+            <strong>{{ d.composer.missing_required|default(0) }}</strong>
+        </p>
+
+        {% if d.composer.packages is defined and d.composer.packages|length > 0 %}
+            <ul class="simple-list mb-3">
+                {% for pkg in d.composer.packages %}
+                    <li class="d-flex flex-wrap flex-justify-between flex-align-center gap-1 mb-1">
+                        <span>
+                            <code>{{ pkg.name }}</code>
+                            {% if pkg.version %}
+                                <span class="text-small fg-gray">{{ pkg.version }}</span>
+                            {% endif %}
+                            {% if pkg.installed %}
+                                <span class="badge inline bg-green fg-white ml-1">{{ 'Установлен'|trans }}</span>
+                            {% else %}
+                                <span class="badge inline bg-red fg-white ml-1">{{ 'Не установлен'|trans }}</span>
+                            {% endif %}
+                        </span>
+                        <span class="d-flex flex-wrap gap-1">
+                            {% if pkg.installed %}
+                                <button type="button"
+                                        class="button small success js-composer-action"
+                                        data-action-type="update"
+                                        data-package="{{ pkg.name|e('html_attr') }}">
+                                    {{ 'Обновить'|trans }}
+                                </button>
+                            {% else %}
+                                <button type="button"
+                                        class="button small primary js-composer-action"
+                                        data-action-type="install"
+                                        data-package="{{ pkg.name|e('html_attr') }}"
+                                        data-version="{{ pkg.version|default('')|e('html_attr') }}">
+                                    {{ 'Установить'|trans }}
+                                </button>
+                            {% endif %}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="d-flex flex-wrap gap-1 mt-2">
+            {% if d.composer.url %}
+                <a href="{{ d.composer.url }}" class="button small primary">
+                    <span class="mif-tools mr-1"></span>{{ 'Открыть Composer'|trans }}
+                </a>
+            {% endif %}
+            <button type="button" class="button small warning js-dump-autoload">
+                <span class="mif-loop2 mr-1"></span>{{ 'dump-autoload'|trans }}
+            </button>
+        </div>
+    </div>
+    {% include 'core/includes/dashboard/composer_scripts.twig' %}
+{% endif %}

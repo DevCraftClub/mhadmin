@@ -1,0 +1,10 @@
+{# Tabs для секций (nav + panels) — для макросов вне settings_page #}
+{% include 'core/includes/ui/templateIncludes/tabs_sections_nav.twig' with {
+    id: id|default('settings-tabs'),
+    sections: sections,
+    opts: opts|default({})
+} only %}
+{% include 'core/includes/ui/templateIncludes/tabs_sections_panels.twig' with {
+    id: id|default('settings-tabs'),
+    sections: sections
+} only %}

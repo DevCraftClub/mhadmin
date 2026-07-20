@@ -1,0 +1,11 @@
+{% macro radio_group(id, label, descr, value, opts, options) %}
+    {% include 'core/includes/form/templateIncludes/field_row.twig' with {
+        widget: 'core/includes/form/templateIncludes/radio.twig',
+        id: id,
+        label: label,
+        descr: descr,
+        value: value,
+        opts: opts|default({}),
+        options: options|default({})
+    } %}
+{% endmacro %}

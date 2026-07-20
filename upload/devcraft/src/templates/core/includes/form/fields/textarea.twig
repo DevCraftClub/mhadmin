@@ -1,0 +1,2 @@
+{% import 'core/includes/form/_macros/textarea.twig' as textarea %}
+{{ textarea.textarea(field.id, field.label, field.description, field.value, field.metro|default({})) }}

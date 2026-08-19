@@ -73,23 +73,4 @@ final class LanguageData extends AbstractType {
 		);
 	}
 
-	/**
-	 * Преобразует описание языка в ассоциативный массив.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array<string, string> Сериализованные метаданные языка.
-	 *
-	 * @example
-	 *     $data = $lang->toArray();
-	 */
-	public function toArray(): array {
-		return [
-			'englishName'  => $this->englishName,
-			'originalName' => $this->originalName,
-			'iso2'         => $this->iso2,
-			'tag'          => $this->tag,
-		];
-	}
-
 }

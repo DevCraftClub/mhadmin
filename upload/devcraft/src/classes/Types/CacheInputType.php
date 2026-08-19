@@ -60,16 +60,4 @@ final class CacheInputType extends AbstractType {
 		);
 	}
 
-	/**
-	 * @inheritDoc
-	 *
-	 * @return array{cacheData: mixed, storedAt: int}
-	 */
-	public function toArray(): array {
-		return [
-			'cacheData' => $this->cacheData,
-			'storedAt'  => $this->storedAt,
-		];
-	}
-
 }

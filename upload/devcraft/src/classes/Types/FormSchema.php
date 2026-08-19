@@ -87,27 +87,6 @@ final class FormSchema extends AbstractType {
 	}
 
 	/**
-	 * Преобразует схему формы в ассоциативный массив.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array<string, mixed> Сериализованная схема.
-	 *
-	 * @example
-	 *     $data = $schema->toArray();
-	 */
-	public function toArray(): array {
-		return [
-			'codename' => $this->codename,
-			'layout'   => $this->layout,
-			'sections' => array_map(
-				static fn(FormSection $section): array => $section->toArray(),
-				$this->sections,
-			),
-		];
-	}
-
-	/**
 	 * Возвращает плоский список всех полей схемы.
 	 *
 	 * @since 200.4.0

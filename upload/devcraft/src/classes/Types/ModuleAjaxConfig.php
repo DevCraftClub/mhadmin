@@ -74,21 +74,4 @@ final class ModuleAjaxConfig extends AbstractType {
 		);
 	}
 
-	/**
-	 * Преобразует конфигурацию AJAX в ассоциативный массив.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array{controller: string, methods: array<string, class-string>} Сериализованные данные.
-	 *
-	 * @example
-	 *     $data = $ajax->toArray();
-	 */
-	public function toArray(): array {
-		return [
-			'controller' => $this->controller,
-			'methods'    => $this->methods,
-		];
-	}
-
 }

@@ -138,23 +138,4 @@ final class Author extends AbstractType {
 		return $result;
 	}
 
-	/**
-	 * Преобразует описание автора в ассоциативный массив.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array{name: string, contacts: array<int, array{name: string, link: string}>, donations: array<int, array{name: string, value: string,
-	 *                     link: string}>} Сериализованные данные.
-	 *
-	 * @example
-	 *     $data = $author->toArray();
-	 */
-	public function toArray(): array {
-		return [
-			'name'      => $this->name,
-			'contacts'  => $this->contacts,
-			'donations' => $this->donations,
-		];
-	}
-
 }

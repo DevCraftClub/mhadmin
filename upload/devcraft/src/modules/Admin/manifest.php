@@ -96,6 +96,7 @@ return [
 		],
 	],
 	'composer_required' => [
+		['name' => 'devcraftclub/dev-tools', 'minVersion' => '^1.0', 'hardRequired' => true],
 		['name' => 'twig/twig', 'minVersion' => '3.14', 'hardRequired' => true],
 		['name' => 'cycle/orm', 'minVersion' => '2.9', 'hardRequired' => true],
 		['name' => 'symfony/translation', 'minVersion' => '7.4', 'hardRequired' => true],

@@ -1702,6 +1702,18 @@
         <source>сюда переводимый текст</source>
         <target state="needs-translation">сюда переводимый текст</target>
       </trans-unit>
+      <trans-unit id="f6e158418c2e52a336a53395342e0f92">
+        <source>here is the text to be translated</source>
+        <target state="needs-translation">here is the text to be translated</target>
+      </trans-unit>
+      <trans-unit id="0234cbc8e4e2a67bcd8aa0202448684f">
+        <source>сюди перекладений текст</source>
+        <target state="needs-translation">сюди перекладений текст</target>
+      </trans-unit>
+      <trans-unit id="701d36a0efd6fa23819da3a0df3c8c59">
+        <source>hier Text übersetzen</source>
+        <target state="needs-translation">hier Text übersetzen</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -1,28 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dleplugin>
-  <name>DevCraft Admin</name>
-  <description>DevCraft Admin - панель администрирования для плагинов от DevCraft</description>
-  <icon>devcraft/src/modules/Admin/Public/devcraft-admin-icon.png</icon>
-  <version>200.4.0</version>
-  <dleversion>20</dleversion>
-  <versioncompare>greater</versioncompare>
-  <upgradeurl></upgradeurl>
-  <filedelete>1</filedelete>
-  <needplugin></needplugin>
-  <mnotice>0</mnotice>
-  <mysqlinstall><![CDATA[]]></mysqlinstall>
-  <mysqlupgrade><![CDATA[]]></mysqlupgrade>
-  <mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('devcraft', 'DevCraft Admin v200.4.0', 'Панель администрирования для плагинов от DevCraft', '', '1,2')
-ON DUPLICATE KEY UPDATE title = VALUES('title');]]></mysqlenable>
-  <mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';]]></mysqldisable>
-  <mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';
+	<name>DevCraft Admin</name>
+	<description>DevCraft Admin - панель администрирования для плагинов от DevCraft</description>
+	<icon>devcraft/src/modules/Admin/Public/icon.png</icon>
+	<version>200.4.0</version>
+	<dleversion>20</dleversion>
+	<versioncompare>greater</versioncompare>
+	<upgradeurl></upgradeurl>
+	<filedelete>1</filedelete>
+	<needplugin></needplugin>
+	<mnotice>1</mnotice>
+	<mysqlinstall><![CDATA[]]></mysqlinstall>
+	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
+	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
+VALUES('devcraft', 'DevCraft Admin v200.4.1', 'Панель администрирования для плагинов от DevCraft', 'devcraft/src/modules/Admin/Public/icon.png', '1,2')
+ON DUPLICATE KEY UPDATE title = 'DevCraft Admin v200.4.1';]]></mysqlenable>
+	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';]]></mysqldisable>
+	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';
 DROP TABLE IF EXISTS {prefix}_devcraft_logs;
-DROP TABLE IF EXISTS {prefix}_devcraft_migrations;]]></mysqldelete>
-  <phpinstall><![CDATA[]]></phpinstall>
-  <phpupgrade><![CDATA[]]></phpupgrade>
-  <phpenable><![CDATA[]]></phpenable>
-  <phpdisable><![CDATA[]]></phpdisable>
-  <phpdelete><![CDATA[]]></phpdelete>
-  <notice><![CDATA[]]></notice>
+DROP TABLE IF EXISTS {prefix}_devcraft_migrations;
+DROP TABLE IF EXISTS {prefix}_devcraft_composer_data;]]></mysqldelete>
+	<phpinstall><![CDATA[]]></phpinstall>
+	<phpupgrade><![CDATA[]]></phpupgrade>
+	<phpenable><![CDATA[]]></phpenable>
+	<phpdisable><![CDATA[]]></phpdisable>
+	<phpdelete><![CDATA[]]></phpdelete>
+	<notice><![CDATA[]]></notice>
+	<file name="engine/init.php">
+		<operation action="after">
+			<searchcode><![CDATA[include_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));]]></searchcode>
+			<replacecode><![CDATA[
+// DevCraft Init: Start
+if (is_file(ROOT_DIR . '/devcraft/init.php')) {
+	require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
+}
+// DevCraft Init: Stop
+]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+	</file>
+	<file name="engine/inc/include/init.php">
+		<operation action="after">
+			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php'));]]></searchcode>
+			<replacecode><![CDATA[
+// DevCraft Init: Start
+if (is_file(ROOT_DIR . '/devcraft/init.php')) {
+	require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
+}
+// DevCraft Init: Stop
+]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+	</file>
 </dleplugin>

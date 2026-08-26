@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace DevCraft\Types;
 
 use DevCraft\Core\Types\ComposerType;
+use DevCraft\Builders\AuthorBuilder;
 
 /**
  * Метаданные зарегистрированного модуля DevCraft.
@@ -131,17 +132,31 @@ final readonly class ModuleManifest {
 
 		if(is_array($composerRaw)) {
 			foreach($composerRaw as $rule) {
-				if(is_array($rule)) {
+				if($rule instanceof ComposerType) {
+					$composer[] = $rule;
+				} elseif(is_array($rule)) {
 					$composer[] = ComposerType::fromArray($rule);
 				}
 			}
 		}
 
-		$ajaxRaw   = is_array($manifest['ajax'] ?? NULL)? $manifest['ajax'] : [];
-		$assetsRaw = is_array($manifest['assets'] ?? NULL)? $manifest['assets'] : [];
+		$ajaxRaw = $manifest['ajax'] ?? [];
+		$ajax    = $ajaxRaw instanceof ModuleAjaxConfig
+			? $ajaxRaw
+			: ModuleAjaxConfig::fromArray(is_array($ajaxRaw)? $ajaxRaw : []);
 
-		$authorData = is_array($meta['author'] ?? NULL)? $meta['author'] : self::defaultAuthorData();
-		$author     = Author::fromArray($authorData);
+		$assetsRaw = $manifest['assets'] ?? [];
+		$assets    = $assetsRaw instanceof ModuleAssets
+			? $assetsRaw
+			: ModuleAssets::fromArray(is_array($assetsRaw)? $assetsRaw : []);
+
+		if(($meta['author'] ?? NULL) instanceof Author) {
+			$author = $meta['author'];
+		} elseif(is_array($meta['author'] ?? NULL)) {
+			$author = Author::fromArray($meta['author']);
+		} else {
+			$author = self::defaultAuthor();
+		}
 
 		$dirName = basename(rtrim($modulePath, '/\\'));
 
@@ -159,13 +174,66 @@ final readonly class ModuleManifest {
 			siteLink        : isset($meta['siteLink'])? (string) $meta['siteLink'] : NULL,
 			docsLink        : isset($meta['docsLink'])? (string) $meta['docsLink'] : NULL,
 			licLink         : isset($meta['licLink'])? (string) $meta['licLink'] : self::DEFAULT_LIC_LINK,
+			crowdinName     : isset($manifest['crowdinName'])
+				? (string) $manifest['crowdinName']
+				: (isset($meta['crowdinName'])? (string) $meta['crowdinName'] : NULL),
+			crowdinStatId   : isset($manifest['crowdinStatId'])
+				? (string) $manifest['crowdinStatId']
+				: (isset($meta['crowdinStatId'])? (string) $meta['crowdinStatId'] : NULL),
 			author          : $author,
 			menu            : $menu,
-			ajax            : ModuleAjaxConfig::fromArray($ajaxRaw),
-			assets          : ModuleAssets::fromArray($assetsRaw),
+			ajax            : $ajax,
+			assets          : $assets,
 			changelog       : $changelog,
 			composerRequired: $composer,
 		);
+	}
+
+	/**
+	 * Dual accept: готовый ModuleManifest или массив manifest.php.
+	 *
+	 * @param   array<string, mixed>|self  $raw
+	 */
+	public static function fromLoaded(string $mod, array|self $raw, string $modulePath): self {
+		if($raw instanceof self) {
+			if($raw->path === $modulePath && $raw->id === $mod) {
+				return $raw;
+			}
+
+			return self::fromManifest($mod, $raw->toLegacyManifestArray(), $modulePath);
+		}
+
+		return self::fromManifest($mod, $raw, $modulePath);
+	}
+
+	/**
+	 * Форма ключей legacy manifest.php (для пересборки path/mod).
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function toLegacyManifestArray(): array {
+		return [
+			'mod'               => $this->id,
+			'code'              => $this->code,
+			'crowdinName'       => $this->crowdinName,
+			'crowdinStatId'     => $this->crowdinStatId,
+			'meta'              => [
+				'name'        => $this->name,
+				'version'     => $this->version,
+				'description' => $this->description,
+				'icon'        => $this->icon,
+				'docsLink'    => $this->docsLink,
+				'siteLink'    => $this->siteLink,
+				'siteId'      => $this->siteId,
+				'licLink'     => $this->licLink,
+				'author'      => $this->author,
+			],
+			'menu'              => $this->menu,
+			'ajax'              => $this->ajax,
+			'assets'            => $this->assets,
+			'changelog'         => $this->changelog,
+			'composer_required' => $this->composerRequired,
+		];
 	}
 
 	/**
@@ -222,33 +290,26 @@ final readonly class ModuleManifest {
 	private const DEFAULT_LIC_LINK = 'https://devcraft.club/pages/licence-agreement/';
 
 	/**
-	 * Возвращает данные автора DevCraft по умолчанию.
+	 * Автор DevCraft по умолчанию.
 	 *
 	 * Используется, если модуль не указал свой `author` в `meta` манифеста —
 	 * чтобы не дублировать один и тот же блок контактов/донатов в каждом manifest.php.
 	 *
-	 * @since 200.4.1
-	 *
-	 * @return array<string, mixed> Данные автора в формате, ожидаемом `Author::fromArray()`.
+	 * @since 200.4.0
 	 */
-	private static function defaultAuthorData(): array {
-		return [
-			'name'      => 'Maxim Harder',
-			'contacts'  => [
-				['name' => __('E-Mail'), 'link' => 'mailto:dev@devcraft.club'],
-				['name' => __('Telegram'), 'link' => 'https://t.me/MaHarder'],
-				['name' => __('Сайт'), 'link' => 'https://devcraft.club/misc/contact'],
-			],
-			'donations' => [
-				['name' => 'PayPal', 'value' => 'paypal.me/MaximH', 'link' => 'https://paypal.me/MaximH'],
-				['name' => 'Ko-Fi', 'value' => 'ko-fi.com/devcraft', 'link' => 'https://ko-fi.com/J3J118N1C'],
-				['name' => 'YooMoney', 'value' => '41001454367103', 'link' => 'https://yoomoney.ru/to/41001454367103'],
-				['name' => 'DALink', 'value' => 'maharder', 'link' => 'https://dalink.to/maharder'],
-				['name' => 'Buy Me a Coffee', 'value' => 'maharder', 'link' => 'https://buymeacoffee.com/maharder'],
-				['name' => 'thanks.dev', 'value' => 'gh/gokujo', 'link' => 'https://thanks.dev/gh/gokujo'],
-				['name' => 'GitHub Sponsors', 'value' => 'sponsors/Gokujo', 'link' => 'https://github.com/sponsors/Gokujo'],
-			],
-		];
+	private static function defaultAuthor(): Author {
+		return AuthorBuilder::create('Maxim Harder')
+			->contact(__('E-Mail'), 'mailto:dev@devcraft.club')
+			->contact(__('Telegram'), 'https://t.me/MaHarder')
+			->contact(__('Сайт'), 'https://devcraft.club/misc/contact')
+			->donation('PayPal', 'paypal.me/MaximH', 'https://paypal.me/MaximH')
+			->donation('Ko-Fi', 'ko-fi.com/devcraft', 'https://ko-fi.com/J3J118N1C')
+			->donation('YooMoney', '41001454367103', 'https://yoomoney.ru/to/41001454367103')
+			->donation('DALink', 'maharder', 'https://dalink.to/maharder')
+			->donation('Buy Me a Coffee', 'maharder', 'https://buymeacoffee.com/maharder')
+			->donation('thanks.dev', 'gh/MaximHarder', 'https://thanks.dev/gh/MaximHarder')
+			->donation('GitHub Sponsors', 'sponsors/MaximHarder', 'https://github.com/sponsors/MaximHarder')
+			->build();
 	}
 
 	/**
@@ -261,8 +322,9 @@ final readonly class ModuleManifest {
 	 *
 	 * @return self Метаданные модуля.
 	 *
+	 * @throws \DateMalformedStringException
 	 * @example
-	 *     $module = ModuleManifest::fromArray('devcraft', $registryEntry);
+	 *        $module = ModuleManifest::fromArray('devcraft', $registryEntry);
 	 */
 	public static function fromArray(string $id, array $config): self {
 		/** @var array<string, class-string> $pages */
@@ -314,7 +376,7 @@ final readonly class ModuleManifest {
 		}
 
 		if($author === NULL) {
-			$author = Author::fromArray(self::defaultAuthorData());
+			$author = self::defaultAuthor();
 		}
 
 		return new self(

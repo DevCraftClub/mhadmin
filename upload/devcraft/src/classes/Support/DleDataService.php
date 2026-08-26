@@ -17,6 +17,8 @@ declare(strict_types=1);
 namespace DevCraft\Core\Support;
 
 use JsonException;
+use DevCraft\Builders\QueryBuilder;
+use DevCraft\Core\Enums\SortDirection;
 use DevCraft\Core\Cache\CacheControl;
 use DevCraft\Core\Logging\LogGenerator;
 
@@ -24,6 +26,8 @@ use DevCraft\Core\Logging\LogGenerator;
  * Агрегирует справочные данные DLE: пользователи, группы, категории, xfields.
  *
  * Порт методов трейта DleData поверх {@see DataLoaderService}.
+ *
+ * Static-фасад: вызовы без инстанса (`DleDataService::users()`).
  *
  * @package    DevCraft
  * @since      200.4.0
@@ -40,11 +44,11 @@ final class DleDataService {
 	private const CACHE_TYPE = 'dledata';
 
 	/**
-	 * @since 200.4.0
+	 * Запрет инстанцирования (только static API).
 	 *
-	 * @param   DataLoaderService  $loader  Сервис загрузки таблиц DLE.
+	 * @since 200.4.0
 	 */
-	public function __construct(private readonly DataLoaderService $loader) {}
+	private function __construct() {}
 
 	/**
 	 * Возвращает список пользователей DLE с основными полями.
@@ -54,14 +58,14 @@ final class DleDataService {
 	 * @return array<int, array<string, mixed>> Строки users.
 	 *
 	 * @example
-	 *     $users = Application::instance()->dleData()->users();
+	 *     $users = DleDataService::users();
 	 */
-	public function users(): array {
-		return $this->loader->loadData([
-			'table'   => 'users',
-			'selects' => ['user_id', 'name', 'email', 'user_group'],
-			'order'   => ['name' => 'ASC'],
-		]);
+	public static function users(): array {
+		return DataLoaderService::loadData(
+			QueryBuilder::create('users')
+				->withColumns(['user_id', 'name', 'email', 'user_group'])
+				->withOrder(['name' => SortDirection::Asc])
+		);
 	}
 
 	/**
@@ -75,26 +79,22 @@ final class DleDataService {
 	 * @return array<string, mixed>|array{} Первая строка или пустой массив.
 	 *
 	 * @example
-	 *     $user = $dleData->user(id: 1);
+	 *     $user = DleDataService::user(id: 1);
 	 */
-	public function user(?int $id = NULL, ?string $uname = NULL): array {
+	public static function user(?int $id = NULL, ?string $uname = NULL): array {
 		if($id === NULL && ($uname === NULL || $uname === '')) {
 			return [];
 		}
 
+		$query = QueryBuilder::create('users')->withLimit(1);
+
 		if($id !== NULL) {
-			$rows = $this->loader->loadData([
-				'table' => 'users',
-				'where' => ['user_id' => $id],
-			]);
+			$query = $query->withConditionsItem('user_id', $id);
 		} else {
-			$rows = $this->loader->loadData([
-				'table' => 'users',
-				'where' => ['name' => $uname],
-			]);
+			$query = $query->withConditionsItem('name', $uname);
 		}
 
-		return $rows[0] ?? [];
+		return DataLoaderService::loadOne($query);
 	}
 
 	/**
@@ -105,12 +105,12 @@ final class DleDataService {
 	 * @return array<int|string, string> Ассоциативный список групп.
 	 *
 	 * @example
-	 *     $groups = $dleData->groups();
+	 *     $groups = DleDataService::groups();
 	 */
-	public function groups(): array {
-		$rows = $this->loader->loadData([
+	public static function groups(): array {
+		$rows = DataLoaderService::loadData([
 			'table'   => 'usergroups',
-			'selects' => ['id', 'group_name'],
+			'columns' => ['id', 'group_name'],
 			'order'   => ['group_name' => 'ASC'],
 		]);
 
@@ -131,10 +131,10 @@ final class DleDataService {
 	 * @return array<int, array<string, mixed>> Все колонки групп.
 	 *
 	 * @example
-	 *     $rows = $dleData->groupsFull();
+	 *     $rows = DleDataService::groupsFull();
 	 */
-	public function groupsFull(): array {
-		return $this->loader->loadData([
+	public static function groupsFull(): array {
+		return DataLoaderService::loadData([
 			'table' => 'usergroups',
 			'order' => ['group_name' => 'ASC'],
 		]);
@@ -148,12 +148,12 @@ final class DleDataService {
 	 * @return array<int|string, string> Ассоциативный список категорий.
 	 *
 	 * @example
-	 *     $cats = $dleData->categories();
+	 *     $cats = DleDataService::categories();
 	 */
-	public function categories(): array {
-		$rows = $this->loader->loadData([
+	public static function categories(): array {
+		$rows = DataLoaderService::loadData([
 			'table'   => 'category',
-			'selects' => ['id', 'name', 'parentid'],
+			'columns' => ['id', 'name', 'parentid'],
 			'order'   => ['name' => 'ASC'],
 		]);
 
@@ -174,10 +174,10 @@ final class DleDataService {
 	 * @return array<int, array<string, mixed>> Все колонки категорий.
 	 *
 	 * @example
-	 *     $rows = $dleData->categoriesFull();
+	 *     $rows = DleDataService::categoriesFull();
 	 */
-	public function categoriesFull(): array {
-		return $this->loader->loadData([
+	public static function categoriesFull(): array {
+		return DataLoaderService::loadData([
 			'table' => 'category',
 			'order' => ['name' => 'ASC'],
 		]);
@@ -191,10 +191,10 @@ final class DleDataService {
 	 * @return array<string, array<string, mixed>> Поля по имени.
 	 *
 	 * @example
-	 *     $fields = $dleData->postXfields();
+	 *     $fields = DleDataService::postXfields();
 	 */
-	public function postXfields(): array {
-		return $this->loadXfieldsFromJson('post_xfields', 'xfields.json');
+	public static function postXfields(): array {
+		return self::loadXfieldsFromJson('post_xfields', 'xfields.json');
 	}
 
 	/**
@@ -205,10 +205,10 @@ final class DleDataService {
 	 * @return array<string, array<string, mixed>> Поля по имени.
 	 *
 	 * @example
-	 *     $fields = $dleData->userXfields();
+	 *     $fields = DleDataService::userXfields();
 	 */
-	public function userXfields(): array {
-		return $this->loadXfieldsFromJson('user_xfields', 'userxfields.json');
+	public static function userXfields(): array {
+		return self::loadXfieldsFromJson('user_xfields', 'userxfields.json');
 	}
 
 	/**
@@ -222,26 +222,26 @@ final class DleDataService {
 	 * @return array<string, string|null> Имя поля => значение.
 	 *
 	 * @example
-	 *     $xfields = $dleData->parseObjectXfields(42, 'post');
+	 *     $xfields = DleDataService::parseObjectXfields(42, 'post');
 	 */
-	public function parseObjectXfields(int $id, string $type = 'post'): array {
+	public static function parseObjectXfields(int $id, string $type = 'post'): array {
 		if($type === 'user') {
-			$rows = $this->loader->loadData([
+			$rows = DataLoaderService::loadData([
 				'table'   => 'users',
-				'selects' => ['xfields'],
-				'where'   => ['user_id' => $id],
+				'columns' => ['xfields'],
+				'conditions' => ['user_id' => $id],
 			]);
 		} else {
-			$rows = $this->loader->loadData([
+			$rows = DataLoaderService::loadData([
 				'table'   => 'post',
-				'selects' => ['xfields'],
-				'where'   => ['id' => $id],
+				'columns' => ['xfields'],
+				'conditions' => ['id' => $id],
 			]);
 		}
 
 		$raw = (string) ($rows[0]['xfields'] ?? '');
 
-		return $this->parseXfieldsString($raw);
+		return self::parseXfieldsString($raw);
 	}
 
 	/**
@@ -254,15 +254,15 @@ final class DleDataService {
 	 *
 	 * @return array<string, array<string, mixed>> Поля xfields.
 	 */
-	private function loadXfieldsFromJson(string $cacheName, string $fileName): array {
-		$cached = $this->readJsonCache($cacheName);
+	private static function loadXfieldsFromJson(string $cacheName, string $fileName): array {
+		$cached = self::readJsonCache($cacheName);
 
 		if($cached !== NULL) {
 			return $cached;
 		}
 
-		$fields = $this->readJsonFields($fileName);
-		$this->writeJsonCache($cacheName, $fields);
+		$fields = self::readJsonFields($fileName);
+		self::writeJsonCache($cacheName, $fields);
 
 		return $fields;
 	}
@@ -276,7 +276,7 @@ final class DleDataService {
 	 *
 	 * @return array<string, array<string, mixed>> Секция fields или пустой массив.
 	 */
-	private function readJsonFields(string $fileName): array {
+	private static function readJsonFields(string $fileName): array {
 		if(!defined('ENGINE_DIR')) {
 			LogGenerator::for('DleDataService')->log(__('Константа ENGINE_DIR не определена.'));
 
@@ -321,7 +321,7 @@ final class DleDataService {
 	 *
 	 * @return array<string, string|null> Имя => значение.
 	 */
-	private function parseXfieldsString(string $raw): array {
+	private static function parseXfieldsString(string $raw): array {
 		if($raw === '') {
 			return [];
 		}
@@ -354,7 +354,7 @@ final class DleDataService {
 	 *
 	 * @return array<string, array<string, mixed>>|null Поля или null.
 	 */
-	private function readJsonCache(string $cacheName): ?array {
+	private static function readJsonCache(string $cacheName): ?array {
 		$cached = CacheControl::getCache(self::CACHE_TYPE, $cacheName);
 
 		if($cached === false) {
@@ -380,7 +380,7 @@ final class DleDataService {
 	 * @param   string                               $cacheName  Ключ кеша.
 	 * @param   array<string, array<string, mixed>>  $fields     Поля xfields.
 	 */
-	private function writeJsonCache(string $cacheName, array $fields): void {
+	private static function writeJsonCache(string $cacheName, array $fields): void {
 		CacheControl::setCache(self::CACHE_TYPE, $cacheName, $fields);
 	}
 

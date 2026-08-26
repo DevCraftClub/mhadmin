@@ -2,7 +2,6 @@
 //===============================================================
 // Файл: manifest.php                                           =
 // Путь: devcraft/src/modules/Admin/manifest.php                =
-// Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
 // Сайт: https://devcraft.club                                  =
@@ -14,7 +13,14 @@
 
 declare(strict_types=1);
 
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DevCraft\Types\AdminLink;
+use DevCraft\Types\ModuleManifest;
+use DevCraft\Builders\ModuleManifestBuilder;
+use DevCraft\Builders\ModuleAjaxConfigBuilder;
+use DevCraft\Builders\ModuleAssetsBuilder;
+use DevCraft\Builders\ComposerTypeBuilder;
 use DevCraft\Modules\Admin\Pages\LogsPage;
 use DevCraft\Modules\Admin\Pages\SettingsPage;
 use DevCraft\Modules\Admin\Pages\ChangelogPage;
@@ -36,74 +42,58 @@ use DevCraft\Modules\Admin\Ajax\CheckAssetsHandler;
 use DevCraft\Modules\Admin\Ajax\CheckUpdateHandler;
 
 /**
- * Манифест модуля DevCraft Admin: метаданные, меню, AJAX и ресурсы.
- *
- * Гидрируется в `ModuleManifest` через `ModuleManifest::fromManifest()` — сам
- * файл возвращает массив в форме, ожидаемой этим методом.
+ * Манифест модуля DevCraft Admin (fluent ModuleManifestBuilder).
  *
  * @package    DevCraft
  * @since      200.4.0
  * @subpackage Modules.Admin
  *
- * @return array{
- *     mod: string,
- *     code?: string,
- *     meta?: array<string, mixed>,
- *     menu?: list<AdminLink>,
- *     ajax?: array{controller?: string, methods?: array<string, class-string>},
- *     changelog?: array<int, array<string, mixed>>,
- *     assets?: array<string, list<string>>,
- * }
+ * @return ModuleManifest
  */
-return [
-	'mod'       => 'devcraft',
-	'code'      => 'devcraft',
-	'crowdinName'   => 'mhadmin',
-	'crowdinStatId' => '16830581-755131',
-	'meta'      => [
-		'name'        => 'DevCraft Admin',
-		'version'     => '200.4.1',
-		'description' => __('DevCraft — админ-оболочка для плагинов DLE'),
-		'icon'        => 'mif-construction',
-		'docsLink'    => 'https://readme.devcraft.club/latest/dev/devcraft_admin/install/',
-		'siteLink'    => 'https://devcraft.club/',
-		'siteId'      => 4,
-	],
-	'menu'      => [
+return ModuleManifestBuilder::create()
+	->mod(AdminIdentity::mod())
+	->code(AdminIdentity::code())
+	->crowdinName('mhadmin')
+	->crowdinStatId('16830581-755131')
+	->name('DevCraft Admin')
+	->version('200.4.1')
+	->description(__('DevCraft — админ-оболочка для плагинов DLE'))
+	->icon('mif-construction')
+	->docsLink('https://readme.devcraft.club/latest/dev/devcraft_admin/install/')
+	->siteLink('https://devcraft.club/')
+	->siteId(4)
+	->menu([
 		AdminLink::page(__('Главная'), 'dashboard', DashboardPage::class, 'mif-home'),
 		AdminLink::page(__('Настройки'), 'settings', SettingsPage::class, 'mif-cog'),
 		AdminLink::page(__('Вывод логов'), 'logs', LogsPage::class, 'mif-list'),
 		AdminLink::page(__('Composer'), 'composer', ComposerPage::class, 'mif-tools'),
 		AdminLink::page(__('История изменений'), 'changelog', ChangelogPage::class, 'mif-library'),
 		AdminLink::page(__('Генератор модулей'), 'generator', NewModulePage::class, 'mif-plus'),
-	],
-	'ajax'      => [
-		'controller' => 'admin',
-		'methods'    => [
-			'settings'     => SettingsHandler::class,
-			'delete_log'   => DeleteLogHandler::class,
-			'check_assets' => CheckAssetsHandler::class,
-			'sync_assets'  => SyncAssetsHandler::class,
-			'save_asset'   => SaveAssetHandler::class,
-			'check_update' => CheckUpdateHandler::class,
-			'logs_table'   => LogsTableHandler::class,
-			'new_module'   => NewModuleHandler::class,
-			'composer_table' => ComposerTableHandler::class,
-			'composer_action' => ComposerActionHandler::class,
-			'composer_policy' => ComposerPolicyHandler::class,
-			'composer_sync'   => ComposerSyncHandler::class,
-			'dump_autoload'   => DumpAutoloadHandler::class,
-		],
-	],
-	'composer_required' => [
-		['name' => 'devcraftclub/dev-tools', 'minVersion' => '^1.0', 'hardRequired' => true],
-		['name' => 'twig/twig', 'minVersion' => '3.14', 'hardRequired' => true],
-		['name' => 'cycle/orm', 'minVersion' => '2.9', 'hardRequired' => true],
-		['name' => 'symfony/translation', 'minVersion' => '7.4', 'hardRequired' => true],
-	],
-	/** Подключает данные истории изменений модуля Admin. */
-	'changelog' => require DLEPlugins::Check(__DIR__ . '/changelog.data.php'),
-	'assets'    => [
-		'js' => ['admin.js'],
-	],
-];
+	])
+	->ajax(
+		ModuleAjaxConfigBuilder::create('admin')
+			->methods([
+				'settings'          => SettingsHandler::class,
+				'delete_log'        => DeleteLogHandler::class,
+				'check_assets'      => CheckAssetsHandler::class,
+				'sync_assets'       => SyncAssetsHandler::class,
+				'save_asset'        => SaveAssetHandler::class,
+				'check_update'      => CheckUpdateHandler::class,
+				'logs_table'        => LogsTableHandler::class,
+				'new_module'        => NewModuleHandler::class,
+				'composer_table'    => ComposerTableHandler::class,
+				'composer_action'   => ComposerActionHandler::class,
+				'composer_policy'   => ComposerPolicyHandler::class,
+				'composer_sync'     => ComposerSyncHandler::class,
+				'dump_autoload'     => DumpAutoloadHandler::class,
+			])
+	)
+	->composerRequired([
+		ComposerTypeBuilder::create('devcraftclub/dev-tools')->minVersion('^1.0')->hardRequired()->build(),
+		ComposerTypeBuilder::create('twig/twig')->minVersion('3.14')->hardRequired()->build(),
+		ComposerTypeBuilder::create('cycle/orm')->minVersion('2.9')->hardRequired()->build(),
+		ComposerTypeBuilder::create('symfony/translation')->minVersion('7.4')->hardRequired()->build(),
+	])
+	->changelog(require DLEPlugins::Check(__DIR__ . '/changelog.data.php'))
+	->assets(ModuleAssetsBuilder::create()->js('admin.js'))
+	->build(__DIR__);

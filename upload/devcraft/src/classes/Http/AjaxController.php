@@ -15,6 +15,7 @@ use DevCraft\Core\I18n\Translation;
 use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Exception\JsonResponseException;
+use DevCraft\Core\Support\AdminAccess;
 
 /**
  * Диспетчер AJAX-запросов DevCraft: аутентификация, маршрутизация, ответ.
@@ -63,6 +64,17 @@ final class AjaxController {
 				__('Ошибка'),
 				__('Требуется аутентификация'),
 				'auth_failed',
+				403,
+			)->send();
+
+			return;
+		}
+
+		if(!$isPublic && !AdminAccess::allowsAjaxMod($request->mod)) {
+			JsonResponse::fail(
+				__('Ошибка'),
+				__('Недостаточно прав'),
+				'forbidden',
 				403,
 			)->send();
 

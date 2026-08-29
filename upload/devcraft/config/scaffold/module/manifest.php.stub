@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+use DevCraft\Types\AdminLink;
+use DevCraft\Types\ModuleManifest;
+use DevCraft\Builders\ModuleManifestBuilder;
+use DevCraft\Builders\ModuleAjaxConfigBuilder;
+use DevCraft\Modules\%dir%\%dir%Identity;
+use DevCraft\Modules\%dir%\Pages\SettingsPage;
+use DevCraft\Modules\%dir%\Pages\ChangelogPage;
+use DevCraft\Modules\%dir%\Pages\DashboardPage;
+use DevCraft\Modules\%dir%\Ajax\SettingsHandler;
+
+/**
+ * Манифест модуля %name%.
+ *
+ * @return ModuleManifest
+ */
+return ModuleManifestBuilder::create()
+	->mod(%dir%Identity::mod())
+	->code(%dir%Identity::code())
+	->name('%name%')
+	->version('%version%')
+	->description('%description%')
+	->icon('%icon%')
+	->docsLink('%docs%')
+	->siteLink('%link%')
+	->menu([
+		AdminLink::page(__('Панель'), 'dashboard', DashboardPage::class, '%icon%', %dir%Identity::mod()),
+		AdminLink::page(__('Настройки'), 'settings', SettingsPage::class, 'mif-cog', %dir%Identity::mod()),
+		AdminLink::page(__('История изменений'), 'changelog', ChangelogPage::class, 'mif-library', %dir%Identity::mod()),
+	])
+	->ajax(
+		ModuleAjaxConfigBuilder::create('admin')
+			->method('settings', SettingsHandler::class)
+	)
+	->changelog(require __DIR__ . '/changelog.data.php')
+	->build(__DIR__);

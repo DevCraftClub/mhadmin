@@ -24,8 +24,9 @@ use DevCraft\Core\Abstracts\AbstractType;
  * @since      200.4.0
  *
  * @subpackage Core.Types
- * @property string                      $controller Идентификатор AJAX-контроллера.
- * @property array<string, class-string> $methods    Карта method → FQCN обработчика.
+ * @property string                                                         $controller Идентификатор AJAX-контроллера.
+ * @property array<string, class-string>                                    $methods    Карта method → FQCN обработчика.
+ * @property array<string, array{handler: class-string, allow_guest: bool}> $public     Публичные методы (controller=public).
  */
 final class ModuleAjaxConfig extends AbstractType {
 
@@ -34,8 +35,9 @@ final class ModuleAjaxConfig extends AbstractType {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param   string                       $controller  Идентификатор AJAX-контроллера.
-	 * @param   array<string, class-string>  $methods     Карта method → FQCN обработчика.
+	 * @param   string                                                          $controller  Идентификатор AJAX-контроллера.
+	 * @param   array<string, class-string>                                     $methods     Карта method → FQCN обработчика.
+	 * @param   array<string, array{handler: class-string, allow_guest: bool}>  $public      Публичные AJAX-методы.
 	 *
 	 * @example
 	 *     $ajax = new ModuleAjaxConfig('admin', ['settings' => SettingsHandler::class]);
@@ -43,6 +45,7 @@ final class ModuleAjaxConfig extends AbstractType {
 	public function __construct(
 		public string $controller = 'admin',
 		public array  $methods = [],
+		public array  $public = [],
 	) {}
 
 	/**
@@ -71,7 +74,53 @@ final class ModuleAjaxConfig extends AbstractType {
 		return new self(
 			controller: (string) ($data['controller'] ?? 'admin'),
 			methods   : $methods,
+			public    : self::normalizePublic($data['public'] ?? []),
 		);
+	}
+
+	/**
+	 * Нормализует секцию ajax.public.
+	 *
+	 * @param   mixed  $raw  Сырые данные.
+	 *
+	 * @return array<string, array{handler: class-string, allow_guest: bool}>
+	 */
+	public static function normalizePublic(mixed $raw): array {
+		if(!is_array($raw)) {
+			return [];
+		}
+
+		$methods = [];
+
+		foreach($raw as $method => $handler) {
+			if(!is_string($method) || $method === '') {
+				continue;
+			}
+
+			if(is_string($handler) && $handler !== '') {
+				$methods[$method] = [
+					'handler'     => $handler,
+					'allow_guest' => false,
+				];
+
+				continue;
+			}
+
+			if(is_array($handler)) {
+				$class = (string) ($handler['handler'] ?? $handler['class'] ?? '');
+
+				if($class === '') {
+					continue;
+				}
+
+				$methods[$method] = [
+					'handler'     => $class,
+					'allow_guest' => !empty($handler['allow_guest']),
+				];
+			}
+		}
+
+		return $methods;
 	}
 
 }

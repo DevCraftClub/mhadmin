@@ -1,0 +1,3 @@
+<h2>%name%</h2>
+<p class="text-leader2">%description%</p>
+<p class="text-small fg-gray">Версия %version%</p>

@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DevCraft\Modules\%dir%\Pages;
+
+use DevCraft\Core\Abstracts\AbstractPage;
+
+final class DashboardPage extends AbstractPage {
+
+    public function handle(): array {
+        $this->addBreadcrumb('Панель');
+
+        return [
+            'view' => '%latin%/dashboard.twig',
+            'data' => [
+                'page_title' => '%name%',
+            ],
+        ];
+    }
+
+}

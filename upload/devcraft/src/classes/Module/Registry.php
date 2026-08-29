@@ -155,18 +155,22 @@ final class Registry {
 
 		try {
 			/** Подключает manifest.php модуля DevCraft. */
-			$manifest = require DLEPlugins::Check($manifestFile);
+			$loaded = require DLEPlugins::Check($manifestFile);
 
-			if(!is_array($manifest)) {
+			if(!$loaded instanceof ModuleManifest && !is_array($loaded)) {
 				return NULL;
 			}
 
-			$manifestMod  = (string) ($manifest['mod'] ?? '');
+			$manifestMod = $loaded instanceof ModuleManifest
+				? $loaded->id
+				: (string) ($loaded['mod'] ?? '');
 			$effectiveMod = $modOverride ?? $manifestMod;
 
 			if($effectiveMod === '') {
 				return NULL;
 			}
+
+			$manifest = ModuleManifest::fromLoaded($effectiveMod, $loaded, $path);
 
 			return new PluginContext($effectiveMod, $manifest, $path);
 		} catch(\Throwable $throwable) {

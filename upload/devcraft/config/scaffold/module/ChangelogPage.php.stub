@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DevCraft\Modules\%dir%\Pages;
+
+use DevCraft\Core\Abstracts\AbstractPage;
+
+final class ChangelogPage extends AbstractPage {
+
+    public function handle(): array {
+        $this->addBreadcrumb('История изменений');
+
+        return [
+            'view' => '%latin%/changelog.twig',
+            'data' => [
+                'page_title' => 'История изменений',
+            ],
+        ];
+    }
+
+}

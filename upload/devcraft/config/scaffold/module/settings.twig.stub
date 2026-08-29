@@ -1,0 +1,2 @@
+<h2>Настройки</h2>
+{% include 'core/includes/form/settings_page.twig' with { form: form } %}

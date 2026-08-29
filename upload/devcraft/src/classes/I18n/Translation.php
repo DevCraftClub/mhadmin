@@ -76,6 +76,50 @@ final class Translation {
 	private static bool $use_translator = false;
 
 	/**
+	 * Идёт ли сейчас загрузка переводчика (защита от реентерабельности).
+	 *
+	 * @since 200.4.0
+	 */
+	private static bool $initializing = false;
+
+	/**
+	 * Ключ конфига (язык+путь), для которого загрузка уже провалилась в этом запросе.
+	 *
+	 * @since 200.4.0
+	 */
+	private static ?string $failedInitKey = NULL;
+
+	/**
+	 * Перевод для логов без повторной инициализации и без DevCraftConfig.
+	 *
+	 * @since 200.4.0
+	 */
+	public static function translateForLog(string $phrase): string {
+		if(
+			self::$initializing
+			|| !self::$use_translator
+			|| self::$translator === NULL
+		) {
+			return $phrase;
+		}
+
+		try {
+			return self::$translator->trans($phrase);
+		} catch(Throwable) {
+			return $phrase;
+		}
+	}
+
+	/**
+	 * true, если setTranslator сейчас в процессе.
+	 *
+	 * @since 200.4.0
+	 */
+	public static function isInitializing(): bool {
+		return self::$initializing;
+	}
+
+	/**
 	 * Возвращает словарь переводов для указанной локали без смены активной локали.
 	 *
 	 * @since 200.4.0
@@ -239,14 +283,13 @@ final class Translation {
 	 *     Translation::setTranslator();
 	 */
 	public static function setTranslator(): void {
-		$config = DevCraftConfig::raw();
-		$locale = (string) ($config['language'] ?? 'ru_RU');
-
-		if(self::$translator !== NULL && self::$locale === $locale) {
+		if(self::$initializing) {
 			return;
 		}
 
-		$path = (string) ($config['locales_path'] ?? '');
+		$config = DevCraftConfig::raw();
+		$locale = (string) ($config['language'] ?? 'ru_RU');
+		$path   = (string) ($config['locales_path'] ?? '');
 
 		if($path === '') {
 			$path = Paths::locales();
@@ -254,17 +297,39 @@ final class Translation {
 			$path = ROOT_DIR . $path;
 		}
 
-		self::setLocalizationPath($path);
-		self::setLocale($locale);
+		$initKey = $locale . '|' . $path;
 
-		$locale_array = self::getTranslationArray();
+		if(self::$failedInitKey === $initKey) {
+			return;
+		}
 
-		$translator = new Translator(self::getLocale());
-		$translator->setFallbackLocales(['ru_RU']);
-		$translator->addLoader('array', new ArrayLoader());
-		$translator->addResource('array', $locale_array, self::getLocale());
-		self::$translator     = $translator;
-		self::$use_translator = $locale_array !== [];
+		if(self::$translator !== NULL && self::$locale === $locale) {
+			return;
+		}
+
+		self::$initializing = true;
+
+		try {
+			self::setLocalizationPath($path);
+			self::setLocale($locale);
+
+			$locale_array = self::getTranslationArray();
+
+			$translator = new Translator(self::getLocale());
+			$translator->setFallbackLocales(['ru_RU']);
+			$translator->addLoader('array', new ArrayLoader());
+			$translator->addResource('array', $locale_array, self::getLocale());
+			self::$translator     = $translator;
+			self::$use_translator = $locale_array !== [];
+			self::$failedInitKey  = NULL;
+		} catch(Throwable $e) {
+			self::$translator     = NULL;
+			self::$use_translator = false;
+			self::$failedInitKey  = $initKey;
+			@error_log('[DevCraft] Translation::setTranslator failed: ' . $e->getMessage());
+		} finally {
+			self::$initializing = false;
+		}
 	}
 
 	/**
@@ -279,6 +344,8 @@ final class Translation {
 		self::$translator     = NULL;
 		self::$locale         = NULL;
 		self::$use_translator = false;
+		self::$initializing   = false;
+		self::$failedInitKey  = NULL;
 		CacheControl::clearCache('Translation');
 	}
 
@@ -774,15 +841,9 @@ final class Translation {
 		$directory = DataManager::normalizePath(self::getLocalizationPath() . '/' . $locale);
 
 		if(!is_dir($directory)) {
-			$config = DevCraftConfig::raw();
-
-			if($locale === (string) ($config['language'] ?? 'ru_RU')) {
-				LogGenerator::for('Translation')->log(
-					"Директория с переводами \"{$directory}\" не найдена!",
-					'warn',
-				);
-				self::setUseTranslator(false);
-			}
+			// F11A: без LogGenerator/__() — иначе цикл Translation ↔ Log ↔ setTranslator
+			@error_log('[DevCraft] Translation: locale directory missing: ' . $directory);
+			self::setUseTranslator(false);
 
 			return [];
 		}
@@ -806,10 +867,7 @@ final class Translation {
 
 				CacheControl::setCache('Translation', $cacheKey, $data);
 			} catch(Exception $e) {
-				LogGenerator::for('Translation')->log(
-					"Ошибка чтения и обработки файлов перевода: {$e->getMessage()}",
-					'critical',
-				);
+				@error_log('[DevCraft] Translation: xliff load error: ' . $e->getMessage());
 			}
 		}
 

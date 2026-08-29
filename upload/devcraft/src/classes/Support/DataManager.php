@@ -137,20 +137,21 @@ final class DataManager {
 			}
 
 			try {
-				/** @var array<string, mixed> $manifest */
-				$manifest = require DLEPlugins::Check($manifestFile);
+				$loaded = require DLEPlugins::Check($manifestFile);
 
-				if(!is_array($manifest)) {
+				if(!$loaded instanceof ModuleManifest && !is_array($loaded)) {
 					continue;
 				}
 
-				$mod = (string) ($manifest['mod'] ?? '');
+				$mod = $loaded instanceof ModuleManifest
+					? $loaded->id
+					: (string) ($loaded['mod'] ?? '');
 
 				if($mod === '') {
 					continue;
 				}
 
-				$manifests[$mod] = ModuleManifest::fromManifest($mod, $manifest, $modulePath);
+				$manifests[$mod] = ModuleManifest::fromLoaded($mod, $loaded, $modulePath);
 			} catch(Throwable $throwable) {
 				LogGenerator::for(self::class)->log($throwable->getMessage());
 			}
@@ -371,6 +372,46 @@ final class DataManager {
 	}
 
 	/**
+	 * Очищает содержимое канонического cache-каталога (не удаляя сам корень и чужие пути).
+	 *
+	 * В отличие от {@see deleteDir()}, сюда можно передать Paths::cache() — защита deleteDir
+	 * для cache остаётся; инвалидация идёт через этот узкий метод.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $path  Абсолютный путь внутри или равный Paths::cache().
+	 *
+	 * @return bool true, если путь допустим и очистка выполнена (или каталога не было).
+	 */
+	public static function clearCacheContents(string $path): bool {
+		$cacheRoot = rtrim(Paths::cache(), DIRECTORY_SEPARATOR);
+		$path      = rtrim(self::normalizePath($path) !== '' ? self::normalizePath($path) : $path, DIRECTORY_SEPARATOR);
+
+		if($path === '' || ($path !== $cacheRoot && !str_starts_with($path, $cacheRoot . DIRECTORY_SEPARATOR))) {
+			return false;
+		}
+
+		if(!is_dir($path)) {
+			return true;
+		}
+
+		$iterator = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+			RecursiveIteratorIterator::CHILD_FIRST,
+		);
+
+		foreach($iterator as $fileInfo) {
+			if($fileInfo->isFile() || $fileInfo->isLink()) {
+				@unlink($fileInfo->getPathname());
+			} elseif($fileInfo->isDir()) {
+				@rmdir($fileInfo->getPathname());
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Преобразует вложенный массив аргументов в плоский ассоциативный массив.
 	 *
 	 * @since 173.3.0
@@ -486,18 +527,48 @@ final class DataManager {
 	 * @param   array<string, mixed>  $config      Данные конфигурации.
 	 * @param   string|null           $configPath  Каталог конфигурации или null для Paths::config().
 	 *
+	 * @return bool true при успешной атомарной записи.
+	 *
 	 * @example
 	 *     DataManager::saveConfig('app', $settings);
 	 */
-	public static function saveConfig(string $codename, array $config, ?string $configPath = NULL): void {
+	public static function saveConfig(string $codename, array $config, ?string $configPath = NULL): bool {
 		$configPath   = $configPath ?? Paths::config();
 		$jsonFilePath = self::normalizePath($configPath . DIRECTORY_SEPARATOR . $codename . '.json');
 
-		file_put_contents(
-			$jsonFilePath,
-			json_encode($config, JSON_UNESCAPED_UNICODE),
-			LOCK_EX,
-		);
+		try {
+			$json = json_encode($config, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+		} catch(JsonException) {
+			@error_log('[DevCraft] DataManager::saveConfig: JSON encode failed for ' . $codename);
+
+			return false;
+		}
+
+		$dir = dirname($jsonFilePath);
+
+		if(!is_dir($dir) && !@mkdir($dir, 0755, true) && !is_dir($dir)) {
+			@error_log('[DevCraft] DataManager::saveConfig: cannot create dir ' . $dir);
+
+			return false;
+		}
+
+		$tmp = $jsonFilePath . '.tmp.' . bin2hex(random_bytes(4));
+
+		if(@file_put_contents($tmp, $json, LOCK_EX) === false) {
+			@unlink($tmp);
+			@error_log('[DevCraft] DataManager::saveConfig: write failed for ' . $codename);
+
+			return false;
+		}
+
+		if(!@rename($tmp, $jsonFilePath)) {
+			@unlink($tmp);
+			@error_log('[DevCraft] DataManager::saveConfig: rename failed for ' . $codename);
+
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -522,9 +593,8 @@ final class DataManager {
 			try {
 				return self::loadJsonConfig($jsonFilePath);
 			} catch(JsonException) {
-				LogGenerator::for('DataManager')->log(
-					__('Некорректный JSON в файле конфигурации: {file}', ['{file}' => $jsonFilePath]),
-				);
+				// F05: без __() / LogGenerator — иначе рекурсия через DevCraftConfig::raw()
+				@error_log('[DevCraft] DataManager::getConfig: invalid JSON in ' . $jsonFilePath);
 
 				return [];
 			}
@@ -790,7 +860,7 @@ final class DataManager {
 	}
 
 	/**
-	 * Загружает и санитизирует JSON-конфигурацию из файла.
+	 * Загружает JSON-конфигурацию из файла без HTML-экранирования (сырые типы).
 	 *
 	 * @since 173.3.0
 	 *
@@ -806,12 +876,7 @@ final class DataManager {
 			JSON_THROW_ON_ERROR,
 		);
 
-		return array_map(
-			static fn($value) => is_array($value)
-				? $value
-				: filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-			$jsonData,
-		);
+		return is_array($jsonData) ? $jsonData : [];
 	}
 
 	/**

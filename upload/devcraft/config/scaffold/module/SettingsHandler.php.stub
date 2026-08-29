@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DevCraft\Modules\%dir%\Ajax;
+
+use DevCraft\Core\Abstracts\AbstractSettingsHandler;
+use DevCraft\Modules\%dir%\%dir%Identity;
+
+/**
+ * Сохранение настроек модуля %name%.
+ */
+final class SettingsHandler extends AbstractSettingsHandler {
+
+	protected function configName(): ?string {
+		return %dir%Identity::code();
+	}
+
+}

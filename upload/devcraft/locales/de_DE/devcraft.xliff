@@ -1714,6 +1714,234 @@
         <source>hier Text übersetzen</source>
         <target state="needs-translation">hier Text übersetzen</target>
       </trans-unit>
+      <trans-unit id="45c0f93d630438c045c460c395ce7038">
+        <source>Нет доступных значений для этого поля.</source>
+        <target state="needs-translation">Нет доступных значений для этого поля.</target>
+      </trans-unit>
+      <trans-unit id="1a07204125aa8c3a122a3003e59cc9ca">
+        <source>Metro UI или #dc-filter-dialog недоступен</source>
+        <target state="needs-translation">Metro UI или #dc-filter-dialog недоступен</target>
+      </trans-unit>
+      <trans-unit id="520614eaf2509907682b2eb74b0c8ff3">
+        <source>Укажите корректный диапазон дат (от и до)</source>
+        <target state="needs-translation">Укажите корректный диапазон дат (от и до)</target>
+      </trans-unit>
+      <trans-unit id="bc992db9125d6e96130525f6d624f20f">
+        <source>Выберите значение для правила фильтра</source>
+        <target state="needs-translation">Выберите значение для правила фильтра</target>
+      </trans-unit>
+      <trans-unit id="0be52474e750f80b63fb8a2d82c2b335">
+        <source>Плагин dialog не инициализирован</source>
+        <target state="needs-translation">Плагин dialog не инициализирован</target>
+      </trans-unit>
+      <trans-unit id="51bb8f5dd1cd86235055011872139940">
+        <source>Правило фильтра</source>
+        <target state="needs-translation">Правило фильтра</target>
+      </trans-unit>
+      <trans-unit id="19a33cea9317b482f4ff86f2c3982713">
+        <source>Панель фильтра не найдена</source>
+        <target state="needs-translation">Панель фильтра не найдена</target>
+      </trans-unit>
+      <trans-unit id="a4d84fc3bc9e742f4c02d13593371cbe">
+        <source>Установка пакета…</source>
+        <target state="needs-translation">Установка пакета…</target>
+      </trans-unit>
+      <trans-unit id="17fb87bbe6242b97b4784347b9131842">
+        <source>Обновление пакета…</source>
+        <target state="needs-translation">Обновление пакета…</target>
+      </trans-unit>
+      <trans-unit id="76a23e98b8725f11f8835b10c571827a">
+        <source>Удаление пакета…</source>
+        <target state="needs-translation">Удаление пакета…</target>
+      </trans-unit>
+      <trans-unit id="1f42f7d417a24787fa24ac097f581020">
+        <source>Выполнение Composer…</source>
+        <target state="needs-translation">Выполнение Composer…</target>
+      </trans-unit>
+      <trans-unit id="b914bbbdaa648da254438d014a74349d">
+        <source>Повторить</source>
+        <target state="needs-translation">Повторить</target>
+      </trans-unit>
+      <trans-unit id="dd9463bd5d0c650b468fc5d6cfa1073c">
+        <source>Закрыть</source>
+        <target state="needs-translation">Закрыть</target>
+      </trans-unit>
+      <trans-unit id="6c21b0c36105b65fe06438fca7a8caa8">
+        <source>Не удалось выполнить Composer-действие</source>
+        <target state="needs-translation">Не удалось выполнить Composer-действие</target>
+      </trans-unit>
+      <trans-unit id="d3319c14f43f4be23a109610eca40cb4">
+        <source>Выполнение dump-autoload…</source>
+        <target state="needs-translation">Выполнение dump-autoload…</target>
+      </trans-unit>
+      <trans-unit id="7fb1beef1320a88b22061ae45ad1fc0e">
+        <source>Не удалось выполнить dump-autoload</source>
+        <target state="needs-translation">Не удалось выполнить dump-autoload</target>
+      </trans-unit>
+      <trans-unit id="782f99cef267396297f309826350cedd">
+        <source>Metro UI недоступен</source>
+        <target state="needs-translation">Metro UI недоступен</target>
+      </trans-unit>
+      <trans-unit id="35248488a3784ff504af411cca7c08dc">
+        <source>Не удалось открыть диалог</source>
+        <target state="needs-translation">Не удалось открыть диалог</target>
+      </trans-unit>
+      <trans-unit id="56fe50fcb17c93e9b59e8bed5e1c2d0f">
+        <source>Сеть или сервер недоступен</source>
+        <target state="needs-translation">Сеть или сервер недоступен</target>
+      </trans-unit>
+      <trans-unit id="36b91b4161cbc171a5c6dd97e782cb36">
+        <source>Сервер вернул не-JSON ответ</source>
+        <target state="needs-translation">Сервер вернул не-JSON ответ</target>
+      </trans-unit>
+      <trans-unit id="4375f421fb9a9e20f9e0f947b914de8a">
+        <source>Не удалось разобрать JSON-ответ</source>
+        <target state="needs-translation">Не удалось разобрать JSON-ответ</target>
+      </trans-unit>
+      <trans-unit id="2a0870ed61058c4836a50ef7422a2560">
+        <source>Ожидался FormData</source>
+        <target state="needs-translation">Ожидался FormData</target>
+      </trans-unit>
+      <trans-unit id="cb519198416d2e54588cd852c3a79c6b">
+        <source>Сетевая ошибка</source>
+        <target state="needs-translation">Сетевая ошибка</target>
+      </trans-unit>
+      <trans-unit id="07a1962e89665f29033d9874339f8a2a">
+        <source>Файл {file} создан</source>
+        <target state="needs-translation">Файл {file} создан</target>
+      </trans-unit>
+      <trans-unit id="861b48f1f3978ee321ec45c1192ca940">
+        <source>Открыть на сайте</source>
+        <target state="needs-translation">Открыть на сайте</target>
+      </trans-unit>
+      <trans-unit id="4bfc89372e33e86e0decd6b612ac04e3">
+        <source>Плагин «{name}» был создан</source>
+        <target state="needs-translation">Плагин «{name}» был создан</target>
+      </trans-unit>
+      <trans-unit id="27059278a7af90ca2004a9f8a1be9212">
+        <source>Плагин не был создан!</source>
+        <target state="needs-translation">Плагин не был создан!</target>
+      </trans-unit>
+      <trans-unit id="365552bb70b76fe898fc974d8c5884a5">
+        <source>Проверка ресурсов…</source>
+        <target state="needs-translation">Проверка ресурсов…</target>
+      </trans-unit>
+      <trans-unit id="9a53302738e7a371d8f3f48e4d7fc17c">
+        <source>Сравнение локальных файлов с сервером разработчика</source>
+        <target state="needs-translation">Сравнение локальных файлов с сервером разработчика</target>
+      </trans-unit>
+      <trans-unit id="33e361ca74c6a9ed9db541c1175beefc">
+        <source>Не удалось проверить ресурсы</source>
+        <target state="needs-translation">Не удалось проверить ресурсы</target>
+      </trans-unit>
+      <trans-unit id="876621a234a5cac345245e1a33c16db6">
+        <source>Повторите попытку позже</source>
+        <target state="needs-translation">Повторите попытку позже</target>
+      </trans-unit>
+      <trans-unit id="43d5186d2dedf9d1f12f6f1758b66a88">
+        <source>Все ресурсы актуальны</source>
+        <target state="needs-translation">Все ресурсы актуальны</target>
+      </trans-unit>
+      <trans-unit id="5b07d4f5203503d2082e38820221d7e6">
+        <source>На сервере: {remote}, локально: {local}</source>
+        <target state="needs-translation">На сервере: {remote}, локально: {local}</target>
+      </trans-unit>
+      <trans-unit id="0caaff865c32af5d96b02ca685c1dd0b">
+        <source>Обнаружены расхождения ресурсов</source>
+        <target state="needs-translation">Обнаружены расхождения ресурсов</target>
+      </trans-unit>
+      <trans-unit id="d7279895ac16f823d5e6fb37a45f2624">
+        <source>Отличается файлов: {count} (на сервере: {remote}, локально: {local})</source>
+        <target state="needs-translation">Отличается файлов: {count} (на сервере: {remote}, локально: {local})</target>
+      </trans-unit>
+      <trans-unit id="db5f55c14912a071887b91510eb9f39c">
+        <source>Подробнее</source>
+        <target state="needs-translation">Подробнее</target>
+      </trans-unit>
+      <trans-unit id="19f66e8e3e5b3ab87deff28b9005c0d3">
+        <source>Ресурсы</source>
+        <target state="needs-translation">Ресурсы</target>
+      </trans-unit>
+      <trans-unit id="766ac4bfdb5bc1104672c7028bd171f5">
+        <source>Отличается файлов: {count}</source>
+        <target state="needs-translation">Отличается файлов: {count}</target>
+      </trans-unit>
+      <trans-unit id="ecec2c0ddf48adc1e55e56c84cabdd79">
+        <source>Все файлы ресурсов совпадают с сервером разработчика.</source>
+        <target state="needs-translation">Все файлы ресурсов совпадают с сервером разработчика.</target>
+      </trans-unit>
+      <trans-unit id="11de90b8bd3c5ec77367e62c6c250de5">
+        <source>Требуют установки</source>
+        <target state="needs-translation">Требуют установки</target>
+      </trans-unit>
+      <trans-unit id="947a01e04969876af12db78482a0102d">
+        <source>Требуют обновления</source>
+        <target state="needs-translation">Требуют обновления</target>
+      </trans-unit>
+      <trans-unit id="0c827e8033147a197b7e8d0fdbbffb4c">
+        <source>Заменить все</source>
+        <target state="needs-translation">Заменить все</target>
+      </trans-unit>
+      <trans-unit id="cba368aa4e4d54e0e2fc9e53136c3216">
+        <source>Заменить изменённые</source>
+        <target state="needs-translation">Заменить изменённые</target>
+      </trans-unit>
+      <trans-unit id="77a209d6357fb19e7312a1ee8e9e8cc0">
+        <source>Расхождения ресурсов</source>
+        <target state="needs-translation">Расхождения ресурсов</target>
+      </trans-unit>
+      <trans-unit id="4c7ec82198facb9847c90f4b4b0a24b4">
+        <source>Проверка ресурсов</source>
+        <target state="needs-translation">Проверка ресурсов</target>
+      </trans-unit>
+      <trans-unit id="96f0f927a5f0c6a88640eab13f8687a2">
+        <source>Синхронизация</source>
+        <target state="needs-translation">Синхронизация</target>
+      </trans-unit>
+      <trans-unit id="dc6b492e62f66eb9eccebb4e3f5b4402">
+        <source>Загрузка файлов ресурсов…</source>
+        <target state="needs-translation">Загрузка файлов ресурсов…</target>
+      </trans-unit>
+      <trans-unit id="911a987de5d843c7d1e122b3e73abde4">
+        <source>Текущая версия: v{version}</source>
+        <target state="needs-translation">Текущая версия: v{version}</target>
+      </trans-unit>
+      <trans-unit id="8ac5d56f3ac89de9f11852ce94731b2b">
+        <source>Обновлено: {date}</source>
+        <target state="needs-translation">Обновлено: {date}</target>
+      </trans-unit>
+      <trans-unit id="559e725e9699aeca8c191d20b5f1ef60">
+        <source>Доступна новая версия</source>
+        <target state="needs-translation">Доступна новая версия</target>
+      </trans-unit>
+      <trans-unit id="5dad7b0a025be1b1dd97ed9bae68e48b">
+        <source>Скачать</source>
+        <target state="needs-translation">Скачать</target>
+      </trans-unit>
+      <trans-unit id="2af0fc0910f1b139829ecf56b0274f11">
+        <source>Не удалось проверить версию</source>
+        <target state="needs-translation">Не удалось проверить версию</target>
+      </trans-unit>
+      <trans-unit id="71d8f10f78db5722acbfb8c4d0a0d4e7">
+        <source>Не удалось синхронизировать пакеты с БД</source>
+        <target state="needs-translation">Не удалось синхронизировать пакеты с БД</target>
+      </trans-unit>
+      <trans-unit id="494ae75f14e03467159934e085c69eba">
+        <source>Текст скопирован в буфер обмена</source>
+        <target state="needs-translation">Текст скопирован в буфер обмена</target>
+      </trans-unit>
+      <trans-unit id="05ff06965fe69fe596819c30e3422f72">
+        <source>Текст выделен — используйте Ctrl+C</source>
+        <target state="needs-translation">Текст выделен — используйте Ctrl+C</target>
+      </trans-unit>
+      <trans-unit id="54f3a404e75a886c4b44101403de4206">
+        <source>Не удалось удалить запись</source>
+        <target state="needs-translation">Не удалось удалить запись</target>
+      </trans-unit>
+      <trans-unit id="29b2d9e4f5dc76f5b0288896055e7833">
+        <source>Модуль Admin инициализирован</source>
+        <target state="needs-translation">Модуль Admin инициализирован</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

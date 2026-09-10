@@ -5,7 +5,7 @@ labels:
     - Запрос на функционал
     - enhancement
 assignees:
-    - Gokujo
+    - MaximHarder
 body:
     -   type: markdown
         attributes:

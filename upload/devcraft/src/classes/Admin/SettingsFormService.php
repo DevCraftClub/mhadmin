@@ -70,6 +70,10 @@ final class SettingsFormService {
 				$value = $this->multiValueToArray($value);
 			}
 
+			if(is_string($value) && $this->isCodeViewerField($field)) {
+				$value = htmlspecialchars_decode($value, ENT_QUOTES|ENT_HTML5);
+			}
+
 			$description = $field->description;
 
 			if($field->id === 'list_count' && $description !== NULL) {
@@ -145,6 +149,15 @@ final class SettingsFormService {
 			preg_split('/[\s,]+/', trim($value))? : [],
 			static fn(string $item): bool => $item !== '',
 		));
+	}
+
+	/**
+	 * Поле ACE (`codeViewer`): класс `html_editor`.
+	 */
+	private function isCodeViewerField(FormField $field): bool {
+		$class = $field->metro['class'] ?? '';
+
+		return is_string($class) && str_contains($class, 'html_editor');
 	}
 
 	/**

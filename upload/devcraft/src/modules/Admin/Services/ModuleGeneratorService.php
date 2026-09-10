@@ -151,6 +151,7 @@ final class ModuleGeneratorService {
 
 		$fileMap = [
 			'engine_inc.php.stub'      => ROOT_DIR . '/engine/inc/' . $latin . '.php',
+			'Identity.php.stub'        => DEVCRAFT_MODULES . '/' . $dirName . '/' . $dirName . 'Identity.php',
 			'manifest.php.stub'        => DEVCRAFT_MODULES . '/' . $dirName . '/manifest.php',
 			'DashboardPage.php.stub'   => DEVCRAFT_MODULES . '/' . $dirName . '/Pages/DashboardPage.php',
 			'ChangelogPage.php.stub'   => DEVCRAFT_MODULES . '/' . $dirName . '/Pages/ChangelogPage.php',

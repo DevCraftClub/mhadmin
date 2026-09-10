@@ -1,0 +1,59 @@
+<script src="{{ dle_home }}public/js/jquery3.js"></script>
+<script src="{{ dle_home }}public/editor/ace/code_editor.js"></script>
+<script src="{{ dle_home }}public/editor/ace/langs/{{ dle_lang_code|default('en')|e('html_attr') }}.js"></script>
+<script>
+    (function () {
+        function resizeExisting($ta) {
+            var aceEl = $ta.prev('.code_editor_area')[0];
+            if (!aceEl || typeof ace === 'undefined' || typeof ace.edit !== 'function') {
+                return;
+            }
+            var ed = ace.edit(aceEl);
+            if (ed && typeof ed.resize === 'function') {
+                ed.resize();
+            }
+        }
+
+        function initHtmlEditors() {
+            if (typeof code_editor !== 'function' || !window.jQuery) {
+                return;
+            }
+            setTimeout(function () {
+                window.jQuery('.html_editor').each(function () {
+                    var $ta = window.jQuery(this);
+                    if ($ta.prev().hasClass('code_editor_area')) {
+                        resizeExisting($ta);
+                        return;
+                    }
+                    code_editor($ta, {showGutter: false, useWorker: false});
+                });
+            }, 1);
+        }
+
+        function bindTabInit() {
+            var tabs = document.getElementById('settings-tabs');
+            if (!tabs) {
+                return;
+            }
+            tabs.addEventListener('tab-open', function () {
+                initHtmlEditors();
+            });
+            document.addEventListener('click', function (e) {
+                var t = e.target;
+                if (t && t.closest && t.closest('#settings-tabs')) {
+                    initHtmlEditors();
+                }
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                bindTabInit();
+                initHtmlEditors();
+            });
+        } else {
+            bindTabInit();
+            initHtmlEditors();
+        }
+    })();
+</script>

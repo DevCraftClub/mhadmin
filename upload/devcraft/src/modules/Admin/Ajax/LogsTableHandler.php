@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Ajax;
 
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DLEPlugins;
 use DevCraft\Core\Application;
 use DevCraft\Types\FilterSchema;
@@ -168,7 +170,7 @@ final class LogsTableHandler implements AjaxHandlerInterface {
 	 */
 	private function buildViewUrl(string $uuid, array $query): string {
 		$params = [
-			'mod'    => 'devcraft',
+			'mod'    => AdminIdentity::mod(),
 			'action' => 'logs',
 			'uuid'   => $uuid,
 		];

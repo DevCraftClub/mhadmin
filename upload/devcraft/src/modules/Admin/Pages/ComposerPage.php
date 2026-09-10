@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Pages;
 
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DLEPlugins;
 use DevCraft\Core\Application;
 use DevCraft\Core\Config\Paths;
@@ -44,7 +46,7 @@ final class ComposerPage extends AbstractPage {
 				'filter_rules'             => $rules,
 				'filter_chips'             => $filterService->buildChipViewModel($rules, $schema),
 				'filter_catalog'           => $filterService->buildCatalogViewModel($schema, $repository),
-				'table_source_url'         => Paths::ajaxUrl('composer_table', 'admin', 'devcraft'),
+				'table_source_url'         => Paths::ajaxUrl('composer_table', 'admin', AdminIdentity::mod()),
 				'table_initial_source_url' => $filterService->buildTableAjaxUrl(
 					$query,
 					(string) ($dle_login_hash ?? ''),

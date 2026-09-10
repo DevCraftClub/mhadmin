@@ -27,6 +27,9 @@ declare(strict_types=1);
 error_reporting(E_ALL^E_WARNING^E_DEPRECATED^E_NOTICE);
 ini_set('error_reporting', E_ALL^E_WARNING^E_DEPRECATED^E_NOTICE);
 
+$GLOBALS['__dc_ajax_t0'] = hrtime(true);
+$GLOBALS['__dc_ajax_marks'] = ['entry' => 0.0];
+
 define('DATALIFEENGINE', true);
 define('ROOT_DIR', dirname(__DIR__));
 define('ENGINE_DIR', ROOT_DIR . '/engine');
@@ -36,8 +39,15 @@ require_once ENGINE_DIR . '/classes/plugins.class.php';
 /** Подключает базовые функции DLE (вспомогательные процедуры движка). */
 require_once DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php');
 
-/** Инициализирует минимальную админ-сессию DLE до загрузки init.php. */
-require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/src/bootstrap/ajax-session.php');
+$dcAjaxController = (string) ($_REQUEST['controller'] ?? $_REQUEST['module'] ?? 'admin');
+
+if($dcAjaxController === 'public') {
+	/** Сессия участника сайта (без allow_admin) для публичного AJAX. */
+	require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/src/bootstrap/ajax-public-session.php');
+} else {
+	/** Инициализирует минимальную админ-сессию DLE до загрузки init.php. */
+	require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/src/bootstrap/ajax-session.php');
+}
 
 while(ob_get_level() > 0) {
 	ob_end_clean();

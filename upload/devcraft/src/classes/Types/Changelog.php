@@ -67,11 +67,15 @@ final class Changelog extends AbstractType {
 		$result = [];
 
 		foreach($entries as $entry) {
-			if(!is_array($entry)) {
+			if($entry instanceof self) {
+				$result[] = $entry;
+
 				continue;
 			}
 
-			$result[] = self::fromArray($entry);
+			if(is_array($entry)) {
+				$result[] = self::fromArray($entry);
+			}
 		}
 
 		return $result;

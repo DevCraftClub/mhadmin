@@ -16,9 +16,10 @@ declare(strict_types=1);
 
 namespace DevCraft\Form;
 
-use DevCraft\Types\FormField;
 use InvalidArgumentException;
+use DevCraft\Types\FormField;
 use DevCraft\Types\FormSchema;
+use DevCraft\Core\Support\DataManager;
 
 /**
  * Fluent-строитель одного поля формы в цепочке FormSchemaBuilder.
@@ -173,7 +174,7 @@ final class FormFieldBuilder {
 	 *     $field->metro(['data-role' => 'input']);
 	 */
 	public function metro(array $metro): self {
-		$this->metro = $metro;
+		$this->metro = array_merge($this->metro, $metro);
 
 		return $this;
 	}
@@ -278,6 +279,51 @@ final class FormFieldBuilder {
 	 */
 	public function textarea(string $id, string $label): self {
 		return $this->sectionBuilder->beginField($id, 'textarea', $label);
+	}
+
+	/**
+	 * Начинает описание WYSIWYG-поля (TinyMCE).
+	 *
+	 * Класс `ajaxwysiwygeditor` — селектор include `tinymce_editor_scripts.twig`.
+	 * Второй класс: `dc-{toTranslit($id)}-editor`.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $id     Идентификатор поля.
+	 * @param   string  $label  Подпись.
+	 *
+	 * @return self Новый строитель textarea-поля с TinyMCE.
+	 *
+	 * @example
+	 *     $field->editor('pm_body', 'Текст ЛС');
+	 */
+	public function editor(string $id, string $label): self {
+		return $this->sectionBuilder->beginField($id, 'textarea', $label)->metro([
+			'class' => 'ajaxwysiwygeditor dc-' . DataManager::toTranslit($id) . '-editor',
+			'role'  => false,
+		]);
+	}
+
+	/**
+	 * Начинает описание поля исходника HTML (ACE, не WYSIWYG).
+	 *
+	 * Класс `html_editor` — селектор include `code_editor_scripts.twig`.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $id     Идентификатор поля.
+	 * @param   string  $label  Подпись.
+	 *
+	 * @return self Новый строитель textarea-поля с ACE.
+	 *
+	 * @example
+	 *     $field->codeViewer('email_body', 'Тело письма');
+	 */
+	public function codeViewer(string $id, string $label): self {
+		return $this->sectionBuilder->beginField($id, 'textarea', $label)->metro([
+			'class' => 'html_editor',
+			'role'  => false,
+		]);
 	}
 
 	/**

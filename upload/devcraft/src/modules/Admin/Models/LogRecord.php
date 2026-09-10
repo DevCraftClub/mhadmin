@@ -103,28 +103,4 @@ class LogRecord extends AbstractEntity {
 		$this->time = new DateTimeImmutable();
 	}
 
-	/**
-	 * Возвращает значение колонки по логическому имени для таблицы и фильтров.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   string  $name  Имя колонки (`id`, `log_type`, `plugin`, `fn_name`, `time`, `message`).
-	 *
-	 * @return mixed Скалярное значение колонки или `null` для неизвестного имени.
-	 *
-	 * @example
-	 *     $type = $record->getColumnVal('log_type');
-	 */
-	public function getColumnVal(string $name): mixed {
-		return match ($name) {
-			'id'               => $this->id(),
-			'log_type', 'type' => $this->log_type,
-			'plugin'           => $this->plugin,
-			'fn_name', 'fn'    => $this->fn_name,
-			'time'             => $this->time->format('Y-m-d H:i:s'),
-			'message'          => $this->message,
-			default            => NULL,
-		};
-	}
-
 }

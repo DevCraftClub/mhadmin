@@ -122,19 +122,51 @@ final class Registry {
 	}
 
 	/**
+	 * Контексты модулей с extends === $hostMod (без повторного enrich).
+	 *
+	 * @return list<PluginContext>
+	 */
+	public function extensionsOf(string $hostMod): array {
+		if($hostMod === '') {
+			return [];
+		}
+
+		$list = [];
+
+		foreach($this->listModuleDirectories() as $dirName) {
+			$context = $this->forModuleDir($dirName, NULL, false);
+
+			if($context === NULL) {
+				continue;
+			}
+
+			$extends = $context->moduleData()->extends;
+
+			if($extends === NULL || $extends !== $hostMod) {
+				continue;
+			}
+
+			$list[] = $context;
+		}
+
+		return $list;
+	}
+
+	/**
 	 * Загружает контекст плагина по имени каталога модуля.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param   string       $moduleDir    Имя каталога относительно DEVCRAFT_MODULES.
-	 * @param   string|null  $modOverride  Переопределение mod из манифеста (необязательно).
+	 * @param   string       $moduleDir         Имя каталога относительно DEVCRAFT_MODULES.
+	 * @param   string|null  $modOverride       Переопределение mod из манифеста (необязательно).
+	 * @param   bool         $applyExtensions   Подмешать сателлиты с extends на этот mod.
 	 *
 	 * @return PluginContext|null Контекст плагина или null при ошибке загрузки.
 	 * @example
 	 *        $plugin = Application::instance()->registry()->forModuleDir('Admin', 'devcraft');
 	 *
 	 */
-	public function forModuleDir(string $moduleDir, ?string $modOverride = NULL): ?PluginContext {
+	public function forModuleDir(string $moduleDir, ?string $modOverride = NULL, bool $applyExtensions = true): ?PluginContext {
 		$moduleDir = trim($moduleDir, '/\\');
 
 		if($moduleDir === '' || str_contains($moduleDir, '..')) {
@@ -171,8 +203,13 @@ final class Registry {
 			}
 
 			$manifest = ModuleManifest::fromLoaded($effectiveMod, $loaded, $path);
+			$context  = new PluginContext($effectiveMod, $manifest, $path);
 
-			return new PluginContext($effectiveMod, $manifest, $path);
+			if($applyExtensions && ($manifest->extends === NULL || $manifest->extends === '')) {
+				ModuleExtensionMerger::enrich($context, $this);
+			}
+
+			return $context;
 		} catch(\Throwable $throwable) {
 			LogGenerator::for(Registry::class)->log($throwable->getMessage());
 

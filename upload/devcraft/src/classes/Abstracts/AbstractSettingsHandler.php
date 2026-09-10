@@ -24,6 +24,7 @@ use DevCraft\Core\Config\DevCraftConfig;
 use DevCraft\Core\Admin\SettingsFormService;
 use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Module\ModuleExtensionMerger;
 use DevCraft\Types\FormSchema;
 
 /**
@@ -94,10 +95,11 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 		}
 
 		if($result['valid'] !== []) {
-			$existing = DataManager::getConfig($schema->codename, NULL, $this->configName());
-			$prepared = $this->prepareConfig(
+			$hostValid = ModuleExtensionMerger::splitAndSaveExtensions($result['valid']);
+			$existing  = DataManager::getConfig($schema->codename, NULL, $this->configName());
+			$prepared  = $this->prepareConfig(
 				is_array($existing) ? $existing : [],
-				$result['valid'],
+				$hostValid,
 				$schema,
 			);
 
@@ -105,13 +107,15 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 				return $prepared;
 			}
 
-			if(!DataManager::saveConfig($schema->codename, $prepared)) {
-				return JsonResponse::fail(
-					__('Ошибка'),
-					__('Не удалось сохранить настройки'),
-					'save_failed',
-					500,
-				);
+			if($hostValid !== [] || $prepared !== (is_array($existing) ? $existing : [])) {
+				if(!DataManager::saveConfig($schema->codename, $prepared)) {
+					return JsonResponse::fail(
+						__('Ошибка'),
+						__('Не удалось сохранить настройки'),
+						'save_failed',
+						500,
+					);
+				}
 			}
 
 			DevCraftConfig::resetCache();

@@ -19,6 +19,7 @@ namespace DevCraft\Core\Admin;
 use DevCraft\Types\Changelog;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Module\PluginContext;
+use DevCraft\Core\Module\ModuleExtensionMerger;
 use DevCraft\Core\Interfaces\PageInterface;
 use DevCraft\Core\Interfaces\SettingsPageInterface;
 
@@ -66,7 +67,10 @@ final class PageOrchestrator {
 				return $vars;
 			}
 
-			$vars['settings'] = DataManager::getConfig($schema->codename);
+			$vars['settings'] = ModuleExtensionMerger::hydrateSettings(
+				DataManager::getConfig($schema->codename),
+				$schema,
+			);
 			$vars['form']     = $this->formService->buildViewModel(
 				$schema,
 				$page->supplementFormData(),

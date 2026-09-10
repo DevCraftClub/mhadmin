@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Pages;
 
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DevCraft\Core\Application;
 use DevCraft\Core\Module\PluginContext;
 use DevCraft\Core\Abstracts\AbstractPage;
@@ -42,7 +44,7 @@ final class DashboardPage extends AbstractPage {
 	 */
 	public function handle(): array {
 		$registry = Application::instance()->registry();
-		$plugin   = $registry->forMod('devcraft');
+		$plugin   = $registry->forMod(AdminIdentity::mod());
 		$meta     = $plugin?->meta() ?? [];
 		$context  = $this->adminContext();
 
@@ -53,7 +55,7 @@ final class DashboardPage extends AbstractPage {
 			$latest['teaser_items'] = $changelog[0]->teaserItems(3);
 		}
 
-		$mod         = $plugin?->mod() ?? 'devcraft';
+		$mod         = $plugin?->mod() ?? AdminIdentity::mod();
 		$menu        = [];
 		$composerUrl = '?mod=' . $mod . '&action=composer';
 		$crowdin     = $this->buildCrowdinDisplay($plugin);

@@ -51,8 +51,19 @@ final class ModuleManifestBuilder {
 
 	private ?Author $author = NULL;
 
+	private ?string $extends = NULL;
+
 	public static function create(): self {
 		return new self();
+	}
+
+	/**
+	 * Объявляет модуль сателлитом host-mod (меню/страницы/настройки встраиваются в host).
+	 */
+	public function extends(string $hostMod): self {
+		$this->extends = $hostMod;
+
+		return $this;
 	}
 
 	public function mod(string $mod): self {
@@ -264,6 +275,10 @@ final class ModuleManifestBuilder {
 
 		if($this->code !== NULL) {
 			$data['code'] = $this->code;
+		}
+
+		if($this->extends !== NULL && $this->extends !== '') {
+			$data['extends'] = $this->extends;
 		}
 
 		if($this->crowdinName !== NULL) {

@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Ajax;
 
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DevCraft\Core\Application;
 use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
@@ -59,7 +61,7 @@ final class CheckUpdateHandler implements AjaxHandlerInterface {
 	 *     $response = (new CheckUpdateHandler())->handle($request);
 	 */
 	public function handle(AjaxRequest $request): JsonResponse {
-		$plugin     = Application::instance()->registry()->forMod('devcraft');
+		$plugin     = Application::instance()->registry()->forMod(AdminIdentity::mod());
 		$meta       = $plugin?->meta() ?? [];
 		$resourceId = (int) ($request->data['resource_id'] ?? 0);
 

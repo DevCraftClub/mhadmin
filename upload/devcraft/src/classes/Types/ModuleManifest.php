@@ -47,6 +47,7 @@ use DevCraft\Builders\AuthorBuilder;
  * @property ModuleAssets                $assets            Публичные ассеты модуля.
  * @property Changelog[]                 $changelog         Записи журнала изменений.
  * @property ComposerType[]              $composerRequired  Обязательные пакеты Composer.
+ * @property string|null                 $extends           Host-mod, в который встраивается сателлит.
  */
 final readonly class ModuleManifest {
 
@@ -76,6 +77,7 @@ final readonly class ModuleManifest {
 	 * @param   ModuleAssets                 $assets            Публичные ассеты модуля.
 	 * @param   Changelog[]                  $changelog         Записи журнала изменений.
 	 * @param   ComposerType[]               $composerRequired  Обязательные пакеты Composer.
+	 * @param   string|null                  $extends           Host-mod для сателлита (`null` — самостоятельный модуль).
 	 *
 	 * @example
 	 *     $module = new ModuleManifest('devcraft', 'DevCraft', '200.4.0', 'DevCraft\\Modules\\Admin', '/path/to/module');
@@ -102,6 +104,7 @@ final readonly class ModuleManifest {
 		public ModuleAssets     $assets = new ModuleAssets(),
 		public array            $changelog = [],
 		public array            $composerRequired = [],
+		public ?string          $extends = NULL,
 	) {}
 
 	/**
@@ -186,6 +189,9 @@ final readonly class ModuleManifest {
 			assets          : $assets,
 			changelog       : $changelog,
 			composerRequired: $composer,
+			extends         : isset($manifest['extends']) && is_string($manifest['extends']) && $manifest['extends'] !== ''
+				? $manifest['extends']
+				: NULL,
 		);
 	}
 
@@ -233,6 +239,7 @@ final readonly class ModuleManifest {
 			'assets'            => $this->assets,
 			'changelog'         => $this->changelog,
 			'composer_required' => $this->composerRequired,
+			'extends'           => $this->extends,
 		];
 	}
 

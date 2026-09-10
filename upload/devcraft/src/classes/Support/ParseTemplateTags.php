@@ -19,7 +19,7 @@ use DLEPlugins;
  * Эталон: engine/modules/show.short.php, show.full.php, show.custom.php.
  *
  * @package    DevCraft
- * @since      200.5.0
+ * @since      200.4.0
  * @subpackage Core.Support
  */
 final class ParseTemplateTags {

@@ -68,17 +68,4 @@ class ComposerData extends AbstractEntity {
 		];
 	}
 
-	public function getColumnVal(string $name): mixed {
-		return match ($name) {
-			'id'              => $this->id(),
-			'package', 'name' => $this->package,
-			'version'         => $this->version,
-			'installed'       => $this->installed? '1' : '0',
-			'required'        => $this->required? '1' : '0',
-			'plugin'          => $this->plugin,
-			'appCode'         => $this->appCode,
-			default           => NULL,
-		};
-	}
-
 }

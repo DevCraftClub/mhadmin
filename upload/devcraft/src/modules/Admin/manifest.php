@@ -94,6 +94,6 @@ return ModuleManifestBuilder::create()
 		ComposerTypeBuilder::create('cycle/orm')->minVersion('2.9')->hardRequired()->build(),
 		ComposerTypeBuilder::create('symfony/translation')->minVersion('7.4')->hardRequired()->build(),
 	])
-	->changelog(require DLEPlugins::Check(__DIR__ . '/changelog.data.php'))
+	->changelog(require DLEPlugins::Check(DEVCRAFT_MODULES . '/Admin/changelog.data.php'))
 	->assets(ModuleAssetsBuilder::create()->js('admin.js'))
 	->build(__DIR__);

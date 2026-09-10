@@ -366,7 +366,7 @@ final class DatabaseGateway {
 	}
 
 	/**
-	 * Лениво создаёт и кэширует экземпляр ORM.
+	 * Лениво создаёт ORM. Схема кэшируется; GenerateMigrations — только при DEVCRAFT_GENERATE_MIGRATIONS.
 	 *
 	 * @since 171.3.0
 	 *
@@ -379,8 +379,31 @@ final class DatabaseGateway {
 
 		Paths::register();
 
-		$registry = new SchemaRegistry($this->generateManager());
-		[$schema_array, $migrator] = $this->compileSchema($registry);
+		$migrationsDir = Paths::src() . '/database/migrations';
+		$fingerprint   = $this->quickModelsSignature();
+		$schema_array  = $this->loadCachedSchema($fingerprint);
+		$needMigrate   = $this->migrationFilesNeedApply($migrationsDir);
+		$migrator      = null;
+
+		if($schema_array === null || $needMigrate) {
+			$migrator = $this->createMigratorForDirectory($migrationsDir);
+		}
+
+		if($schema_array === null) {
+			$path_resolver      = new EntityPathResolver($this->registry);
+			$model_directories  = $path_resolver->entityModelDirectories();
+			$generateMigrations = defined('DEVCRAFT_GENERATE_MIGRATIONS')
+				&& constant('DEVCRAFT_GENERATE_MIGRATIONS');
+
+			$registry     = new SchemaRegistry($this->generateManager());
+			$schema_array = $this->compileSchema(
+				$registry,
+				$model_directories,
+				$migrator ?? $this->createMigratorForDirectory($migrationsDir),
+				(bool) $generateMigrations,
+			);
+			$this->storeCachedSchema($fingerprint, $schema_array);
+		}
 
 		$schema            = new ORM\Schema($schema_array);
 		$factory           = new ORM\Factory($this->generateManager());
@@ -393,12 +416,26 @@ final class DatabaseGateway {
 			commandGenerator: $command_generator,
 		);
 
-		$capsule = new Capsule($this->generateManager()->database());
-
-		$this->skipCreateMigrationsForExistingTables($migrator);
-
-		while($migrator->run($capsule) !== NULL) {
+		// Миграции только если в каталоге больше файлов, чем записей в журнале.
+		if($needMigrate && $migrator !== null) {
+			$capsule = new Capsule($this->generateManager()->database());
 			$this->skipCreateMigrationsForExistingTables($migrator);
+
+			try {
+				while($migrator->run($capsule) !== NULL) {
+					$this->skipCreateMigrationsForExistingTables($migrator);
+				}
+			} catch(\Throwable) {
+				$this->skipCreateMigrationsForExistingTables($migrator);
+
+				try {
+					while($migrator->run($capsule) !== NULL) {
+						$this->skipCreateMigrationsForExistingTables($migrator);
+					}
+				} catch(\Throwable) {
+					// Таблицы уже существуют / дубликат create — ORM-схема всё равно готова.
+				}
+			}
 		}
 
 		$this->setManager();
@@ -407,12 +444,129 @@ final class DatabaseGateway {
 	}
 
 	/**
-	 * Возвращает менеджер базы данных Cycle, создавая его при необходимости.
-	 *
-	 * @since 171.3.0
-	 *
-	 * @return DatabaseManager Менеджер подключений.
+	 * Лёгкая подпись Models (один уровень, без RecursiveIterator).
 	 */
+	private function quickModelsSignature(): string {
+		$parts   = [];
+		$modules = Paths::src() . '/modules';
+
+		foreach(glob($modules . '/*/Models') ?: [] as $dir) {
+			$parts[] = $dir . ':' . (string) (@filemtime($dir) ?: 0);
+
+			foreach(glob($dir . '/*.php') ?: [] as $file) {
+				$parts[] = $file . ':' . (string) (@filemtime($file) ?: 0);
+			}
+		}
+
+		$composerModels = Paths::src() . '/classes/Composer/Models';
+
+		if(is_dir($composerModels)) {
+			$parts[] = $composerModels . ':' . (string) (@filemtime($composerModels) ?: 0);
+
+			foreach(glob($composerModels . '/*.php') ?: [] as $file) {
+				$parts[] = $file . ':' . (string) (@filemtime($file) ?: 0);
+			}
+		}
+
+		sort($parts);
+
+		return hash('sha256', implode('|', $parts));
+	}
+
+	/**
+	 * Есть ли файлы миграций, которых ещё нет в журнале (без загрузки классов).
+	 */
+	private function migrationFilesNeedApply(string $migrationsDir): bool {
+		$fileCount = count(glob($migrationsDir . '/*.php') ?: []);
+
+		if($fileCount === 0) {
+			return false;
+		}
+
+		$migrationTable = PREFIX . '_devcraft_migrations';
+
+		if(!$this->tableExists($migrationTable)) {
+			return true;
+		}
+
+		$result   = $this->query("SELECT COUNT(*) AS total FROM `{$migrationTable}`")->fetchAll();
+		$executed = isset($result[0]['total']) ? (int) $result[0]['total'] : 0;
+
+		return $fileCount > $executed;
+	}
+
+	/**
+	 * @return array<string, mixed>|null
+	 */
+	private function loadCachedSchema(string $fingerprint): ?array {
+		$path = rtrim(Paths::cache(), '/\\') . '/cycle_orm_schema.ser';
+
+		if(!is_file($path)) {
+			return null;
+		}
+
+		$raw = @file_get_contents($path);
+
+		if($raw === false || $raw === '') {
+			return null;
+		}
+
+		/** @var mixed $payload */
+		$payload = @unserialize($raw);
+
+		if(!is_array($payload)
+			|| ($payload['fingerprint'] ?? null) !== $fingerprint
+			|| !is_array($payload['schema'] ?? null)
+		) {
+			return null;
+		}
+
+		/** @var array<string, mixed> $schema */
+		$schema = $payload['schema'];
+
+		return $schema;
+	}
+
+	/**
+	 * @param array<string, mixed> $schema
+	 */
+	private function storeCachedSchema(string $fingerprint, array $schema): void {
+		$dir = rtrim(Paths::cache(), '/\\');
+
+		if(!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+			return;
+		}
+
+		$path = $dir . '/cycle_orm_schema.ser';
+		@file_put_contents($path, serialize([
+			'fingerprint' => $fingerprint,
+			'schema'      => $schema,
+		]), LOCK_EX);
+	}
+
+	private function createMigratorForDirectory(string $directory): Migrations\Migrator {
+		if(!is_dir($directory)) {
+			@mkdir($directory, 0775, true);
+		}
+
+		$migrator_config = new MigrationConfig(
+			[
+				'directory' => $directory,
+				'table'     => 'devcraft_migrations',
+				'safe'      => true,
+			],
+		);
+
+		$migrator = new Migrations\Migrator(
+			$migrator_config,
+			$this->generateManager(),
+			new Migrations\FileRepository($migrator_config),
+		);
+		$migrator->configure();
+
+		return $migrator;
+	}
+
 	private function generateManager(): DatabaseManager {
 		return $this->database_manager ??= new DatabaseManager($this->generateOrmConfig());
 	}
@@ -471,18 +625,23 @@ final class DatabaseGateway {
 	}
 
 	/**
-	 * Компилирует схему ORM и возвращает массив схемы вместе с мигратором.
+	 * Компилирует схему ORM (без автогенерации миграций, если не запрошено явно).
 	 *
 	 * @since 171.3.0
 	 *
-	 * @param   SchemaRegistry  $registry  Реестр Cycle Schema.
+	 * @param   SchemaRegistry         $registry            Реестр Cycle Schema.
+	 * @param   list<string>           $model_directories   Каталоги моделей.
+	 * @param   Migrations\Migrator    $migrator            Мигратор.
+	 * @param   bool                   $generateMigrations  Писать новые файлы миграций (только CLI/флаг).
 	 *
-	 * @return array{0: array<string, mixed>, 1: Migrations\Migrator} Схема и мигратор.
+	 * @return array<string, mixed> Схема ORM.
 	 */
-	private function compileSchema(SchemaRegistry $registry): array {
-		$path_resolver     = new EntityPathResolver($this->registry);
-		$model_directories = $path_resolver->entityModelDirectories();
-
+	private function compileSchema(
+		SchemaRegistry $registry,
+		array $model_directories,
+		Migrations\Migrator $migrator,
+		bool $generateMigrations = false,
+	): array {
 		if($model_directories === []) {
 			$class_locator = new ClassLocator(new \ArrayIterator([]));
 		} else {
@@ -491,59 +650,45 @@ final class DatabaseGateway {
 			$class_locator = new ClassLocator($files);
 		}
 
-		$migrator_config = new MigrationConfig(
-			[
-				'directory' => $path_resolver->migrationsDirectory(),
-				'table'     => 'devcraft_migrations',
-				'safe'      => true,
-			],
-		);
+		$generators = [
+			new Generator\ResetTables(),
+			new Annotated\Embeddings(new TokenizerEmbeddingLocator($class_locator)),
+			new Annotated\Entities(new TokenizerEntityLocator($class_locator)),
+			new Annotated\TableInheritance(),
+			new Annotated\MergeColumns(),
+			new Generator\GenerateRelations(),
+			new Generator\GenerateModifiers(),
+			new Generator\ValidateEntities(),
+			new Generator\RenderTables(),
+			new Generator\RenderRelations(),
+			new Generator\RenderModifiers(),
+			new Generator\ForeignKeys(),
+			new Annotated\MergeIndexes(),
+		];
 
-		$migrator = new Migrations\Migrator(
-			$migrator_config,
-			$this->generateManager(),
-			new Migrations\FileRepository($migrator_config),
-		);
+		if($generateMigrations) {
+			$generators[] = new Schema\Generator\Migrations\GenerateMigrations(
+				$migrator->getRepository(),
+				$migrator->getConfig(),
+				new SingleFileStrategy(
+					$migrator->getConfig(),
+					new NameBasedOnChangesGenerator(),
+				),
+			);
+		}
 
-		$migrator->configure();
+		$generators[] = new Generator\GenerateTypecast();
 
 		$compiler = new Compiler();
-		$schemas  = $compiler->compile(
-			$registry,
-			[
-				new Generator\ResetTables(),
-				new Annotated\Embeddings(new TokenizerEmbeddingLocator($class_locator)),
-				new Annotated\Entities(new TokenizerEntityLocator($class_locator)),
-				new Annotated\TableInheritance(),
-				new Annotated\MergeColumns(),
-				new Generator\GenerateRelations(),
-				new Generator\GenerateModifiers(),
-				new Generator\ValidateEntities(),
-				new Generator\RenderTables(),
-				new Generator\RenderRelations(),
-				new Generator\RenderModifiers(),
-				new Generator\ForeignKeys(),
-				new Annotated\MergeIndexes(),
-				new Schema\Generator\Migrations\GenerateMigrations(
-					$migrator->getRepository(),
-					$migrator->getConfig(),
-					new SingleFileStrategy(
-						$migrator->getConfig(),
-						new NameBasedOnChangesGenerator(),
-					),
-				),
-				new Generator\GenerateTypecast(),
-			],
-		);
 
-		return [$schemas, $migrator];
+		return $compiler->compile($registry, $generators);
 	}
 
 	/**
-	 * Помечает create-миграции как выполненные, если целевая таблица уже существует.
+	 * Помечает create/change-миграции выполненными, если объекты уже есть в БД.
 	 *
-	 * Это предотвращает повторный CREATE существующих таблиц и конфликты
-	 * вида "column already exists" для исторических миграций.
+	 * Create: таблица существует.
+	 * Change: первый add_index / add_column из имени уже есть — весь up() уже применяли вне журнала.
 	 *
 	 * @since 200.4.0
 	 */
@@ -564,22 +709,77 @@ final class DatabaseGateway {
 			$migrationName = $state->getName();
 			$tableKey      = '';
 
-			if(preg_match('/_create_dle_(.+?)(?:_change_|$)/', $migrationName, $matches) === 1) {
+			if(preg_match('/_create_(?:dle_)?([a-z0-9_]+?)(?:_create_|_change_|$)/', $migrationName, $matches) === 1) {
 				$tableKey = (string) ($matches[1] ?? '');
 			}
 
-			if($tableKey === '') {
-				continue;
+			$alreadyThere = false;
+			$tableName    = '';
+
+			if($tableKey !== '') {
+				$tableName    = PREFIX . '_' . $tableKey;
+				$alreadyThere = $this->tableExists($tableName);
+			} elseif(preg_match('/_change_dle_(.+?)_add_(.+)$/', $migrationName, $change) === 1) {
+				$tableKey  = (string) $change[1];
+				$tableName = PREFIX . '_' . $tableKey;
+				$ops       = 'add_' . $change[2];
+				$alreadyThere = $this->tableExists($tableName)
+					&& $this->changeMigrationFirstOpExists($tableName, $ops);
 			}
 
-			$tableName = PREFIX . '_' . $tableKey;
-
-			if(!$this->tableExists($tableName)) {
+			if(!$alreadyThere) {
 				continue;
 			}
 
 			$this->markMigrationAsExecuted($migrationTable, $migrationName);
 		}
+	}
+
+	/**
+	 * Проверяет, что первая операция change-миграции уже есть в таблице.
+	 */
+	private function changeMigrationFirstOpExists(string $tableName, string $ops): bool {
+		if(preg_match('/^add_index_([a-z0-9_]+?)(?=_add_|$)/', $ops, $m) === 1) {
+			return $this->indexExists($tableName, $m[1]);
+		}
+
+		if(preg_match('/^add_([a-z0-9_]+?)(?=_add_|$)/', $ops, $m) === 1) {
+			return $this->columnExists($tableName, $m[1]);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Есть ли индекс у таблицы.
+	 */
+	private function indexExists(string $tableName, string $indexName): bool {
+		$result = $this->query(
+			'SELECT COUNT(*) AS total FROM information_schema.statistics WHERE table_schema = :schema AND table_name = :table AND index_name = :idx',
+			[
+				'schema' => DBNAME,
+				'table'  => $tableName,
+				'idx'    => $indexName,
+			],
+		)->fetchAll();
+
+		return isset($result[0]['total']) && (int) $result[0]['total'] > 0;
+	}
+
+	/**
+	 * Есть ли колонка у таблицы.
+	 */
+	private function columnExists(string $tableName, string $columnName): bool {
+		$result = $this->query(
+			'SELECT COUNT(*) AS total FROM information_schema.columns WHERE table_schema = :schema AND table_name = :table AND column_name = :col',
+			[
+				'schema' => DBNAME,
+				'table'  => $tableName,
+				'col'    => $columnName,
+			],
+		)->fetchAll();
+
+		return isset($result[0]['total']) && (int) $result[0]['total'] > 0;
 	}
 
 	/**

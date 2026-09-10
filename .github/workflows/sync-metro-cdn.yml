@@ -1,0 +1,138 @@
+name: Sync Metro UI from CDN
+
+on:
+  schedule:
+    # 1-е число месяца, 06:00 UTC
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-metro-cdn
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DEVBOT_GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Download CDN and compare
+        id: download
+        run: |
+          set -euo pipefail
+          TMP="_metro_cdn"
+          rm -rf "$TMP"
+          mkdir -p "$TMP/css" "$TMP/js"
+
+          curl -fsSL -o "$TMP/css/metro.css"  "https://cdn.metroui.org.ua/current/metro.css"
+          curl -fsSL -o "$TMP/css/icons.css"  "https://cdn.metroui.org.ua/current/icons.css"
+          curl -fsSL -o "$TMP/js/metro.js"    "https://cdn.metroui.org.ua/current/metro.js"
+
+          HEADER="$(head -n 40 "$TMP/js/metro.js")"
+          if ! echo "$HEADER" | grep -qE 'Metro UI v[0-9]+\.[0-9]+\.[0-9]+'; then
+            echo "Cannot parse Metro UI version from metro.js header"
+            echo "$HEADER"
+            exit 1
+          fi
+          METRO_VERSION="$(echo "$HEADER" | sed -nE 's/.*Metro UI v([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' | head -n1)"
+          BUILD_LINE="$(echo "$HEADER" | grep -E '^\s*\* Build:' | head -n1 | sed 's/^[[:space:]]*\*[[:space:]]*//')"
+          {
+            echo "metro_version=${METRO_VERSION}"
+            echo "build_line<<EOF"
+            echo "${BUILD_LINE}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "Detected Metro UI v${METRO_VERSION}"
+          echo "Build: ${BUILD_LINE}"
+
+          REPO_METRO_CSS="upload/devcraft/src/templates/core/assets/css/metro.css"
+          REPO_ICONS_CSS="upload/devcraft/src/templates/core/assets/css/icons.css"
+          REPO_METRO_JS="upload/devcraft/src/templates/core/assets/js/metro.js"
+
+          CHANGED=0
+          cmp -s "$TMP/css/metro.css" "$REPO_METRO_CSS"  || CHANGED=1
+          cmp -s "$TMP/css/icons.css" "$REPO_ICONS_CSS"  || CHANGED=1
+          cmp -s "$TMP/js/metro.js"   "$REPO_METRO_JS"   || CHANGED=1
+          echo "changed=${CHANGED}" >> "$GITHUB_OUTPUT"
+
+          if [ "$CHANGED" = "0" ]; then
+            echo "No differences vs repository — skip PR"
+          else
+            echo "Differences found — will update branch and PR"
+          fi
+
+      - name: Create branch, commit and PR
+        if: steps.download.outputs.changed == '1'
+        env:
+          GH_TOKEN: ${{ secrets.DEVBOT_GITHUB_TOKEN }}
+          METRO_VERSION: ${{ steps.download.outputs.metro_version }}
+          BUILD_LINE: ${{ steps.download.outputs.build_line }}
+        run: |
+          set -euo pipefail
+          test -n "${GH_TOKEN}" || { echo "Missing secret DEVBOT_GITHUB_TOKEN"; exit 1; }
+          test -n "${METRO_VERSION}" || { echo "Empty METRO_VERSION"; exit 1; }
+
+          BRANCH="Dependencies/MetroUI"
+          DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)"
+          TITLE="chore(deps): Metro UI v${METRO_VERSION}"
+          CHECKED_AT="$(date -u +'%Y-%m-%d %H:%M UTC')"
+
+          git config user.name "DevBot CI"
+          git config user.email "ci@devcraft.club"
+
+          git fetch origin "${DEFAULT_BRANCH}"
+          git checkout -B "${BRANCH}" "origin/${DEFAULT_BRANCH}"
+
+          cp _metro_cdn/css/metro.css upload/devcraft/src/templates/core/assets/css/metro.css
+          cp _metro_cdn/css/icons.css upload/devcraft/src/templates/core/assets/css/icons.css
+          cp _metro_cdn/js/metro.js   upload/devcraft/src/templates/core/assets/js/metro.js
+
+          git add \
+            upload/devcraft/src/templates/core/assets/css/metro.css \
+            upload/devcraft/src/templates/core/assets/css/icons.css \
+            upload/devcraft/src/templates/core/assets/js/metro.js
+
+          if git diff --cached --quiet; then
+            echo "Staged diff empty — nothing to commit"
+            exit 0
+          fi
+
+          git commit -m "${TITLE}"
+          git push -u origin "${BRANCH}" --force-with-lease
+
+          BODY=$(cat <<EOF
+          ## Metro UI CDN update
+
+          - **Version:** v${METRO_VERSION}
+          - **${BUILD_LINE:-Build: (n/a)}**
+          - **Checked at:** ${CHECKED_AT}
+          - **Sources:**
+            - https://cdn.metroui.org.ua/current/metro.css
+            - https://cdn.metroui.org.ua/current/icons.css
+            - https://cdn.metroui.org.ua/current/metro.js
+
+          ### Changed files
+
+          - \`upload/devcraft/src/templates/core/assets/css/metro.css\`
+          - \`upload/devcraft/src/templates/core/assets/css/icons.css\`
+          - \`upload/devcraft/src/templates/core/assets/js/metro.js\`
+          EOF
+          )
+          BODY="$(printf '%s\n' "$BODY" | sed 's/^[[:space:]]*//')"
+
+          EXISTING_PR="$(gh pr list --head "${BRANCH}" --base "${DEFAULT_BRANCH}" --state open --json number -q '.[0].number // empty')"
+          if [ -n "${EXISTING_PR}" ]; then
+            gh pr edit "${EXISTING_PR}" --title "${TITLE}" --body "${BODY}"
+            echo "Updated existing PR #${EXISTING_PR}"
+          else
+            gh pr create --base "${DEFAULT_BRANCH}" --head "${BRANCH}" --title "${TITLE}" --body "${BODY}"
+            echo "Created new PR"
+          fi

@@ -1,0 +1,64 @@
+name: Sync assets to FTP
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'upload/devcraft/src/templates/core/assets/css/metro.css'
+      - 'upload/devcraft/src/templates/core/assets/css/icons.css'
+      - 'upload/devcraft/src/templates/core/assets/css/devcraft.css'
+      - 'upload/devcraft/src/templates/core/assets/css/devcraft.css.map'
+      - 'upload/devcraft/src/templates/core/assets/js/metro.js'
+      - 'upload/devcraft/src/templates/core/assets/js/i18n/metro.ru.js'
+      - 'upload/devcraft/src/templates/core/assets/js/i18n/translator.js'
+      - 'upload/devcraft/src/templates/core/assets/js/composer.js'
+      - 'upload/devcraft/src/templates/core/assets/js/dc_public.js'
+      - 'upload/devcraft/src/templates/core/assets/js/devcraft.js'
+      - 'upload/devcraft/src/templates/core/assets/js/filter.js'
+      - 'upload/devcraft/src/modules/Admin/Public/admin.js'
+      - '.github/assets/sync-map.yml'
+      - '.github/assets/stage_ftp.py'
+      - '.github/workflows/sync-assets-ftp.yml'
+
+concurrency:
+  group: sync-assets-ftp
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Stage files from sync-map.yml
+        run: |
+          set -euo pipefail
+          export STAGE=_ftp_stage
+          python3 .github/assets/stage_ftp.py
+          find "$STAGE" -type f | sort
+      - name: Upload to FTP
+        env:
+          FTP_ADDRESS: ${{ secrets.FTP_ADDRESS }}
+          FTP_USER_ASSETS: ${{ secrets.FTP_USER_ASSETS }}
+          FTP_PASSWORD_ASSETS: ${{ secrets.FTP_PASSWORD_ASSETS }}
+        run: |
+          set -euo pipefail
+          test -n "${FTP_ADDRESS}" || { echo "Missing secret FTP_ADDRESS"; exit 1; }
+          test -n "${FTP_USER_ASSETS}" || { echo "Missing secret FTP_USER_ASSETS"; exit 1; }
+          test -n "${FTP_PASSWORD_ASSETS}" || { echo "Missing secret FTP_PASSWORD_ASSETS"; exit 1; }
+          # Только staged дерево; assets.json / прочее на сервере не трогаем
+          lftp -c "
+            set ftp:ssl-allow no;
+            set net:max-retries 3;
+            set net:timeout 30;
+            open -u ${FTP_USER_ASSETS},${FTP_PASSWORD_ASSETS} ${FTP_ADDRESS};
+            mirror -R --verbose --no-perms _ftp_stage/ .;
+            bye
+          "

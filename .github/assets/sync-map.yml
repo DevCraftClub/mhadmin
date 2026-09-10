@@ -1,0 +1,26 @@
+# Карта синхронизации DevCraft assets → FTP assets.devcraft.club
+entries:
+  - repo: upload/devcraft/src/templates/core/assets/css/metro.css
+    ftp: assets/css/metro.css
+  - repo: upload/devcraft/src/templates/core/assets/css/icons.css
+    ftp: assets/css/icons.css
+  - repo: upload/devcraft/src/templates/core/assets/css/devcraft.css
+    ftp: assets/css/devcraft.css
+  - repo: upload/devcraft/src/templates/core/assets/css/devcraft.css.map
+    ftp: assets/css/devcraft.css.map
+  - repo: upload/devcraft/src/templates/core/assets/js/metro.js
+    ftp: assets/js/metro.js
+  - repo: upload/devcraft/src/templates/core/assets/js/i18n/metro.ru.js
+    ftp: assets/js/i18n/metro.ru.js
+  - repo: upload/devcraft/src/templates/core/assets/js/i18n/translator.js
+    ftp: assets/js/i18n/translator.js
+  - repo: upload/devcraft/src/templates/core/assets/js/composer.js
+    ftp: assets/js/composer.js
+  - repo: upload/devcraft/src/templates/core/assets/js/dc_public.js
+    ftp: assets/js/dc_public.js
+  - repo: upload/devcraft/src/templates/core/assets/js/devcraft.js
+    ftp: assets/js/devcraft.js
+  - repo: upload/devcraft/src/templates/core/assets/js/filter.js
+    ftp: assets/js/filter.js
+  - repo: upload/devcraft/src/modules/Admin/Public/admin.js
+    ftp: assets/js/admin.js

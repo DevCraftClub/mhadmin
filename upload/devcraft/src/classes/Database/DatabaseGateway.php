@@ -366,7 +366,8 @@ final class DatabaseGateway {
 	}
 
 	/**
-	 * Лениво создаёт ORM. Схема кэшируется; GenerateMigrations — только при DEVCRAFT_GENERATE_MIGRATIONS.
+	 * Лениво создаёт ORM. Схема кэшируется.
+	 * GenerateMigrations: DEVCRAFT_GENERATE_MIGRATIONS или чистая установка (нет таблиц ядра).
 	 *
 	 * @since 171.3.0
 	 *
@@ -381,9 +382,11 @@ final class DatabaseGateway {
 
 		$migrationsDir = Paths::src() . '/database/migrations';
 		$fingerprint   = $this->quickModelsSignature();
-		$schema_array  = $this->loadCachedSchema($fingerprint);
-		$needMigrate   = $this->migrationFilesNeedApply($migrationsDir);
+		$bootstrap     = $this->ormSchemaBootstrapNeeded();
+		$schema_array  = $bootstrap ? null : $this->loadCachedSchema($fingerprint);
+		$needMigrate   = $bootstrap || $this->migrationFilesNeedApply($migrationsDir);
 		$migrator      = null;
+		$didGenerate   = false;
 
 		if($schema_array === null || $needMigrate) {
 			$migrator = $this->createMigratorForDirectory($migrationsDir);
@@ -392,15 +395,16 @@ final class DatabaseGateway {
 		if($schema_array === null) {
 			$path_resolver      = new EntityPathResolver($this->registry);
 			$model_directories  = $path_resolver->entityModelDirectories();
-			$generateMigrations = defined('DEVCRAFT_GENERATE_MIGRATIONS')
-				&& constant('DEVCRAFT_GENERATE_MIGRATIONS');
+			$generateMigrations = $bootstrap
+				|| (defined('DEVCRAFT_GENERATE_MIGRATIONS') && constant('DEVCRAFT_GENERATE_MIGRATIONS'));
+			$didGenerate        = (bool) $generateMigrations;
 
 			$registry     = new SchemaRegistry($this->generateManager());
 			$schema_array = $this->compileSchema(
 				$registry,
 				$model_directories,
 				$migrator ?? $this->createMigratorForDirectory($migrationsDir),
-				(bool) $generateMigrations,
+				$didGenerate,
 			);
 			$this->storeCachedSchema($fingerprint, $schema_array);
 		}
@@ -416,8 +420,8 @@ final class DatabaseGateway {
 			commandGenerator: $command_generator,
 		);
 
-		// Миграции только если в каталоге больше файлов, чем записей в журнале.
-		if($needMigrate && $migrator !== null) {
+		// После GenerateMigrations файлы только что появились — всегда прогоняем migrator.
+		if(($needMigrate || $didGenerate) && $migrator !== null) {
 			$capsule = new Capsule($this->generateManager()->database());
 			$this->skipCreateMigrationsForExistingTables($migrator);
 
@@ -441,6 +445,19 @@ final class DatabaseGateway {
 		$this->setManager();
 
 		return $this->orm;
+	}
+
+	/**
+	 * Нет журнала миграций или таблиц ядра Admin — Cycle должен сам сгенерировать и применить схему.
+	 */
+	private function ormSchemaBootstrapNeeded(): bool {
+		foreach(['devcraft_migrations', 'devcraft_logs', 'devcraft_composer_data'] as $suffix) {
+			if(!$this->tableExists(PREFIX . '_' . $suffix)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

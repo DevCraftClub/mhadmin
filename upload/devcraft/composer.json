@@ -16,10 +16,6 @@
 		"cycle/orm": "^2.9",
 		"cycle/schema-migrations-generator": "^2.3",
 		"devcraftclub/dev-tools": "^1.1",
-		"fakerphp/faker": "^1.23",
-		"guzzlehttp/guzzle": "^7.15",
-		"league/oauth2-server": "^9.0",
-		"luzrain/telegram-bot-api": "^3.17",
 		"ramsey/uuid": "^4.7",
 		"spiral/pagination": "^3.0",
 		"symfony/dependency-injection": "^7.0",
@@ -27,8 +23,7 @@
 		"symfony/translation": "^7.4",
 		"symfony/twig-bridge": "^7.0",
 		"twig/cache-extra": "^3.24",
-		"twig/twig": "^3.14",
-		"vkcom/vk-php-sdk": "^5.0"
+		"twig/twig": "^3.14"
 	},
 	"autoload": {
 		"psr-4": {

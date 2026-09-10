@@ -460,7 +460,7 @@ final class Translation {
 	/**
 	 * Ключи фраз, для которых отсутствие перевода уже залогировано в текущем запросе.
 	 *
-	 * @since 200.4.1
+	 * @since 200.4.0
 	 * @var array<string, true>
 	 */
 	private static array $loggedMissingKeys = [];
@@ -471,7 +471,7 @@ final class Translation {
 	 * Symfony Translator при отсутствии перевода молча возвращает исходную фразу —
 	 * без этого лога пропущенные ключи было бы невозможно обнаружить.
 	 *
-	 * @since 200.4.1
+	 * @since 200.4.0
 	 *
 	 * @param   string  $phrase      Исходная фраза (ключ перевода).
 	 * @param   string  $translated  Результат перевода.

@@ -292,7 +292,7 @@ final readonly class ModuleManifest {
 	 *
 	 * Используется, если модуль не указал свой `licLink` в `meta` манифеста.
 	 *
-	 * @since 200.4.1
+	 * @since 200.4.0
 	 */
 	private const DEFAULT_LIC_LINK = 'https://devcraft.club/pages/licence-agreement/';
 

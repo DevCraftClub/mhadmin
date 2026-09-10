@@ -30,13 +30,6 @@ use DevCraft\Types\Changelog;
  */
 
 return [
-	ChangelogBuilder::create('200.4.1')
-		->date('2026-07-17')
-		->added([
-			__('Публичный клиент `dc_public.js` для шаблонов DLE и режим `controller=public` в `ajax.php` (сессия участника сайта).'),
-			__('Карточка справки по публичному JS на панели DevCraft Admin.'),
-		])
-		->build(),
 	ChangelogBuilder::create('200.4.0')
 		->date('2026-06-15')
 		->added([
@@ -49,6 +42,8 @@ return [
 			__('Обновление скриптов и стилей с сервера разработчика (assets.devcraft.club).'),
 			__('Генератор модулей для создания новых плагинов в структуре DevCraft.'),
 			__('Мультиязычность: русский, английский, немецкий, украинский — интерфейс и элементы Metro UI.'),
+			__('Публичный клиент `dc_public.js` для шаблонов DLE и режим `controller=public` в `ajax.php` (сессия участника сайта).'),
+			__('Карточка справки по публичному JS на панели DevCraft Admin.'),
 		])
 		->changed([
 			__('AjaxHandlerInterface возвращает ResponseInterface; существующие JSON-обработчики работают без изменений контракта.'),

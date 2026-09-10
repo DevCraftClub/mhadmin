@@ -75,24 +75,4 @@ final class FormSection extends AbstractType {
 		);
 	}
 
-	/**
-	 * Преобразует секцию формы в ассоциативный массив.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array<string, mixed> Сериализованная секция с полями.
-	 *
-	 * @example
-	 *     $data = $section->toArray();
-	 */
-	public function toArray(): array {
-		return [
-			'title'  => $this->title,
-			'fields' => array_map(
-				static fn(FormField $field): array => $field->toArray(),
-				$this->fields,
-			),
-		];
-	}
-
 }

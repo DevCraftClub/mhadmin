@@ -17,6 +17,8 @@ declare(strict_types=1);
 namespace DevCraft\Core\Abstracts;
 
 use DateTimeImmutable;
+use DateTimeInterface;
+use ReflectionProperty;
 use Cycle\ORM\Entity\Behavior;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Table\Index;
@@ -153,15 +155,40 @@ abstract class AbstractEntity {
 	}
 
 	/**
-	 * Возвращает значение колонки сущности по имени.
+	 * Возвращает значение колонки сущности по имени свойства или колонки.
+	 *
+	 * Ищет `$name`, camelCase и snake_case. `DateTimeInterface` приводится к
+	 * `Y-m-d H:i:s`, `bool` — к `0`/`1`. Неизвестное имя даёт `null`.
 	 *
 	 * @since 200.4.0
 	 *
 	 * @param   string  $name  Имя колонки или свойства.
 	 *
-	 * @return mixed Значение колонки.
+	 * @return mixed Значение колонки или `null`.
+	 *
+	 * @example
+	 *     $type = $record->getColumnVal('log_type');
 	 */
-	abstract public function getColumnVal(string $name): mixed;
+	public function getColumnVal(string $name): mixed {
+		if($name === 'id') {
+			return isset($this->id)? $this->id() : NULL;
+		}
+
+		foreach($this->columnNameCandidates($name) as $property) {
+			if(!property_exists($this, $property)) {
+				continue;
+			}
+
+			$ref = new ReflectionProperty($this, $property);
+			if(!$ref->isInitialized($this)) {
+				return NULL;
+			}
+
+			return $this->normalizeColumnValue($ref->getValue($this));
+		}
+
+		return NULL;
+	}
 
 	/**
 	 * Возвращает первичный ключ записи.
@@ -243,6 +270,28 @@ abstract class AbstractEntity {
 	 */
 	public function updatedAt(): ?DateTimeImmutable {
 		return $this->updatedAt;
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	private function columnNameCandidates(string $name): array {
+		$camel = lcfirst(str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $name))));
+		$snake = strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $name));
+
+		return array_values(array_unique([$name, $camel, $snake]));
+	}
+
+	private function normalizeColumnValue(mixed $value): mixed {
+		if($value instanceof DateTimeInterface) {
+			return $value->format('Y-m-d H:i:s');
+		}
+
+		if(is_bool($value)) {
+			return $value? 1 : 0;
+		}
+
+		return $value;
 	}
 
 }

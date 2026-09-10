@@ -22,11 +22,9 @@ use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Admin\Router;
 use DevCraft\Enums\AdminErrorKind;
 use DevCraft\Core\Module\Registry;
-use DevCraft\Core\Support\DleDataService;
 use DevCraft\Core\Twig\EnvironmentFactory;
 use DevCraft\Core\Admin\AdminErrorRenderer;
 use DevCraft\Core\Database\DatabaseGateway;
-use DevCraft\Core\Support\DataLoaderService;
 use DevCraft\Core\Exception\DevCraftException;
 use DevCraft\Core\Support\AssetsCheckerService;
 
@@ -34,7 +32,8 @@ use DevCraft\Core\Support\AssetsCheckerService;
  * Главный контейнер приложения DevCraft (Singleton).
  *
  * Инициализирует реестр модулей, Twig и лениво предоставляет сервисы
- * базы данных, загрузки данных и проверки ассетов.
+ * базы данных и проверки ассетов. Загрузка DLE-данных — static
+ * {@see \DevCraft\Core\Support\DataLoaderService} / {@see \DevCraft\Core\Support\DleDataService}.
  *
  * @package    DevCraft
  * @since      200.4.0
@@ -81,22 +80,6 @@ final class Application {
 	 * @var DatabaseGateway|null
 	 */
 	private ?DatabaseGateway $database = NULL;
-
-	/**
-	 * Сервис загрузки данных из таблиц DLE с кешированием.
-	 *
-	 * @since 200.4.0
-	 * @var DataLoaderService|null
-	 */
-	private ?DataLoaderService $dataLoader = NULL;
-
-	/**
-	 * Сервис агрегированных данных DLE (пользователи, категории и т.д.).
-	 *
-	 * @since 200.4.0
-	 * @var DleDataService|null
-	 */
-	private ?DleDataService $dleData = NULL;
 
 	/**
 	 * Сервис проверки целостности публичных ассетов.
@@ -243,38 +226,6 @@ final class Application {
 		$this->boot();
 
 		return $this->registry;
-	}
-
-	/**
-	 * Возвращает сервис агрегированных данных DLE с кешированием.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return DleDataService Сервис высокоуровневых данных DLE.
-	 * @example
-	 *        $users = Application::instance()->dleData()->users();
-	 *
-	 */
-	public function dleData(): DleDataService {
-		$this->boot();
-
-		return $this->dleData ??= new DleDataService($this->dataLoader());
-	}
-
-	/**
-	 * Возвращает сервис загрузки данных с учётом таймера кеша из настроек.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return DataLoaderService Сервис выборки данных DLE.
-	 * @example
-	 *        $rows = Application::instance()->dataLoader()->loadData(['table' => 'users']);
-	 *
-	 */
-	public function dataLoader(): DataLoaderService {
-		$this->boot();
-
-		return $this->dataLoader ??= new DataLoaderService($this->database());
 	}
 
 	/**

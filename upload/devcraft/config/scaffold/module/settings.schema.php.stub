@@ -1,0 +1,11 @@
+<?php
+
+declare(strict_types=1);
+
+use DevCraft\Form\FormSchemaBuilder;
+use DevCraft\Modules\%dir%\%dir%Identity;
+
+return FormSchemaBuilder::create(%dir%Identity::code())
+	->section(__('Общие'))
+		->checkbox('enabled', __('Включено'))
+	->build();

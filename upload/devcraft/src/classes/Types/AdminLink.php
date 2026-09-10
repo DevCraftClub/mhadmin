@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace DevCraft\Types;
 
 use DevCraft\Core\Abstracts\AbstractType;
+use DevCraft\Modules\Admin\AdminIdentity;
 
 /**
  * Элемент навигационного меню административной панели.
@@ -75,7 +76,7 @@ final class AdminLink extends AbstractType {
 	 * @param   string       $action     Ключ action страницы.
 	 * @param   string       $pageClass  Полное имя класса страницы.
 	 * @param   string|null  $extra      Дополнительное data-значение.
-	 * @param   string       $mod        Код модуля DLE (по умолчанию `devcraft`).
+	 * @param   string|null  $mod        DLE mod модуля (по умолчанию AdminIdentity::mod()).
 	 *
 	 * @return self Элемент меню типа `link`.
 	 *
@@ -87,8 +88,10 @@ final class AdminLink extends AbstractType {
 		string  $action,
 		string  $pageClass,
 		?string $extra = NULL,
-		string  $mod = 'devcraft',
+		?string $mod = NULL,
 	): self {
+		$mod ??= AdminIdentity::mod();
+
 		return new self(
 			name     : $name,
 			link     : '?mod=' . rawurlencode($mod) . '&action=' . rawurlencode($action),

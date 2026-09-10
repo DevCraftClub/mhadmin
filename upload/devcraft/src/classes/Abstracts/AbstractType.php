@@ -16,33 +16,13 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Abstracts;
 
+use Devcraft\Abstracts\AbstractReflection;
+
 /**
- * Базовый тип данных с сериализацией в массив и обратно.
+ * Базовый compatibility-layer для DTO DevCraft поверх Reflection mapper.
  *
  * @package    DevCraft
  * @since      200.4.0
  * @subpackage Core.Abstracts
  */
-abstract class AbstractType {
-
-	/**
-	 * Создаёт экземпляр типа из ассоциативного массива.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<string, mixed>  $data  Исходные данные.
-	 *
-	 * @return static Новый экземпляр типа.
-	 */
-	abstract public static function fromArray(array $data): static;
-
-	/**
-	 * Преобразует экземпляр типа в ассоциативный массив.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array<string, mixed> Сериализованное представление.
-	 */
-	abstract public function toArray(): array;
-
-}
+abstract class AbstractType extends AbstractReflection {}

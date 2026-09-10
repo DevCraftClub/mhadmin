@@ -241,5 +241,5 @@ function dc_bootstrap_build_response(string $operation): array {
 }
 
 function dc_bootstrap_send_json(array $payload): void {
-	echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+	echo json_encode($payload, JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
 }

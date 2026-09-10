@@ -19,6 +19,7 @@ namespace DevCraft\Form;
 use DevCraft\Types\FormField;
 use DevCraft\Types\FormSchema;
 use DevCraft\Types\FormSection;
+use DevCraft\Core\Support\DataManager;
 
 /**
  * Fluent-строитель секции формы с набором полей.
@@ -163,6 +164,40 @@ final class FormSectionBuilder {
 	 */
 	public function textarea(string $id, string $label): FormFieldBuilder {
 		return $this->beginField($id, 'textarea', $label);
+	}
+
+	/**
+	 * Добавляет WYSIWYG-поле (TinyMCE) в секцию.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $id     Идентификатор поля.
+	 * @param   string  $label  Подпись.
+	 *
+	 * @return FormFieldBuilder Строитель поля.
+	 */
+	public function editor(string $id, string $label): FormFieldBuilder {
+		return $this->beginField($id, 'textarea', $label)->metro([
+			'class' => 'ajaxwysiwygeditor dc-' . DataManager::toTranslit($id) . '-editor',
+			'role'  => false,
+		]);
+	}
+
+	/**
+	 * Добавляет поле исходника HTML (ACE, не WYSIWYG) в секцию.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   string  $id     Идентификатор поля.
+	 * @param   string  $label  Подпись.
+	 *
+	 * @return FormFieldBuilder Строитель поля.
+	 */
+	public function codeViewer(string $id, string $label): FormFieldBuilder {
+		return $this->beginField($id, 'textarea', $label)->metro([
+			'class' => 'html_editor',
+			'role'  => false,
+		]);
 	}
 
 	/**

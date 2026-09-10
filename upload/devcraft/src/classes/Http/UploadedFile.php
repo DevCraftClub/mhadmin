@@ -22,12 +22,21 @@ final class UploadedFile {
 	 * Создаёт экземпляр из ключа $_FILES.
 	 */
 	public static function fromFilesKey(string $key): self {
-		$file = $_FILES[$key] ?? NULL;
+		$file = $_FILES[$key] ?? null;
 
 		if(!is_array($file)) {
 			throw new RuntimeException(__('Файл не передан'));
 		}
 
+		return self::fromArray($file);
+	}
+
+	/**
+	 * Создаёт экземпляр из массива в формате $_FILES / Slim temp.
+	 *
+	 * @param array{name?: string, type?: string, tmp_name?: string, error?: int, size?: int} $file
+	 */
+	public static function fromArray(array $file): self {
 		$error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
 
 		if($error !== UPLOAD_ERR_OK) {
@@ -36,7 +45,7 @@ final class UploadedFile {
 
 		$tmp = (string) ($file['tmp_name'] ?? '');
 
-		if($tmp === '' || !is_uploaded_file($tmp)) {
+		if($tmp === '' || (!is_uploaded_file($tmp) && !is_file($tmp))) {
 			throw new RuntimeException(__('Временный файл загрузки недоступен'));
 		}
 
@@ -86,9 +95,20 @@ final class UploadedFile {
 			throw new RuntimeException(__('Не удалось создать каталог для файлов'));
 		}
 
-		if(!move_uploaded_file($this->tmpName(), $targetPath)) {
-			throw new RuntimeException(__('Не удалось сохранить загруженный файл'));
+		$tmp = $this->tmpName();
+		if(@move_uploaded_file($tmp, $targetPath)) {
+			return;
 		}
+		if(@rename($tmp, $targetPath)) {
+			return;
+		}
+		if(@copy($tmp, $targetPath)) {
+			@unlink($tmp);
+
+			return;
+		}
+
+		throw new RuntimeException(__('Не удалось сохранить загруженный файл'));
 	}
 
 }

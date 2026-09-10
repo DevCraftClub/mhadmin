@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Pages;
 
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DLEPlugins;
 use DevCraft\Core\Application;
 use DevCraft\Core\Config\Paths;
@@ -74,7 +76,7 @@ final class LogsPage extends AbstractPage {
 				'filter_chips'             => $chips,
 				'filter_catalog'           => $catalog,
 				'query'                    => $query,
-				'table_source_url'         => Paths::ajaxUrl('logs_table', 'admin', 'devcraft'),
+				'table_source_url'         => Paths::ajaxUrl('logs_table', 'admin', AdminIdentity::mod()),
 				'table_initial_source_url' => $filterService->buildLogsTableAjaxUrl(
 					$query,
 					$dle_login_hash ?? '',
@@ -139,7 +141,7 @@ final class LogsPage extends AbstractPage {
 	private function buildBackUrl(): string {
 		$params = $_GET;
 		unset($params['uuid']);
-		$params['mod']    = 'devcraft';
+		$params['mod']    = AdminIdentity::mod();
 		$params['action'] = 'logs';
 
 		return '?' . http_build_query($params);

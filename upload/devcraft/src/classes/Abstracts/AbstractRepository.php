@@ -231,7 +231,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	 *
 	 * Вызывает `beforeSave()` у сущности, если метод есть.
 	 *
-	 * @since 200.4.1
+	 * @since 200.4.0
 	 *
 	 * @param   object  $entity  Экземпляр сущности для сохранения.
 	 *

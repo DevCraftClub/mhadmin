@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    [
+        'version' => '%version%',
+        'date'    => '%year%-01-01',
+        'changes' => [
+            'added' => [
+                __('Основной релиз'),
+            ],
+        ],
+    ],
+];
+

@@ -24,6 +24,7 @@ use InvalidArgumentException;
 use DevCraft\Core\Application;
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Core\I18n\Translation;
 use DevCraft\Modules\Admin\Models\LogRecord;
 
 /**
@@ -483,15 +484,17 @@ final class LogGenerator {
 	 *     $types = LogGenerator::allowedTypes();
 	 */
 	public static function allowedTypes(): array {
+		$t = static fn(string $phrase): string => Translation::translateForLog($phrase);
+
 		$baseTypes = [
-			'all'      => __('Все типы ошибок'),
-			'error'    => __('Ошибка'),
-			'info'     => __('Информация'),
-			'notice'   => __('Уведомление / К справке'),
-			'warning'  => __('Предупреждение'),
-			'critical' => __('Критическая ошибка'),
-			'debug'    => __('Отладка'),
-			'urgent'   => __('Требует срочного решения'),
+			'all'      => $t('Все типы ошибок'),
+			'error'    => $t('Ошибка'),
+			'info'     => $t('Информация'),
+			'notice'   => $t('Уведомление / К справке'),
+			'warning'  => $t('Предупреждение'),
+			'critical' => $t('Критическая ошибка'),
+			'debug'    => $t('Отладка'),
+			'urgent'   => $t('Требует срочного решения'),
 		];
 
 		$baseTypes['warn']      = $baseTypes['warning'];
@@ -603,11 +606,11 @@ final class LogGenerator {
 		mixed  $message,
 	): string {
 		$fields = [
-			__('Уведомление')  => $type,
-			__('Модуль')       => $service,
-			__('Функция')      => $functionName,
-			__('Дата и время') => $dateTime,
-			__('Ошибка')       => $message,
+			Translation::translateForLog('Уведомление')  => $type,
+			Translation::translateForLog('Модуль')       => $service,
+			Translation::translateForLog('Функция')      => $functionName,
+			Translation::translateForLog('Дата и время') => $dateTime,
+			Translation::translateForLog('Ошибка')       => $message,
 		];
 
 		return implode(
@@ -629,17 +632,34 @@ final class LogGenerator {
 	 *
 	 * @return mixed Значение без CURLFile-объектов.
 	 */
-	private static function preventCurlFile(mixed $message): mixed {
-		if(is_array($message)) {
-			foreach($message as $idx => $mess) {
-				if($mess instanceof \CURLFile) {
-					$message[$idx] = (array) $mess;
-				}
+	private static function preventCurlFile(mixed $message, int $depth = 0, array &$seen = []): mixed {
+		if($depth > 32) {
+			return '[max-depth]';
+		}
 
-				if(is_array($mess)) {
-					$message[$idx] = self::preventCurlFile($mess);
+		if(is_array($message)) {
+			foreach($seen as $prev) {
+				if($prev === $message) {
+					return '[cycle]';
 				}
 			}
+
+			$seen[] = $message;
+			$out    = [];
+
+			foreach($message as $idx => $mess) {
+				if($mess instanceof \CURLFile) {
+					$out[$idx] = (array) $mess;
+				} elseif(is_array($mess)) {
+					$out[$idx] = self::preventCurlFile($mess, $depth + 1, $seen);
+				} else {
+					$out[$idx] = $mess;
+				}
+			}
+
+			array_pop($seen);
+
+			return $out;
 		}
 
 		if($message instanceof \CURLFile) {
@@ -789,11 +809,11 @@ final class LogGenerator {
 
 		$typeDescription = self::allowedType($type);
 		$tgMessage       = [
-			'<b>' . __('Тип') . "</b>: {$typeDescription}",
-			'<b>' . __('Время') . "</b>: {$message['datetime']}",
-			'<b>' . __('Плагин') . "</b>: {$message['plugin']}",
-			'<b>' . __('Функция') . "</b>: {$message['function_name']}",
-			'<b>' . __('Описание') . '</b>: <code>' . self::normalizeLogValue($message['message'] ?? '') . '</code>',
+			'<b>' . Translation::translateForLog('Тип') . "</b>: {$typeDescription}",
+			'<b>' . Translation::translateForLog('Время') . "</b>: {$message['datetime']}",
+			'<b>' . Translation::translateForLog('Плагин') . "</b>: {$message['plugin']}",
+			'<b>' . Translation::translateForLog('Функция') . "</b>: {$message['function_name']}",
+			'<b>' . Translation::translateForLog('Описание') . '</b>: <code>' . self::normalizeLogValue($message['message'] ?? '') . '</code>',
 		];
 
 		$botToken         = self::telegramBot();
@@ -812,7 +832,9 @@ final class LogGenerator {
 		if($response === false) {
 			$originalTelegramSendFlag = self::$telegram_send;
 			self::setTelegramSend(false);
-			self::dispatchLog('LogGenerator', 'telegramLog', ['response' => $response, 'url' => $url]);
+			// F17: в лог — URL без bot-токена
+			$safeUrl = preg_replace('#/bot[^/]+/#', '/bot***/', $url) ?? 'https://api.telegram.org/bot***/sendMessage';
+			self::dispatchLog('LogGenerator', 'telegramLog', ['response' => $response, 'url' => $safeUrl]);
 			self::setTelegramSend($originalTelegramSendFlag);
 		}
 	}

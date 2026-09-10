@@ -62,6 +62,10 @@ if(!function_exists('translate')) {
 			return $phrase;
 		}
 
+		if(Translation::isInitializing()) {
+			return $params === [] ? $phrase : strtr($phrase, $params);
+		}
+
 		$config = DevCraftConfig::raw();
 
 		if(!isset($config['language']) && !isset($config['locales_path'])) {
@@ -85,9 +89,9 @@ if(!function_exists('translate')) {
 
 			return Translation::getTranslationWithParameters($phrase, $params);
 		} catch(Throwable $e) {
-			LogGenerator::for('functions')->log($e->getMessage());
+			@error_log('[DevCraft] translate(): ' . $e->getMessage());
 
-			return $phrase;
+			return $params === [] ? $phrase : strtr($phrase, $params);
 		}
 	}
 }

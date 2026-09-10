@@ -99,6 +99,21 @@ final class JsonResponse implements ResponseInterface {
 	) {}
 
 	/**
+	 * Возвращает копию ответа с дополнительными ключами в data (для диагностики).
+	 *
+	 * @param   array<string, mixed>  $extra  Данные для слияния в data.
+	 */
+	public function withData(array $extra): self {
+		$payload         = $this->payload;
+		$payload['data'] = array_merge(
+			is_array($payload['data'] ?? null) ? $payload['data'] : [],
+			$extra,
+		);
+
+		return new self($payload, $this->status_code);
+	}
+
+	/**
 	 * Формирует успешный ответ с toast-уведомлением.
 	 *
 	 * @since 200.4.0

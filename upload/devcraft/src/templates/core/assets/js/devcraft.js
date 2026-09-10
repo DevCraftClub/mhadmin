@@ -54,6 +54,7 @@
     class DevCraftAssets {}
     class DevCraftDashboard {}
     class DevCraftSettings {}
+    class DevCraftLoader {}
 
     const DevCraftDebug = {
         FORCE: null,
@@ -69,10 +70,11 @@
                 return;
             }
             const prefix = '[DevCraft:' + channel + '] ' + step;
+            const write = typeof console.debug === 'function' ? console.debug : console.info;
             if (payload !== undefined) {
-                console.info(prefix, payload);
+                write.call(console, prefix, payload);
             } else {
-                console.info(prefix);
+                write.call(console, prefix);
             }
         },
         dumpFilterState() {
@@ -90,6 +92,7 @@
         static Assets = DevCraftAssets;
         static Dashboard = DevCraftDashboard;
         static Settings = DevCraftSettings;
+        static Loader = DevCraftLoader;
         static Debug = DevCraftDebug;
 
         static boot() {
@@ -107,6 +110,8 @@
         static toast(message) { return DevCraft.Metro.toast(message); }
         static notify(title, message, type) { return DevCraft.Metro.notify(title, message, type); }
         static notifyError(title, message, details) { return DevCraft.Metro.notifyError(title, message, details); }
+        static showLoader(text) { return DevCraft.Loader.show(text); }
+        static hideLoader() { return DevCraft.Loader.hide(); }
         static handleApiNotice(payload) { return DevCraft.Ajax.handleNotice(payload); }
         static runAssetsCheck(options) { return DevCraft.Assets.runCheck(options); }
         static runUpdateCheck() { return DevCraft.Dashboard.runUpdateCheck(); }
@@ -157,6 +162,104 @@
     function dcNotifyError(title, message, details) {
         dcNotify(title, message, 'error');
         console.error('[DevCraft]', title, message, details);
+    }
+
+    const DC_LOADER_SNIPPETS = [
+        {
+            label: 'PHP',
+            lines: [
+                '<span class="dc-code-loader__kw">require_once</span> <span class="dc-code-loader__str">\'bootstrap.php\'</span>;',
+                '$api-><span class="dc-code-loader__fn">sync</span>();',
+                'status: <span class="dc-code-loader__str">processing</span> <span class="dc-code-loader__cursor"></span>',
+            ],
+        },
+        {
+            label: 'JavaScript',
+            lines: [
+                '<span class="dc-code-loader__kw">import</span> { <span class="dc-code-loader__fn">save</span> } <span class="dc-code-loader__kw">from</span> <span class="dc-code-loader__str">\'admin\'</span>;',
+                '<span class="dc-code-loader__kw">await</span> save();',
+                'status: <span class="dc-code-loader__str">please wait</span> <span class="dc-code-loader__cursor"></span>',
+            ],
+        },
+        {
+            label: 'Python',
+            lines: [
+                '<span class="dc-code-loader__kw">from</span> core <span class="dc-code-loader__kw">import</span> <span class="dc-code-loader__fn">sync</span>',
+                '<span class="dc-code-loader__fn">sync</span>()',
+                'status: <span class="dc-code-loader__str">running</span> <span class="dc-code-loader__cursor"></span>',
+            ],
+        },
+        {
+            label: 'Go',
+            lines: [
+                '<span class="dc-code-loader__kw">package</span> main',
+                '<span class="dc-code-loader__kw">func</span> <span class="dc-code-loader__fn">process</span>() {}',
+                'status: <span class="dc-code-loader__str">working</span> <span class="dc-code-loader__cursor"></span>',
+            ],
+        },
+        {
+            label: 'Rust',
+            lines: [
+                '<span class="dc-code-loader__kw">use</span> crate::<span class="dc-code-loader__fn">worker</span>;',
+                '<span class="dc-code-loader__fn">worker</span>::run();',
+                'status: <span class="dc-code-loader__str">hold on</span> <span class="dc-code-loader__cursor"></span>',
+            ],
+        },
+    ];
+    let dcLoaderDepth = 0;
+
+    function dcLoaderNode(id) {
+        return document.getElementById(id);
+    }
+
+    function dcLoaderRender() {
+        const sample = DC_LOADER_SNIPPETS[Math.floor(Math.random() * DC_LOADER_SNIPPETS.length)] || DC_LOADER_SNIPPETS[0];
+        const label = dcLoaderNode('dc-code-loader-label');
+        const line1 = dcLoaderNode('dc-code-loader-line-1');
+        const line2 = dcLoaderNode('dc-code-loader-line-2');
+        const line3 = dcLoaderNode('dc-code-loader-line-3');
+
+        if (label) {
+            label.textContent = sample.label;
+        }
+        if (line1) {
+            line1.innerHTML = sample.lines[0] || '';
+        }
+        if (line2) {
+            line2.innerHTML = sample.lines[1] || '';
+        }
+        if (line3) {
+            line3.innerHTML = sample.lines[2] || '';
+        }
+    }
+
+    function dcLoaderShow(text) {
+        const root = dcLoaderNode('dc-code-loader');
+        const hint = dcLoaderNode('dc-code-loader-hint');
+
+        dcLoaderDepth += 1;
+        if (!root) {
+            return;
+        }
+
+        dcLoaderRender();
+        if (hint) {
+            hint.textContent = text || t('Пожалуйста, подождите, идёт обработка…');
+        }
+        root.classList.add('is-visible');
+        root.setAttribute('aria-hidden', 'false');
+    }
+
+    function dcLoaderHide() {
+        const root = dcLoaderNode('dc-code-loader');
+
+        dcLoaderDepth = Math.max(0, dcLoaderDepth - 1);
+        if (dcLoaderDepth > 0 || !root) {
+            return;
+        }
+
+        root.classList.remove('is-visible');
+        root.setAttribute('aria-hidden', 'true');
     }
 
     /**
@@ -376,6 +479,8 @@
         const userHashInput = form.querySelector('input[name="user_hash"]');
         const userHash = userHashInput ? userHashInput.value : getUserHash();
 
+        dcLoaderShow(t('Сохраняем изменения, пожалуйста подождите…'));
+
         return fetch(saveUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -390,6 +495,8 @@
                 handleApiNotice(payload);
 
                 return payload;
+            }).finally(function () {
+                dcLoaderHide();
             });
     };
 
@@ -474,6 +581,8 @@
             params.mod = mod;
         }
 
+        dcLoaderShow(data && typeof data.__loaderText === 'string' ? data.__loaderText : t('Выполняем запрос, пожалуйста подождите…'));
+
         return fetch(ajaxUrl(ajaxBaseUrl(), params), {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -481,7 +590,9 @@
                 user_hash: getUserHash(),
                 data: JSON.stringify(data || {})
             }).toString()
-        }).then(parseJsonResponse);
+        }).then(parseJsonResponse).finally(function () {
+            dcLoaderHide();
+        });
     }
 
     /**
@@ -496,6 +607,8 @@
         if (!formData.has('user_hash')) {
             formData.append('user_hash', getUserHash());
         }
+
+        dcLoaderShow(t('Загружаем данные, пожалуйста подождите…'));
 
         return new Promise(function (resolve, reject) {
             const xhr = new XMLHttpRequest();
@@ -513,11 +626,13 @@
                 try {
                     payload = JSON.parse(xhr.responseText || '{}');
                 } catch (e) {
+                    dcLoaderHide();
                     reject(new Error(t('Не удалось разобрать JSON-ответ')));
                     return;
                 }
 
                 if (xhr.status >= 200 && xhr.status < 300) {
+                    dcLoaderHide();
                     resolve(payload);
                     return;
                 }
@@ -526,10 +641,12 @@
                     handleApiNotice(payload);
                 }
 
+                dcLoaderHide();
                 reject(payload || new Error('HTTP ' + xhr.status));
             });
 
             xhr.addEventListener('error', function () {
+                dcLoaderHide();
                 reject(new Error(t('Сетевая ошибка')));
             });
 
@@ -546,6 +663,8 @@
     DevCraftMetro.dialogElement = dcMetroDialogElement;
     DevCraftMetro.dialogGetPlugin = dcMetroDialogGetPlugin;
     DevCraftMetro.dialogPluginElement = dcMetroDialogPluginElement;
+    DevCraftLoader.show = dcLoaderShow;
+    DevCraftLoader.hide = dcLoaderHide;
     DevCraftAjax.parseResponse = parseJsonResponse;
     DevCraftAjax.post = postAjax;
     DevCraftAjax.postMultipart = postMultipart;

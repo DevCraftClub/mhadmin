@@ -15,6 +15,8 @@ use DevCraft\Core\I18n\Translation;
 use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Exception\JsonResponseException;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Core\Support\AdminAccess;
 
 /**
  * Диспетчер AJAX-запросов DevCraft: аутентификация, маршрутизация, ответ.
@@ -40,7 +42,13 @@ final class AjaxController {
 	public function run(): void {
 		global $dle_login_hash, $is_loged_in, $is_logged;
 
+		$mark = static function (string $name): void {
+			$t0 = $GLOBALS['__dc_ajax_t0'] ?? hrtime(true);
+			$GLOBALS['__dc_ajax_marks'][$name] = round((hrtime(true) - $t0) / 1e6, 2);
+		};
+
 		Translation::setTranslator();
+		$mark('translator');
 
 		$request  = AjaxRequest::fromGlobals();
 		$isPublic = $request->controller === 'public';
@@ -48,26 +56,41 @@ final class AjaxController {
 		$requestHash = (string) ($_REQUEST['user_hash'] ?? '');
 
 		if($requestHash === '' || !isset($dle_login_hash) || $requestHash !== $dle_login_hash) {
-			JsonResponse::fail(
+			$this->sendTimed(JsonResponse::fail(
 				__('Ошибка'),
 				__('Недопустимый хеш сессии'),
 				'auth_failed',
 				403,
-			)->send();
+			), $mark);
 
 			return;
 		}
 
+		$mark('auth_ok');
+
 		if(!$isPublic && empty($is_loged_in)) {
-			JsonResponse::fail(
+			$this->sendTimed(JsonResponse::fail(
 				__('Ошибка'),
 				__('Требуется аутентификация'),
 				'auth_failed',
 				403,
-			)->send();
+			), $mark);
 
 			return;
 		}
+
+		if(!$isPublic && !AdminAccess::allowsAjaxMod($request->mod)) {
+			$this->sendTimed(JsonResponse::fail(
+				__('Ошибка'),
+				__('Недостаточно прав'),
+				'forbidden',
+				403,
+			), $mark);
+
+			return;
+		}
+
+		$mark('access_ok');
 
 		$registry    = new AjaxRouteRegistry();
 		$adminPlugin = Application::instance()->registry()->forMod('devcraft');
@@ -82,10 +105,12 @@ final class AjaxController {
 			$registry->loadFromManifest($plugin);
 		}
 
+		$mark('registry');
+
 		$handlerClass = $registry->resolve($request->controller, $request->method);
 
 		if($handlerClass === NULL || !class_exists($handlerClass)) {
-			JsonResponse::fail(
+			$this->sendTimed(JsonResponse::fail(
 				__('Ошибка'),
 				__('Неизвестный AJAX-метод: {method} (mod={mod}, controller={controller})', [
 					'{method}'     => $request->method,
@@ -94,18 +119,18 @@ final class AjaxController {
 				]),
 				'unknown_method',
 				404,
-			)->send();
+			), $mark);
 
 			return;
 		}
 
 		if($isPublic && !$registry->allowsGuest($request->controller, $request->method) && empty($is_logged)) {
-			JsonResponse::fail(
+			$this->sendTimed(JsonResponse::fail(
 				__('Ошибка'),
 				__('Требуется авторизация на сайте'),
 				'auth_failed',
 				403,
-			)->send();
+			), $mark);
 
 			return;
 		}
@@ -115,9 +140,10 @@ final class AjaxController {
 		try {
 			if($handler instanceof AjaxHandlerInterface) {
 				$response = $handler->handle($request);
+				$mark('handler');
 
 				if($response instanceof ResponseInterface) {
-					$response->send();
+					$this->sendTimed($response, $mark);
 
 					return;
 				}
@@ -125,20 +151,23 @@ final class AjaxController {
 
 			if(method_exists($handler, 'handle')) {
 				$handler->handle();
+				$mark('handler');
 
 				return;
 			}
 		} catch(JsonResponseException $e) {
-			$e->response()->send();
+			$mark('handler_fail');
+			$this->sendTimed($e->response(), $mark);
 
 			return;
 		} catch(\Throwable $e) {
+			$mark('handler_fail');
 			$this->sendInternalError($e);
 
 			return;
 		}
 
-		JsonResponse::fail(
+		$this->sendTimed(JsonResponse::fail(
 			__('Ошибка'),
 			__('Обработчик недоступен для вызова: {method} (mod={mod}, controller={controller})', [
 				'{method}'     => $request->method,
@@ -147,7 +176,27 @@ final class AjaxController {
 			]),
 			'unknown_method',
 			500,
-		)->send();
+		), $mark);
+	}
+
+	/**
+	 * При debug — добавляет pipeline_ms в JSON и отправляет ответ.
+	 *
+	 * @param   callable(string): void  $mark
+	 */
+	private function sendTimed(ResponseInterface $response, callable $mark): void {
+		$mark('before_send');
+
+		if($response instanceof JsonResponse && LogGenerator::isDebugEnabled()) {
+			$marks = is_array($GLOBALS['__dc_ajax_marks'] ?? null)
+				? $GLOBALS['__dc_ajax_marks']
+				: [];
+			$response = $response->withData([
+				'pipeline_ms' => $marks,
+			]);
+		}
+
+		$response->send();
 	}
 
 	/**

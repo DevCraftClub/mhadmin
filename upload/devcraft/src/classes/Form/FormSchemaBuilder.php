@@ -181,6 +181,18 @@ final class FormSchemaBuilder {
 	}
 
 	/**
+	 * Добавляет уже собранную секцию (для merge сателлитов и т.п.).
+	 *
+	 * @since 200.4.0
+	 */
+	public function addSection(FormSection $section): self {
+		$this->commitCurrentSection();
+		$this->sections[] = $section;
+
+		return $this;
+	}
+
+	/**
 	 * Собирает immutable-объект FormSchema.
 	 *
 	 * @since 200.4.0

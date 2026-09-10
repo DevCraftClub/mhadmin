@@ -2,7 +2,6 @@
 //===============================================================
 // Файл: SettingsHandler.php                                    =
 // Путь: devcraft/src/modules/Admin/Ajax/SettingsHandler.php    =
-// Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
 // Сайт: https://devcraft.club                                  =
@@ -16,116 +15,40 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Ajax;
 
-use DevCraft\Core\Application;
-use DevCraft\Core\Config\Paths;
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DevCraft\Core\I18n\Translation;
-use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
-use DevCraft\Core\Support\DataManager;
-use DevCraft\Core\Config\DevCraftConfig;
-use DevCraft\Core\Admin\SettingsFormService;
-use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Types\FormSchema;
+use DevCraft\Core\Abstracts\AbstractSettingsHandler;
 
 /**
- * AJAX-обработчик частичного сохранения настроек модуля по схеме.
+ * AJAX-обработчик частичного сохранения настроек ядра DevCraft Admin.
  *
  * @package    DevCraft
  * @since      200.4.0
  * @subpackage Modules.Admin
  */
-final class SettingsHandler implements AjaxHandlerInterface {
+final class SettingsHandler extends AbstractSettingsHandler {
+	protected function configName(): ?string {
+		return AdminIdentity::code();
+	}
 
 	/**
-	 * Валидирует и сохраняет настройки модуля, допуская частичное обновление.
+	 * @param   array<string, mixed>  $existing
+	 * @param   array<string, mixed>  $valid
 	 *
-	 * @since 200.4.0
-	 *
-	 * @param   AjaxRequest  $request  AJAX-запрос с полями формы настроек.
-	 *
-	 * @return JsonResponse JSON-ответ об успехе, предупреждении или ошибке валидации.
-	 *
-	 * @example
-	 *     $response = (new SettingsHandler())->handle($request);
+	 * @return array<string, mixed>
 	 */
-	public function handle(AjaxRequest $request): JsonResponse {
-		$plugin = Application::instance()->registry()->forMod($request->mod);
-		$schema = $plugin?->settingsSchema();
+	protected function prepareConfig(array $existing, array $valid, FormSchema $schema): array|JsonResponse {
+		$merged = array_merge($existing, $valid);
+		unset($merged['debug_filter_daterange']);
 
-		if($schema === NULL) {
-			return JsonResponse::fail(
-				__('Ошибка'),
-				__('Схема настроек недоступна'),
-				'validation',
-			);
-		}
+		return $merged;
+	}
 
-		$configDir  = Paths::config();
-		$configFile = $configDir . '/' . $schema->codename . '.json';
-
-		if(is_file($configFile) && !is_writable($configFile)) {
-			return JsonResponse::fail(
-				__('Ошибка'),
-				__('Файл конфигурации недоступен для записи'),
-				'validation',
-				500,
-			);
-		}
-
-		if(!is_dir($configDir) && !DataManager::createDir($configDir)) {
-			return JsonResponse::fail(
-				__('Ошибка'),
-				__('Каталог конфигурации недоступен для записи'),
-				'validation',
-				500,
-			);
-		}
-
-		$service = new SettingsFormService();
-		$result  = $service->validatePartial($request->data, $schema);
-
-		if($result['valid'] === [] && $result['errors'] !== []) {
-			return JsonResponse::fail(
-				__('Ошибка'),
-				__('Все поля недействительны'),
-				'validation',
-				422,
-				['fields' => $result['errors']],
-			);
-		}
-
-		if($result['valid'] !== []) {
-			$existing = DataManager::getConfig($schema->codename);
-			$merged   = array_merge($existing, $result['valid']);
-			unset($merged['debug_filter_daterange']);
-			DataManager::saveConfig($schema->codename, $merged);
-			DevCraftConfig::resetCache();
-			Translation::reset();
-		}
-
-		if($result['errors'] !== []) {
-			$partialMessage = __('Частичное сохранение завершено с ошибками в полях');
-
-			return JsonResponse::notify(
-				__('Внимание'),
-				$partialMessage,
-				JsonResponse::TYPE_WARNING,
-				[],
-				422,
-				false,
-				[
-					'code'    => 'validation',
-					'message' => $partialMessage,
-					'title'   => __('Внимание'),
-					'fields'  => $result['errors'],
-				],
-			);
-		}
-
-		if(function_exists('clear_cache')) {
-			clear_cache();
-		}
-
-		return JsonResponse::toast(__('Сохранено'), ['saved' => true]);
+	protected function afterSave(array $saved, FormSchema $schema): void {
+		Translation::reset();
 	}
 
 }

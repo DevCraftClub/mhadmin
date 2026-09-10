@@ -31,15 +31,4 @@ class ComposerType extends AbstractType {
 		return $this;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toArray(): array {
-		return [
-			'package'  => $this->package,
-			'version'  => $this->version,
-			'requires' => $this->requires,
-		];
-	}
-
 }

@@ -2,7 +2,6 @@
 //===============================================================
 // Файл: DataLoaderService.php                                  =
 // Путь: devcraft/src/classes/Support/DataLoaderService.php     =
-// Последнее изменение: 2026-06-13 19:29:35                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
 // Сайт: https://devcraft.club                                  =
@@ -17,16 +16,20 @@ declare(strict_types=1);
 namespace DevCraft\Core\Support;
 
 use Throwable;
+use DevCraft\Core\Application;
+use DevCraft\Builders\QueryBuilder;
 use Cycle\Database\Query\SelectQuery;
+use Cycle\Database\Query\UpdateQuery;
+use Cycle\Database\Query\DeleteQuery;
 use DevCraft\Core\Cache\CacheControl;
 use Cycle\Database\DatabaseInterface;
+use DevCraft\Core\Enums\SortDirection;
 use DevCraft\Core\Logging\LogGenerator;
-use DevCraft\Core\Database\DatabaseGateway;
 
 /**
- * Загружает строки из таблиц DLE через Cycle SelectQuery с кешированием.
+ * Загружает и изменяет строки таблиц DLE через Cycle Database с кешированием SELECT.
  *
- * Порт логики трейта DataLoader (load_data).
+ * Static-фасад: БД берётся из {@see Application::database()}.
  *
  * @package    DevCraft
  * @since      173.3.0
@@ -51,48 +54,200 @@ final class DataLoaderService {
 	private const USER_TABLES = ['users', 'users_delete', 'usergroups'];
 
 	/**
-	 * Создаёт сервис загрузки данных.
+	 * Запрет инстанцирования (только static API).
 	 *
-	 * @since 173.3.0
-	 *
-	 * @param   DatabaseGateway  $db  Шлюз базы данных.
+	 * @since 200.4.0
 	 */
-	public function __construct(private readonly DatabaseGateway $db) {}
+	private function __construct() {}
 
 	/**
 	 * Загружает данные таблицы DLE с кешированием (legacy load_data).
 	 *
 	 * @since 173.3.0
 	 *
-	 * @param   array<string, mixed>  $args  Аргументы запроса: table, selects, where, order, limit, offset.
+	 * @param   array<string, mixed>|QueryBuilder  $args  Аргументы запроса или fluent-билдер.
 	 *
 	 * @return array<int, array<string, mixed>> Строки результата или пустой массив при ошибке.
 	 *
 	 * @example
-	 *     $rows = $loader->loadData([
-	 *         'table'   => 'users',
-	 *         'selects' => ['user_id', 'name'],
-	 *         'where'   => ['user_group' => 1],
+	 *     $rows = DataLoaderService::loadData([
+	 *         'table'      => 'users',
+	 *         'columns'    => ['user_id', 'name'],
+	 *         'conditions' => ['user_group' => 1],
 	 *     ]);
+	 *     $rows = DataLoaderService::loadData(
+	 *         QueryBuilder::create('users')->withConditionsItem('user_group', 1)
+	 *     );
 	 */
-	public function loadData(array $args): array {
-		$normalized = $this->normalizeArgs($args);
+	public static function loadData(array|QueryBuilder $args): array {
+		if($args instanceof QueryBuilder) {
+			$args = $args->build();
+		}
+
+		$normalized = self::normalizeArgs($args);
 		$cacheKey   = 'dataloader_' . md5(serialize($normalized));
-		$cached     = $this->readCache($cacheKey);
+		$cached     = self::readCache($cacheKey);
 
 		if($cached !== NULL) {
 			return $cached;
 		}
 
 		try {
-			$rows = $this->executeQuery($normalized);
-			$this->writeCache($cacheKey, $rows);
+			$rows = self::executeQuery($normalized);
+			self::writeCache($cacheKey, $rows);
 
 			return $rows;
 		} catch(Throwable $exception) {
 			LogGenerator::for('DataLoaderService')->log($exception->getMessage());
 
 			return [];
+		}
+	}
+
+	/**
+	 * Возвращает первую строку результата или пустой массив.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   array<string, mixed>|QueryBuilder  $args  Аргументы запроса или fluent-билдер.
+	 *
+	 * @return array<string, mixed> Первая строка либо [].
+	 *
+	 * @example
+	 *     $user = DataLoaderService::loadOne(
+	 *         QueryBuilder::create('users')->withConditionsItem('user_id', 1)->withLimit(1)
+	 *     );
+	 */
+	public static function loadOne(array|QueryBuilder $args): array {
+		return self::loadData($args)[0] ?? [];
+	}
+
+	/**
+	 * Вставляет строку и возвращает созданную запись (reload по PK).
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   QueryBuilder  $query  Билдер с table + values (+ primaryKey).
+	 *
+	 * @return array<string, mixed> Созданная строка либо [].
+	 *
+	 * @example
+	 *     $row = DataLoaderService::insert(
+	 *         QueryBuilder::create('pm')->withValues(['subj' => 'Hi', 'user' => 1])
+	 *     );
+	 */
+	public static function insert(QueryBuilder $query): array {
+		try {
+			$table  = $query->getTable();
+			$values = $query->getValues();
+
+			if($table === '' || $values === []) {
+				return [];
+			}
+
+			$db = self::resolveDatabaseForTable($table);
+			$id = $db->insert($table)->values($values)->run();
+
+			$pk = $query->getPrimaryKey();
+			if($pk === '' || $id === NULL || $id === false || $id === '') {
+				return [];
+			}
+
+			self::clearCache();
+
+			return QueryBuilder::create($table)
+			                   ->withConditionsItem($pk, $id)
+			                   ->withLimit(1)
+			                   ->first();
+		} catch(Throwable $exception) {
+			LogGenerator::for(self::class)->log($exception->getMessage());
+
+			return [];
+		}
+	}
+
+	/**
+	 * Обновляет строки по conditions и возвращает все совпавшие записи.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   QueryBuilder  $query  Билдер с table + values + conditions.
+	 *
+	 * @return array<int, array<string, mixed>> Строки после UPDATE либо [].
+	 *
+	 * @example
+	 *     $rows = DataLoaderService::update(
+	 *         QueryBuilder::create('users')
+	 *             ->withValues(['banned' => 1])
+	 *             ->withConditionsItem('user_id', 1)
+	 *     );
+	 */
+	public static function update(QueryBuilder $query): array {
+		try {
+			$table      = $query->getTable();
+			$values     = $query->getValues();
+			$conditions = $query->getConditions();
+
+			if($table === '' || $values === []) {
+				return [];
+			}
+
+			$db     = self::resolveDatabaseForTable($table);
+			$update = $db->update($table)->values($values);
+			self::applyConditions($update, $conditions);
+			$update->run();
+
+			self::clearCache();
+
+			return QueryBuilder::create($table)
+			                   ->withConditions($conditions)
+			                   ->load();
+		} catch(Throwable $exception) {
+			LogGenerator::for(self::class)->log($exception->getMessage());
+
+			return [];
+		}
+	}
+
+	/**
+	 * Удаляет строки по conditions.
+	 *
+	 * Без conditions DELETE не выполняется (защита от полной очистки таблицы).
+	 *
+	 * @since 200.4.0
+	 *
+	 * @param   QueryBuilder  $query  Билдер с table + conditions.
+	 *
+	 * @return bool true при успехе, false при ошибке или пустых conditions.
+	 *
+	 * @example
+	 *     $ok = DataLoaderService::delete(
+	 *         QueryBuilder::create('tags')
+	 *             ->withConditionsItem('news_id', $newsId)
+	 *             ->withConditionsItem('tag', $tag)
+	 *     );
+	 */
+	public static function delete(QueryBuilder $query): bool {
+		try {
+			$table      = $query->getTable();
+			$conditions = $query->getConditions();
+
+			if($table === '' || $conditions === []) {
+				return false;
+			}
+
+			$db     = self::resolveDatabaseForTable($table);
+			$delete = $db->delete($table);
+			self::applyConditions($delete, $conditions);
+			$delete->run();
+
+			self::clearCache();
+
+			return true;
+		} catch(Throwable $exception) {
+			LogGenerator::for(self::class)->log($exception->getMessage());
+
+			return false;
 		}
 	}
 
@@ -104,9 +259,9 @@ final class DataLoaderService {
 	 * @param   string|null  $key  Ключ записи кеша или null для полной очистки типа.
 	 *
 	 * @example
-	 *     $loader->clearCache();
+	 *     DataLoaderService::clearCache();
 	 */
-	public function clearCache(?string $key = NULL): void {
+	public static function clearCache(?string $key = NULL): void {
 		if($key === NULL) {
 			CacheControl::clearCache(self::CACHE_TYPE);
 
@@ -125,7 +280,7 @@ final class DataLoaderService {
 	 *
 	 * @return array<string, mixed> Аргументы с ksort по ключам.
 	 */
-	private function normalizeArgs(array $args): array {
+	private static function normalizeArgs(array $args): array {
 		ksort($args);
 
 		return $args;
@@ -134,53 +289,38 @@ final class DataLoaderService {
 	/**
 	 * Выполняет SELECT к таблице DLE через Cycle SelectQuery.
 	 *
-	 * Префикс физической таблицы (`PREFIX` / `USERPREFIX`) определяется в {@see resolvePrefix()}
-	 * и применяется через {@see resolveDatabaseForTable()}. Параметры запроса передаются
-	 * структурированно — без конкатенации SQL-строк.
-	 *
 	 * @since 173.3.0
 	 *
-	 * @see   resolveDatabaseForTable()
-	 * @see   applyWhere()
-	 * @see   applyOrder()
-	 *
-	 * @param   array<string, mixed>  $args  Нормализованные аргументы (см. {@see loadData()}), ключи:
-	 *                                       - `table`   (string): Имя таблицы без префикса.
-	 *                                       - `selects` (list<string>|отсутствует): Столбцы выборки.
-	 *                                       - `where`   (array): Условия `['поле' => значение]`.
-	 *                                       - `order`   (array): Сортировка `['поле' => 'ASC'|'DESC']`.
-	 *                                       - `limit`   (int|null): LIMIT.
-	 *                                       - `offset`  (int|null): OFFSET.
+	 * @param   array<string, mixed>  $args  Нормализованные аргументы (см. {@see loadData()}).
 	 *
 	 * @return array<int, array<string, mixed>> Строки результата fetchAll().
-	 *
 	 */
-	private function executeQuery(array $args): array {
+	private static function executeQuery(array $args): array {
 		$table = (string) ($args['table'] ?? '');
 
 		if($table === '') {
 			return [];
 		}
 
-		$db     = $this->resolveDatabaseForTable($table);
+		$db     = self::resolveDatabaseForTable($table);
 		$select = $db->table($table)->select();
 
-		$selects = $args['selects'] ?? '*';
+		$columns = $args['columns'] ?? '*';
 
-		if(is_array($selects) && $selects !== []) {
-			$select->columns($selects);
+		if(is_array($columns) && $columns !== []) {
+			$select->columns($columns);
 		}
 
-		$where = $args['where'] ?? [];
+		$conditions = $args['conditions'] ?? [];
 
-		if(is_array($where)) {
-			$this->applyWhere($select, $where);
+		if(is_array($conditions)) {
+			self::applyConditions($select, $conditions);
 		}
 
 		$order = $args['order'] ?? [];
 
 		if(is_array($order)) {
-			$this->applyOrder($select, $order);
+			self::applyOrder($select, $order);
 		}
 
 		if(isset($args['limit']) && is_int($args['limit'])) {
@@ -195,26 +335,26 @@ final class DataLoaderService {
 	}
 
 	/**
-	 * Применяет условия where к SelectQuery.
+	 * Применяет условия фильтрации к SelectQuery, UpdateQuery или DeleteQuery.
 	 *
 	 * @since 173.3.0
 	 *
-	 * @param   SelectQuery           $select  Объект запроса.
-	 * @param   array<string, mixed>  $where   Условия фильтрации.
+	 * @param   SelectQuery|UpdateQuery|DeleteQuery  $query       Объект запроса.
+	 * @param   array<string, mixed>                 $conditions  Условия фильтрации.
 	 */
-	private function applyWhere(SelectQuery $select, array $where): void {
-		foreach($where as $column => $value) {
+	private static function applyConditions(SelectQuery|UpdateQuery|DeleteQuery $query, array $conditions): void {
+		foreach($conditions as $column => $value) {
 			if(!is_string($column) || $column === '') {
 				continue;
 			}
 
 			if(is_array($value) && isset($value['op'], $value['value'])) {
-				$select->where($column, (string) $value['op'], $value['value']);
+				$query->where($column, (string) $value['op'], $value['value']);
 
 				continue;
 			}
 
-			$select->where($column, $value);
+			$query->where($column, $value);
 		}
 	}
 
@@ -223,16 +363,16 @@ final class DataLoaderService {
 	 *
 	 * @since 173.3.0
 	 *
-	 * @param   SelectQuery            $select  Объект запроса.
-	 * @param   array<string, string>  $order   Карта колонка => направление.
+	 * @param   SelectQuery                          $select  Объект запроса.
+	 * @param   array<string, SortDirection|string>  $order   Карта колонка => направление.
 	 */
-	private function applyOrder(SelectQuery $select, array $order): void {
+	private static function applyOrder(SelectQuery $select, array $order): void {
 		foreach($order as $column => $direction) {
 			if(!is_string($column) || $column === '') {
 				continue;
 			}
 
-			$select->orderBy($column, $this->normalizeSortDirection($direction));
+			$select->orderBy($column, self::normalizeSortDirection($direction));
 		}
 	}
 
@@ -241,14 +381,16 @@ final class DataLoaderService {
 	 *
 	 * @since 173.3.0
 	 *
-	 * @param   string  $direction  Строка ASC/DESC.
+	 * @param   SortDirection|string  $direction  Enum или строка ASC/DESC.
 	 *
 	 * @return string SelectQuery::SORT_ASC или SelectQuery::SORT_DESC.
 	 */
-	private function normalizeSortDirection(string $direction): string {
-		return strtoupper($direction) === 'DESC'
-			? SelectQuery::SORT_DESC
-			: SelectQuery::SORT_ASC;
+	private static function normalizeSortDirection(SortDirection|string $direction): string {
+		if($direction instanceof SortDirection) {
+			return $direction->toCycle();
+		}
+
+		return SortDirection::fromString($direction)->toCycle();
 	}
 
 	/**
@@ -260,9 +402,9 @@ final class DataLoaderService {
 	 *
 	 * @return DatabaseInterface Подключение с нужным prefix.
 	 */
-	private function resolveDatabaseForTable(string $table): DatabaseInterface {
-		$prefix = $this->resolvePrefix($table) . '_';
-		$db     = $this->db->connection();
+	private static function resolveDatabaseForTable(string $table): DatabaseInterface {
+		$prefix = self::resolvePrefix($table) . '_';
+		$db     = Application::instance()->database()->connection();
 
 		if($prefix !== $db->getPrefix()) {
 			return $db->withPrefix($prefix, false);
@@ -280,7 +422,7 @@ final class DataLoaderService {
 	 *
 	 * @return string Префикс без завершающего подчёркивания.
 	 */
-	private function resolvePrefix(string $table): string {
+	private static function resolvePrefix(string $table): string {
 		if(in_array(strtolower($table), self::USER_TABLES, true)) {
 			return DataManager::getUserPrefix();
 		}
@@ -297,7 +439,7 @@ final class DataLoaderService {
 	 *
 	 * @return array<int, array<string, mixed>>|null Строки или null при промахе.
 	 */
-	private function readCache(string $cacheKey): ?array {
+	private static function readCache(string $cacheKey): ?array {
 		$cached = CacheControl::getCache(self::CACHE_TYPE, $cacheKey);
 
 		if($cached === false) {
@@ -323,7 +465,7 @@ final class DataLoaderService {
 	 * @param   string                            $cacheKey  Ключ записи.
 	 * @param   array<int, array<string, mixed>>  $rows      Строки результата.
 	 */
-	private function writeCache(string $cacheKey, array $rows): void {
+	private static function writeCache(string $cacheKey, array $rows): void {
 		try {
 			CacheControl::setCache(self::CACHE_TYPE, $cacheKey, $rows);
 		} catch(Throwable $exception) {

@@ -41,6 +41,34 @@ final class AssetsCheckerService {
 	private const REMOTE_URL = 'https://assets.devcraft.club/assets.json';
 
 	/**
+	 * Максимальный размер скачиваемого ассета (байты).
+	 *
+	 * @since 200.4.0
+	 */
+	private const MAX_DOWNLOAD_BYTES = 10_485_760;
+
+	/**
+	 * Таймаут HTTP-скачивания (секунды).
+	 *
+	 * @since 200.4.0
+	 */
+	private const DOWNLOAD_TIMEOUT = 30;
+
+	/**
+	 * Разрешённые расширения публичных ассетов.
+	 *
+	 * @since 200.4.0
+	 *
+	 * @var list<string>
+	 */
+	private const ALLOWED_EXTENSIONS = [
+		'css', 'js', 'mjs', 'map',
+		'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico',
+		'woff', 'woff2', 'ttf', 'eot', 'otf',
+		'json', 'txt', 'md', 'html',
+	];
+
+	/**
 	 * Путь к локальному JSON-манифесту.
 	 *
 	 * @since 173.3.0
@@ -359,7 +387,7 @@ final class AssetsCheckerService {
 	private function deployAbsolutePath(array $meta): ?string {
 		$deployFile = (string) ($meta['file'] ?? '');
 
-		if($deployFile === '' || !str_starts_with($deployFile, '/devcraft/')) {
+		if(!$this->isAllowedDeployFile($deployFile)) {
 			return NULL;
 		}
 
@@ -367,7 +395,117 @@ final class AssetsCheckerService {
 			Paths::register();
 		}
 
-		return DataManager::normalizePath(ROOT_DIR . '/' . ltrim($deployFile, '/'));
+		$absolute = DataManager::normalizePath(ROOT_DIR . '/' . ltrim($deployFile, '/'));
+		$root     = rtrim((string) ROOT_DIR, '/');
+
+		if($absolute === '' || !str_starts_with($absolute, $root . '/')) {
+			return NULL;
+		}
+
+		return $absolute;
+	}
+
+	/**
+	 * Разрешён ли путь развёртывания (публичные ассеты под /devcraft/, без PHP/vendor/src).
+	 *
+	 * @since 200.4.0
+	 */
+	private function isAllowedDeployFile(string $deployFile): bool {
+		if($deployFile === '' || !str_starts_with($deployFile, '/devcraft/')) {
+			return false;
+		}
+
+		$normalized = str_replace('\\', '/', $deployFile);
+
+		if(str_contains($normalized, '..')) {
+			return false;
+		}
+
+		$blockedPrefixes = [
+			'/devcraft/vendor/',
+			'/devcraft/src/',
+			'/devcraft/config/',
+			'/devcraft/locales/',
+			'/devcraft/var/',
+		];
+
+		foreach($blockedPrefixes as $prefix) {
+			if(str_starts_with($normalized, $prefix)) {
+				return false;
+			}
+		}
+
+		$ext = strtolower(pathinfo($normalized, PATHINFO_EXTENSION));
+
+		if($ext === '' || $ext === 'php' || $ext === 'phtml' || $ext === 'phar') {
+			return false;
+		}
+
+		return in_array($ext, self::ALLOWED_EXTENSIONS, true);
+	}
+
+	/**
+	 * Host удалённого манифеста (для allowlist скачиваний).
+	 *
+	 * @since 200.4.0
+	 */
+	private function allowedRemoteHost(): string {
+		$host = parse_url(self::REMOTE_URL, PHP_URL_HOST);
+
+		return is_string($host) ? strtolower($host) : 'assets.devcraft.club';
+	}
+
+	/**
+	 * Проверяет URL скачивания: https + allowlist host.
+	 *
+	 * @since 200.4.0
+	 */
+	private function isAllowedDownloadUrl(string $url): bool {
+		$parts = parse_url($url);
+
+		if(!is_array($parts)) {
+			return false;
+		}
+
+		$scheme = strtolower((string) ($parts['scheme'] ?? ''));
+		$host   = strtolower((string) ($parts['host'] ?? ''));
+
+		return $scheme === 'https' && $host === $this->allowedRemoteHost();
+	}
+
+	/**
+	 * Скачивает тело по HTTPS с лимитом размера.
+	 *
+	 * @since 200.4.0
+	 */
+	private function fetchUrlBody(string $url): string|false {
+		if(!$this->isAllowedDownloadUrl($url)) {
+			return false;
+		}
+
+		$ctx = stream_context_create([
+			'http' => [
+				'timeout'         => self::DOWNLOAD_TIMEOUT,
+				'follow_location' => 0,
+				'max_redirects'   => 0,
+			],
+			'ssl'  => [
+				'verify_peer'      => true,
+				'verify_peer_name' => true,
+			],
+		]);
+
+		$body = @file_get_contents($url, false, $ctx);
+
+		if($body === false || $body === '') {
+			return false;
+		}
+
+		if(strlen($body) > self::MAX_DOWNLOAD_BYTES) {
+			return false;
+		}
+
+		return $body;
 	}
 
 	/**
@@ -506,18 +644,26 @@ final class AssetsCheckerService {
 	private function downloadAssetFile(string $manifestKey, array $meta): bool {
 		$url = (string) ($meta['link'] ?? '');
 
-		$content = $url !== ''? @file_get_contents($url) : false;
+		$content = $url !== '' ? $this->fetchUrlBody($url) : false;
 
 		if($content === false || $content === '') {
 			$alt = (string) ($meta['alt'] ?? '');
 
 			if($alt !== '') {
-				$content = @file_get_contents($alt);
+				$content = $this->fetchUrlBody($alt);
 			}
 		}
 
 		if($content === false || $content === '') {
 			LogGenerator::for('AssetsCheckerService')->log(__("Не удалось загрузить файл: {manifestKey}", ['{manifestKey}' => $manifestKey]));
+
+			return false;
+		}
+
+		$expectedHash = (string) ($meta['hash'] ?? '');
+
+		if($expectedHash !== '' && !hash_equals($expectedHash, md5($content))) {
+			LogGenerator::for('AssetsCheckerService')->log(__("Хеш не совпал: {manifestKey}", ['{manifestKey}' => $manifestKey]));
 
 			return false;
 		}
@@ -538,8 +684,18 @@ final class AssetsCheckerService {
 			return false;
 		}
 
-		if(file_put_contents($targetPath, $content, LOCK_EX) === false) {
+		$tmp = $targetPath . '.tmp.' . bin2hex(random_bytes(4));
+
+		if(@file_put_contents($tmp, $content, LOCK_EX) === false) {
+			@unlink($tmp);
 			LogGenerator::for('AssetsCheckerService')->log(__("Не удалось записать файл: {targetPath}", ['{targetPath}' => $targetPath]));
+
+			return false;
+		}
+
+		if(!@rename($tmp, $targetPath)) {
+			@unlink($tmp);
+			LogGenerator::for('AssetsCheckerService')->log(__("Не удалось заменить файл: {targetPath}", ['{targetPath}' => $targetPath]));
 
 			return false;
 		}

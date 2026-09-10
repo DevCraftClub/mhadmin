@@ -14,6 +14,8 @@
 
 declare(strict_types=1);
 
+use DevCraft\Modules\Admin\AdminIdentity;
+
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Enums\FormLayout;
 use DevCraft\Core\I18n\Translation;
@@ -39,7 +41,7 @@ $logsSaveTypesDescr = __('Какие типы записывать в файл, 
                      . __('При включённом debug DevCraft сохраняются все типы независимо от выбора.<br>')
                      . __('Если выбрано «Все», остальные выбранные значения игнорируются');
 
-return FormSchemaBuilder::create('devcraft')
+return FormSchemaBuilder::create(AdminIdentity::code())
                         ->layout(FormLayout::TABS)
                         ->section(__('Общие'))
 	                        ->number('list_count', __('Количество объектов'))

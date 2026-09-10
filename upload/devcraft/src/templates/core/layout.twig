@@ -7,7 +7,83 @@
     <link rel="stylesheet" href="{{ asset_base }}css/metro.css">
     <link rel="stylesheet" href="{{ asset_base }}css/icons.css">
     <link rel="stylesheet" href="{{ asset_base }}css/devcraft.css">
-    <style>.navview-content { padding-top: 52px; } #page-content { padding: 1rem; }</style>
+    <style>
+        .navview-content { padding-top: 52px; }
+        #page-content { padding: 1rem; }
+        .dc-code-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(3px);
+        }
+        .dc-code-loader.is-visible {
+            display: flex;
+        }
+        .dc-code-loader__box {
+            width: min(100%, 560px);
+            padding: 1.5rem;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            background: #0f172a;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+            color: #f8fafc;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .dc-code-loader__label {
+            margin-bottom: 1rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+        .dc-code-loader__editor {
+            padding: 1rem 1.25rem;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: #020617;
+        }
+        .dc-code-loader__line {
+            width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            line-height: 1.7;
+            opacity: 0;
+            animation: dc-code-loader-type 4.2s steps(36, end) infinite;
+            animation-delay: var(--delay, 0s);
+        }
+        .dc-code-loader__kw { color: #c084fc; }
+        .dc-code-loader__fn { color: #38bdf8; }
+        .dc-code-loader__str { color: #4ade80; }
+        .dc-code-loader__cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.05em;
+            margin-left: 4px;
+            vertical-align: middle;
+            background: #38bdf8;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+            animation: dc-code-loader-blink .8s infinite;
+        }
+        .dc-code-loader__hint {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+        @keyframes dc-code-loader-type {
+            0% { width: 0; opacity: 1; }
+            18%, 80% { width: 100%; opacity: 1; }
+            100% { width: 0; opacity: 0; }
+        }
+        @keyframes dc-code-loader-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
 </head>
 <body data-ajax-base="{{ ajax_base_url }}" data-mod="{{ mod|default('devcraft') }}" data-debug="{{ devcraft_debug ? '1' : '0' }}">
 <input type="hidden" name="user_hash" value="{{ dle_login_hash }}">
@@ -33,6 +109,17 @@
      data-overlay-click-close="true"
      data-default-actions="false"
      data-width="640"></div>
+<div class="dc-code-loader" id="dc-code-loader" aria-hidden="true">
+    <div class="dc-code-loader__box" role="status" aria-live="polite">
+        <div class="dc-code-loader__label" id="dc-code-loader-label">Processing</div>
+        <div class="dc-code-loader__editor">
+            <div class="dc-code-loader__line" style="--delay: 0s" id="dc-code-loader-line-1"></div>
+            <div class="dc-code-loader__line" style="--delay: 1.35s" id="dc-code-loader-line-2"></div>
+            <div class="dc-code-loader__line" style="--delay: 2.7s" id="dc-code-loader-line-3"></div>
+        </div>
+        <div class="dc-code-loader__hint" id="dc-code-loader-hint">Пожалуйста, подождите…</div>
+    </div>
+</div>
 <script src="{{ asset_base }}js/metro.js"></script>
 {% if devcraft_metro_i18n_url %}
 <script src="{{ devcraft_metro_i18n_url }}"></script>

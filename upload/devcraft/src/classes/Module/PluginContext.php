@@ -27,9 +27,6 @@ use DevCraft\Core\Admin\AdminLinkResolver;
 /**
  * Контекст одного DevCraft-модуля после загрузки manifest.php.
  *
- * Предоставляет меню админки, схемы настроек и фильтров, AJAX-обработчики
- * и метаданные для маршрутизации и рендеринга страниц.
- *
  * @package    DevCraft
  * @since      200.4.0
  * @subpackage Core.Module
@@ -37,75 +34,48 @@ use DevCraft\Core\Admin\AdminLinkResolver;
 final class PluginContext {
 
 	/**
-	 * Полный массив данных из manifest.php.
-	 *
-	 * @since 200.4.0
-	 * @var array<string, mixed>
-	 */
-	private array $manifest;
-
-	/**
-	 * Пункты меню админки модуля.
-	 *
 	 * @since 200.4.0
 	 * @var AdminLink[]
 	 */
 	private array $menu;
 
 	/**
-	 * Карта AJAX-методов: имя метода => FQCN обработчика.
-	 *
 	 * @since 200.4.0
 	 * @var array<string, class-string>
 	 */
 	private array $ajaxMethods;
 
 	/**
-	 * Публичные AJAX-методы сайта: method => [handler, allow_guest].
-	 *
 	 * @since 200.4.0
 	 * @var array<string, array{handler: class-string, allow_guest: bool}>
 	 */
 	private array $ajaxPublicMethods;
 
 	/**
-	 * Схема полей настроек модуля (если есть settings.schema.php).
-	 *
 	 * @since 200.4.0
 	 * @var FormSchema|null
 	 */
 	private ?FormSchema $settingsSchema = NULL;
 
 	/**
-	 * Схемы фильтров по action (например, «logs»).
-	 *
 	 * @since 200.4.0
 	 * @var array<string, FilterSchema>
 	 */
 	private array $filterSchemas = [];
 
 	/**
-	 * Создаёт контекст плагина из загруженного манифеста и пути к модулю.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   string                $mod         Идентификатор модуля в URL админки.
-	 * @param   array<string, mixed>  $manifest    Данные из manifest.php.
-	 * @param   string                $modulePath  Абсолютный путь к каталогу модуля.
-	 *
-	 * @example
-	 *        $plugin = new PluginContext('devcraft', $manifest, $modulePath);
-	 *
+	 * @param   string          $mod         Идентификатор модуля в URL админки.
+	 * @param   ModuleManifest  $manifest    Нормализованный манифест.
+	 * @param   string          $modulePath  Абсолютный путь к каталогу модуля.
 	 */
 	public function __construct(
-		private readonly string $mod,
-		array                   $manifest,
-		private readonly string $modulePath,
+		private readonly string         $mod,
+		private readonly ModuleManifest $manifest,
+		private readonly string         $modulePath,
 	) {
-		$this->manifest          = $manifest;
-		$this->menu              = $this->parseMenu($manifest['menu'] ?? []);
-		$this->ajaxMethods       = $this->parseAjaxMethods($manifest['ajax']['methods'] ?? []);
-		$this->ajaxPublicMethods = $this->parseAjaxPublicMethods($manifest['ajax']['public'] ?? []);
+		$this->menu              = $manifest->menu;
+		$this->ajaxMethods       = $manifest->ajax->methods;
+		$this->ajaxPublicMethods = $manifest->ajax->public;
 
 		AdminLinkResolver::validateStartActions($this->menu);
 
@@ -113,300 +83,127 @@ final class PluginContext {
 	}
 
 	/**
-	 * Возвращает идентификатор модуля (mod) для URL и конфигурации.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return string Значение mod из манифеста или переопределения.
-	 * @example
-	 *        $mod = $plugin->mod();
-	 *
+	 * Добавляет пункт меню (host-merge сателлитов).
 	 */
+	public function appendMenuLink(AdminLink $link): void {
+		$this->menu[] = $link;
+		AdminLinkResolver::validateStartActions($this->menu);
+	}
+
+	/**
+	 * @param   array<string, class-string>  $methods
+	 */
+	public function appendAjaxMethods(array $methods): void {
+		foreach($methods as $name => $handler) {
+			if(!is_string($name) || !is_string($handler) || $handler === '') {
+				continue;
+			}
+
+			// Host сохраняет свой SettingsHandler; схема сателлитов уже в merge settings.
+			if($name === 'settings') {
+				continue;
+			}
+
+			$this->ajaxMethods[$name] = $handler;
+		}
+	}
+
+	public function setSettingsSchema(?FormSchema $schema): void {
+		$this->settingsSchema = $schema;
+	}
+
 	public function mod(): string {
 		return $this->mod;
 	}
 
 	/**
-	 * Возвращает блок meta манифеста с добавленным module_code.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array<string, mixed> Метаданные модуля для шаблонов.
-	 * @example
-	 *        $title = $plugin->meta()['title'] ?? '';
-	 *
+	 * @return array<string, mixed>
 	 */
 	public function meta(): array {
-		/** @var array<string, mixed> $meta */
-		$meta = $this->manifest['meta'] ?? [];
+		$meta = [
+			'name'        => $this->manifest->name,
+			'version'     => $this->manifest->version,
+			'description' => $this->manifest->description,
+			'icon'        => $this->manifest->icon,
+			'docsLink'    => $this->manifest->docsLink,
+			'siteLink'    => $this->manifest->siteLink,
+			'siteId'      => $this->manifest->siteId,
+			'licLink'     => $this->manifest->licLink,
+			'module_code' => $this->manifest->code ?? $this->mod,
+		];
 
-		$meta['module_code'] = $this->manifest['code'] ?? $this->mod;
+		if($this->manifest->author !== NULL) {
+			$meta['author'] = $this->manifest->author->toArray();
+		}
 
 		return $meta;
 	}
 
 	/**
-	 * Возвращает пункты меню админки модуля.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return AdminLink[] Ссылки меню из manifest.php.
-	 * @example
-	 *        $links = $plugin->menu();
-	 *
+	 * @return AdminLink[]
 	 */
 	public function menu(): array {
 		return $this->menu;
 	}
 
-	/**
-	 * Возвращает FQCN класса страницы для указанного action.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   string  $action  Имя action из URL.
-	 *
-	 * @return string|null FQCN класса страницы или null.
-	 * @example
-	 *        $class = $plugin->pageClass('settings');
-	 *
-	 */
 	public function pageClass(string $action): ?string {
 		return AdminLinkResolver::resolvePageClass($this->menu, $action);
 	}
 
-	/**
-	 * Возвращает action страницы по умолчанию (start) для модуля.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return string|null Имя action или null, если меню пусто.
-	 * @example
-	 *        $default = $plugin->defaultAction() ?? 'dashboard';
-	 *
-	 */
 	public function defaultAction(): ?string {
 		return AdminLinkResolver::defaultAction($this->menu);
 	}
 
-	/**
-	 * Возвращает схему настроек модуля, если файл settings.schema.php существует.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return FormSchema|null Схема полей или null.
-	 * @example
-	 *        $schema = $plugin->settingsSchema();
-	 *
-	 */
 	public function settingsSchema(): ?FormSchema {
 		return $this->settingsSchema;
 	}
 
-	/**
-	 * Возвращает схему фильтра для указанного action (например, «logs»).
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   string  $action  Ключ action, для которого загружена схема фильтра.
-	 *
-	 * @return FilterSchema|null Схема фильтра или null.
-	 * @example
-	 *        $filter = $plugin->filterSchema('logs');
-	 *
-	 */
 	public function filterSchema(string $action): ?FilterSchema {
 		return $this->filterSchemas[$action] ?? NULL;
 	}
 
 	/**
-	 * Возвращает карту зарегистрированных AJAX-методов модуля.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return array<string, class-string> Имя метода => FQCN обработчика.
-	 * @example
-	 *        $methods = $plugin->ajaxMethods();
-	 *
+	 * @return array<string, class-string>
 	 */
 	public function ajaxMethods(): array {
 		return $this->ajaxMethods;
 	}
 
 	/**
-	 * Возвращает карту публичных AJAX-методов (controller=public).
-	 *
-	 * @since 200.4.0
-	 *
 	 * @return array<string, array{handler: class-string, allow_guest: bool}>
 	 */
 	public function ajaxPublicMethods(): array {
 		return $this->ajaxPublicMethods;
 	}
 
-	/**
-	 * Возвращает идентификатор AJAX-контроллера из манифеста.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return string Значение ajax.controller (по умолчанию «admin»).
-	 * @example
-	 *        $controller = $plugin->ajaxController();
-	 *
-	 */
 	public function ajaxController(): string {
-		return (string) ($this->manifest['ajax']['controller'] ?? 'admin');
+		return $this->manifest->ajax->controller;
 	}
 
-	/**
-	 * Возвращает абсолютный путь к корневому каталогу модуля.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return string Путь к каталогу модуля на диске.
-	 * @example
-	 *        $path = $plugin->modulePath();
-	 *
-	 */
 	public function modulePath(): string {
 		return $this->modulePath;
 	}
 
 	/**
-	 * Возвращает список имён JS-файлов из секции assets.js манифеста.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return list<string> Имена файлов относительно Public/.
-	 * @example
-	 *        $jsFiles = $plugin->jsAssetFiles();
-	 *
+	 * @return list<string>
 	 */
 	public function jsAssetFiles(): array {
-		$assets = $this->manifest['assets']['js'] ?? [];
-
-		if(!is_array($assets)) {
-			return [];
-		}
-
-		return array_values(array_filter($assets, 'is_string'));
+		return $this->manifest->assets->js;
 	}
 
-	/**
-	 * Формирует объект ModuleManifest для реестра и шаблонов.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return ModuleManifest Агрегированные метаданные модуля.
-	 * @example
-	 *        $data = $plugin->moduleData();
-	 *
-	 */
 	public function moduleData(): ModuleManifest {
-		return ModuleManifest::fromManifest($this->mod, $this->manifest, $this->modulePath);
+		return $this->manifest;
 	}
 
 	/**
-	 * Возвращает записи changelog модуля.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @return Changelog[] История изменений из changelog.data.php.
-	 * @example
-	 *        $entries = $plugin->changelog();
-	 *
+	 * @return Changelog[]
 	 */
 	public function changelog(): array {
-		return $this->moduleData()->changelog;
-	}
-
-	/**
-	 * Преобразует сырой массив menu из манифеста в объекты AdminLink.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<int, mixed>  $rawMenu  Элементы секции menu manifest.php.
-	 *
-	 * @return AdminLink[] Только элементы типа AdminLink.
-	 */
-	private function parseMenu(array $rawMenu): array {
-		$links = [];
-
-		foreach($rawMenu as $item) {
-			if($item instanceof AdminLink) {
-				$links[] = $item;
-			}
-		}
-
-		return $links;
-	}
-
-	/**
-	 * Нормализует карту AJAX-методов из манифеста.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   array<string, mixed>  $rawMethods  Секция ajax.methods manifest.php.
-	 *
-	 * @return array<string, class-string> Валидные пары method => handler.
-	 */
-	private function parseAjaxMethods(array $rawMethods): array {
-		$methods = [];
-
-		foreach($rawMethods as $method => $handler) {
-			if(is_string($method) && is_string($handler) && $handler !== '') {
-				$methods[$method] = $handler;
-			}
-		}
-
-		return $methods;
-	}
-
-	/**
-	 * Нормализует карту публичных AJAX-методов из манифеста.
-	 *
-	 * @param   array<string, mixed>  $rawMethods  Секция ajax.public.
-	 *
-	 * @return array<string, array{handler: class-string, allow_guest: bool}>
-	 */
-	private function parseAjaxPublicMethods(array $rawMethods): array {
-		$methods = [];
-
-		foreach($rawMethods as $method => $handler) {
-			if(!is_string($method) || $method === '') {
-				continue;
-			}
-
-			if(is_string($handler) && $handler !== '') {
-				$methods[$method] = [
-					'handler'     => $handler,
-					'allow_guest' => false,
-				];
-
-				continue;
-			}
-
-			if(is_array($handler)) {
-				$class = (string) ($handler['handler'] ?? $handler['class'] ?? '');
-
-				if($class === '') {
-					continue;
-				}
-
-				$methods[$method] = [
-					'handler'     => $class,
-					'allow_guest' => !empty($handler['allow_guest']),
-				];
-			}
-		}
-
-		return $methods;
+		return $this->manifest->changelog;
 	}
 
 	/**
 	 * Загружает settings.schema.php и Filter/logs.filter.schema.php модуля при наличии.
-	 *
-	 * @since 200.4.0
 	 */
 	private function loadSchemas(): void {
 		$settingsFile = $this->modulePath . '/settings.schema.php';
@@ -417,6 +214,8 @@ final class PluginContext {
 
 			if($loaded instanceof FormSchema) {
 				$this->settingsSchema = $loaded;
+			} elseif(is_array($loaded)) {
+				$this->settingsSchema = FormSchema::fromArray($loaded);
 			}
 		}
 
@@ -424,10 +223,11 @@ final class PluginContext {
 
 		if(is_file($filterFile)) {
 			/** Подключает схему фильтра журнала модуля. */
-			/** @var array<string, mixed> $raw */
 			$raw = require DLEPlugins::Check($filterFile);
 
-			if(is_array($raw)) {
+			if($raw instanceof FilterSchema) {
+				$this->filterSchemas['logs'] = $raw;
+			} elseif(is_array($raw)) {
 				$this->filterSchemas['logs'] = FilterSchema::fromArray($raw);
 			}
 		}

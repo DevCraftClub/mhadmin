@@ -1,0 +1,49 @@
+version: 2
+# Порядок merge: .github/workflows/dependabot-queue.yml (по одному PR, включая major).
+# CI-gate: .github/workflows/dependabot-ci-automerge.yml
+# Без ignore для major — major открываются и мержатся как minor, если checks зелёные.
+# Merge-очередь: секрет DEVBOT_GITHUB_TOKEN (PAT DevBot CI / ci@devcraft.club).
+# «Allow auto-merge» полезно; очередь всё равно мержит через gh.
+updates:
+  # PHP / Composer (DevCraft Admin)
+  - package-ecosystem: 'composer'
+    directory: '/upload/devcraft'
+    schedule:
+      interval: 'monthly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Berlin'
+    open-pull-requests-limit: 5
+    reviewers:
+      - 'MaximHarder'
+    assignees:
+      - 'MaximHarder'
+    commit-message:
+      prefix: 'chore'
+      prefix-development: 'chore'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'security'
+      - 'automated'
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'semiannually'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Berlin'
+    open-pull-requests-limit: 3
+    reviewers:
+      - 'MaximHarder'
+    assignees:
+      - 'MaximHarder'
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+      - 'automated'

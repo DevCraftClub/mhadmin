@@ -5,7 +5,7 @@ labels:
     - Прочее
     - Не знаю куда
 assignees:
-    - Gokujo
+    - MaximHarder
 body:
     -   type: markdown
         attributes:

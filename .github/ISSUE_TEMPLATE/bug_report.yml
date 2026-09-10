@@ -5,7 +5,7 @@ labels:
     - Ошибка
     - bug
 assignees:
-    - Gokujo
+    - MaximHarder
 body:
     -   type: markdown
         attributes:

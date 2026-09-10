@@ -1,0 +1,54 @@
+name: CI и Dependabot Automerge
+
+# Минимальный status-gate для Dependabot-PR.
+# Composer: validate в upload/devcraft.
+# Иначе: checkout-gate для PR по workflows/Actions.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'upload/devcraft/composer.json'
+      - 'upload/devcraft/composer.lock'
+      - '.github/workflows/**'
+  push:
+    branches: [main, master]
+    paths:
+      - 'upload/devcraft/composer.json'
+      - 'upload/devcraft/composer.lock'
+      - '.github/workflows/**'
+
+# Своя concurrency — НЕ делить dependabot-updates-gate / dependabot-merge-queue
+# (иначе deadlock, когда Deploy/FTP ждёт эти checks и очередь).
+concurrency:
+  group: dependabot-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  ci:
+    name: Установка и проверки
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        if: hashFiles('upload/devcraft/composer.json') != ''
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+          coverage: none
+
+      - name: Composer validate
+        if: hashFiles('upload/devcraft/composer.json') != ''
+        working-directory: upload/devcraft
+        run: composer validate --no-check-publish --no-check-lock
+
+      - name: Минимальный gate (нет composer и package.json)
+        if: hashFiles('upload/devcraft/composer.json') == ''
+        run: |
+          echo "Нет composer.json — checkout-gate OK."

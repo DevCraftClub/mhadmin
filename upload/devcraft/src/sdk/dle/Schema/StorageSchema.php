@@ -19,10 +19,10 @@ final class StorageSchema extends AbstractTableSchema {
 	public int $id = 0;
 	#[OA\Property(
 		property: 'name',
-		type: 'integer',
+		type: 'string',
 		description: 'Имя (storage.name)',
 	)]
-	public int $name = 0;
+	public string $name = '0';
 	#[OA\Property(
 		property: 'type',
 		type: 'integer',
@@ -142,7 +142,7 @@ final class StorageSchema extends AbstractTableSchema {
 
 	protected function defaultMap(): array {
 		return [
-			'name' => 0,
+			'name' => '0',
 			'type' => 0,
 			'accesstype' => '',
 			'connect_url' => '',

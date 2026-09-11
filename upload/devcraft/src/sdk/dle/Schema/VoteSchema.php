@@ -31,10 +31,10 @@ final class VoteSchema extends AbstractTableSchema {
 	public int $vote_num = 0;
 	#[OA\Property(
 		property: 'date',
-		type: 'integer',
+		type: 'string',
 		description: 'Дата/время (vote.date)',
 	)]
-	public int $date = 0;
+	public string $date = '0';
 	#[OA\Property(
 		property: 'title',
 		type: 'string',
@@ -95,7 +95,7 @@ final class VoteSchema extends AbstractTableSchema {
 		return [
 			'category' => '',
 			'vote_num' => 0,
-			'date' => 0,
+			'date' => '0',
 			'title' => '',
 			'body' => '',
 			'approve' => 1,

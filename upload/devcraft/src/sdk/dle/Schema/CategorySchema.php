@@ -163,10 +163,10 @@ final class CategorySchema extends AbstractTableSchema {
 	public int $rating_type = -1;
 	#[OA\Property(
 		property: 'schema_org',
-		type: 'integer',
+		type: 'string',
 		description: 'Колонка category.schema_org',
 	)]
-	public int $schema_org = 1;
+	public string $schema_org = '1';
 	#[OA\Property(
 		property: 'disable_index',
 		type: 'integer',
@@ -236,7 +236,7 @@ final class CategorySchema extends AbstractTableSchema {
 			'enable_dzen' => 1,
 			'active' => 1,
 			'rating_type' => -1,
-			'schema_org' => 1,
+			'schema_org' => '1',
 			'disable_index' => 0,
 		];
 	}

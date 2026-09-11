@@ -79,10 +79,10 @@ final class RssSchema extends AbstractTableSchema {
 	public string $cookie = '';
 	#[OA\Property(
 		property: 'category',
-		type: 'string',
-		description: 'CSV id или all (таблица rss.category)',
+		type: 'integer',
+		description: 'ID категории (rss.category)',
 	)]
-	public string $category = '';
+	public int $category = 0;
 	#[OA\Property(
 		property: 'lastdate',
 		type: 'integer',
@@ -131,7 +131,7 @@ final class RssSchema extends AbstractTableSchema {
 			'search' => '',
 			'max_news' => 0,
 			'cookie' => '',
-			'category' => '',
+			'category' => 0,
 			'lastdate' => 0,
 			'allow_source' => 0,
 		];

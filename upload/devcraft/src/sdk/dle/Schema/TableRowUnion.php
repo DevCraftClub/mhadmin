@@ -40,6 +40,8 @@ use OpenApi\Attributes as OA;
 		new OA\Schema(ref: LogsSchema::class),
 		new OA\Schema(ref: LostdbSchema::class),
 		new OA\Schema(ref: MailLogSchema::class),
+		new OA\Schema(ref: MailCampaignsSchema::class),
+		new OA\Schema(ref: MailCampaignUsersSchema::class),
 		new OA\Schema(ref: MetatagsSchema::class),
 		new OA\Schema(ref: NewsletterTemplateCategoriesSchema::class),
 		new OA\Schema(ref: NewsletterTemplateItemsSchema::class),

@@ -126,6 +126,9 @@ final class RelationMap {
 		['from' => 'newsletter_template_items', 'column' => 'category_id', 'to' => 'newsletter_template_categories', 'toColumn' => 'id', 'kind' => self::KIND_ONE],
 		['from' => 'newsletter_template_items', 'column' => 'created_by', 'to' => 'users', 'toColumn' => 'user_id', 'kind' => self::KIND_ONE],
 		['from' => 'newsletter_template_categories', 'column' => 'created_by', 'to' => 'users', 'toColumn' => 'user_id', 'kind' => self::KIND_ONE],
+		['from' => 'mail_campaigns', 'column' => 'sender_id', 'to' => 'users', 'toColumn' => 'user_id', 'kind' => self::KIND_ONE],
+		['from' => 'mail_campaign_users', 'column' => 'campaign_id', 'to' => 'mail_campaigns', 'toColumn' => 'id', 'kind' => self::KIND_ONE],
+		['from' => 'mail_campaign_users', 'column' => 'user_id', 'to' => 'users', 'toColumn' => 'user_id', 'kind' => self::KIND_ONE],
 	];
 
 	/**

@@ -34,6 +34,8 @@ final class SchemaTableNames {
 	public const LOGS = 'logs';
 	public const LOSTDB = 'lostdb';
 	public const MAIL_LOG = 'mail_log';
+	public const MAIL_CAMPAIGNS = 'mail_campaigns';
+	public const MAIL_CAMPAIGN_USERS = 'mail_campaign_users';
 	public const METATAGS = 'metatags';
 	public const NEWSLETTER_TEMPLATE_CATEGORIES = 'newsletter_template_categories';
 	public const NEWSLETTER_TEMPLATE_ITEMS = 'newsletter_template_items';

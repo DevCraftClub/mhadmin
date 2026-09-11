@@ -30,6 +30,24 @@ use DevCraft\Types\Changelog;
  */
 
 return [
+	ChangelogBuilder::create('200.4.1')
+		->date('2026-09-10')
+		->added([
+			__('In-process SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.'),
+			__('Мост equality между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.'),
+		])
+		->changed([
+			__('Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.'),
+		])
+		->deprecated([
+			__('Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.'),
+		])
+		->fixed([
+			__('Cycle ORM: при пересборке схемы (нет или устарел `cycle_orm_schema.ser`) всегда включается GenerateMigrations — таблицы сателлитов (в т.ч. `api_*`) создаются после установки ядра Admin, а не только при первом bootstrap.'),
+			__('SDK: `create()` любой Schema падал с «Table `PREFIX_PREFIX_*` doesn\'t exist» — INSERT шёл через builder Cycle, у которого префикс уже настроен. Теперь префикс не удваивается.'),
+			__('SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.'),
+		])
+		->build(),
 	ChangelogBuilder::create('200.4.0')
 		->date('2026-06-15')
 		->added([

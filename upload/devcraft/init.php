@@ -39,6 +39,9 @@ if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
 	/** Подключает автозагрузчик Composer (исключение: без DLEPlugins::Check()). */
 	require_once $vendor_autoload;
 
+	/** Подключает in-process DLE SDK: глобальные шимы `prepare()` / `query()` и fallback-автозагрузку. */
+	require_once DLEPlugins::Check(__DIR__ . '/src/sdk/dle/bootstrap.php');
+
 	/** Регистрирует пути каталогов DevCraft в среде выполнения. */
 	DevCraft\Core\Config\Paths::register();
 

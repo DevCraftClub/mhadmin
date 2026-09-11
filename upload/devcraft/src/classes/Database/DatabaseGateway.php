@@ -367,9 +367,12 @@ final class DatabaseGateway {
 
 	/**
 	 * Лениво создаёт ORM. Схема кэшируется.
-	 * GenerateMigrations: DEVCRAFT_GENERATE_MIGRATIONS или чистая установка (нет таблиц ядра).
+	 * GenerateMigrations: при любой пересборке схемы (без кэша), bootstrap ядра
+	 * или константа DEVCRAFT_GENERATE_MIGRATIONS — иначе новые Entity сателлитов
+	 * не получают CREATE TABLE после первой установки Admin.
 	 *
 	 * @since 171.3.0
+	 * @since 200.4.1 GenerateMigrations при любой пересборке схемы (не только bootstrap ядра).
 	 *
 	 * @return ORM\ORM Инициализированный ORM.
 	 */
@@ -395,9 +398,9 @@ final class DatabaseGateway {
 		if($schema_array === null) {
 			$path_resolver      = new EntityPathResolver($this->registry);
 			$model_directories  = $path_resolver->entityModelDirectories();
-			$generateMigrations = $bootstrap
-				|| (defined('DEVCRAFT_GENERATE_MIGRATIONS') && constant('DEVCRAFT_GENERATE_MIGRATIONS'));
-			$didGenerate        = (bool) $generateMigrations;
+			// Пересборка схемы без кэша всегда пишет diff миграций (сателлиты после ядра).
+			$generateMigrations = true;
+			$didGenerate        = true;
 
 			$registry     = new SchemaRegistry($this->generateManager());
 			$schema_array = $this->compileSchema(

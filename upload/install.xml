@@ -3,7 +3,7 @@
 	<name>DevCraft Admin</name>
 	<description>DevCraft Admin - панель администрирования для плагинов от DevCraft</description>
 	<icon>devcraft/src/modules/Admin/Public/icon.png</icon>
-	<version>200.4.0</version>
+	<version>200.4.1</version>
 	<dleversion>20</dleversion>
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
@@ -13,8 +13,8 @@
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
 	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('devcraft', 'DevCraft Admin v200.4.0', 'Панель администрирования для плагинов от DevCraft', 'devcraft/src/modules/Admin/Public/icon.png', '1,2')
-ON DUPLICATE KEY UPDATE title = 'DevCraft Admin v200.4.0';]]></mysqlenable>
+VALUES('devcraft', 'DevCraft Admin v200.4.1', 'Панель администрирования для плагинов от DevCraft', 'devcraft/src/modules/Admin/Public/icon.png', '1,2')
+ON DUPLICATE KEY UPDATE title = 'DevCraft Admin v200.4.1';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';]]></mysqldisable>
 	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';
 DROP TABLE IF EXISTS {prefix}_devcraft_logs;

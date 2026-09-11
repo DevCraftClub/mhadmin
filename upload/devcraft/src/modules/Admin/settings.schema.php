@@ -98,6 +98,12 @@ return FormSchemaBuilder::create(AdminIdentity::code())
 				                        ['{path}' => str_replace(ROOT_DIR, '', Paths::locales())]),
 		                        )
 		                        ->default(str_replace(ROOT_DIR, '', Paths::locales()))
+	                        ->text('plugin_exports_path', __('Путь экспорта плагинов'))
+		                        ->description(
+			                        __('Каталог для install.xml / ZIP при вызове SDK <code>PluginPresenter::export()</code> без явного <code>$path</code>.<br>По умолчанию: <code>{path}</code>',
+				                        ['{path}' => str_replace(ROOT_DIR, '', Paths::cache() . '/plugin_exports')]),
+		                        )
+		                        ->default(str_replace(ROOT_DIR, '', Paths::cache() . '/plugin_exports'))
 		                ->section(__('Логирование'))
 	                        ->checkbox('logs', __('Включить логирование?'))
 		                        ->description(__('При включенном параметре будет создавать текстовые логи в папке <b>{path}</b>',

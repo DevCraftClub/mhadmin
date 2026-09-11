@@ -35,6 +35,7 @@ return [
 		->added([
 			__('In-process SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.'),
 			__('Мост equality между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.'),
+			__('`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).'),
 		])
 		->changed([
 			__('Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.'),

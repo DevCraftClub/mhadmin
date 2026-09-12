@@ -11,7 +11,7 @@ use DevCraft\Core\Abstracts\AbstractModuleIdentity;
  */
 final class %dir%Identity extends AbstractModuleIdentity {
 
-	public const string MODULE = '%latin%';
+	public const string MODULE = '%dir%';
 
 	public const string CODE = '%latin%';
 

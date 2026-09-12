@@ -13,7 +13,7 @@
             </div>
 
             {{ input.input('name', 'Название модуля'|trans, 'Введите название модуля, скрипт создаст сам все пути и файлы и настроит к ним нужные права доступа.'|trans, variable.name|default(''), {}) }}
-            {{ input.input('translit', 'Название модуля на латинице'|trans, 'Введите название модуля на латинице, иначе будет использована стандартная функция DLE для преобразования названия.'|trans, variable.translit|default(''), {}) }}
+            {{ input.input('translit', 'Название модуля на латинице'|trans, 'Латиница, цифры, `_` и `-` (например `dle_connections`). Пусто — транслит из названия модуля.'|trans, variable.translit|default(''), {}) }}
             {{ input.input('description', 'Описание модуля'|trans, 'Введите описание модуля'|trans, variable.description|default(''), {}) }}
             {{ input.input('version', 'Версия модуля'|trans, 'Введите версию модуля.<br>По умолчанию: ВерсияDLE.1.0 -> 200.1.0'|trans, variable.version|default(''), {}) }}
             {{ input.input('icon', 'Иконка'|trans, 'Класс иконки Metro UI.<br>По умолчанию: <span class="mif-cog"></span> (mif-cog)'|trans, variable.icon|default(''), {}) }}

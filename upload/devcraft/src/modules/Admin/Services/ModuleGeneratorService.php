@@ -149,8 +149,10 @@ final class ModuleGeneratorService {
 			$report['dirs']['success'][] = $dir;
 		}
 
+		$incSlug = $normalized['inc'];
+
 		$fileMap = [
-			'engine_inc.php.stub'      => ROOT_DIR . '/engine/inc/' . $latin . '.php',
+			'engine_inc.php.stub'      => ROOT_DIR . '/engine/inc/' . $incSlug . '.php',
 			'Identity.php.stub'        => DEVCRAFT_MODULES . '/' . $dirName . '/' . $dirName . 'Identity.php',
 			'manifest.php.stub'        => DEVCRAFT_MODULES . '/' . $dirName . '/manifest.php',
 			'DashboardPage.php.stub'   => DEVCRAFT_MODULES . '/' . $dirName . '/Pages/DashboardPage.php',
@@ -197,6 +199,7 @@ final class ModuleGeneratorService {
 	 *     name: string,
 	 *     latin: string,
 	 *     dir: string,
+	 *     inc: string,
 	 *     description: string,
 	 *     version: string,
 	 *     icon: string,
@@ -216,6 +219,8 @@ final class ModuleGeneratorService {
 		}
 
 		$latin = DataManager::toTranslit($latin);
+		$dir   = $this->pascalModuleDir($name);
+		$inc   = $this->engineIncSlug($latin);
 
 		$icon       = $input->icon !== ''? $input->icon : 'mif-cog';
 		$pluginIcon = $input->pluginIcon !== ''? $input->pluginIcon : 'engine/skins/images/default_module.png';
@@ -224,7 +229,8 @@ final class ModuleGeneratorService {
 		return [
 			'name'        => $name,
 			'latin'       => $latin,
-			'dir'         => ucfirst($latin),
+			'dir'         => $dir,
+			'inc'         => $inc,
 			'description' => $input->description,
 			'version'     => $version,
 			'icon'        => $icon,
@@ -234,6 +240,37 @@ final class ModuleGeneratorService {
 			'db'          => $input->db,
 			'override'    => $input->override,
 		];
+	}
+
+	/**
+	 * PascalCase имя каталога модуля из отображаемого названия.
+	 */
+	private function pascalModuleDir(string $name): string {
+		$trimmed = trim($name);
+		if(preg_match('/^[A-Za-z][A-Za-z0-9]*$/', $trimmed) === 1) {
+			return $trimmed;
+		}
+
+		$slug = DataManager::toTranslit($trimmed);
+		$parts = preg_split('/[_\-\s]+/', $slug) ?: [];
+		$dir = '';
+		foreach($parts as $part) {
+			if($part === '') {
+				continue;
+			}
+			$dir .= ucfirst($part);
+		}
+
+		return $dir !== '' ? $dir : 'Module';
+	}
+
+	/**
+	 * Имя engine/inc/{slug}.php: latin без префикса dle_ / dle-.
+	 */
+	private function engineIncSlug(string $latin): string {
+		$slug = preg_replace('/^dle[_-]/', '', $latin) ?? $latin;
+
+		return $slug !== '' ? $slug : $latin;
 	}
 
 	/**
@@ -249,6 +286,7 @@ final class ModuleGeneratorService {
 		return [
 			'%latin%'       => $normalized['latin'],
 			'%dir%'         => $normalized['dir'],
+			'%inc%'         => $normalized['inc'],
 			'%name%'        => $normalized['name'],
 			'%version%'     => $normalized['version'],
 			'%description%' => $normalized['description'],

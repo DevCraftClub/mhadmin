@@ -708,7 +708,8 @@ final class DataManager {
 			$transliterated = $input;
 		}
 
-		$filtered    = preg_replace('/[^a-zA-Z0-9\.\+\s]/', '', (string) $transliterated) ?? '';
+		// Разрешены `_` и `-`
+		$filtered    = preg_replace('/[^a-zA-Z0-9\.\+\s_\-]/', '', (string) $transliterated) ?? '';
 		$underscored = preg_replace('/\s+/', '_', $filtered) ?? '';
 
 		if($lowercase) {

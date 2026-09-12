@@ -37,6 +37,7 @@ return [
 			__('Мост equality между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.'),
 			__('`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).'),
 			__('SDK Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` по DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); константы `SchemaTableNames`, связи в `RelationMap`, refs в `TableRowUnion`.'),
+			__('Канон сателлитов: публичный слой `Controller/`; патчи DLE через систему плагинов — маркеры `// DevCraft {Name}: start` / `end`.'),
 		])
 		->changed([
 			__('Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.'),
@@ -49,6 +50,7 @@ return [
 			__('SDK: `create()` любой Schema падал с «Table `PREFIX_PREFIX_*` doesn\'t exist» — INSERT шёл через builder Cycle, у которого префикс уже настроен. Теперь префикс не удваивается.'),
 			__('SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.'),
 			__('SDK Schema типы по install/dump DLE 21: `category.schema_org` и `storage.name` / `vote.date` — string; `rss.category` — int.'),
+			__('Генератор модулей: latin/`toTranslit` сохраняет `_` и `-`; Identity `MODULE=%dir%`, `CODE=%latin%`; каталог модуля — PascalCase от имени; `engine/inc` — slug без префикса `dle_`.'),
 		])
 		->build(),
 	ChangelogBuilder::create('200.4.0')

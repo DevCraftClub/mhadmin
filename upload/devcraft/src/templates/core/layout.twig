@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="{{ asset_base }}css/metro.css">
     <link rel="stylesheet" href="{{ asset_base }}css/icons.css">
     <link rel="stylesheet" href="{{ asset_base }}css/devcraft.css">
+    {% for css_url in module_css_urls|default([]) %}
+    <link rel="stylesheet" href="{{ css_url }}">
+    {% endfor %}
     <style>
         .navview-content { padding-top: 52px; }
         #page-content { padding: 1rem; }

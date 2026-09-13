@@ -11,7 +11,7 @@ use DevCraft\Types\FormSchema;
 use DevCraft\Types\FormSection;
 
 /**
- * Встраивает сателлиты (`extends`) в host PluginContext: menu, ajax, settings.
+ * Встраивает сателлиты (`extends`) в host PluginContext: menu, ajax, assets, settings.
  */
 final class ModuleExtensionMerger {
 
@@ -132,6 +132,14 @@ final class ModuleExtensionMerger {
 		}
 
 		$host->appendAjaxMethods($extension->ajaxMethods());
+
+		foreach($extension->jsAssetFiles() as $file) {
+			$host->appendExtensionJsAsset($extension->modulePath(), $file);
+		}
+
+		foreach($extension->cssAssetFiles() as $file) {
+			$host->appendExtensionCssAsset($extension->modulePath(), $file);
+		}
 
 		$extSchema = $extension->settingsSchema();
 		$hostSchema = $host->settingsSchema();

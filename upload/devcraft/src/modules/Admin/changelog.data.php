@@ -38,9 +38,11 @@ return [
 			__('`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).'),
 			__('SDK Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` по DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); константы `SchemaTableNames`, связи в `RelationMap`, refs в `TableRowUnion`.'),
 			__('Канон сателлитов: публичный слой `Controller/`; патчи DLE через систему плагинов — маркеры `// DevCraft {Name}: start` / `end`.'),
+			__('Публичный `dle_template`: у `[if]` — опциональный `[else]`; новый блок `[has value="…" condition="!=" comparison=""]` с `[else]` — только при `compile(..., true)`, патч `engine/classes/templates.class.php` (маркеры `// DevCraft Admin`) через `install.xml`.'),
 		])
 		->changed([
 			__('Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.'),
+			__('Поставка расширений условий шаблонов — в `install.xml` Admin (`plugins_files`), без отдельного DLE-плагина.'),
 		])
 		->deprecated([
 			__('Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.'),

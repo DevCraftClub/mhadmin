@@ -3,7 +3,7 @@
 	<name>DevCraft Admin</name>
 	<description>DevCraft Admin - панель администрирования для плагинов от DevCraft</description>
 	<icon>devcraft/src/modules/Admin/Public/icon.png</icon>
-	<version>200.4.0</version>
+	<version>200.4.1</version>
 	<dleversion>20</dleversion>
 	<versioncompare>greater</versioncompare>
 	<upgradeurl></upgradeurl>
@@ -13,8 +13,8 @@
 	<mysqlinstall><![CDATA[]]></mysqlinstall>
 	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
 	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
-VALUES('devcraft', 'DevCraft Admin v200.4.0', 'Панель администрирования для плагинов от DevCraft', 'devcraft/src/modules/Admin/Public/icon.png', '1,2')
-ON DUPLICATE KEY UPDATE title = 'DevCraft Admin v200.4.0';]]></mysqlenable>
+VALUES('devcraft', 'DevCraft Admin v200.4.1', 'Панель администрирования для плагинов от DevCraft', 'devcraft/src/modules/Admin/Public/icon.png', '1,2')
+ON DUPLICATE KEY UPDATE title = 'DevCraft Admin v200.4.1';]]></mysqlenable>
 	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';]]></mysqldisable>
 	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';
 DROP TABLE IF EXISTS {prefix}_devcraft_logs;
@@ -52,6 +52,231 @@ if (is_file(ROOT_DIR . '/devcraft/init.php')) {
 	require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
 }
 // DevCraft Init: Stop
+]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+	</file>
+	<file name="engine/classes/templates.class.php">
+		<operation action="replace">
+			<searchcode><![CDATA[		if( $compile_if AND stripos( $this->copy_template, "[if" ) !== false){
+		
+			$this->copy_template = $this->if_check($this->copy_template);
+		}
+		
+		if (stripos($this->copy_template, "{catmenu") !== false) {]]></searchcode>
+			<replacecode><![CDATA[		if( $compile_if AND stripos( $this->copy_template, "[if" ) !== false){
+		
+			$this->copy_template = $this->if_check($this->copy_template);
+		}
+
+		// DevCraft Admin: start
+		if( $compile_if AND stripos( $this->copy_template, "[has" ) !== false ) {
+			$this->copy_template = $this->has_check($this->copy_template);
+		}
+		// DevCraft Admin: end
+		
+		if (stripos($this->copy_template, "{catmenu") !== false) {]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+		<operation action="before">
+			<searchcode><![CDATA[	function if_check($text){]]></searchcode>
+			<replacecode><![CDATA[	// DevCraft Admin: start
+	/**
+	 * Проверяет «пустое» значение для [has] / сравнения с "".
+	 * Пусто: null-подобное, "", только ASCII whitespace. Не пусто: &nbsp;, U+00A0.
+	 */
+	function dc_is_empty_template_value($value) {
+		if ($value === null) {
+			return true;
+		}
+
+		$value = (string) $value;
+
+		if ($value === '') {
+			return true;
+		}
+
+		return preg_replace('/[ \t\n\r\0\x0B]+/', '', $value) === '';
+	}
+
+	/**
+	 * Делит блок на then/else по первому top-level [else] (вложенные [if]/[has] игнорируются).
+	 *
+	 * @return array{0: string, 1: string}
+	 */
+	function dc_split_else_block($content) {
+		$content = (string) $content;
+		$pos     = 0;
+		$depth   = 0;
+		$len     = strlen($content);
+
+		while ($pos < $len && preg_match('/\[else\]|\[if\b[^\]]*\]|\[\/if\]|\[has\b[^\]]*\]|\[\/has\]/i', $content, $m, PREG_OFFSET_CAPTURE, $pos)) {
+			$tag = $m[0][0];
+			$at  = (int) $m[0][1];
+
+			if (strcasecmp($tag, '[else]') === 0 && $depth === 0) {
+				return array(substr($content, 0, $at), substr($content, $at + strlen($tag)));
+			}
+
+			if (preg_match('/^\[(\/)?(if|has)\b/i', $tag, $tm)) {
+				if (!empty($tm[1])) {
+					$depth--;
+					if ($depth < 0) {
+						$depth = 0;
+					}
+				} else {
+					$depth++;
+				}
+			}
+
+			$pos = $at + strlen($tag);
+		}
+
+		return array($content, '');
+	}
+	// DevCraft Admin: end
+
+]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+		<operation action="replace">
+			<searchcode><![CDATA[				$replacement = $is_condition_met ? $process_if_block($block_content) : '';
+				$text = substr_replace($text, $replacement, $start_pos, $end_pos - $start_pos);]]></searchcode>
+			<replacecode><![CDATA[				// DevCraft Admin: start
+				$parts = $this->dc_split_else_block($block_content);
+				$then  = $parts[0];
+				$else  = $parts[1];
+				$replacement = $is_condition_met ? $process_if_block($then) : ($else !== '' ? $process_if_block($else) : '');
+				// DevCraft Admin: end
+				$text = substr_replace($text, $replacement, $start_pos, $end_pos - $start_pos);]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+		<operation action="replace">
+			<searchcode><![CDATA[		return $process_if_block($text);	
+	}
+
+	function evaluate_condition($condition, $row, $xfields) {]]></searchcode>
+			<replacecode><![CDATA[		return $process_if_block($text);	
+	}
+
+	// DevCraft Admin: start
+	/**
+	 * Обрабатывает блоки [has value="…" condition="…" comparison="…"]…[else]…[/has].
+	 */
+	function has_check($text) {
+		$process_has_block = function ($text) use (&$process_has_block) {
+			$regex = '/\[has\b([^\]]*)\]/i';
+
+			while (preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE)) {
+				$full_open_tag = $matches[0][0];
+				$attrs_raw     = $matches[1][0];
+				$start_pos     = $matches[0][1];
+
+				$value       = null;
+				$condition   = '!=';
+				$comparison  = '';
+				$attrs_ok    = true;
+
+				if (preg_match_all('/\b(value|condition|comparison)\s*=\s*(["\'])(.*?)\2/i', $attrs_raw, $am, PREG_SET_ORDER)) {
+					foreach ($am as $attr) {
+						$name = strtolower($attr[1]);
+						$val  = $attr[3];
+						if ($name === 'value') {
+							$value = $val;
+						} elseif ($name === 'condition') {
+							$condition = $val !== '' ? $val : '!=';
+						} elseif ($name === 'comparison') {
+							$comparison = $val;
+						}
+					}
+				}
+
+				if ($value === null) {
+					$attrs_ok = false;
+				}
+
+				$end_pos = $start_pos + strlen($full_open_tag);
+				$depth   = 1;
+
+				while ($depth > 0 && preg_match('/\[has\b[^\]]*\]|\[\/has\]/i', $text, $sub_matches, PREG_OFFSET_CAPTURE, $end_pos)) {
+					if (stripos($sub_matches[0][0], '[/has]') !== false) {
+						$depth--;
+					} else {
+						$depth++;
+					}
+					$end_pos = $sub_matches[0][1] + strlen($sub_matches[0][0]);
+				}
+
+				if ($depth > 0) {
+					break;
+				}
+
+				if (!$attrs_ok) {
+					break;
+				}
+
+				$block_content = substr($text, $start_pos + strlen($full_open_tag), $end_pos - $start_pos - strlen($full_open_tag) - strlen('[/has]'));
+				$parts         = $this->dc_split_else_block($block_content);
+				$then          = $parts[0];
+				$else          = $parts[1];
+
+				$left  = $this->dc_is_empty_template_value($value) ? '' : (string) $value;
+				$right = $this->dc_is_empty_template_value($comparison) ? '' : (string) $comparison;
+				$met   = $this->evaluate_operator($left, $condition, $right);
+
+				$replacement = $met ? $process_has_block($then) : ($else !== '' ? $process_has_block($else) : '');
+				$text        = substr_replace($text, $replacement, $start_pos, $end_pos - $start_pos);
+			}
+
+			return $text;
+		};
+
+		return $process_has_block($text);
+	}
+	// DevCraft Admin: end
+
+	function evaluate_condition($condition, $row, $xfields) {]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+	</file>
+	<file name="engine/modules/main.php">
+		<operation action="after">
+			<searchcode><![CDATA[$tpl->load_template ( 'main.tpl' );]]></searchcode>
+			<replacecode><![CDATA[$tpl->load_template ( 'main.tpl' );
+
+// DevCraft Admin: start
+try {
+	if ( !class_exists( \DevCraft\Modules\Admin\Services\PublicAssetTagService::class, false )
+		&& is_file( ROOT_DIR . '/devcraft/init.php' ) ) {
+		require_once DLEPlugins::Check( ROOT_DIR . '/devcraft/init.php' );
+	}
+	if ( class_exists( \DevCraft\Modules\Admin\Services\PublicAssetTagService::class ) ) {
+		( new \DevCraft\Modules\Admin\Services\PublicAssetTagService() )->applyToTemplate( $tpl );
+	}
+} catch ( \Throwable ) {
+	// Публичная страница не должна падать из‑за тегов DevCraft.
+}
+// DevCraft Admin: end
 ]]></replacecode>
 			<searchcount>1</searchcount>
 			<replacecount>1</replacecount>

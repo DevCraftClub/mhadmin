@@ -157,9 +157,12 @@ final class Router {
 		$devcraftJsPath            = Paths::templates() . '/core/assets/js/devcraft.js';
 		$filterJsPath              = Paths::templates() . '/core/assets/js/filter.js';
 		$composerJsPath            = Paths::templates() . '/core/assets/js/composer.js';
+		$devcraftCssPath           = Paths::templates() . '/core/assets/css/devcraft.css';
 		$devcraftMtime             = is_file($devcraftJsPath)? filemtime($devcraftJsPath) : 0;
 		$filterMtime               = is_file($filterJsPath)? filemtime($filterJsPath) : 0;
+		$devcraftCssMtime          = is_file($devcraftCssPath)? filemtime($devcraftCssPath) : 0;
 		$data['asset_js_mtime']    = (string) max($devcraftMtime, $filterMtime, 0)? : (string) ($meta['version'] ?? '1.0.0');
+		$data['asset_css_mtime']   = $devcraftCssMtime > 0? (string) $devcraftCssMtime : $data['asset_js_mtime'];
 		$data['composer_js_mtime'] = is_file($composerJsPath)? (string) filemtime($composerJsPath) : $data['asset_js_mtime'];
 		$data['filter_js_mtime']   = $filterMtime > 0? (string) $filterMtime : $data['asset_js_mtime'];
 		$data['page_title']        = $data['page_title'] ?? (string) ($meta['name'] ?? 'DevCraft');
@@ -179,6 +182,7 @@ final class Router {
 		$data['devcraft_metro_i18n_url']  = $this->buildMetroI18nUrl($metroLocale);
 		$data['devcraft_translation_url'] = $this->buildTranslationJsUrl($locale);
 		$data['module_js_urls']           = $this->buildModuleJsUrls($plugin);
+		$data['module_css_urls']          = $this->buildModuleCssUrls($plugin);
 
 		LogGenerator::for('Router')->debug([
 			'mod'       => $mod,
@@ -239,16 +243,45 @@ final class Router {
 	 * @return list<string> URL скриптов модуля.
 	 */
 	private function buildModuleJsUrls(PluginContext $plugin): array {
+		return $this->buildModuleAssetUrls($plugin->resolvedJsAssets());
+	}
+
+	/**
+	 * Собирает URL публичных CSS-файлов модуля с версией по mtime.
+	 *
+	 * @since 210.1.0
+	 *
+	 * @param   PluginContext  $plugin  Контекст модуля.
+	 *
+	 * @return list<string> URL стилей модуля.
+	 */
+	private function buildModuleCssUrls(PluginContext $plugin): array {
+		return $this->buildModuleAssetUrls($plugin->resolvedCssAssets());
+	}
+
+	/**
+	 * @param   list<array{modulePath: string, file: string}>  $assets
+	 *
+	 * @return list<string>
+	 */
+	private function buildModuleAssetUrls(array $assets): array {
 		$urls = [];
 
-		foreach($plugin->jsAssetFiles() as $file) {
-			$path = $plugin->modulePath() . '/Public/' . $file;
+		foreach($assets as $asset) {
+			$modulePath = (string) ($asset['modulePath'] ?? '');
+			$file       = ltrim((string) ($asset['file'] ?? ''), '/');
+
+			if($modulePath === '' || $file === '') {
+				continue;
+			}
+
+			$path = $modulePath . '/Public/' . $file;
 
 			if(!is_file($path)) {
 				continue;
 			}
 
-			$urls[] = Application::instance()->modulePublicAssetUrl($plugin->modulePath())
+			$urls[] = Application::instance()->modulePublicAssetUrl($modulePath)
 			          . $file
 			          . '?v=' . filemtime($path);
 		}

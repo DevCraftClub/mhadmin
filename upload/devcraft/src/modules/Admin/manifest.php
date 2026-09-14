@@ -27,6 +27,10 @@ use DevCraft\Modules\Admin\Pages\ChangelogPage;
 use DevCraft\Modules\Admin\Pages\DashboardPage;
 use DevCraft\Modules\Admin\Pages\ComposerPage;
 use DevCraft\Modules\Admin\Pages\NewModulePage;
+use DevCraft\Modules\Admin\Pages\PublicStylesPage;
+use DevCraft\Modules\Admin\Pages\PublicScriptsPage;
+use DevCraft\Modules\Admin\Pages\PublicHeadersPage;
+use DevCraft\Builders\ModuleSiteAssetsBuilder;
 use DevCraft\Modules\Admin\Ajax\DumpAutoloadHandler;
 use DevCraft\Modules\Admin\Ajax\SettingsHandler;
 use DevCraft\Modules\Admin\Ajax\DeleteLogHandler;
@@ -40,6 +44,14 @@ use DevCraft\Modules\Admin\Ajax\ComposerSyncHandler;
 use DevCraft\Modules\Admin\Ajax\SyncAssetsHandler;
 use DevCraft\Modules\Admin\Ajax\CheckAssetsHandler;
 use DevCraft\Modules\Admin\Ajax\CheckUpdateHandler;
+use DevCraft\Modules\Admin\Ajax\PublicAssetSaveHandler;
+use DevCraft\Modules\Admin\Ajax\PublicAssetDeleteHandler;
+use DevCraft\Modules\Admin\Ajax\PublicAssetToggleHandler;
+use DevCraft\Modules\Admin\Ajax\PublicAssetReorderHandler;
+use DevCraft\Modules\Admin\Ajax\PublicHeaderSaveHandler;
+use DevCraft\Modules\Admin\Ajax\PublicHeaderDeleteHandler;
+use DevCraft\Modules\Admin\Ajax\PublicHeaderReorderHandler;
+use DevCraft\Modules\Admin\Ajax\PublicHeaderToggleHandler;
 
 /**
  * Манифест модуля DevCraft Admin (fluent ModuleManifestBuilder).
@@ -56,7 +68,7 @@ return ModuleManifestBuilder::create()
 	->crowdinName('mhadmin')
 	->crowdinStatId('16830581-755131')
 	->name('DevCraft Admin')
-	->version('200.4.0')
+	->version('200.4.1')
 	->description(__('DevCraft — админ-оболочка для плагинов DLE'))
 	->icon('mif-construction')
 	->docsLink('https://readme.devcraft.club/latest/dev/devcraft_admin/install/')
@@ -65,6 +77,9 @@ return ModuleManifestBuilder::create()
 	->menu([
 		AdminLink::page(__('Главная'), 'dashboard', DashboardPage::class, 'mif-home'),
 		AdminLink::page(__('Настройки'), 'settings', SettingsPage::class, 'mif-cog'),
+		AdminLink::page(__('Публичные стили'), 'public_styles', PublicStylesPage::class, 'mif-palette'),
+		AdminLink::page(__('Публичные скрипты'), 'public_scripts', PublicScriptsPage::class, 'mif-file-code'),
+		AdminLink::page(__('Публичные заголовки'), 'public_headers', PublicHeadersPage::class, 'mif-tags'),
 		AdminLink::page(__('Вывод логов'), 'logs', LogsPage::class, 'mif-list'),
 		AdminLink::page(__('Composer'), 'composer', ComposerPage::class, 'mif-tools'),
 		AdminLink::page(__('История изменений'), 'changelog', ChangelogPage::class, 'mif-library'),
@@ -73,19 +88,27 @@ return ModuleManifestBuilder::create()
 	->ajax(
 		ModuleAjaxConfigBuilder::create('admin')
 			->methods([
-				'settings'          => SettingsHandler::class,
-				'delete_log'        => DeleteLogHandler::class,
-				'check_assets'      => CheckAssetsHandler::class,
-				'sync_assets'       => SyncAssetsHandler::class,
-				'save_asset'        => SaveAssetHandler::class,
-				'check_update'      => CheckUpdateHandler::class,
-				'logs_table'        => LogsTableHandler::class,
-				'new_module'        => NewModuleHandler::class,
-				'composer_table'    => ComposerTableHandler::class,
-				'composer_action'   => ComposerActionHandler::class,
-				'composer_policy'   => ComposerPolicyHandler::class,
-				'composer_sync'     => ComposerSyncHandler::class,
-				'dump_autoload'     => DumpAutoloadHandler::class,
+				'settings'               => SettingsHandler::class,
+				'delete_log'             => DeleteLogHandler::class,
+				'check_assets'           => CheckAssetsHandler::class,
+				'sync_assets'            => SyncAssetsHandler::class,
+				'save_asset'             => SaveAssetHandler::class,
+				'check_update'           => CheckUpdateHandler::class,
+				'logs_table'             => LogsTableHandler::class,
+				'new_module'             => NewModuleHandler::class,
+				'composer_table'         => ComposerTableHandler::class,
+				'composer_action'        => ComposerActionHandler::class,
+				'composer_policy'        => ComposerPolicyHandler::class,
+				'composer_sync'          => ComposerSyncHandler::class,
+				'dump_autoload'          => DumpAutoloadHandler::class,
+				'public_asset_save'      => PublicAssetSaveHandler::class,
+				'public_asset_delete'    => PublicAssetDeleteHandler::class,
+				'public_asset_toggle'    => PublicAssetToggleHandler::class,
+				'public_asset_reorder'   => PublicAssetReorderHandler::class,
+				'public_header_save'     => PublicHeaderSaveHandler::class,
+				'public_header_delete'   => PublicHeaderDeleteHandler::class,
+				'public_header_reorder'  => PublicHeaderReorderHandler::class,
+				'public_header_toggle'   => PublicHeaderToggleHandler::class,
 			])
 	)
 	->composerRequired([
@@ -96,4 +119,8 @@ return ModuleManifestBuilder::create()
 	])
 	->changelog(require DLEPlugins::Check(DEVCRAFT_MODULES . '/Admin/changelog.data.php'))
 	->assets(ModuleAssetsBuilder::create()->js('admin.js'))
+	->siteAssets(
+		ModuleSiteAssetsBuilder::create()
+			->js('devcraft/src/templates/core/assets/js/dc_public.js')
+	)
 	->build(__DIR__);

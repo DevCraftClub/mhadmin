@@ -1,0 +1,96 @@
+{# Список публичных CSS/JS — таблица + DnD; добавление в модалке #}
+<div id="dc-public-assets-page"
+	 class="dc-public-assets-page"
+	 data-dc-public-assets-page="1"
+	 data-kind="{{ kind }}"
+	 data-mod="{{ mod }}">
+	<div class="d-flex flex-align-center flex-justify-between mb-3">
+		<div>
+			<h2 class="mb-0">{{ page_title }}</h2>
+			<p class="text-muted text-small mb-0">{{ page_description }}</p>
+		</div>
+		<button type="button" class="button primary" data-dc-public-add>
+			{{ 'Добавить'|trans }}
+		</button>
+	</div>
+
+	<div class="remark info mb-2">
+		{{ 'Перетащите строки за ручку слева. Автозаписи нельзя удалить — только выключить.'|trans }}
+	</div>
+
+	<p class="text-small mb-2">{{ rows|length }} {{ 'записей'|trans }}</p>
+
+	<table class="table striped table-border row-hover mt-2 dc-public-assets-table"
+		   data-role="table"
+		   data-show-search="true"
+		   data-show-rows-steps="false"
+		   data-show-table-info="false"
+		   data-show-pagination="false"
+		   data-rows="200"
+		   data-search-fields="label,path,module"
+		   data-table-search-placeholder="{{ 'Поиск…'|trans }}">
+		<thead>
+			<tr>
+				<th data-sortable="false" style="width:2.5rem;"></th>
+				<th name="origin" data-sortable="false">{{ 'Источник'|trans }}</th>
+				<th name="label" data-sortable="false">{{ 'Метка'|trans }}</th>
+				<th name="path" data-sortable="false">{{ 'Путь'|trans }}</th>
+				<th name="module" data-sortable="false">{{ 'Модуль'|trans }}</th>
+				<th name="active" data-sortable="false">{{ 'Активен'|trans }}</th>
+				<th name="actions" data-sortable="false">{{ 'Действия'|trans }}</th>
+			</tr>
+		</thead>
+		<tbody id="dc-public-assets-list" class="dc-public-assets-list" data-kind="{{ kind }}">
+			{% for row in rows %}
+				<tr class="dc-public-asset-row" data-id="{{ row.id }}">
+					<td class="dc-public-drag-cell">
+						<button type="button"
+								class="button cycle outline dc-public-drag"
+								title="{{ 'Перетащить'|trans }}"
+								aria-label="{{ 'Перетащить'|trans }}">
+							<span class="mif-move"></span>
+						</button>
+					</td>
+					<td>
+						<span class="badge {{ row.origin == 'auto' ? 'info' : 'secondary' }}">
+							{{ row.origin == 'auto' ? 'авто'|trans : 'ручной'|trans }}
+						</span>
+					</td>
+					<td class="dc-public-asset-label">{{ row.label }}</td>
+					<td><code class="dc-public-asset-path">{{ row.local_path }}</code></td>
+					<td>{{ row.module_code|default('—') }}</td>
+					<td>
+						<input type="checkbox"
+							   data-role="switch"
+							   data-material="true"
+							   class="js-dc-asset-toggle"
+							   data-id="{{ row.id }}"
+							   {% if row.active %}checked{% endif %}>
+					</td>
+					<td>
+						{% if row.origin == 'manual' %}
+							<button type="button" class="button alert small js-dc-asset-delete" data-id="{{ row.id }}">
+								{{ 'Удалить'|trans }}
+							</button>
+						{% else %}
+							<span class="text-muted text-small">{{ 'только выкл.'|trans }}</span>
+						{% endif %}
+					</td>
+				</tr>
+			{% else %}
+				<tr data-dc-public-empty>
+					<td colspan="7">{{ 'Пока нет записей'|trans }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<template id="dc-public-asset-form-tpl">
+		<form id="dc-public-asset-form" class="form dc-public-dialog-form" data-kind="{{ kind }}">
+			{% include 'core/includes/ui/sections_layout.twig' with {
+				sections: form.sections,
+				layout: form.layout|default('stack')
+			} %}
+		</form>
+	</template>
+</div>

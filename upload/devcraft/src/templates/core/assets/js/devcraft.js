@@ -264,6 +264,8 @@
 
     /**
      * Metro UI Dialog — OpenDialog-Pattern (DevCraft.Metro.dialogApi().create).
+     * Кнопки: Metro 5 ждёт `customButtons` (`text` + `onclick`).
+     * `actions` / `caption` (старый вызов) приводятся к этому формату.
      * @see metroui/examples/dialog.html — OpenDialog()
      */
     function dcMetroDialogCreate(options) {
@@ -272,10 +274,29 @@
             return null;
         }
 
-        return DevCraft.Metro.dialogApi().create(Object.assign({
+        const opts = Object.assign({
             closeButton: true,
-            defaultActions: false
-        }, options || {}));
+            defaultActions: false,
+            removeOnClose: true
+        }, options || {});
+
+        if (Array.isArray(opts.actions) && opts.customButtons == null) {
+            opts.customButtons = opts.actions.map(function (btn) {
+                btn = btn || {};
+
+                return {
+                    text: btn.text || btn.caption || '',
+                    cls: btn.cls || 'js-dialog-close',
+                    onclick: btn.onclick,
+                    attr: btn.attr,
+                    html: btn.html
+                };
+            });
+        }
+
+        delete opts.actions;
+
+        return DevCraft.Metro.dialogApi().create(opts);
     }
 
     function dcMetroDialogElement(selector) {

@@ -1,0 +1,101 @@
+{# Список публичных meta — таблица + DnD; добавление в модалке #}
+<div id="dc-public-headers-page"
+	 class="dc-public-headers-page"
+	 data-dc-public-headers-page="1"
+	 data-mod="{{ mod }}">
+	<div class="d-flex flex-align-center flex-justify-between mb-3">
+		<div>
+			<h2 class="mb-0">{{ page_title }}</h2>
+			<p class="text-muted text-small mb-0">{{ page_description }}</p>
+		</div>
+		<button type="button" class="button primary" data-dc-public-add>
+			{{ 'Добавить'|trans }}
+		</button>
+	</div>
+
+	<div class="remark info mb-2">
+		{{ 'Meta name/content для head. Автозаписи нельзя удалить — только выключить. DnD меняет порядок.'|trans }}
+	</div>
+
+	<p class="text-small mb-2">{{ rows|length }} {{ 'записей'|trans }}</p>
+
+	<table class="table striped table-border row-hover mt-2 dc-public-headers-table"
+		   data-role="table"
+		   data-show-search="true"
+		   data-show-rows-steps="false"
+		   data-show-table-info="false"
+		   data-show-pagination="false"
+		   data-rows="200"
+		   data-search-fields="name,content,module"
+		   data-table-search-placeholder="{{ 'Поиск…'|trans }}">
+		<thead>
+			<tr>
+				<th data-sortable="false" style="width:2.5rem;"></th>
+				<th name="origin" data-sortable="false">{{ 'Источник'|trans }}</th>
+				<th name="name" data-sortable="false">{{ 'Имя (name)'|trans }}</th>
+				<th name="content" data-sortable="false">{{ 'Содержимое'|trans }}</th>
+				<th name="module" data-sortable="false">{{ 'Модуль'|trans }}</th>
+				<th name="active" data-sortable="false">{{ 'Активен'|trans }}</th>
+				<th name="actions" data-sortable="false">{{ 'Действия'|trans }}</th>
+			</tr>
+		</thead>
+		<tbody id="dc-public-headers-list" class="dc-public-headers-list">
+			{% for row in rows %}
+				<tr class="dc-public-header-row" data-id="{{ row.id }}">
+					<td class="dc-public-drag-cell">
+						<button type="button"
+								class="button cycle outline dc-public-drag"
+								title="{{ 'Перетащить'|trans }}"
+								aria-label="{{ 'Перетащить'|trans }}">
+							<span class="mif-move"></span>
+						</button>
+					</td>
+					<td>
+						<span class="badge {{ row.origin == 'auto' ? 'info' : 'secondary' }}">
+							{{ row.origin == 'auto' ? 'авто'|trans : 'ручной'|trans }}
+						</span>
+					</td>
+					<td class="dc-public-header-name"><code>{{ row.name }}</code></td>
+					<td class="dc-public-header-content">{{ row.content }}</td>
+					<td>{{ row.module_code|default('—') }}</td>
+					<td>
+						<input type="checkbox"
+							   data-role="switch"
+							   data-material="true"
+							   class="js-dc-header-toggle"
+							   data-id="{{ row.id }}"
+							   {% if row.active %}checked{% endif %}>
+					</td>
+					<td>
+						{% if row.origin == 'manual' %}
+							<button type="button"
+									class="button small secondary js-dc-header-copy"
+									data-name="{{ row.name }}"
+									data-content="{{ row.content }}">
+								{{ 'Копировать'|trans }}
+							</button>
+							<button type="button" class="button alert small js-dc-header-delete" data-id="{{ row.id }}">
+								{{ 'Удалить'|trans }}
+							</button>
+						{% else %}
+							<span class="text-muted text-small">{{ 'авто'|trans }}</span>
+						{% endif %}
+					</td>
+				</tr>
+			{% else %}
+				<tr data-dc-public-empty>
+					<td colspan="7">{{ 'Пока нет записей'|trans }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<template id="dc-public-header-form-tpl">
+		<form id="dc-public-header-form" class="form dc-public-dialog-form">
+			{% include 'core/includes/ui/sections_layout.twig' with {
+				sections: form.sections,
+				layout: form.layout|default('stack')
+			} %}
+		</form>
+	</template>
+</div>

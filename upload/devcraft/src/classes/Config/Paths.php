@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Config;
 
+use DevCraft\Core\Support\DataManager;
+
 /**
  * Регистрация и доступ к путям и URL-адресам DevCraft.
  *
@@ -75,6 +77,10 @@ final class Paths {
 
 		if(!defined('DEVCRAFT_CACHE')) {
 			define('DEVCRAFT_CACHE', DEVCRAFT_ROOT . '/cache');
+		}
+
+		if(!defined('DEVCRAFT_PLUGIN_EXPORTS')) {
+			define('DEVCRAFT_PLUGIN_EXPORTS', DEVCRAFT_CACHE . '/plugin_exports');
 		}
 	}
 
@@ -202,6 +208,30 @@ final class Paths {
 	 */
 	public static function cache(): string {
 		return DEVCRAFT_CACHE;
+	}
+
+	/**
+	 * Возвращает каталог экспорта install.xml / ZIP плагинов (SDK PluginPresenter::export).
+	 *
+	 * Берёт `plugin_exports_path` из настроек Admin; пустое значение — {@see DEVCRAFT_PLUGIN_EXPORTS}.
+	 * Относительные пути считаются от ROOT_DIR.
+	 *
+	 * @since 200.4.1
+	 *
+	 * @return string Абсолютный нормализованный путь к каталогу экспорта.
+	 */
+	public static function pluginExports(): string {
+		self::register();
+
+		$path = (string) (DevCraftConfig::raw()['plugin_exports_path'] ?? '');
+
+		if($path === '') {
+			$path = DEVCRAFT_PLUGIN_EXPORTS;
+		} elseif(!str_starts_with($path, '/') && !preg_match('#^[A-Za-z]:[\\\\/]#', $path)) {
+			$path = ROOT_DIR . $path;
+		}
+
+		return DataManager::normalizePath($path);
 	}
 
 	/**

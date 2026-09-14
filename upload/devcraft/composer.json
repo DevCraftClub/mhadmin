@@ -2,7 +2,7 @@
 	"name": "devcraftclub/admin-panel",
 	"description": "DevCraft — DLE >= 20.х admin plugin",
 	"license": "MIT",
-	"version": "200.4.0",
+	"version": "200.4.1",
 	"require": {
 		"php": "^8.3",
 		"ext-curl": "*",
@@ -36,10 +36,17 @@
 			"DevCraft\\Enums\\": "src/classes/Enums/",
 			"DevCraft\\Types\\": "src/classes/Types/",
 			"DevCraft\\Utils\\": "src/classes/Utils/",
-			"Migration\\": "src/database/migrations/"
+			"Migration\\": "src/database/migrations/",
+			"DevCraft\\Dle\\": "src/sdk/dle/",
+			"JetBrains\\PhpStorm\\": "src/sdk/dle/Support/PhpStorm/"
 		},
+		"classmap": [
+			"src/sdk/dle/DcApi.php"
+		],
 		"files": [
-			"src/bootstrap/functions.php"
+			"src/bootstrap/functions.php",
+			"src/sdk/dle/Fluent/DcDatabase.php",
+			"src/sdk/dle/Fluent/functions.php"
 		]
 	},
 	"config": {

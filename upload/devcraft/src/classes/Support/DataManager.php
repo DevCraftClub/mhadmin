@@ -72,12 +72,12 @@ final class DataManager {
 		$codename = trim($codename);
 
 		if($codename === '') {
-			JsonResponse::fail(
+			JsonResponse::abort(
 				__('Ошибка'),
 				__('Код модуля не указан'),
 				'manifest_code_missing',
 				400,
-			)->send();
+			);
 		}
 
 		$manifests = self::readManifest();
@@ -92,14 +92,12 @@ final class DataManager {
 			}
 		}
 
-		JsonResponse::fail(
+		JsonResponse::abort(
 			__('Ошибка'),
 			__('Модуль не найден: {code}', ['{code}' => $codename]),
 			'manifest_not_found',
 			404,
-		)->send();
-
-		return NULL;
+		);
 	}
 
 	/**
@@ -708,7 +706,8 @@ final class DataManager {
 			$transliterated = $input;
 		}
 
-		$filtered    = preg_replace('/[^a-zA-Z0-9\.\+\s]/', '', (string) $transliterated) ?? '';
+		// Разрешены `_` и `-` (latin-код модуля / code: dle_connections).
+		$filtered    = preg_replace('/[^a-zA-Z0-9\.\+\s_\-]/', '', (string) $transliterated) ?? '';
 		$underscored = preg_replace('/\s+/', '_', $filtered) ?? '';
 
 		if($lowercase) {

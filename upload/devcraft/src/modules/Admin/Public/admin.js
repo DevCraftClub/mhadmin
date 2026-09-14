@@ -786,14 +786,491 @@
 	DevCraftComposer.initTable = initComposerTable;
 	DevCraftComposer.runSync = runComposerSync;
 
+	/**
+	 * Публичные CSS/JS/meta — таблица + Metro drag-items (эталон Connections).
+	 */
+	class DevCraftPublicAssets {}
+
+	function publicPostSilent(method, data) {
+		const params = { controller: 'admin', method: method };
+		const mod = document.body.dataset.mod;
+
+		if (mod) {
+			params.mod = mod;
+		}
+
+		return fetch(DevCraftAjax.url(DevCraftAjax.baseUrl(), params), {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URLSearchParams({
+				user_hash: DevCraftAjax.getUserHash(),
+				data: JSON.stringify(data || {}),
+			}).toString(),
+		}).then(DevCraftAjax.parseResponse).then(function (payload) {
+			DevCraftAjax.handleNotice(payload);
+			return payload;
+		});
+	}
+
+	function publicConfirmDelete(message) {
+		return new Promise(function (resolve) {
+			DevCraftMetro.dialogCreate({
+				title: t('Удалить'),
+				content: '<p>' + message + '</p>',
+				customButtons: [
+					{
+						text: t('Отмена'),
+						cls: 'js-dialog-close',
+						onclick: function () {
+							resolve(false);
+						},
+					},
+					{
+						text: t('Удалить'),
+						cls: 'alert js-dialog-close',
+						onclick: function () {
+							resolve(true);
+						},
+					},
+				],
+			});
+		});
+	}
+
+	function publicBindDrag(list, onDrop) {
+		const MetroLib = global.Metro;
+
+		if (!list || !MetroLib || typeof MetroLib.makePlugin !== 'function') {
+			return;
+		}
+
+		const empty = list.querySelector('[data-dc-public-empty]');
+
+		if (empty) {
+			empty.remove();
+		}
+
+		if (!list.querySelector('tr[data-id]')) {
+			return;
+		}
+
+		try {
+			const existing = MetroLib.getPlugin(list, 'drag-items');
+
+			if (existing && typeof existing.destroy === 'function') {
+				existing.destroy();
+			}
+		} catch (e) {
+			/* плагин ещё не создан */
+		}
+
+		list.classList.remove('drag-items-target');
+		list.querySelectorAll('.drag-item-marker').forEach(function (marker) {
+			marker.remove();
+		});
+
+		MetroLib.makePlugin(list, 'drag-items', {
+			dragItem: 'tr[data-id]',
+			drawDragMarker: true,
+			dragMarker: '.dc-public-drag',
+			canDrag: true,
+			clsDragItemAvatar: 'dc-public-drag-avatar',
+			onDragDropItem: function () {
+				list.querySelectorAll('.drag-item-marker').forEach(function (marker) {
+					marker.remove();
+				});
+				onDrop();
+			},
+		});
+
+		list.querySelectorAll('.drag-item-marker').forEach(function (marker) {
+			marker.remove();
+		});
+	}
+
+	function publicCollectIds(list) {
+		const ids = [];
+
+		list.querySelectorAll('tr[data-id]').forEach(function (row) {
+			ids.push(parseInt(row.getAttribute('data-id'), 10));
+		});
+
+		return ids.filter(function (id) {
+			return id > 0;
+		});
+	}
+
+	function publicCloneTemplate(id) {
+		const tpl = document.getElementById(id);
+
+		if (!tpl || !tpl.content) {
+			return null;
+		}
+
+		return tpl.content.cloneNode(true);
+	}
+
+	function publicFragmentHtml(frag) {
+		const wrap = document.createElement('div');
+
+		wrap.appendChild(frag);
+
+		return wrap.innerHTML;
+	}
+
+	function publicDialogNode(dlg) {
+		if (!dlg) {
+			return null;
+		}
+
+		if (dlg.nodeType === 1) {
+			return dlg;
+		}
+
+		if (dlg[0] && dlg[0].nodeType === 1) {
+			return dlg[0];
+		}
+
+		if (typeof DevCraftMetro.dialogElement === 'function') {
+			return DevCraftMetro.dialogElement(dlg);
+		}
+
+		return null;
+	}
+
+	function publicCloseDialog(dlg) {
+		if (typeof DevCraftMetro.dialogClose === 'function') {
+			DevCraftMetro.dialogClose(dlg);
+			return;
+		}
+
+		const MetroLib = global.Metro;
+		const node = publicDialogNode(dlg);
+
+		if (MetroLib && typeof MetroLib.dialog === 'function' && node) {
+			MetroLib.dialog.close(node);
+		}
+	}
+
+	function publicOpenFormDialog(options) {
+		const opts = options || {};
+		const frag = publicCloneTemplate(opts.templateId);
+
+		if (!frag) {
+			DevCraftMetro.notifyError(t('Ошибка'), t('Шаблон формы не найден'));
+			return;
+		}
+
+		const form = frag.querySelector('form');
+
+		if (form && opts.defaults && typeof opts.defaults === 'object') {
+			Object.keys(opts.defaults).forEach(function (key) {
+				const input = form.querySelector('[name="' + key + '"]');
+
+				if (input) {
+					input.value = opts.defaults[key];
+				}
+			});
+		}
+
+		const contentHtml = publicFragmentHtml(frag);
+		const dlg = DevCraftMetro.dialogCreate({
+			title: opts.title || t('Добавить'),
+			content: contentHtml,
+			width: opts.width || 560,
+			closeButton: true,
+			defaultActions: false,
+			removeOnClose: true,
+			customButtons: [
+				{
+					text: t('Сохранить'),
+					cls: 'primary',
+					onclick: function (_btn, dialogEl) {
+						const root = publicDialogNode(dialogEl || dlg);
+						const liveForm = root ? root.querySelector('form') : null;
+
+						if (!liveForm || typeof opts.onSave !== 'function') {
+							return;
+						}
+
+						const data = DevCraftAjax.serializeForm(liveForm);
+
+						opts.onSave(data, function () {
+							publicCloseDialog(dialogEl || dlg);
+						});
+					},
+				},
+				{
+					text: t('Отмена'),
+					cls: 'js-dialog-close',
+					onclick: function () {},
+				},
+			],
+		});
+
+		const node = publicDialogNode(dlg);
+
+		if (node && global.Metro && typeof global.Metro.init === 'function') {
+			global.Metro.init(node);
+		}
+
+		return dlg;
+	}
+
+	function initPublicAssetsPage() {
+		const root = document.querySelector('[data-dc-public-assets-page]');
+
+		if (!root) {
+			return;
+		}
+
+		const kind = root.getAttribute('data-kind') || '';
+		const list = document.getElementById('dc-public-assets-list');
+
+		const persistOrder = function () {
+			if (!list) {
+				return;
+			}
+
+			const ids = publicCollectIds(list);
+
+			if (!ids.length) {
+				return;
+			}
+
+			publicPostSilent('public_asset_reorder', { kind: kind, ids: ids });
+		};
+
+		window.setTimeout(function () {
+			publicBindDrag(list, persistOrder);
+		}, 50);
+
+		const openAddDialog = function () {
+			publicOpenFormDialog({
+				templateId: 'dc-public-asset-form-tpl',
+				title: t('Добавить запись'),
+				onSave: function (data, closeFn) {
+					if (!data.kind) {
+						data.kind = kind;
+					}
+
+					DevCraftAjax.post('public_asset_save', data)
+						.then(function (payload) {
+							DevCraftAjax.handleNotice(payload);
+
+							if (payload.success) {
+								if (typeof closeFn === 'function') {
+									closeFn();
+								}
+								global.location.reload();
+							}
+						})
+						.catch(function (err) {
+							DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось сохранить'), err);
+						});
+				},
+			});
+		};
+
+		root.addEventListener('click', function (event) {
+			const addBtn = event.target.closest('[data-dc-public-add]');
+
+			if (addBtn) {
+				openAddDialog();
+				return;
+			}
+
+			const delBtn = event.target.closest('.js-dc-asset-delete');
+
+			if (delBtn) {
+				const id = parseInt(delBtn.getAttribute('data-id'), 10);
+
+				publicConfirmDelete(t('Удалить ручную запись?')).then(function (ok) {
+					if (!ok || !id) {
+						return;
+					}
+
+					DevCraftAjax.post('public_asset_delete', { id: id, kind: kind })
+						.then(function (payload) {
+							DevCraftAjax.handleNotice(payload);
+
+							if (payload.success) {
+								const row = delBtn.closest('tr');
+
+								if (row) {
+									row.remove();
+								}
+							}
+						})
+						.catch(function (err) {
+							DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
+						});
+				});
+			}
+		});
+
+		root.addEventListener('change', function (event) {
+			const toggle = event.target.closest('.js-dc-asset-toggle');
+
+			if (!toggle) {
+				return;
+			}
+
+			const id = parseInt(toggle.getAttribute('data-id'), 10);
+
+			DevCraftAjax.post('public_asset_toggle', {
+				id: id,
+				active: toggle.checked ? 1 : 0,
+			}).then(function (payload) {
+				DevCraftAjax.handleNotice(payload);
+
+				if (!payload.success) {
+					toggle.checked = !toggle.checked;
+				}
+			}).catch(function (err) {
+				toggle.checked = !toggle.checked;
+				DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
+			});
+		});
+	}
+
+	function initPublicHeadersPage() {
+		const root = document.querySelector('[data-dc-public-headers-page]');
+
+		if (!root) {
+			return;
+		}
+
+		const list = document.getElementById('dc-public-headers-list');
+
+		const persistOrder = function () {
+			if (!list) {
+				return;
+			}
+
+			const ids = publicCollectIds(list);
+
+			if (!ids.length) {
+				return;
+			}
+
+			publicPostSilent('public_header_reorder', { ids: ids });
+		};
+
+		window.setTimeout(function () {
+			publicBindDrag(list, persistOrder);
+		}, 50);
+
+		const openAddDialog = function (defaults) {
+			publicOpenFormDialog({
+				templateId: 'dc-public-header-form-tpl',
+				title: defaults ? t('Копировать заголовок') : t('Добавить заголовок'),
+				defaults: defaults || null,
+				onSave: function (data, closeFn) {
+					DevCraftAjax.post('public_header_save', data)
+						.then(function (payload) {
+							DevCraftAjax.handleNotice(payload);
+
+							if (payload.success) {
+								if (typeof closeFn === 'function') {
+									closeFn();
+								}
+								global.location.reload();
+							}
+						})
+						.catch(function (err) {
+							DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось сохранить'), err);
+						});
+				},
+			});
+		};
+
+		root.addEventListener('click', function (event) {
+			const addBtn = event.target.closest('[data-dc-public-add]');
+
+			if (addBtn) {
+				openAddDialog();
+				return;
+			}
+
+			const copyBtn = event.target.closest('.js-dc-header-copy');
+
+			if (copyBtn) {
+				openAddDialog({
+					name: copyBtn.getAttribute('data-name') || '',
+					content: copyBtn.getAttribute('data-content') || '',
+				});
+				return;
+			}
+
+			const delBtn = event.target.closest('.js-dc-header-delete');
+
+			if (delBtn) {
+				const id = parseInt(delBtn.getAttribute('data-id'), 10);
+
+				publicConfirmDelete(t('Удалить ручной заголовок?')).then(function (ok) {
+					if (!ok || !id) {
+						return;
+					}
+
+					DevCraftAjax.post('public_header_delete', { id: id })
+						.then(function (payload) {
+							DevCraftAjax.handleNotice(payload);
+
+							if (payload.success) {
+								const row = delBtn.closest('tr');
+
+								if (row) {
+									row.remove();
+								}
+							}
+						})
+						.catch(function (err) {
+							DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
+						});
+				});
+			}
+		});
+
+		root.addEventListener('change', function (event) {
+			const toggle = event.target.closest('.js-dc-header-toggle');
+
+			if (!toggle) {
+				return;
+			}
+
+			const id = parseInt(toggle.getAttribute('data-id'), 10);
+
+			DevCraftAjax.post('public_header_toggle', {
+				id: id,
+				active: toggle.checked ? 1 : 0,
+			}).then(function (payload) {
+				DevCraftAjax.handleNotice(payload);
+
+				if (!payload.success) {
+					toggle.checked = !toggle.checked;
+				}
+			}).catch(function (err) {
+				toggle.checked = !toggle.checked;
+				DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
+			});
+		});
+	}
+
+	DevCraftPublicAssets.initAssets = initPublicAssetsPage;
+	DevCraftPublicAssets.initHeaders = initPublicHeadersPage;
+
 	const DevCraftAdmin = {
 		Filter: DevCraft.Filter,
 		Assets: DevCraftAssets,
 		Dashboard: DevCraftDashboard,
 		Composer: DevCraftComposer,
+		PublicAssets: DevCraftPublicAssets,
 		boot() {
 			DevCraftAdmin.Dashboard.init();
 			DevCraftAdmin.Composer.initTable();
+			DevCraftAdmin.PublicAssets.initAssets();
+			DevCraftAdmin.PublicAssets.initHeaders();
 			if (DevCraft.Debug.isEnabled()) {
 				DevCraft.Debug.log('Admin', 'boot', { message: t('Модуль Admin инициализирован') });
 			}

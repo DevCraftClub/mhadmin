@@ -64,6 +64,18 @@ final class PluginContext {
 	private array $filterSchemas = [];
 
 	/**
+	 * @since 200.4.0
+	 * @var list<array{modulePath: string, file: string}>
+	 */
+	private array $extensionJsAssets = [];
+
+	/**
+	 * @since 200.4.0
+	 * @var list<array{modulePath: string, file: string}>
+	 */
+	private array $extensionCssAssets = [];
+
+	/**
 	 * @param   string          $mod         Идентификатор модуля в URL админки.
 	 * @param   ModuleManifest  $manifest    Нормализованный манифест.
 	 * @param   string          $modulePath  Абсолютный путь к каталогу модуля.
@@ -106,6 +118,38 @@ final class PluginContext {
 
 			$this->ajaxMethods[$name] = $handler;
 		}
+	}
+
+	/**
+	 * Добавляет публичный JS сателлита (host-merge).
+	 */
+	public function appendExtensionJsAsset(string $modulePath, string $file): void {
+		$file = ltrim($file, '/');
+
+		if($modulePath === '' || $file === '') {
+			return;
+		}
+
+		$this->extensionJsAssets[] = [
+			'modulePath' => $modulePath,
+			'file'       => $file,
+		];
+	}
+
+	/**
+	 * Добавляет публичный CSS сателлита (host-merge).
+	 */
+	public function appendExtensionCssAsset(string $modulePath, string $file): void {
+		$file = ltrim($file, '/');
+
+		if($modulePath === '' || $file === '') {
+			return;
+		}
+
+		$this->extensionCssAssets[] = [
+			'modulePath' => $modulePath,
+			'file'       => $file,
+		];
 	}
 
 	public function setSettingsSchema(?FormSchema $schema): void {
@@ -189,6 +233,85 @@ final class PluginContext {
 	 */
 	public function jsAssetFiles(): array {
 		return $this->manifest->assets->js;
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	public function cssAssetFiles(): array {
+		return $this->manifest->assets->css;
+	}
+
+	/**
+	 * Хост + JS сателлитов для layout.
+	 *
+	 * @return list<array{modulePath: string, file: string}>
+	 */
+	public function resolvedJsAssets(): array {
+		return $this->resolveAssets($this->jsAssetFiles(), $this->extensionJsAssets);
+	}
+
+	/**
+	 * Хост + CSS сателлитов для layout.
+	 *
+	 * @return list<array{modulePath: string, file: string}>
+	 */
+	public function resolvedCssAssets(): array {
+		return $this->resolveAssets($this->cssAssetFiles(), $this->extensionCssAssets);
+	}
+
+	/**
+	 * @param   list<string>                                    $ownFiles
+	 * @param   list<array{modulePath: string, file: string}>   $extensionFiles
+	 *
+	 * @return list<array{modulePath: string, file: string}>
+	 */
+	private function resolveAssets(array $ownFiles, array $extensionFiles): array {
+		$out  = [];
+		$seen = [];
+
+		foreach($ownFiles as $file) {
+			$file = ltrim((string) $file, '/');
+
+			if($file === '') {
+				continue;
+			}
+
+			$key = $this->modulePath . "\0" . $file;
+
+			if(isset($seen[$key])) {
+				continue;
+			}
+
+			$seen[$key] = true;
+			$out[]      = [
+				'modulePath' => $this->modulePath,
+				'file'       => $file,
+			];
+		}
+
+		foreach($extensionFiles as $row) {
+			$file = ltrim((string) ($row['file'] ?? ''), '/');
+			$path = (string) ($row['modulePath'] ?? '');
+
+			if($file === '' || $path === '') {
+				continue;
+			}
+
+			$key = $path . "\0" . $file;
+
+			if(isset($seen[$key])) {
+				continue;
+			}
+
+			$seen[$key] = true;
+			$out[]      = [
+				'modulePath' => $path,
+				'file'       => $file,
+			];
+		}
+
+		return $out;
 	}
 
 	public function moduleData(): ModuleManifest {

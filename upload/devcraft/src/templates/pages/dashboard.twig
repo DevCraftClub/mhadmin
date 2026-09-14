@@ -49,6 +49,35 @@
         </div>
     </div>
 
+    {% if d.stats is defined and d.stats|length > 0 %}
+        <div class="remark dc-dashboard-card dc-dashboard-stats mb-4">
+            {% if d.stats_title|default('') %}
+                <h4 class="border-bottom bd-default pb-2 mb-3">{{ d.stats_title }}</h4>
+            {% endif %}
+            <div class="row flex-justify-center">
+                {% for stat in d.stats %}
+                    <div class="cell-md-2 cell-sm-4 cell-6 mb-2">
+                        {% if stat.url %}
+                            <a href="{{ stat.url }}" class="dc-dashboard-stat dc-dashboard-stat-link">
+                        {% else %}
+                            <div class="dc-dashboard-stat">
+                        {% endif %}
+                            {% if stat.icon|default('') %}
+                                <span class="dc-dashboard-stat-icon {{ stat.icon }}" aria-hidden="true"></span>
+                            {% endif %}
+                            <div class="dc-dashboard-stat-value">{{ stat.value }}</div>
+                            <div class="dc-dashboard-stat-label">{{ stat.label }}</div>
+                        {% if stat.url %}
+                            </a>
+                        {% else %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     {% if d.show_assets|default(false) %}
         <div id="dc-assets-status" class="remark info dc-assets-status mb-4 d-none" data-auto-check="1"></div>
     {% endif %}
@@ -61,16 +90,6 @@
             <a href="{{ d.crowdin.project_url }}" target="_blank" rel="noopener">
                 <img src="{{ d.crowdin.badge_url }}" alt="Crowdin" />
             </a>
-        </div>
-    {% endif %}
-
-    {% if d.public_js is defined and d.public_js %}
-        <div class="remark info dc-dashboard-card mb-4">
-            <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Публичный JS для шаблонов DLE'|trans }}</h4>
-            <p class="mb-2">{{ 'Единый клиент для запросов модулей с сайта через'|trans }} <code>devcraft/ajax.php</code> (<code>controller=public</code>).</p>
-            <p class="mb-1"><strong>{{ 'Путь'|trans }}:</strong> <code>{{ d.public_js.path }}</code></p>
-            <p class="mb-0"><strong>{{ 'Подключение в теме'|trans }}:</strong></p>
-            <pre class="mt-2 mb-0"><code>{{ d.public_js.example }}</code></pre>
         </div>
     {% endif %}
 

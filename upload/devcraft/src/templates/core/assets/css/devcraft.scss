@@ -105,6 +105,70 @@
   padding: 1.25rem 1.5rem;
 }
 
+.dc-dashboard-stats {
+  overflow: visible;
+
+  // Metro .row — container query + .row > * { flex: 100% }.
+  // Внутри .remark (overflow:hidden, flex) ряд карточек схлопывается.
+  .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+    gap: 0.75rem;
+    margin-right: 0;
+    min-width: 0;
+    container-type: normal;
+    flex: none;
+  }
+
+  .row > * {
+    flex: none;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .dc-dashboard-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem 0.5rem;
+    min-height: 5.5rem;
+    border-radius: 0.35rem;
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .dc-dashboard-stat-link {
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  .dc-dashboard-stat-icon {
+    font-size: 1.35rem;
+    opacity: 0.7;
+    margin-bottom: 0.25rem;
+  }
+
+  .dc-dashboard-stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .dc-dashboard-stat-label {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin-top: 0.15rem;
+  }
+}
+
 .dc-dashboard-app-header {
   display: flex;
   align-items: center;
@@ -417,4 +481,51 @@
       text-decoration: underline;
     }
   }
+}
+
+/* Публичные CSS/JS/meta — DnD как у Connections */
+.dc-public-assets-page,
+.dc-public-headers-page {
+  .dc-public-drag-cell {
+    width: 2.5rem;
+    white-space: nowrap;
+  }
+
+  .dc-public-drag.button {
+    width: var(--control-height, 36px);
+    height: var(--control-height, 36px);
+    min-width: var(--control-height, 36px);
+    padding: 0 !important;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .dc-public-drag.button:active {
+    cursor: grabbing;
+  }
+
+  tr.dragged-item {
+    opacity: 0.35;
+  }
+
+  .dc-public-header-content,
+  .dc-public-asset-path {
+    max-width: 28rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.dc-public-drag-avatar,
+.dragged-item-avatar.dc-public-drag-avatar {
+  box-sizing: border-box;
+  border: 1px solid rgba(27, 161, 226, 0.55);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  opacity: 0.92;
+  pointer-events: none;
+  z-index: 2000;
 }

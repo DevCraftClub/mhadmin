@@ -13,6 +13,7 @@ use DevCraft\Types\Changelog;
 use DevCraft\Types\ModuleAjaxConfig;
 use DevCraft\Types\ModuleAssets;
 use DevCraft\Types\ModuleManifest;
+use DevCraft\Types\ModuleSiteAssets;
 
 /**
  * Fluent-строитель манифеста модуля DevCraft.
@@ -42,6 +43,8 @@ final class ModuleManifestBuilder {
 	private ?ModuleAjaxConfig $ajax = NULL;
 
 	private ?ModuleAssets $assets = NULL;
+
+	private ?ModuleSiteAssets $siteAssets = NULL;
 
 	/** @var Changelog[] */
 	private array $changelog = [];
@@ -205,6 +208,23 @@ final class ModuleManifestBuilder {
 	}
 
 	/**
+	 * Публичные ассеты оболочки сайта (`{devcraft*}`), не админ-панель.
+	 *
+	 * @param   ModuleSiteAssets|ModuleSiteAssetsBuilder|array<string, mixed>  $siteAssets
+	 */
+	public function siteAssets(ModuleSiteAssets|ModuleSiteAssetsBuilder|array $siteAssets): self {
+		if($siteAssets instanceof ModuleSiteAssetsBuilder) {
+			$this->siteAssets = $siteAssets->build();
+		} elseif($siteAssets instanceof ModuleSiteAssets) {
+			$this->siteAssets = $siteAssets;
+		} else {
+			$this->siteAssets = ModuleSiteAssets::fromArray($siteAssets);
+		}
+
+		return $this;
+	}
+
+	/**
 	 * @param   list<Changelog|array<string, mixed>>|Changelog  $entries
 	 */
 	public function changelog(array|Changelog $entries): self {
@@ -299,6 +319,10 @@ final class ModuleManifestBuilder {
 
 		if($this->assets !== NULL) {
 			$data['assets'] = $this->assets->toArray();
+		}
+
+		if($this->siteAssets !== NULL) {
+			$data['siteAssets'] = $this->siteAssets->toArray();
 		}
 
 		if($this->changelog !== []) {

@@ -259,4 +259,30 @@ if (is_file(ROOT_DIR . '/devcraft/init.php')) {
 			<versioncompare>greater</versioncompare>
 		</operation>
 	</file>
+	<file name="engine/modules/main.php">
+		<operation action="after">
+			<searchcode><![CDATA[$tpl->load_template ( 'main.tpl' );]]></searchcode>
+			<replacecode><![CDATA[$tpl->load_template ( 'main.tpl' );
+
+// DevCraft Admin: start
+try {
+	if ( !class_exists( \DevCraft\Modules\Admin\Services\PublicAssetTagService::class, false )
+		&& is_file( ROOT_DIR . '/devcraft/init.php' ) ) {
+		require_once DLEPlugins::Check( ROOT_DIR . '/devcraft/init.php' );
+	}
+	if ( class_exists( \DevCraft\Modules\Admin\Services\PublicAssetTagService::class ) ) {
+		( new \DevCraft\Modules\Admin\Services\PublicAssetTagService() )->applyToTemplate( $tpl );
+	}
+} catch ( \Throwable ) {
+	// Публичная страница не должна падать из‑за тегов DevCraft.
+}
+// DevCraft Admin: end
+]]></replacecode>
+			<searchcount>1</searchcount>
+			<replacecount>1</replacecount>
+			<enabled>1</enabled>
+			<dleversion>20</dleversion>
+			<versioncompare>greater</versioncompare>
+		</operation>
+	</file>
 </dleplugin>

@@ -229,7 +229,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 	/**
 	 * Сохраняет сущность (INSERT или UPDATE) через DatabaseGateway::run.
 	 *
-	 * Вызывает `beforeSave()` у сущности, если метод есть.
+	 * Вызывает `beforeSave()` у сущности, если метод есть (автор пишут поведения Cycle).
 	 *
 	 * @since 200.4.0
 	 *

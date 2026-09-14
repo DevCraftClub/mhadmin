@@ -44,7 +44,8 @@ use DevCraft\Builders\AuthorBuilder;
  * @property Author|null                 $author            Данные автора модуля.
  * @property AdminLink[]                 $menu              Пункты меню админки.
  * @property ModuleAjaxConfig            $ajax              Конфигурация AJAX-эндпоинтов.
- * @property ModuleAssets                $assets            Публичные ассеты модуля.
+ * @property ModuleAssets                $assets            Админские ассеты модуля (панель).
+ * @property ModuleSiteAssets            $siteAssets        Публичные ассеты оболочки сайта.
  * @property Changelog[]                 $changelog         Записи журнала изменений.
  * @property ComposerType[]              $composerRequired  Обязательные пакеты Composer.
  * @property string|null                 $extends           Host-mod, в который встраивается сателлит.
@@ -74,10 +75,11 @@ final readonly class ModuleManifest {
 	 * @param   Author|null                  $author            Данные автора модуля.
 	 * @param   AdminLink[]                  $menu              Пункты меню админки.
 	 * @param   ModuleAjaxConfig             $ajax              Конфигурация AJAX-эндпоинтов.
-	 * @param   ModuleAssets                 $assets            Публичные ассеты модуля.
+	 * @param   ModuleAssets                 $assets            Админские ассеты модуля.
 	 * @param   Changelog[]                  $changelog         Записи журнала изменений.
 	 * @param   ComposerType[]               $composerRequired  Обязательные пакеты Composer.
 	 * @param   string|null                  $extends           Host-mod для сателлита (`null` — самостоятельный модуль).
+	 * @param   ModuleSiteAssets             $siteAssets        Публичные ассеты оболочки сайта.
 	 *
 	 * @example
 	 *     $module = new ModuleManifest('devcraft', 'DevCraft', '200.4.0', 'DevCraft\\Modules\\Admin', '/path/to/module');
@@ -105,6 +107,7 @@ final readonly class ModuleManifest {
 		public array            $changelog = [],
 		public array            $composerRequired = [],
 		public ?string          $extends = NULL,
+		public ModuleSiteAssets $siteAssets = new ModuleSiteAssets(),
 	) {}
 
 	/**
@@ -153,6 +156,11 @@ final readonly class ModuleManifest {
 			? $assetsRaw
 			: ModuleAssets::fromArray(is_array($assetsRaw)? $assetsRaw : []);
 
+		$siteAssetsRaw = $manifest['siteAssets'] ?? [];
+		$siteAssets    = $siteAssetsRaw instanceof ModuleSiteAssets
+			? $siteAssetsRaw
+			: ModuleSiteAssets::fromArray(is_array($siteAssetsRaw)? $siteAssetsRaw : []);
+
 		if(($meta['author'] ?? NULL) instanceof Author) {
 			$author = $meta['author'];
 		} elseif(is_array($meta['author'] ?? NULL)) {
@@ -192,6 +200,7 @@ final readonly class ModuleManifest {
 			extends         : isset($manifest['extends']) && is_string($manifest['extends']) && $manifest['extends'] !== ''
 				? $manifest['extends']
 				: NULL,
+			siteAssets      : $siteAssets,
 		);
 	}
 
@@ -237,6 +246,7 @@ final readonly class ModuleManifest {
 			'menu'              => $this->menu,
 			'ajax'              => $this->ajax,
 			'assets'            => $this->assets,
+			'siteAssets'        => $this->siteAssets,
 			'changelog'         => $this->changelog,
 			'composer_required' => $this->composerRequired,
 			'extends'           => $this->extends,
@@ -372,6 +382,7 @@ final readonly class ModuleManifest {
 
 		$ajax   = $config['ajax'] ?? $config['ajaxData'] ?? [];
 		$assets = $config['assets'] ?? [];
+		$siteAssetsRaw = $config['siteAssets'] ?? [];
 
 		$author = NULL;
 		if(isset($config['author'])) {
@@ -408,6 +419,9 @@ final readonly class ModuleManifest {
 			assets          : $config['assets'] instanceof ModuleAssets? $config['assets'] : ModuleAssets::fromArray(is_array($assets)? $assets : []),
 			changelog       : $changelog,
 			composerRequired: $composer,
+			siteAssets      : $config['siteAssets'] instanceof ModuleSiteAssets
+				? $config['siteAssets']
+				: ModuleSiteAssets::fromArray(is_array($siteAssetsRaw)? $siteAssetsRaw : []),
 		);
 	}
 
@@ -445,6 +459,7 @@ final readonly class ModuleManifest {
 			),
 			'ajax'             => $this->ajax->toArray(),
 			'assets'           => $this->assets->toArray(),
+			'siteAssets'       => $this->siteAssets->toArray(),
 			'changelog'        => array_map(
 				static fn(Changelog $entry): array => $entry->toArray(),
 				$this->changelog,
@@ -453,6 +468,7 @@ final readonly class ModuleManifest {
 				static fn(ComposerType $rule): array => $rule->toArray(),
 				$this->composerRequired,
 			),
+			'extends'          => $this->extends,
 		];
 	}
 

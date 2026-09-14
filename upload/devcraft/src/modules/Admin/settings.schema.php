@@ -72,11 +72,19 @@ return FormSchemaBuilder::create(AdminIdentity::code())
 			                        'dark'  => __('Тёмная'),
 		                        ])
 		                        ->default('light')
-//	                        ->checkbox('cache_icon', __('Добавить кнопку с очищением кеша?'))
-//		                        ->description(
-//			                        __('При включенном параметре в шапку админпанели DLE добавится кнопка с функционалом об очищении кеша системы'),
-//		                        )
-//		                        ->default(false)
+                        ->section(__('Публичные ресурсы'))
+	                        ->checkbox('public_assets_compress', __('Компрессия публичных стилей и скриптов'))
+		                        ->description(
+			                        __('При включении CSS и JS оболочки объединяются и минифицируются в кэш-файлы. ')
+			                        . __('При выключении каждый файл подключается отдельным тегом.'),
+		                        )
+		                        ->default(true)
+	                        ->hidden('public_assets_list_manually_ordered_css', '')
+		                        ->default(false)
+	                        ->hidden('public_assets_list_manually_ordered_js', '')
+		                        ->default(false)
+	                        ->hidden('public_assets_list_manually_ordered_meta', '')
+		                        ->default(false)
                         ->section(__('Отладка'))
 	                        ->checkbox('debug', __('Режим отладки'))
 		                        ->description(

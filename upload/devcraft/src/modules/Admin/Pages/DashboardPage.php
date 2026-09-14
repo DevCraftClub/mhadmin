@@ -103,10 +103,6 @@ final class DashboardPage extends AbstractPage {
 						'dump_autoload_url' => 'dump_autoload',
 					],
 					'crowdin'          => $crowdin,
-					'public_js'        => [
-						'path'    => '/devcraft/src/templates/core/assets/js/dc_public.js',
-						'example' => '<script src="/devcraft/src/templates/core/assets/js/dc_public.js"></script>',
-					],
 				],
 			],
 		];

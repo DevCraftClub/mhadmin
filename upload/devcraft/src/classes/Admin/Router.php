@@ -157,9 +157,12 @@ final class Router {
 		$devcraftJsPath            = Paths::templates() . '/core/assets/js/devcraft.js';
 		$filterJsPath              = Paths::templates() . '/core/assets/js/filter.js';
 		$composerJsPath            = Paths::templates() . '/core/assets/js/composer.js';
+		$devcraftCssPath           = Paths::templates() . '/core/assets/css/devcraft.css';
 		$devcraftMtime             = is_file($devcraftJsPath)? filemtime($devcraftJsPath) : 0;
 		$filterMtime               = is_file($filterJsPath)? filemtime($filterJsPath) : 0;
+		$devcraftCssMtime          = is_file($devcraftCssPath)? filemtime($devcraftCssPath) : 0;
 		$data['asset_js_mtime']    = (string) max($devcraftMtime, $filterMtime, 0)? : (string) ($meta['version'] ?? '1.0.0');
+		$data['asset_css_mtime']   = $devcraftCssMtime > 0? (string) $devcraftCssMtime : $data['asset_js_mtime'];
 		$data['composer_js_mtime'] = is_file($composerJsPath)? (string) filemtime($composerJsPath) : $data['asset_js_mtime'];
 		$data['filter_js_mtime']   = $filterMtime > 0? (string) $filterMtime : $data['asset_js_mtime'];
 		$data['page_title']        = $data['page_title'] ?? (string) ($meta['name'] ?? 'DevCraft');

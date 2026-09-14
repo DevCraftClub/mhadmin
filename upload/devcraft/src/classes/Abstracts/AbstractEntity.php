@@ -22,6 +22,10 @@ use ReflectionProperty;
 use Cycle\ORM\Entity\Behavior;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Table\Index;
+use Cycle\ORM\Entity\Behavior\Event\Mapper\Command\OnCreate;
+use Cycle\ORM\Entity\Behavior\Event\Mapper\Command\OnUpdate;
+use DevCraft\Core\Database\Audit\CreatedByHook;
+use DevCraft\Core\Database\Audit\UpdatedByHook;
 
 /**
  * Базовая ORM-сущность с аудитом создания и изменения записи.
@@ -34,6 +38,8 @@ use Cycle\Annotated\Annotation\Table\Index;
 #[Index(columns: ['creator'])]
 #[Behavior\CreatedAt(field: 'createdAt', column: 'created_at')]
 #[Behavior\UpdatedAt(field: 'updatedAt', column: 'updated_at')]
+#[Behavior\Hook(callable: [CreatedByHook::class, 'invoke'], events: OnCreate::class)]
+#[Behavior\Hook(callable: [UpdatedByHook::class, 'invoke'], events: OnUpdate::class)]
 abstract class AbstractEntity {
 
 	/**
@@ -98,33 +104,16 @@ abstract class AbstractEntity {
 	protected int $id;
 
 	/**
-	 * Заполняет поля аудита перед сохранением сущности в базу данных.
+	 * Совместимость: раньше писал автора. Теперь автор заполняется поведениями Cycle.
 	 *
 	 * @since 200.4.0
-	 *
-	 * @global bool                $is_logged Флаг авторизации пользователя DLE.
-	 * @global array<string,mixed> $member_id Данные текущего пользователя DLE.
+	 * @since 200.4.1 Не записывает `creator` / `lastEditor`.
 	 *
 	 * @example
 	 *     $entity->beforeSave();
 	 *     $database->getManager()->persist($entity)->run();
 	 */
-	public function beforeSave(): void {
-		global $is_logged, $member_id;
-
-		$user_id = NULL;
-
-		if(!empty($is_logged) && is_array($member_id) && isset($member_id['user_id'])) {
-			$user_id = (int) $member_id['user_id'];
-		}
-
-		if(isset($this->id)) {
-			$this->setLastEditor($user_id);
-			$this->touchUpdatedAt();
-		} else {
-			$this->setCreator($user_id);
-		}
-	}
+	public function beforeSave(): void {}
 
 	/**
 	 * Возвращает дату и время создания записи.

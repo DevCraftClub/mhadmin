@@ -85,11 +85,7 @@ final class PublicAssetManifestSyncService {
 
 			$existing = $repo->findByKindAndLocalPath($kind, $local);
 			if($existing !== null) {
-				if(!$existing->active) {
-					$existing->active = true;
-					$repo->saveEntity($existing);
-				}
-
+				// Не включаем снова: админ мог выключить auto-запись вручную.
 				continue;
 			}
 
@@ -111,7 +107,7 @@ final class PublicAssetManifestSyncService {
 	}
 
 	/**
-	 * Выключает auto-записи модуля, которых больше нет в siteAssets (иначе бандл тащит лишнее).
+	 * Выключает auto-записи модуля, которых больше нет в siteAssets (иначе в оболочку попадает лишнее).
 	 *
 	 * @param   array<string, true>  $keep
 	 */

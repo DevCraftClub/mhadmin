@@ -44,7 +44,7 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 				$schema->defaultOrder,
 			);
 
-			// Если таблица пуста, выполняем мягкий автосинк из composer.json и повторяем выборку.
+			// Если таблица пуста, мягко подставляем зависимости из composer.json и повторяем выборку.
 			if((int) ($listResult['total'] ?? 0) === 0) {
 				(new ComposerDbSyncService())->syncFromRuntimeSnapshot();
 				$listResult = $repository->findFiltered(

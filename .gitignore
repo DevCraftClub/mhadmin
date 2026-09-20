@@ -18,6 +18,10 @@ upload/engine/inc/maharder/_logs/**/*
 upload/engine/inc/maharder/_migrations
 upload/engine/inc/maharder/_migrations/*
 
+# Cycle ORM — миграции генерируются на каждой установке, не в каноне пакета
+upload/devcraft/src/database/migrations/
+upload/devcraft/src/database/migrations/*
+
 upload/engine/inc/maharder/_includes/assets.json
 upload/engine/inc/maharder/admin/composer.lock
 upload/engine/inc/maharder/admin/composer.phar

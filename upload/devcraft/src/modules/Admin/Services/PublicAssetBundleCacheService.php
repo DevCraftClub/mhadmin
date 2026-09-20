@@ -217,7 +217,7 @@ final class PublicAssetBundleCacheService {
 	}
 
 	/**
-	 * Разрешает HTTP-доступ к бандлу: родительский `devcraft/.htaccess` закрывает весь каталог.
+	 * Разрешает HTTP-доступ к собранным файлам: родительский `devcraft/.htaccess` закрывает весь каталог.
 	 */
 	private function ensurePublicHtaccess(string $dir): void {
 		$file = $dir . '/.htaccess';

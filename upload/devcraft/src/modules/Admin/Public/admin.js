@@ -1273,7 +1273,7 @@
 				return;
 			}
 
-			publicPostSilent('public_asset_reorder', { kind: kind, ids: ids });
+			publicPersistOrder(list, 'public_asset_reorder', { kind: kind, ids: ids });
 		};
 
 		if (root.getAttribute('data-dc-dnd') !== '0') {
@@ -1363,7 +1363,7 @@
 				return;
 			}
 
-			publicPostSilent('public_header_reorder', { ids: ids });
+			publicPersistOrder(list, 'public_header_reorder', { ids: ids });
 		};
 
 		if (root.getAttribute('data-dc-dnd') !== '0') {
@@ -1487,6 +1487,8 @@
 
 	DevCraftPublicAssets.initAssets = initPublicAssetsPage;
 	DevCraftPublicAssets.initHeaders = initPublicHeadersPage;
+	DevCraftPublicAssets.initAssetEdit = initPublicAssetEditPage;
+	DevCraftPublicAssets.initHeaderEdit = initPublicHeaderEditPage;
 
 	const DevCraftAdmin = {
 		Filter: DevCraft.Filter,
@@ -1499,6 +1501,8 @@
 			DevCraftAdmin.Composer.initTable();
 			DevCraftAdmin.PublicAssets.initAssets();
 			DevCraftAdmin.PublicAssets.initHeaders();
+			DevCraftAdmin.PublicAssets.initAssetEdit();
+			DevCraftAdmin.PublicAssets.initHeaderEdit();
 			if (DevCraft.Debug.isEnabled()) {
 				DevCraft.Debug.log('Admin', 'boot', { message: t('Модуль Admin инициализирован') });
 			}

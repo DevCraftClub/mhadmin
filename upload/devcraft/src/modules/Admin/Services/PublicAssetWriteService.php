@@ -247,7 +247,7 @@ final class PublicAssetWriteService {
 		$saved = $repo->saveEntity($entry);
 
 		if($recalcSort) {
-			$this->recalculateCategorySortOrder($entry->kind);
+			$this->recalculateKindSort($entry->kind);
 		}
 
 		(new PublicAssetBundleCacheService())->invalidateAllSections($entry->kind);
@@ -255,7 +255,7 @@ final class PublicAssetWriteService {
 		return $saved;
 	}
 
-	private function recalculateCategorySortOrder(string $kind): void {
+	public function recalculateKindSort(string $kind): void {
 		/** @var PublicAssetEntryRepository $repo */
 		$repo    = Application::instance()->database()->repository(PublicAssetEntry::class);
 		$entries = $repo->listByKind($kind);

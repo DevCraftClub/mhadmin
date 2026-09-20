@@ -18,13 +18,29 @@ final class PublicAssetBundleCacheService {
 		private readonly PublicAssetMinify $minify = new PublicAssetMinify(),
 	) {}
 
+	/**
+	 * Каталог бандла и `.htaccess` с доступом (нужен из‑за закрытого `devcraft/.htaccess`).
+	 */
+	public function ensureCacheDir(): ?string {
+		$dir = Paths::cache() . '/public_assets';
+
+		if(!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+			return null;
+		}
+
+		$this->ensurePublicHtaccess($dir);
+
+		return $dir;
+	}
+
 	public function ensure(string $kind): ?string {
 		if($kind !== 'css' && $kind !== 'js') {
 			return null;
 		}
 
-		$dir = Paths::cache() . '/public_assets';
-		if(!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+		$dir = $this->ensureCacheDir();
+
+		if($dir === null) {
 			return null;
 		}
 
@@ -139,6 +155,30 @@ final class PublicAssetBundleCacheService {
 			: rtrim(ROOT_DIR, '/') . '/' . ltrim($path, '/');
 
 		return is_file($abs) ? $abs : null;
+	}
+
+	/**
+	 * Разрешает HTTP-доступ к бандлу: родительский `devcraft/.htaccess` закрывает весь каталог.
+	 */
+	private function ensurePublicHtaccess(string $dir): void {
+		$file = $dir . '/.htaccess';
+
+		if(is_file($file)) {
+			return;
+		}
+
+		$content = <<<'HTACCESS'
+<IfModule mod_authz_core.c>
+    Require all granted
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Allow from all
+</IfModule>
+
+HTACCESS;
+
+		@file_put_contents($file, $content);
 	}
 
 }

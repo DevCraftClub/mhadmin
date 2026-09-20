@@ -24,6 +24,8 @@ final class PublicAssetManifestSyncService {
 		$site = $manifest->siteAssets;
 
 		if($site->isEmpty()) {
+			$this->clearModulePublicAssets($code);
+
 			return;
 		}
 
@@ -32,13 +34,28 @@ final class PublicAssetManifestSyncService {
 		$this->syncMeta($manifest, $site, $code, $isFirstInstall);
 	}
 
-	public function deactivateModule(string $moduleCode): void {
+	/**
+	 * Снимает auto-записи siteAssets модуля, у которого в манифесте больше нет публичной оболочки.
+	 */
+	private function clearModulePublicAssets(string $moduleCode): void {
+		$removed = $this->deactivateModule($moduleCode);
+
+		if($removed <= 0) {
+			return;
+		}
+
+		$cache = new PublicAssetBundleCacheService();
+		$cache->invalidate('js');
+		$cache->invalidate('css');
+	}
+
+	public function deactivateModule(string $moduleCode): int {
 		/** @var PublicAssetEntryRepository $assets */
 		$assets = Application::instance()->database()->repository(PublicAssetEntry::class);
 		/** @var PublicHeaderEntryRepository $headers */
 		$headers = Application::instance()->database()->repository(PublicHeaderEntry::class);
-		$assets->deactivateByModule($moduleCode);
-		$headers->deactivateByModule($moduleCode);
+
+		return $assets->deactivateByModule($moduleCode) + $headers->deactivateByModule($moduleCode);
 	}
 
 	/**
@@ -56,6 +73,7 @@ final class PublicAssetManifestSyncService {
 		$repo     = Application::instance()->database()->repository(PublicAssetEntry::class);
 		$ordered  = $this->isManuallyOrdered($kind);
 		$append   = !$isFirstInstall || $ordered;
+		$keep     = [];
 
 		foreach($paths as $path) {
 			$local = $this->resolvePath($manifest, $path);
@@ -63,8 +81,15 @@ final class PublicAssetManifestSyncService {
 				continue;
 			}
 
+			$keep[$local] = true;
+
 			$existing = $repo->findByKindAndLocalPath($kind, $local);
 			if($existing !== null) {
+				if(!$existing->active) {
+					$existing->active = true;
+					$repo->saveEntity($existing);
+				}
+
 				continue;
 			}
 
@@ -80,6 +105,40 @@ final class PublicAssetManifestSyncService {
 				? $repo->maxSortOrder($kind) + 1
 				: $this->initialSortHint($code, $kind);
 			$repo->saveEntity($entry);
+		}
+
+		$this->deactivateStaleAutoFiles($repo, $code, $kind, $keep);
+	}
+
+	/**
+	 * Выключает auto-записи модуля, которых больше нет в siteAssets (иначе бандл тащит лишнее).
+	 *
+	 * @param   array<string, true>  $keep
+	 */
+	private function deactivateStaleAutoFiles(
+		PublicAssetEntryRepository $repo,
+		string $code,
+		string $kind,
+		array $keep,
+	): void {
+		$changed = false;
+
+		foreach($repo->listByKindOrdered($kind, false) as $entry) {
+			if($entry->origin !== 'auto' || $entry->module_code !== $code || !$entry->active) {
+				continue;
+			}
+
+			if(isset($keep[$entry->local_path])) {
+				continue;
+			}
+
+			$entry->active = false;
+			$repo->saveEntity($entry);
+			$changed = true;
+		}
+
+		if($changed) {
+			(new PublicAssetBundleCacheService())->invalidate($kind);
 		}
 	}
 

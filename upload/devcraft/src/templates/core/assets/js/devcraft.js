@@ -400,9 +400,11 @@
     }
 
     function handleApiNotice(payload) {
-        if (!payload) {
+        if (!payload || payload.__dcNoticeShown) {
             return;
         }
+
+        payload.__dcNoticeShown = true;
 
         if (payload.error && payload.error.detail) {
             console.error('[DevCraft]', payload.error.code, payload.error.detail);
@@ -702,6 +704,85 @@
     DevCraftAjax.saveSettings = function (form) {
         return DevCraftSettings.save(form);
     };
+
+    /**
+     * Копирует текст в буфер обмена (Clipboard API + запасной execCommand для http).
+     *
+     * @param {string} text
+     * @param {HTMLTextAreaElement|HTMLInputElement|null} [fallbackEl]
+     * @returns {Promise<boolean>}
+     */
+    function copyText(text, fallbackEl) {
+        const value = text == null ? '' : String(text);
+
+        if (value === '') {
+            return Promise.resolve(false);
+        }
+
+        function notifyCopied() {
+            dcNotify(t('Готово'), t('Текст скопирован в буфер обмена'), 'success');
+            return true;
+        }
+
+        function notifySelectFallback() {
+            if (fallbackEl && typeof fallbackEl.focus === 'function') {
+                fallbackEl.focus();
+                if (typeof fallbackEl.select === 'function') {
+                    fallbackEl.select();
+                }
+            }
+            dcNotify(t('Готово'), t('Текст выделен — используйте Ctrl+C'), 'info');
+            return false;
+        }
+
+        function legacyCopy() {
+            if (fallbackEl && typeof fallbackEl.select === 'function') {
+                fallbackEl.focus();
+                fallbackEl.select();
+                try {
+                    if (document.execCommand('copy')) {
+                        return true;
+                    }
+                } catch (e) {
+                    // дальше — скрытое поле
+                }
+            }
+
+            const ta = document.createElement('textarea');
+            ta.value = value;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.top = '0';
+            ta.style.left = '0';
+            ta.style.width = '1px';
+            ta.style.height = '1px';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            ta.setSelectionRange(0, value.length);
+            let done = false;
+            try {
+                done = document.execCommand('copy');
+            } catch (e) {
+                done = false;
+            }
+            document.body.removeChild(ta);
+            return done;
+        }
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
+            return navigator.clipboard.writeText(value).then(function () {
+                return notifyCopied();
+            }).catch(function () {
+                return legacyCopy() ? notifyCopied() : notifySelectFallback();
+            });
+        }
+
+        return Promise.resolve(legacyCopy() ? notifyCopied() : notifySelectFallback());
+    }
+
+    DevCraft.copyText = copyText;
 
     global.DevCraft = DevCraft;
     DevCraft.__ = typeof global.__ === 'function' ? global.__ : function (phrase) { return phrase; };

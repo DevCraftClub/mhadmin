@@ -18,6 +18,8 @@ namespace DevCraft\Core\Support;
 use Throwable;
 use DevCraft\Core\Application;
 use DevCraft\Builders\QueryBuilder;
+use Cycle\Database\Injection\Expression;
+use Cycle\Database\Injection\Parameter;
 use Cycle\Database\Query\SelectQuery;
 use Cycle\Database\Query\UpdateQuery;
 use Cycle\Database\Query\DeleteQuery;
@@ -337,23 +339,147 @@ final class DataLoaderService {
 	/**
 	 * Применяет условия фильтрации к SelectQuery, UpdateQuery или DeleteQuery.
 	 *
+	 * Поддерживает равенство, `['op' => …, 'value' => …]` (`in`, `like`, `find_in_set` и прочие
+	 * операторы Cycle) и группу «или» по ключу `_or` (список условий).
+	 *
 	 * @since 173.3.0
 	 *
 	 * @param   SelectQuery|UpdateQuery|DeleteQuery  $query       Объект запроса.
 	 * @param   array<string, mixed>                 $conditions  Условия фильтрации.
+	 * @param   string                               $boolean     Связка с предыдущим условием: `AND` или `OR`.
 	 */
-	private static function applyConditions(SelectQuery|UpdateQuery|DeleteQuery $query, array $conditions): void {
+	private static function applyConditions(
+		SelectQuery|UpdateQuery|DeleteQuery $query,
+		array $conditions,
+		string $boolean = 'AND',
+	): void {
 		foreach($conditions as $column => $value) {
 			if(!is_string($column) || $column === '') {
 				continue;
 			}
 
-			if(is_array($value) && isset($value['op'], $value['value'])) {
-				$query->where($column, (string) $value['op'], $value['value']);
+			if($column === '_or' && is_array($value)) {
+				self::applyOrGroup($query, $value, $boolean);
 
 				continue;
 			}
 
+			self::applyConditionToken($query, $column, $value, $boolean);
+		}
+	}
+
+	/**
+	 * Вкладывает группу условий, связанных через OR.
+	 *
+	 * Каждый элемент списка — набор условий через И; элементы списка соединяются через ИЛИ.
+	 *
+	 * @param   SelectQuery|UpdateQuery|DeleteQuery  $query
+	 * @param   list<array<string, mixed>>           $items
+	 * @param   string                               $boolean  Связка группы с внешним запросом.
+	 */
+	private static function applyOrGroup(
+		SelectQuery|UpdateQuery|DeleteQuery $query,
+		array $items,
+		string $boolean = 'AND',
+	): void {
+		$nested = static function (SelectQuery|UpdateQuery|DeleteQuery $inner) use ($items): void {
+			$first = true;
+
+			foreach($items as $item) {
+				if(!is_array($item) || $item === []) {
+					continue;
+				}
+
+				$branch = static function (SelectQuery|UpdateQuery|DeleteQuery $branchQuery) use ($item): void {
+					self::applyConditions($branchQuery, $item, 'AND');
+				};
+
+				if($first) {
+					$inner->where($branch);
+					$first = false;
+				} else {
+					$inner->orWhere($branch);
+				}
+			}
+		};
+
+		if(strtoupper($boolean) === 'OR') {
+			$query->orWhere($nested);
+
+			return;
+		}
+
+		$query->where($nested);
+	}
+
+	/**
+	 * Одно условие (равенство или op/value) с выбранной связкой AND/OR.
+	 *
+	 * @param   SelectQuery|UpdateQuery|DeleteQuery  $query
+	 * @param   string                               $column
+	 * @param   mixed                                $value
+	 * @param   string                               $boolean
+	 */
+	private static function applyConditionToken(
+		SelectQuery|UpdateQuery|DeleteQuery $query,
+		string $column,
+		mixed $value,
+		string $boolean = 'AND',
+	): void {
+		$isOr = strtoupper($boolean) === 'OR';
+
+		if(is_array($value) && isset($value['op'], $value['value'])) {
+			$op  = strtolower((string) $value['op']);
+			$val = $value['value'];
+
+			if($op === 'in') {
+				$param = new Parameter(is_array($val)? array_values($val) : [$val]);
+
+				if($isOr) {
+					$query->orWhere($column, 'in', $param);
+				} else {
+					$query->where($column, 'in', $param);
+				}
+
+				return;
+			}
+
+			if($op === 'like') {
+				if($isOr) {
+					$query->orWhere($column, 'like', $val);
+				} else {
+					$query->where($column, 'like', $val);
+				}
+
+				return;
+			}
+
+			if($op === 'find_in_set') {
+				// Значение только через плейсхолдер — не склеивать в SQL.
+				$safeCol = preg_replace('/[^a-zA-Z0-9_]/', '', $column) ?? $column;
+				$expr    = new Expression('FIND_IN_SET(?, `' . $safeCol . '`)', $val);
+
+				if($isOr) {
+					$query->orWhere($expr);
+				} else {
+					$query->where($expr);
+				}
+
+				return;
+			}
+
+			if($isOr) {
+				$query->orWhere($column, (string) $value['op'], $val);
+			} else {
+				$query->where($column, (string) $value['op'], $val);
+			}
+
+			return;
+		}
+
+		if($isOr) {
+			$query->orWhere($column, $value);
+		} else {
 			$query->where($column, $value);
 		}
 	}

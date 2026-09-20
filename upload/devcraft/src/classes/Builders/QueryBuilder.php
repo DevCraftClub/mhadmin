@@ -63,7 +63,8 @@ final class QueryBuilder extends AbstractWith {
 	private array $columns = [];
 
 	/**
-	 * Условия: равенство или `['op' => string, 'value' => mixed]`.
+	 * Условия: равенство, `['op' => string, 'value' => mixed]` (`in`, `like`, `find_in_set`, …)
+	 * или группа «или» по ключу `_or` → list<array<string, mixed>>.
 	 *
 	 * @var array<string, mixed>
 	 */

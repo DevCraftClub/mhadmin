@@ -690,21 +690,7 @@
 				const textarea = document.getElementById(targetId);
 				const text = textarea ? textarea.value : '';
 
-				if (text && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-					navigator.clipboard.writeText(text).then(function () {
-						DevCraftMetro.notifySuccess(t('Готово'), t('Текст скопирован в буфер обмена'));
-					}).catch(function () {
-						if (textarea) {
-							textarea.focus();
-							textarea.select();
-							DevCraftMetro.notifySuccess(t('Готово'), t('Текст выделен — используйте Ctrl+C'));
-						}
-					});
-				} else if (textarea) {
-					textarea.focus();
-					textarea.select();
-					DevCraftMetro.notifySuccess(t('Готово'), t('Текст выделен — используйте Ctrl+C'));
-				}
+				copyText(text, textarea);
 				return;
 			}
 
@@ -900,6 +886,63 @@
 		});
 	}
 
+	/**
+	 * Metro Switch оборачивает checkbox в label и переносит CSS-класс на обёртку,
+	 * а data-id остаётся на input. Клик по label+input может дать два change.
+	 */
+	function publicBindRowSwitch(root, method) {
+		root.addEventListener('change', function (event) {
+			const input = event.target;
+
+			if (!input || input.type !== 'checkbox') {
+				return;
+			}
+
+			const row = input.closest('tr[data-id]');
+
+			if (!row) {
+				return;
+			}
+
+			const id = parseInt(row.getAttribute('data-id') || input.getAttribute('data-id') || '0', 10);
+
+			if (!id || input._dcToggleQueued || input._dcToggleBusy) {
+				return;
+			}
+
+			input._dcToggleQueued = true;
+			const active = input.checked ? 1 : 0;
+			const previous = active ? 0 : 1;
+
+			window.setTimeout(function () {
+				input._dcToggleQueued = false;
+				input.checked = active === 1;
+
+				if (input._dcToggleBusy) {
+					return;
+				}
+
+				input._dcToggleBusy = true;
+
+				DevCraftAjax.post(method, {
+					id: id,
+					active: active,
+				}).then(function (payload) {
+					DevCraftAjax.handleNotice(payload);
+
+					if (!payload.success) {
+						input.checked = previous === 1;
+					}
+				}).catch(function (err) {
+					input.checked = previous === 1;
+					DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
+				}).then(function () {
+					input._dcToggleBusy = false;
+				});
+			}, 0);
+		});
+	}
+
 	function publicCloneTemplate(id) {
 		const tpl = document.getElementById(id);
 
@@ -1020,9 +1063,11 @@
 	function initPublicAssetsPage() {
 		const root = document.querySelector('[data-dc-public-assets-page]');
 
-		if (!root) {
+		if (!root || root.dataset.dcBound === '1') {
 			return;
 		}
+
+		root.dataset.dcBound = '1';
 
 		const kind = root.getAttribute('data-kind') || '';
 		const list = document.getElementById('dc-public-assets-list');
@@ -1041,9 +1086,11 @@
 			publicPostSilent('public_asset_reorder', { kind: kind, ids: ids });
 		};
 
-		window.setTimeout(function () {
-			publicBindDrag(list, persistOrder);
-		}, 50);
+		if (root.getAttribute('data-dc-dnd') !== '0') {
+			window.setTimeout(function () {
+				publicBindDrag(list, persistOrder);
+			}, 50);
+		}
 
 		const openAddDialog = function () {
 			publicOpenFormDialog({
@@ -1109,37 +1156,17 @@
 			}
 		});
 
-		root.addEventListener('change', function (event) {
-			const toggle = event.target.closest('.js-dc-asset-toggle');
-
-			if (!toggle) {
-				return;
-			}
-
-			const id = parseInt(toggle.getAttribute('data-id'), 10);
-
-			DevCraftAjax.post('public_asset_toggle', {
-				id: id,
-				active: toggle.checked ? 1 : 0,
-			}).then(function (payload) {
-				DevCraftAjax.handleNotice(payload);
-
-				if (!payload.success) {
-					toggle.checked = !toggle.checked;
-				}
-			}).catch(function (err) {
-				toggle.checked = !toggle.checked;
-				DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
-			});
-		});
+		publicBindRowSwitch(root, 'public_asset_toggle');
 	}
 
 	function initPublicHeadersPage() {
 		const root = document.querySelector('[data-dc-public-headers-page]');
 
-		if (!root) {
+		if (!root || root.dataset.dcBound === '1') {
 			return;
 		}
+
+		root.dataset.dcBound = '1';
 
 		const list = document.getElementById('dc-public-headers-list');
 
@@ -1157,9 +1184,11 @@
 			publicPostSilent('public_header_reorder', { ids: ids });
 		};
 
-		window.setTimeout(function () {
-			publicBindDrag(list, persistOrder);
-		}, 50);
+		if (root.getAttribute('data-dc-dnd') !== '0') {
+			window.setTimeout(function () {
+				publicBindDrag(list, persistOrder);
+			}, 50);
+		}
 
 		const openAddDialog = function (defaults) {
 			publicOpenFormDialog({
@@ -1232,29 +1261,54 @@
 			}
 		});
 
-		root.addEventListener('change', function (event) {
-			const toggle = event.target.closest('.js-dc-header-toggle');
+		publicBindRowSwitch(root, 'public_header_toggle');
+	}
 
-			if (!toggle) {
-				return;
-			}
+	/**
+	 * Копирует текст в буфер обмена (делегирует в ядро DevCraft.copyText).
+	 *
+	 * @param {string} text
+	 * @param {HTMLTextAreaElement|HTMLInputElement|null} [fallbackEl] поле для выделения при отказе
+	 * @returns {Promise<boolean>}
+	 */
+	function copyText(text, fallbackEl) {
+		if (typeof DevCraft.copyText === 'function' && DevCraft.copyText !== copyText) {
+			return DevCraft.copyText(text, fallbackEl);
+		}
 
-			const id = parseInt(toggle.getAttribute('data-id'), 10);
+		const value = text == null ? '' : String(text);
 
-			DevCraftAjax.post('public_header_toggle', {
-				id: id,
-				active: toggle.checked ? 1 : 0,
-			}).then(function (payload) {
-				DevCraftAjax.handleNotice(payload);
+		if (value === '') {
+			return Promise.resolve(false);
+		}
 
-				if (!payload.success) {
-					toggle.checked = !toggle.checked;
+		const fallbackSelect = function () {
+			if (fallbackEl && typeof fallbackEl.focus === 'function') {
+				fallbackEl.focus();
+				if (typeof fallbackEl.select === 'function') {
+					fallbackEl.select();
 				}
-			}).catch(function (err) {
-				toggle.checked = !toggle.checked;
-				DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
+			}
+			DevCraftMetro.notify(t('Готово'), t('Текст выделен — используйте Ctrl+C'), 'info');
+		};
+
+		if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
+			return navigator.clipboard.writeText(value).then(function () {
+				DevCraftMetro.notify(t('Готово'), t('Текст скопирован в буфер обмена'), 'success');
+				return true;
+			}).catch(function () {
+				fallbackSelect();
+				return false;
 			});
-		});
+		}
+
+		fallbackSelect();
+		return Promise.resolve(false);
+	}
+
+	// Не перезаписываем ядро, если уже есть DevCraft.copyText из devcraft.js
+	if (typeof DevCraft.copyText !== 'function') {
+		DevCraft.copyText = copyText;
 	}
 
 	DevCraftPublicAssets.initAssets = initPublicAssetsPage;

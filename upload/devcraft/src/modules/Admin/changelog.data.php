@@ -53,6 +53,11 @@ return [
 			__('SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.'),
 			__('SDK Schema типы по install/dump DLE 21: `category.schema_org` и `storage.name` / `vote.date` — string; `rss.category` — int.'),
 			__('Генератор модулей: latin/`toTranslit` сохраняет `_` и `-`; Identity `MODULE=%dir%`, `CODE=%latin%`; каталог модуля — PascalCase от имени; `engine/inc` — slug без префикса `dle_`.'),
+			__('Публичный бандл CSS/JS: в `cache/public_assets/` пишется `.htaccess` с доступом — иначе родительский `devcraft/.htaccess` отдаёт 403 на `bundle.css` / `bundle.js`.'),
+			__('Синк siteAssets: устаревшие auto-записи модуля выключаются, если файлов больше нет в манифесте (или siteAssets пуст) — бандл не тащит админский JS на сайт.'),
+			__('`DevCraft.copyText` в ядре (`devcraft.js`): копирование в буфер на всех страницах админки, в т.ч. по HTTP (запасной `execCommand`).'),
+			__('Публичные стили/скрипты/заголовки: переключатель «Активен» брал id с обёртки Metro Switch (класс уехал с checkbox, data-id остался на input) — «Запись не найдена» и два запроса/уведомления. Id берётся из строки таблицы; повтор change сливается в один запрос.'),
+			__('Публичные списки: Metro-таблица пересобирала строки (терялся `data-id`, ломалось перетаскивание) и искала колонки не по тем именам (поиск ничего не находил). Теперь штатный `filter_bar` + обычная таблица; перетаскивание по живым строкам, при фильтре порядок не пишется.'),
 		])
 		->build(),
 	ChangelogBuilder::create('200.4.0')

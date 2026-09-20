@@ -15,11 +15,12 @@ use DevCraft\Modules\Admin\Repositories\PublicAssetEntryRepository;
 final class PublicAssetBundleCacheService {
 
 	public function __construct(
-		private readonly PublicAssetMinify $minify = new PublicAssetMinify(),
+		private readonly PublicAssetMinify            $minify = new PublicAssetMinify(),
+		private readonly PublicAssetDependencyService $deps   = new PublicAssetDependencyService(),
 	) {}
 
 	/**
-	 * Каталог бандла и `.htaccess` с доступом (нужен из‑за закрытого `devcraft/.htaccess`).
+	 * Каталог собранных файлов и `.htaccess` с доступом (нужен из‑за закрытого `devcraft/.htaccess`).
 	 */
 	public function ensureCacheDir(): ?string {
 		$dir = Paths::cache() . '/public_assets';
@@ -33,21 +34,22 @@ final class PublicAssetBundleCacheService {
 		return $dir;
 	}
 
-	public function ensure(string $kind): ?string {
+	public function ensure(string $kind, ?string $sectionKey = null): ?string {
 		if($kind !== 'css' && $kind !== 'js') {
 			return null;
 		}
 
+		$sectionKey ??= DleSiteSectionRegistry::instance()->currentKey();
 		$dir = $this->ensureCacheDir();
 
 		if($dir === null) {
 			return null;
 		}
 
-		$entries = $this->activeEntries($kind);
-		$hash    = $this->compositionHash($entries);
-		$metaPath = $dir . '/bundle.' . $kind . '.meta.json';
-		$outPath  = $dir . '/bundle.' . $kind;
+		$entries  = $this->activeEntriesForSection($kind, $sectionKey);
+		$hash     = $this->compositionHash($entries, $sectionKey);
+		$metaPath = $dir . '/bundle.' . $kind . '.' . $this->sectionSlug($sectionKey) . '.meta.json';
+		$outPath  = $dir . '/bundle.' . $kind . '.' . $this->sectionSlug($sectionKey);
 
 		if(is_file($metaPath) && is_file($outPath)) {
 			$meta = json_decode((string) file_get_contents($metaPath), true);
@@ -82,31 +84,82 @@ final class PublicAssetBundleCacheService {
 
 		$generatedAt = time();
 		@file_put_contents($metaPath, json_encode([
-			'kind'              => $kind,
-			'generated_at'      => $generatedAt,
-			'sources'           => $sources,
-			'composition_hash'  => $hash,
-			'output_file'       => str_replace(ROOT_DIR, '', $outPath),
+			'kind'             => $kind,
+			'section_key'      => $sectionKey,
+			'generated_at'     => $generatedAt,
+			'sources'          => $sources,
+			'composition_hash' => $hash,
+			'output_file'      => str_replace(ROOT_DIR, '', $outPath),
 		], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
 		return $outPath;
 	}
 
 	public function invalidate(string $kind): void {
+		$this->invalidateAllSections($kind);
+	}
+
+	public function invalidateAllSections(string $kind): void {
 		$dir = Paths::cache() . '/public_assets';
-		@unlink($dir . '/bundle.' . $kind);
-		@unlink($dir . '/bundle.' . $kind . '.meta.json');
+		if(!is_dir($dir)) {
+			return;
+		}
+
+		if($kind === 'meta') {
+			return;
+		}
+
+		foreach(glob($dir . '/bundle.' . $kind . '.*') ?: [] as $file) {
+			if(str_ends_with($file, '.meta.json')) {
+				@unlink($file);
+				continue;
+			}
+
+			@unlink($file);
+		}
 	}
 
 	/**
 	 * @return list<PublicAssetEntry>
 	 */
-	private function activeEntries(string $kind): array {
+	private function activeEntriesForSection(string $kind, string $sectionKey): array {
 		try {
 			/** @var PublicAssetEntryRepository $repo */
-			$repo = Application::instance()->database()->repository(PublicAssetEntry::class);
+			$repo    = Application::instance()->database()->repository(PublicAssetEntry::class);
+			$entries = $repo->listByKind($kind);
+			$depsMap = $this->deps->buildDepsMap($entries);
+			$candidates = [];
 
-			return $repo->listByKindOrdered($kind, true);
+			foreach($entries as $entry) {
+				if(!$entry->active) {
+					continue;
+				}
+
+				if(!$entry->matchesSection($sectionKey)) {
+					continue;
+				}
+
+				$candidates[] = $entry->id();
+			}
+
+			$outputIds = $this->deps->orderedClosureForOutput($candidates, $depsMap);
+			$byId      = [];
+
+			foreach($entries as $entry) {
+				$byId[$entry->id()] = $entry;
+			}
+
+			$result = [];
+
+			foreach($outputIds as $id) {
+				if(!isset($byId[$id])) {
+					continue;
+				}
+
+				$result[] = $byId[$id];
+			}
+
+			return $result;
 		} catch(\Throwable) {
 			return [];
 		}
@@ -115,14 +168,20 @@ final class PublicAssetBundleCacheService {
 	/**
 	 * @param   list<PublicAssetEntry>  $entries
 	 */
-	private function compositionHash(array $entries): string {
-		$parts = [];
+	private function compositionHash(array $entries, string $sectionKey): string {
+		$parts = [$sectionKey];
 
 		foreach($entries as $entry) {
 			$parts[] = $entry->id() . '|' . $entry->local_path . '|' . $entry->sort_order;
 		}
 
 		return hash('sha256', implode(';', $parts));
+	}
+
+	private function sectionSlug(string $sectionKey): string {
+		$slug = preg_replace('/[^a-z0-9_-]+/', '_', strtolower($sectionKey)) ?? 'main';
+
+		return $slug === '' ? 'main' : $slug;
 	}
 
 	/**

@@ -10,14 +10,22 @@ use DevCraft\Modules\Admin\Models\PublicAssetEntry;
 use DevCraft\Modules\Admin\Repositories\PublicAssetEntryRepository;
 
 /**
- * Однократный сид auto-записи Admin для `dc_public.js`.
+ * Однократный сид auto-записи Admin для `dc_public.js` и демо-ключа раздела quickstart.
  */
 final class PublicAssetSeedService {
 
 	private const string DC_PUBLIC_JS = 'devcraft/src/templates/core/assets/js/dc_public.js';
 
+	/** Ключ раздела для сценария SC-004 в quickstart (только локальная проверка). */
+	public const string QUICKSTART_SECTION_KEY = 'dc_demo_section';
+
 	public function ensureAdminDcPublicJs(): void {
 		try {
+			DleSiteSectionRegistry::instance()->register(
+				self::QUICKSTART_SECTION_KEY,
+				__('Демо-раздел quickstart'),
+			);
+
 			/** @var PublicAssetEntryRepository $repo */
 			$repo = Application::instance()->database()->repository(PublicAssetEntry::class);
 			$existing = $repo->findByKindAndLocalPath('js', self::DC_PUBLIC_JS);

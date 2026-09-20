@@ -65,4 +65,42 @@ class PublicHeaderEntryRepository extends AbstractRepository {
 		return $row instanceof PublicHeaderEntry ? $row->sort_order : 0;
 	}
 
+	/**
+	 * @return list<PublicHeaderEntry>
+	 */
+	public function listAllOrdered(): array {
+		/** @var list<PublicHeaderEntry> */
+		return $this->select()->orderBy('sort_order', 'ASC')->fetchAll();
+	}
+
+	/**
+	 * @return list<PublicHeaderEntry>
+	 */
+	public function findDependents(int $id): array {
+		$result = [];
+
+		foreach($this->listAllOrdered() as $entry) {
+			if(in_array($id, $entry->dependsOnIds(), true)) {
+				$result[] = $entry;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param   array<int, int>  $sortById
+	 */
+	public function bulkUpdateSortOrder(array $sortById): void {
+		foreach($sortById as $id => $order) {
+			$entry = $this->findByPK((int) $id);
+			if(!$entry instanceof PublicHeaderEntry) {
+				continue;
+			}
+
+			$entry->sort_order = (int) $order;
+			$this->saveEntity($entry);
+		}
+	}
+
 }

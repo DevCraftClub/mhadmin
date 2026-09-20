@@ -167,8 +167,14 @@ final class PublicAssetListPageService {
 	}
 
 	private function loadSchema(string $rel): FilterSchema {
+		$loaded = require DLEPlugins::Check(DEVCRAFT_MODULES . '/' . $rel);
+
+		if($loaded instanceof FilterSchema) {
+			return $loaded;
+		}
+
 		/** @var array<string, mixed> $raw */
-		$raw = require DLEPlugins::Check(DEVCRAFT_MODULES . '/' . $rel);
+		$raw = is_array($loaded) ? $loaded : [];
 
 		return FilterSchema::fromArray($raw);
 	}

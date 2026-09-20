@@ -7,79 +7,51 @@ namespace DevCraft\Modules\Admin\Services;
 use DevCraft\Core\Application;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Modules\Admin\AdminIdentity;
-use DevCraft\Modules\Admin\Models\PublicAssetEntry;
-use DevCraft\Modules\Admin\Repositories\PublicAssetEntryRepository;
+use DevCraft\Modules\Admin\Models\PublicHeaderEntry;
+use DevCraft\Modules\Admin\Repositories\PublicHeaderEntryRepository;
 use RuntimeException;
 
 /**
- * CRUD правил для публичных CSS/JS (manual delete only; auto — toggle).
+ * CRUD и граф зависимостей для публичных meta-заголовков.
  */
-final class PublicAssetWriteService {
+final class PublicHeaderWriteService {
 
 	public function __construct(
-		private readonly PublicAssetRemoteDownloadService $downloader = new PublicAssetRemoteDownloadService(),
-		private readonly PublicAssetDependencyService     $deps       = new PublicAssetDependencyService(),
+		private readonly PublicAssetDependencyService $deps = new PublicAssetDependencyService(),
 	) {}
 
 	/**
 	 * @param   array<string, mixed>  $data
 	 */
-	public function save(array $data): PublicAssetEntry {
-		$kind   = (string) ($data['kind'] ?? '');
-		$id     = (int) ($data['id'] ?? 0);
+	public function save(array $data): PublicHeaderEntry {
+		$name    = trim((string) ($data['name'] ?? ''));
+		$content = trim((string) ($data['content'] ?? ''));
+		$id      = (int) ($data['id'] ?? 0);
 
-		if($kind !== 'css' && $kind !== 'js') {
-			throw new RuntimeException(__('Некорректный тип ресурса'));
+		if($name === '' || $content === '') {
+			throw new RuntimeException(__('Имя и содержимое обязательны'));
 		}
 
-		/** @var PublicAssetEntryRepository $repo */
-		$repo  = Application::instance()->database()->repository(PublicAssetEntry::class);
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo  = Application::instance()->database()->repository(PublicHeaderEntry::class);
 		$entry = $id > 0 ? $repo->findByPK($id) : null;
 
-		if($id > 0 && !$entry instanceof PublicAssetEntry) {
+		if($id > 0 && !$entry instanceof PublicHeaderEntry) {
 			throw new RuntimeException(__('Запись не найдена'));
 		}
 
 		if($entry === null) {
-			$entry             = new PublicAssetEntry();
+			$entry             = new PublicHeaderEntry();
 			$entry->origin     = 'manual';
-			$entry->kind       = $kind;
-			$entry->sort_order = $repo->maxSortOrder($kind) + 1;
-		} elseif($entry->origin === 'auto' && isset($data['local_path'])) {
-			throw new RuntimeException(__('Автозапись нельзя редактировать как ручную'));
+			$entry->sort_order = $repo->maxSortOrder() + 1;
 		}
 
-		$sourceUrl = trim((string) ($data['source_url'] ?? ''));
-		$localPath = trim((string) ($data['local_path'] ?? $entry->local_path));
+		$entry->name    = $name;
+		$entry->content = $content;
+		$entry->active  = $this->resolveActiveFlag($data, $entry->active);
 
-		if($sourceUrl !== '') {
-			$localPath = $this->downloader->download($sourceUrl, $kind);
-			$entry->source_url = $sourceUrl;
-		}
-
-		if($localPath === '') {
-			throw new RuntimeException(__('Укажите локальный путь или внешний URL'));
-		}
-
-		if(str_contains($localPath, '..')) {
-			throw new RuntimeException(__('Путь не должен содержать ..'));
-		}
-
-		$dup = $repo->findByKindAndLocalPath($kind, $localPath);
-		if($dup !== null && $dup->active && !($id > 0 && $dup->id() === $id)) {
-			throw new RuntimeException(__('Активная запись с таким путём уже существует'));
-		}
-
-		$entry->kind        = $kind;
-		$entry->label       = trim((string) ($data['label'] ?? $entry->label)) ?: null;
-		$entry->source_path = trim((string) ($data['source_path'] ?? $entry->source_path)) ?: null;
-		$entry->local_path  = $localPath;
-		$entry->active      = $this->resolveActiveFlag($data, $entry->active);
-		$entry->origin      = $entry->origin === 'auto' ? 'auto' : 'manual';
-
-		/** @var PublicAssetEntry $saved */
-		$saved = $repo->saveEntity($entry);
-		(new PublicAssetBundleCacheService())->invalidateAllSections($saved->kind);
+		/** @var PublicHeaderEntry $saved */
+		$saved = $this->persistDepsFields($entry, $data, false);
 
 		return $saved;
 	}
@@ -87,40 +59,31 @@ final class PublicAssetWriteService {
 	/**
 	 * @param   array<string, mixed>  $data
 	 */
-	public function saveEdit(array $data): PublicAssetEntry {
-		$kind = (string) ($data['kind'] ?? '');
-		$id   = (int) ($data['id'] ?? 0);
-
-		if($kind !== 'css' && $kind !== 'js') {
-			throw new RuntimeException(__('Некорректный тип ресурса'));
-		}
+	public function saveEdit(array $data): PublicHeaderEntry {
+		$id = (int) ($data['id'] ?? 0);
 
 		if($id <= 0) {
 			throw new RuntimeException(__('Запись не найдена'));
 		}
 
-		/** @var PublicAssetEntryRepository $repo */
-		$repo  = Application::instance()->database()->repository(PublicAssetEntry::class);
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo  = Application::instance()->database()->repository(PublicHeaderEntry::class);
 		$entry = $repo->findByPK($id);
 
-		if(!$entry instanceof PublicAssetEntry || $entry->kind !== $kind) {
+		if(!$entry instanceof PublicHeaderEntry) {
 			throw new RuntimeException(__('Запись не найдена'));
 		}
 
-		if($entry->origin === 'manual') {
-			$sourceUrl = trim((string) ($data['source_url'] ?? ''));
-			$localPath = trim((string) ($data['local_path'] ?? $entry->local_path));
+		if($entry->origin !== 'auto') {
+			$name    = trim((string) ($data['name'] ?? $entry->name));
+			$content = trim((string) ($data['content'] ?? $entry->content));
 
-			if($sourceUrl !== '') {
-				$localPath = $this->downloader->download($sourceUrl, $kind);
-				$entry->source_url = $sourceUrl;
+			if($name === '' || $content === '') {
+				throw new RuntimeException(__('Имя и содержимое обязательны'));
 			}
 
-			if($localPath !== '' && !str_contains($localPath, '..')) {
-				$entry->local_path = $localPath;
-			}
-
-			$entry->label = trim((string) ($data['label'] ?? $entry->label)) ?: null;
+			$entry->name    = $name;
+			$entry->content = $content;
 		}
 
 		$entry->active = $this->resolveActiveFlag($data, $entry->active);
@@ -128,30 +91,15 @@ final class PublicAssetWriteService {
 		return $this->persistDepsFields($entry, $data, true);
 	}
 
-	public function toggle(int $id, bool $active): PublicAssetEntry {
-		/** @var PublicAssetEntryRepository $repo */
-		$repo  = Application::instance()->database()->repository(PublicAssetEntry::class);
-		$entry = $repo->findByPK($id);
-
-		if(!$entry instanceof PublicAssetEntry) {
-			throw new RuntimeException(__('Запись не найдена'));
-		}
-
-		$entry->active = $active;
-
-		/** @var PublicAssetEntry */
-		return $repo->saveEntity($entry);
-	}
-
 	/**
 	 * @return array{deleted: bool, probe?: array<string, mixed>}
 	 */
 	public function delete(int $id, ?string $mode = null): array {
-		/** @var PublicAssetEntryRepository $repo */
-		$repo  = Application::instance()->database()->repository(PublicAssetEntry::class);
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo  = Application::instance()->database()->repository(PublicHeaderEntry::class);
 		$entry = $repo->findByPK($id);
 
-		if(!$entry instanceof PublicAssetEntry) {
+		if(!$entry instanceof PublicHeaderEntry) {
 			throw new RuntimeException(__('Запись не найдена'));
 		}
 
@@ -159,7 +107,7 @@ final class PublicAssetWriteService {
 			throw new RuntimeException(__('Автозапись нельзя удалить — только выключить'));
 		}
 
-		$dependents = $repo->findDependents($id, $entry->kind);
+		$dependents = $repo->findDependents($id);
 
 		if($dependents !== [] && ($mode === null || $mode === 'probe')) {
 			return [
@@ -176,9 +124,8 @@ final class PublicAssetWriteService {
 			throw new RuntimeException(__('Неизвестный режим удаления'));
 		}
 
-		$kind = $entry->kind;
 		$repo->deleteEntity($entry);
-		(new PublicAssetBundleCacheService())->invalidateAllSections($kind);
+		(new PublicAssetBundleCacheService())->invalidateAllSections('meta');
 
 		return ['deleted' => true];
 	}
@@ -186,16 +133,17 @@ final class PublicAssetWriteService {
 	/**
 	 * @param   list<int|string>  $ids
 	 *
+	 * @return array{reordered: bool}
+	 */
+	/**
+	 * @param   list<int|string>  $ids
+	 *
 	 * @return array{reordered: bool, ids: list<int>}
 	 */
-	public function reorder(string $kind, array $ids): array {
-		if($kind !== 'css' && $kind !== 'js') {
-			throw new RuntimeException(__('Некорректный тип ресурса'));
-		}
-
-		/** @var PublicAssetEntryRepository $repo */
-		$repo    = Application::instance()->database()->repository(PublicAssetEntry::class);
-		$entries = $repo->listByKind($kind);
+	public function reorder(array $ids): array {
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo    = Application::instance()->database()->repository(PublicHeaderEntry::class);
+		$entries = $repo->listAllOrdered();
 		$depsMap = $this->deps->buildDepsMap($entries);
 		$ordered = array_values(array_map('intval', $ids));
 		$adjusted = false;
@@ -212,8 +160,7 @@ final class PublicAssetWriteService {
 		}
 
 		$repo->bulkUpdateSortOrder($sortById);
-		$this->markManuallyOrdered($kind);
-		(new PublicAssetBundleCacheService())->invalidateAllSections($kind);
+		$this->markManuallyOrdered();
 
 		return [
 			'reordered' => $adjusted,
@@ -224,12 +171,12 @@ final class PublicAssetWriteService {
 	/**
 	 * @param   array<string, mixed>  $data
 	 */
-	private function persistDepsFields(PublicAssetEntry $entry, array $data, bool $recalcSort): PublicAssetEntry {
-		/** @var PublicAssetEntryRepository $repo */
-		$repo    = Application::instance()->database()->repository(PublicAssetEntry::class);
-		$all     = $repo->listByKind($entry->kind);
-		$valid   = array_map(static fn(PublicAssetEntry $row): int => $row->id(), $all);
-		$depends = $this->deps->sanitizeDependsOn(
+	private function persistDepsFields(PublicHeaderEntry $entry, array $data, bool $recalcSort): PublicHeaderEntry {
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo      = Application::instance()->database()->repository(PublicHeaderEntry::class);
+		$all       = $repo->listAllOrdered();
+		$valid     = array_map(static fn(PublicHeaderEntry $row): int => $row->id(), $all);
+		$depends   = $this->deps->sanitizeDependsOn(
 			$this->normalizeIntList($data['depends_on'] ?? []),
 			$entry->id() ?? 0,
 			$valid,
@@ -243,27 +190,27 @@ final class PublicAssetWriteService {
 		$entry->setAvailableKeys($available);
 		$entry->setNotAvailableKeys($notAvailable);
 
-		/** @var PublicAssetEntry $saved */
+		/** @var PublicHeaderEntry $saved */
 		$saved = $repo->saveEntity($entry);
 
 		if($recalcSort) {
-			$this->recalculateCategorySortOrder($entry->kind);
+			$this->recalculateCategorySortOrder();
 		}
 
-		(new PublicAssetBundleCacheService())->invalidateAllSections($entry->kind);
+		(new PublicAssetBundleCacheService())->invalidateAllSections('meta');
 
 		return $saved;
 	}
 
-	private function recalculateCategorySortOrder(string $kind): void {
-		/** @var PublicAssetEntryRepository $repo */
-		$repo    = Application::instance()->database()->repository(PublicAssetEntry::class);
-		$entries = $repo->listByKind($kind);
+	private function recalculateCategorySortOrder(): void {
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo    = Application::instance()->database()->repository(PublicHeaderEntry::class);
+		$entries = $repo->listAllOrdered();
 		$depsMap = $this->deps->buildDepsMap($entries);
 		$this->deps->assertAcyclic($depsMap);
 
 		$ordered = $this->deps->topologicalSort(
-			array_map(static fn(PublicAssetEntry $e): int => $e->id(), $entries),
+			array_map(static fn(PublicHeaderEntry $e): int => $e->id(), $entries),
 			$depsMap,
 		);
 
@@ -277,7 +224,7 @@ final class PublicAssetWriteService {
 	}
 
 	/**
-	 * @param   list<PublicAssetEntry>  $dependents
+	 * @param   list<PublicHeaderEntry>  $dependents
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -287,7 +234,7 @@ final class PublicAssetWriteService {
 		foreach($dependents as $entry) {
 			$rows[] = [
 				'id'     => $entry->id(),
-				'label'  => $entry->label ?: $entry->local_path,
+				'label'  => $entry->name,
 				'origin' => $entry->origin,
 			];
 		}
@@ -300,11 +247,11 @@ final class PublicAssetWriteService {
 	}
 
 	/**
-	 * @param   list<PublicAssetEntry>  $dependents
+	 * @param   list<PublicHeaderEntry>  $dependents
 	 */
 	private function unlinkFromDependents(int $targetId, array $dependents): void {
-		/** @var PublicAssetEntryRepository $repo */
-		$repo = Application::instance()->database()->repository(PublicAssetEntry::class);
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo = Application::instance()->database()->repository(PublicHeaderEntry::class);
 
 		foreach($dependents as $entry) {
 			$deps = array_values(array_filter(
@@ -317,11 +264,11 @@ final class PublicAssetWriteService {
 	}
 
 	/**
-	 * @param   list<PublicAssetEntry>  $dependents
+	 * @param   list<PublicHeaderEntry>  $dependents
 	 */
 	private function cascadeDeleteDependents(int $targetId, array $dependents): void {
-		/** @var PublicAssetEntryRepository $repo */
-		$repo = Application::instance()->database()->repository(PublicAssetEntry::class);
+		/** @var PublicHeaderEntryRepository $repo */
+		$repo = Application::instance()->database()->repository(PublicHeaderEntry::class);
 
 		foreach($dependents as $entry) {
 			if($entry->origin === 'auto') {
@@ -338,12 +285,10 @@ final class PublicAssetWriteService {
 		}
 	}
 
-	private function markManuallyOrdered(string $kind): void {
-		$code   = AdminIdentity::code();
-		$config = DataManager::getConfig($code);
-		$key    = 'public_assets_list_manually_ordered_' . $kind;
-		$config[$key] = true;
-		DataManager::saveConfig($code, $config);
+	private function markManuallyOrdered(): void {
+		$config = DataManager::getConfig(AdminIdentity::code());
+		$config['public_assets_list_manually_ordered_meta'] = true;
+		DataManager::saveConfig(AdminIdentity::code(), $config);
 	}
 
 	/**

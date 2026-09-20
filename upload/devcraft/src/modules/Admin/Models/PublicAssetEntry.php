@@ -23,6 +23,8 @@ use DevCraft\Modules\Admin\Repositories\PublicAssetEntryRepository;
 #[Index(columns: ['module_code'], name: 'idx_dc_pub_asset_module')]
 class PublicAssetEntry extends AbstractEntity {
 
+	use PublicResourceDepsColumnsTrait;
+
 	/** css | js */
 	#[Column(type: 'string', size: 8)]
 	public string $kind = 'js';

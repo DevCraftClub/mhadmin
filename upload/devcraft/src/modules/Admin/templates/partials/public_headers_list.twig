@@ -54,7 +54,7 @@
 									class="button cycle outline dc-public-drag"
 									title="{{ 'Перетащить'|trans }}"
 									aria-label="{{ 'Перетащить'|trans }}">
-								<span class="mif-move"></span>
+								<span class="mif-line-spacing"></span>
 							</button>
 						{% endif %}
 					</td>
@@ -75,6 +75,10 @@
 							   {% if row.active %}checked{% endif %}>
 					</td>
 					<td>
+						<a class="button small secondary"
+						   href="?mod={{ mod }}&action=public_header_edit&id={{ row.id }}">
+							{{ 'Изменить'|trans }}
+						</a>
 						{% if row.origin == 'manual' %}
 							<button type="button"
 									class="button small secondary js-dc-header-copy"

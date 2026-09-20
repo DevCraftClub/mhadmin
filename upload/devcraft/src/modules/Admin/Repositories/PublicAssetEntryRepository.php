@@ -101,4 +101,42 @@ class PublicAssetEntryRepository extends AbstractRepository {
 		return $row instanceof PublicAssetEntry ? $row->sort_order : 0;
 	}
 
+	/**
+	 * @return list<PublicAssetEntry>
+	 */
+	public function listByKind(string $kind): array {
+		/** @var list<PublicAssetEntry> */
+		return $this->select()->where('kind', $kind)->orderBy('sort_order', 'ASC')->fetchAll();
+	}
+
+	/**
+	 * @return list<PublicAssetEntry>
+	 */
+	public function findDependents(int $id, string $kind): array {
+		$result = [];
+
+		foreach($this->listByKind($kind) as $entry) {
+			if(in_array($id, $entry->dependsOnIds(), true)) {
+				$result[] = $entry;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param   array<int, int>  $sortById
+	 */
+	public function bulkUpdateSortOrder(array $sortById): void {
+		foreach($sortById as $id => $order) {
+			$entry = $this->findByPK((int) $id);
+			if(!$entry instanceof PublicAssetEntry) {
+				continue;
+			}
+
+			$entry->sort_order = (int) $order;
+			$this->saveEntity($entry);
+		}
+	}
+
 }

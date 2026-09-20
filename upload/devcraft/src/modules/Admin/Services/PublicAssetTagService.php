@@ -18,6 +18,10 @@ use DevCraft\Modules\Admin\Repositories\PublicHeaderEntryRepository;
  */
 final class PublicAssetTagService {
 
+	public function __construct(
+		private readonly PublicAssetDependencyService $deps = new PublicAssetDependencyService(),
+	) {}
+
 	public function applyToTemplate(object $tpl): void {
 		(new PublicAssetSeedService())->ensureAdminDcPublicJs();
 		$this->syncManifestsOnce();
@@ -82,7 +86,7 @@ final class PublicAssetTagService {
 
 		$parts = [];
 
-		foreach($this->activeAssets('js') as $entry) {
+		foreach($this->outputAssets('js') as $entry) {
 			$url = $this->publicUrl($entry->local_path);
 			if($url === null) {
 				continue;
@@ -104,7 +108,7 @@ final class PublicAssetTagService {
 
 		$parts = [];
 
-		foreach($this->activeAssets('css') as $entry) {
+		foreach($this->outputAssets('css') as $entry) {
 			$url = $this->publicUrl($entry->local_path);
 			if($url === null) {
 				continue;
@@ -119,7 +123,7 @@ final class PublicAssetTagService {
 	public function renderMeta(): string {
 		$parts = [];
 
-		foreach($this->activeHeaders() as $entry) {
+		foreach($this->outputHeaders() as $entry) {
 			$parts[] = '<meta name="' . $this->escapeAttr($entry->name) . '" content="'
 				. $this->escapeAttr($entry->content) . '">';
 		}
@@ -130,12 +134,43 @@ final class PublicAssetTagService {
 	/**
 	 * @return list<PublicAssetEntry>
 	 */
-	private function activeAssets(string $kind): array {
+	private function outputAssets(string $kind): array {
 		try {
 			/** @var PublicAssetEntryRepository $repo */
-			$repo = Application::instance()->database()->repository(PublicAssetEntry::class);
+			$repo       = Application::instance()->database()->repository(PublicAssetEntry::class);
+			$sectionKey = DleSiteSectionRegistry::instance()->currentKey();
+			$entries    = $repo->listByKind($kind);
+			$depsMap    = $this->deps->buildDepsMap($entries);
+			$candidates = [];
 
-			return $repo->listByKindOrdered($kind, true);
+			foreach($entries as $entry) {
+				if(!$entry->active) {
+					continue;
+				}
+
+				if(!$entry->matchesSection($sectionKey)) {
+					continue;
+				}
+
+				$candidates[] = $entry->id();
+			}
+
+			$outputIds = $this->deps->orderedClosureForOutput($candidates, $depsMap);
+			$byId      = [];
+
+			foreach($entries as $entry) {
+				$byId[$entry->id()] = $entry;
+			}
+
+			$result = [];
+
+			foreach($outputIds as $id) {
+				if(isset($byId[$id])) {
+					$result[] = $byId[$id];
+				}
+			}
+
+			return $result;
 		} catch(\Throwable) {
 			return [];
 		}
@@ -144,12 +179,43 @@ final class PublicAssetTagService {
 	/**
 	 * @return list<PublicHeaderEntry>
 	 */
-	private function activeHeaders(): array {
+	private function outputHeaders(): array {
 		try {
 			/** @var PublicHeaderEntryRepository $repo */
-			$repo = Application::instance()->database()->repository(PublicHeaderEntry::class);
+			$repo       = Application::instance()->database()->repository(PublicHeaderEntry::class);
+			$sectionKey = DleSiteSectionRegistry::instance()->currentKey();
+			$entries    = $repo->listAllOrdered();
+			$depsMap    = $this->deps->buildDepsMap($entries);
+			$candidates = [];
 
-			return $repo->listOrdered(true);
+			foreach($entries as $entry) {
+				if(!$entry->active) {
+					continue;
+				}
+
+				if(!$entry->matchesSection($sectionKey)) {
+					continue;
+				}
+
+				$candidates[] = $entry->id();
+			}
+
+			$outputIds = $this->deps->orderedClosureForOutput($candidates, $depsMap);
+			$byId      = [];
+
+			foreach($entries as $entry) {
+				$byId[$entry->id()] = $entry;
+			}
+
+			$result = [];
+
+			foreach($outputIds as $id) {
+				if(isset($byId[$id])) {
+					$result[] = $byId[$id];
+				}
+			}
+
+			return $result;
 		} catch(\Throwable) {
 			return [];
 		}
@@ -167,13 +233,15 @@ final class PublicAssetTagService {
 
 	private function bundleUrl(string $kind): ?string {
 		try {
-			$cache = new PublicAssetBundleCacheService();
-			$file  = $cache->ensure($kind);
+			$sectionKey = DleSiteSectionRegistry::instance()->currentKey();
+			$cache      = new PublicAssetBundleCacheService();
+			$file       = $cache->ensure($kind, $sectionKey);
 			if($file === null || !is_file($file)) {
 				return null;
 			}
 
-			$metaFile = Paths::cache() . '/public_assets/bundle.' . $kind . '.meta.json';
+			$slug     = preg_replace('/[^a-z0-9_-]+/', '_', strtolower($sectionKey)) ?: 'main';
+			$metaFile = Paths::cache() . '/public_assets/bundle.' . $kind . '.' . $slug . '.meta.json';
 			$v        = is_file($metaFile)
 				? (string) ((json_decode((string) file_get_contents($metaFile), true)['generated_at'] ?? null) ?? filemtime($file))
 				: (string) filemtime($file);

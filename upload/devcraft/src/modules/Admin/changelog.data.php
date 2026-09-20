@@ -33,16 +33,18 @@ return [
 	ChangelogBuilder::create('200.4.1')
 		->date('2026-09-10')
 		->added([
-			__('In-process SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.'),
-			__('Мост equality между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.'),
+			__('Встроенный SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.'),
+			__('Мост равенств между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.'),
 			__('`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).'),
 			__('SDK Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` по DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); константы `SchemaTableNames`, связи в `RelationMap`, refs в `TableRowUnion`.'),
 			__('Канон сателлитов: публичный слой `Controller/`; патчи DLE через систему плагинов — маркеры `// DevCraft {Name}: start` / `end`.'),
 			__('Публичный `dle_template`: у `[if]` — опциональный `[else]`; новый блок `[has value="…" condition="!=" comparison=""]` с `[else]` — только при `compile(..., true)`, патч `engine/classes/templates.class.php` (маркеры `// DevCraft Admin`) через `install.xml`.'),
+			__('Публичные ресурсы оболочки: зависимости между записями, список разделов показа и список исключений, отдельные страницы правки, справочник режимов страницы DLE (`$do`). Зависимости подтягиваются в оболочку даже если раздел не совпал; при удалении — отвязать ссылки или удалить зависимые ручные записи; при перетаскивании с нарушением порядка — предупреждение и исправленный порядок.'),
 		])
 		->changed([
 			__('Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.'),
 			__('Поставка расширений условий шаблонов — в `install.xml` Admin (`plugins_files`), без отдельного DLE-плагина.'),
+			__('Собранные публичные CSS/JS хранятся отдельно для каждого раздела сайта; в оболочке зависимости идут раньше зависимых записей.'),
 		])
 		->deprecated([
 			__('Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.'),

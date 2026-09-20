@@ -138,6 +138,11 @@ final class DataManager {
 				$loaded = require DLEPlugins::Check($manifestFile);
 
 				if(!$loaded instanceof ModuleManifest && !is_array($loaded)) {
+					LogGenerator::for(self::class)->log(
+						__('Некорректный manifest.php в «{dir}» — модуль пропущен', ['{dir}' => $entry]),
+						'warning',
+					);
+
 					continue;
 				}
 
@@ -146,12 +151,35 @@ final class DataManager {
 					: (string) ($loaded['mod'] ?? '');
 
 				if($mod === '') {
+					LogGenerator::for(self::class)->log(
+						__('Манифест без mod в каталоге «{dir}» пропущен', ['{dir}' => $entry]),
+						'warning',
+					);
+
 					continue;
+				}
+
+				if(isset($manifests[$mod])) {
+					$previous = $manifests[$mod];
+					LogGenerator::for(self::class)->log(
+						__('Дубликат mod «{mod}»: каталог «{prev}» вытеснен «{next}» (побеждает последний)', [
+							'{mod}'  => $mod,
+							'{prev}' => basename($previous->path),
+							'{next}' => $entry,
+						]),
+						'warning',
+					);
 				}
 
 				$manifests[$mod] = ModuleManifest::fromLoaded($mod, $loaded, $modulePath);
 			} catch(Throwable $throwable) {
-				LogGenerator::for(self::class)->log($throwable->getMessage());
+				LogGenerator::for(self::class)->log(
+					__('Ошибка манифеста «{dir}»: {msg}', [
+						'{dir}' => $entry,
+						'{msg}' => $throwable->getMessage(),
+					]),
+					'warning',
+				);
 			}
 		}
 

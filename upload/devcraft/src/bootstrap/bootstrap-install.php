@@ -169,6 +169,12 @@ function dc_bootstrap_start_install(): void {
 		escapeshellarg($installShell),
 	);
 
+	if(!function_exists('exec')) {
+		throw new RuntimeException(
+			'На сервере отключена функция exec (disable_functions). Нужны exec и putenv — без них Composer из админки не запускается.',
+		);
+	}
+
 	$output = [];
 	exec($launcher, $output);
 

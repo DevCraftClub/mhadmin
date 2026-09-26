@@ -23,8 +23,7 @@ final class PublicAssetTagService {
 	) {}
 
 	public function applyToTemplate(object $tpl): void {
-		(new PublicAssetSeedService())->ensureAdminDcPublicJs();
-		$this->syncManifestsOnce();
+		(new PublicAssetSeedService())->ensureRegistered();
 
 		$copy = (string) ($tpl->copy_template ?? '');
 		$hasAll     = str_contains($copy, '{devcraft}');
@@ -290,26 +289,6 @@ final class PublicAssetTagService {
 
 	private function escapeAttr(string $value): string {
 		return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-	}
-
-	private function syncManifestsOnce(): void {
-		static $done = false;
-		if($done) {
-			return;
-		}
-		$done = true;
-
-		try {
-			$sync = new PublicAssetManifestSyncService();
-			foreach(DataManager::readManifest() as $manifest) {
-				if(!$manifest instanceof \DevCraft\Types\ModuleManifest) {
-					continue;
-				}
-				$sync->syncModule($manifest, false);
-			}
-		} catch(\Throwable) {
-			// Синк не должен ломать публичную страницу.
-		}
 	}
 
 }

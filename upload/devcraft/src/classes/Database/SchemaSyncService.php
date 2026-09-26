@@ -129,6 +129,7 @@ final class SchemaSyncService {
 		// Таблиц нет, а create уже «выполнен» или файл не появился — только миграции, не SyncTables.
 		if(!$this->schemaTablesExist($schema_array)) {
 			$this->unmarkCreateMigrationsWithAllTablesMissing($migrator);
+			$registry     = new SchemaRegistry($this->gateway->databaseManager());
 			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, true, false);
 			$this->runPending($migrator);
 		}

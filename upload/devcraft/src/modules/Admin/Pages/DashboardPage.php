@@ -23,6 +23,7 @@ use DevCraft\Core\Module\PluginContext;
 use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Core\Composer\ComposerInstallAllPlaceholder;
 use DevCraft\Modules\Admin\Services\DashboardPackageMetricService;
+use DevCraft\Modules\Admin\Services\PublicAssetSeedService;
 
 /**
  * Главная страница (панель) модуля DevCraft Admin.
@@ -44,6 +45,8 @@ final class DashboardPage extends AbstractPage {
 	 *     $result = (new DashboardPage())->handle();
 	 */
 	public function handle(): array {
+		(new PublicAssetSeedService())->ensureRegistered();
+
 		$registry = Application::instance()->registry();
 		$plugin   = $registry->forMod(AdminIdentity::mod());
 		$meta     = $plugin?->meta() ?? [];

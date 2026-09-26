@@ -23,6 +23,8 @@ final class PublicAssetListPageService {
 	 * @return array<string, mixed>
 	 */
 	public function assetsPayload(string $kind, string $pageAction): array {
+		(new PublicAssetSeedService())->ensureRegistered();
+
 		$filter = $this->filterPayload(
 			'Admin/Filter/public_assets.filter.schema.php',
 			$pageAction,
@@ -66,6 +68,8 @@ final class PublicAssetListPageService {
 	 * @return array<string, mixed>
 	 */
 	public function headersPayload(string $pageAction): array {
+		(new PublicAssetSeedService())->ensureRegistered();
+
 		$filter = $this->filterPayload(
 			'Admin/Filter/public_headers.filter.schema.php',
 			$pageAction,

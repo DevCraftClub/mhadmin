@@ -19,6 +19,28 @@ use DevCraft\Types\ModuleSiteAssets;
  */
 final class PublicAssetManifestSyncService {
 
+	/**
+	 * Подставляет siteAssets всех модулей в списки Admin. Повтор в том же запросе не делает.
+	 */
+	public function syncAll(): void {
+		static $done = false;
+		if($done) {
+			return;
+		}
+		$done = true;
+
+		try {
+			foreach(DataManager::readManifest() as $manifest) {
+				if(!$manifest instanceof ModuleManifest) {
+					continue;
+				}
+				$this->syncModule($manifest, false);
+			}
+		} catch(\Throwable) {
+			// Схема ещё не готова — повтор при следующем заходе в админку или на сайт.
+		}
+	}
+
 	public function syncModule(ModuleManifest $manifest, bool $isFirstInstall = false): void {
 		$code = $manifest->code ?: $manifest->id;
 		$site = $manifest->siteAssets;

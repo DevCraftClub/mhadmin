@@ -120,6 +120,12 @@ final class ComposerRuntimeAdapter {
 		self::applyProcessEnvironment();
 		$paths = self::composerEnvironmentPaths();
 
+		if(!function_exists('exec')) {
+			return ComposerActionResult::error(
+				'На сервере отключена функция exec (disable_functions). Нужны exec и putenv.',
+			);
+		}
+
 		// Явный env для дочернего процесса: putenv может быть недоступен (disable_functions).
 		$cmd = sprintf(
 			'env HOME=%s COMPOSER_HOME=%s %s',

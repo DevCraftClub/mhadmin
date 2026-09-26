@@ -19,6 +19,14 @@ final class PublicAssetSeedService {
 	/** Ключ раздела для сценария SC-004 в quickstart (только локальная проверка). */
 	public const string QUICKSTART_SECTION_KEY = 'dc_demo_section';
 
+	/**
+	 * Создаёт строку `dc_public.js` и подставляет siteAssets в списки Admin.
+	 */
+	public function ensureRegistered(): void {
+		$this->ensureAdminDcPublicJs();
+		(new PublicAssetManifestSyncService())->syncAll();
+	}
+
 	public function ensureAdminDcPublicJs(): void {
 		try {
 			DleSiteSectionRegistry::instance()->register(

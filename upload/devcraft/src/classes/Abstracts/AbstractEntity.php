@@ -182,15 +182,17 @@ abstract class AbstractEntity {
 	/**
 	 * Возвращает первичный ключ записи.
 	 *
+	 * У ещё не сохранённой записи ключ не задан — возвращает `0`, без обращения к пустому свойству.
+	 *
 	 * @since 200.4.0
 	 *
-	 * @return int Числовой идентификатор.
+	 * @return int Числовой идентификатор или `0`, если запись ещё не сохранена.
 	 *
 	 * @example
 	 *     $id = $entity->id();
 	 */
 	public function id(): int {
-		return $this->id;
+		return (new ReflectionProperty(self::class, 'id'))->isInitialized($this) ? $this->id : 0;
 	}
 
 	/**

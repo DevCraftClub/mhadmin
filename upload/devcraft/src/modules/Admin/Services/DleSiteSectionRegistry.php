@@ -13,7 +13,7 @@ namespace DevCraft\Modules\Admin\Services;
  * DleSiteSectionRegistry::instance()->register('my_module_page', __('Моя страница'));
  * ```
  *
- * Сопоставление с текущей страницей — только через глобальный `$do` DLE (см. currentKey()).
+ * Сопоставление с текущей страницей — через `$dle_module`, а если главная переписана в статическую страницу — через `$do` (см. currentKey()).
  */
 final class DleSiteSectionRegistry {
 
@@ -89,14 +89,26 @@ final class DleSiteSectionRegistry {
 	}
 
 	/**
-	 * Текущий ключ раздела по контексту DLE (`$do`).
+	 * Текущий ключ раздела.
+	 *
+	 * На полной новости, в архиве по дате и в каталоге `$do` пустой, режим лежит в `$dle_module`.
+	 * Если главная сайта — статическая страница, `$do` становится `static`, а `$dle_module` остаётся `main`.
 	 */
 	public function currentKey(): string {
-		global $do;
+		global $do, $dle_module;
 
-		$raw = strtolower(trim((string) ($do ?? '')));
+		$module = strtolower(trim((string) ($dle_module ?? '')));
+		$action = strtolower(trim((string) ($do ?? '')));
 
-		return $raw === '' ? 'main' : $raw;
+		if($action !== '' && $module === 'main' && $action !== 'main') {
+			return $action;
+		}
+
+		if($module !== '') {
+			return $module;
+		}
+
+		return $action !== '' ? $action : 'main';
 	}
 
 }

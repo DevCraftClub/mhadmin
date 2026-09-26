@@ -35,6 +35,21 @@ final class DashboardPackageMetricService {
 	}
 
 	/**
+	 * Есть ли пакеты со статусом «не установлен» в списке для dashboard.
+	 *
+	 * @param   string|null  $appCode  Код приложения / plugin; null — все модули.
+	 */
+	public function hasUninstalledPackages(?string $appCode = NULL): bool {
+		foreach($this->packagesForDashboard($appCode) as $package) {
+			if(!($package['installed'] ?? false)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Список пакетов для панели Composer на dashboard.
 	 *
 	 * @param   string|null  $appCode  Код приложения / plugin; null — все модули.

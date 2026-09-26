@@ -21,6 +21,14 @@ final class PackagePolicyService {
 	) {}
 
 	public function validateAction(string $actionType, string $packageName, ?string $targetVersion = NULL): ?ComposerActionResult {
+		if(ComposerInstallAllPlaceholder::is($packageName) || $actionType === 'install_all') {
+			if($actionType === 'install' || $actionType === 'install_all') {
+				return NULL;
+			}
+
+			return ComposerActionResult::error('Заглушка «установить все» не поддерживает это действие');
+		}
+
 		$policies = $this->store->all();
 		$policy   = $policies[$packageName] ?? NULL;
 

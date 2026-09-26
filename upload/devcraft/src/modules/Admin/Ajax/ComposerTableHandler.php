@@ -13,6 +13,7 @@ use DevCraft\Core\Admin\FilterFormService;
 use DevCraft\Core\Composer\Models\ComposerData;
 use DevCraft\Core\Composer\ComposerDbSyncService;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Composer\ComposerInstallAllPlaceholder;
 use DevCraft\Core\Composer\Repositories\ComposerDataRepository;
 
 final class ComposerTableHandler implements AjaxHandlerInterface {
@@ -75,6 +76,10 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 				];
 			}
 
+			if($repository->hasUninstalled()) {
+				array_unshift($rows, $this->installAllPlaceholderRow());
+			}
+
 			return new JsonResponse([
 				'header' => [
 					['name' => 'package', 'title' => __('Пакет'), 'sortable' => true],
@@ -119,6 +124,27 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 				],
 			], 200);
 		}
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	private function installAllPlaceholderRow(): array {
+		$pkg = ComposerInstallAllPlaceholder::PACKAGE;
+
+		return [
+			ComposerInstallAllPlaceholder::label(),
+			'—',
+			'Admin',
+			__('Да'),
+			__('Нет'),
+			'devcraft',
+			'<div class="d-flex flex-wrap gap-1">'
+			. '<button type="button" class="button small primary js-composer-action" data-action-type="install_all" data-package="'
+			. htmlspecialchars($pkg, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8') . '">'
+			. __('Установить все') . '</button>'
+			. '</div>',
+		];
 	}
 
 	private function actionsCell(ComposerData $item): string {

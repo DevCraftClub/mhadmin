@@ -44,8 +44,16 @@ function dc_bootstrap_apply_composer_env(): void {
 		throw new RuntimeException('Не удалось создать каталог COMPOSER_HOME: ' . $composerHome);
 	}
 
-	putenv('HOME=' . $home);
-	putenv('COMPOSER_HOME=' . $composerHome);
+	$_ENV['HOME']             = $home;
+	$_SERVER['HOME']          = $home;
+	$_ENV['COMPOSER_HOME']    = $composerHome;
+	$_SERVER['COMPOSER_HOME'] = $composerHome;
+
+	// putenv часто в disable_functions — переменные для фона уже в export shell (start_install).
+	if(function_exists('putenv')) {
+		putenv('HOME=' . $home);
+		putenv('COMPOSER_HOME=' . $composerHome);
+	}
 }
 
 function dc_bootstrap_ensure_composer_phar(): bool {

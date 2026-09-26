@@ -59,7 +59,7 @@ if(!function_exists('translate')) {
 	 */
 	function translate(string $phrase, array $params = [], int $count = 0): string {
 		if(DevCraftConfig::isSchemaLoading()) {
-			return $phrase;
+			return $params === [] ? $phrase : strtr($phrase, $params);
 		}
 
 		if(Translation::isInitializing()) {
@@ -69,7 +69,7 @@ if(!function_exists('translate')) {
 		$config = DevCraftConfig::raw();
 
 		if(!isset($config['language']) && !isset($config['locales_path'])) {
-			return $phrase;
+			return $params === [] ? $phrase : strtr($phrase, $params);
 		}
 
 		try {

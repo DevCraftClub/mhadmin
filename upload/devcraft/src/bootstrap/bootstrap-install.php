@@ -10,6 +10,8 @@ if(!defined('DATALIFEENGINE')) {
 	die('Hacking attempt!');
 }
 
+require_once __DIR__ . '/composer_marker.php';
+
 /**
  * @return array{dir:string,log:string,pid:string,exit:string}
  */
@@ -33,7 +35,7 @@ function dc_bootstrap_ensure_state_dir(): void {
 }
 
 function dc_bootstrap_vendor_ready(): bool {
-	return is_file(ROOT_DIR . '/devcraft/vendor/autoload.php');
+	return is_file(dc_composer_root() . '/vendor/autoload.php') && dc_composer_initialized();
 }
 
 function dc_bootstrap_apply_composer_env(): void {
@@ -230,6 +232,8 @@ function dc_bootstrap_build_response(string $operation): array {
 		}
 
 		if($exitCode === 0 && dc_bootstrap_vendor_ready()) {
+			dc_composer_mark_initialized(true);
+
 			return [
 				'currentStep' => 'finalize',
 				'status'      => 'completed',
@@ -245,6 +249,8 @@ function dc_bootstrap_build_response(string $operation): array {
 			'logExcerpt'  => dc_bootstrap_read_log_excerpt(),
 		];
 	}
+
+	dc_composer_ensure_stamp();
 
 	return [
 		'currentStep' => 'finalize',

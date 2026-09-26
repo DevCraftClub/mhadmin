@@ -15,6 +15,7 @@ upload/devcraft/config/*.json
 upload/devcraft/src/database/migrations/
 upload/devcraft/src/database/migrations/**
 upload/devcraft/composer.lock
+upload/devcraft/.composer_initialized
 upload/devcraft/composer.phar
 upload/devcraft/vendor/
 upload/devcraft/vendor/**

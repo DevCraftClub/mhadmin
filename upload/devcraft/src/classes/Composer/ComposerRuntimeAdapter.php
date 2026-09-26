@@ -149,6 +149,15 @@ final class ComposerRuntimeAdapter {
 			);
 		}
 
+		if($code === 0) {
+			$verb = (string) ($args[0] ?? '');
+
+			if($verb === 'install' || $verb === 'update') {
+				require_once ROOT_DIR . '/devcraft/src/bootstrap/composer_marker.php';
+				dc_composer_mark_initialized(true);
+			}
+		}
+
 		return ComposerActionResult::ok($successMessage, [
 			'command' => $cmd,
 			'output'  => implode(PHP_EOL, $output),

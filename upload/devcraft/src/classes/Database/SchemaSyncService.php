@@ -89,7 +89,7 @@ final class SchemaSyncService {
 		$needPending   = $this->migrationFilesNeedApply($migrationsDir);
 		$cached        = $bootstrap ? null : $this->loadCachedSchema($fingerprint);
 
-		if($cached !== null && !$needPending && !$bootstrap) {
+		if($cached !== null && !$needPending && !$bootstrap && $this->schemaTablesExist($cached)) {
 			return $cached;
 		}
 
@@ -102,7 +102,7 @@ final class SchemaSyncService {
 
 		$debug = (bool) DevCraftConfig::get('debug', false);
 
-		if($cached !== null && !$bootstrap && !$debug) {
+		if($cached !== null && !$bootstrap && !$debug && $this->schemaTablesExist($cached)) {
 			return $cached;
 		}
 
@@ -123,6 +123,13 @@ final class SchemaSyncService {
 		$wroteNew     = array_diff($after, $before) !== [];
 
 		if($wroteNew) {
+			$this->runPending($migrator);
+		}
+
+		// Таблиц нет, а create уже «выполнен» или файл не появился — только миграции, не SyncTables.
+		if(!$this->schemaTablesExist($schema_array)) {
+			$this->unmarkCreateMigrationsWithAllTablesMissing($migrator);
+			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, true, false);
 			$this->runPending($migrator);
 		}
 
@@ -397,14 +404,6 @@ final class SchemaSyncService {
 			}
 
 			$migrationName = $state->getName();
-			$tableKey      = '';
-
-			if(preg_match('/_create_(?:dle_)?([a-z0-9_]+?)(?:_create_|_change_|$)/', $migrationName, $matches) === 1) {
-				$tableKey = (string) ($matches[1] ?? '');
-			}
-
-			$alreadyThere = false;
-			$tableName    = '';
 
 			if(str_contains($migrationName, '_add_fk_') || str_contains($migrationName, '_add_foreign_')) {
 				// Cycle пытается вешать FK INT UNSIGNED → BIGINT (id AbstractEntity) — MySQL errno 150.
@@ -412,22 +411,124 @@ final class SchemaSyncService {
 				continue;
 			}
 
-			if($tableKey !== '') {
-				$tableName    = PREFIX . '_' . $tableKey;
-				$alreadyThere = $this->tableExists($tableName);
-			} elseif(preg_match('/_change_dle_(.+?)_add_(.+)$/', $migrationName, $change) === 1) {
-				$tableKey     = (string) $change[1];
-				$tableName    = PREFIX . '_' . $tableKey;
-				$ops          = 'add_' . $change[2];
-				$alreadyThere = $this->tableExists($tableName)
-					&& $this->changeMigrationFirstOpExists($tableName, $ops);
-			}
+			$createTables = $this->createTableNamesFromMigration($migrationName);
 
-			if(!$alreadyThere) {
+			if($createTables !== []) {
+				$allPresent = true;
+
+				foreach($createTables as $tableName) {
+					if(!$this->tableExists($tableName)) {
+						$allPresent = false;
+						break;
+					}
+				}
+
+				if($allPresent) {
+					$this->markMigrationAsExecuted($migrationTable, $migrationName);
+				}
+
 				continue;
 			}
 
-			$this->markMigrationAsExecuted($migrationTable, $migrationName);
+			if(preg_match('/_change_dle_(.+?)_add_(.+)$/', $migrationName, $change) === 1) {
+				$tableName = PREFIX . '_' . (string) $change[1];
+				$ops       = 'add_' . $change[2];
+
+				if($this->tableExists($tableName) && $this->changeMigrationFirstOpExists($tableName, $ops)) {
+					$this->markMigrationAsExecuted($migrationTable, $migrationName);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Имена таблиц с префиксом из сегментов `_create_` в имени миграции.
+	 *
+	 * @return list<string>
+	 */
+	private function createTableNamesFromMigration(string $migrationName): array {
+		if(preg_match_all('/_create_(?:dle_)?([a-z0-9_]+?)(?=_create_|_change_|$)/', $migrationName, $matches) < 1) {
+			return [];
+		}
+
+		$tables = [];
+
+		foreach($matches[1] as $key) {
+			$key = (string) $key;
+
+			if($key === '') {
+				continue;
+			}
+
+			$tables[] = PREFIX . '_' . $key;
+		}
+
+		return array_values(array_unique($tables));
+	}
+
+	/**
+	 * Все таблицы из скомпилированной схемы Cycle существуют в БД.
+	 *
+	 * @param   array<string, mixed>  $schema
+	 */
+	private function schemaTablesExist(array $schema): bool {
+		foreach($schema as $def) {
+			if(!is_array($def)) {
+				continue;
+			}
+
+			$table = $def[\Cycle\ORM\SchemaInterface::TABLE] ?? null;
+
+			if(!is_string($table) || $table === '') {
+				continue;
+			}
+
+			$full = str_starts_with($table, PREFIX . '_')? $table : PREFIX . '_' . $table;
+
+			if(!$this->tableExists($full)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Снимает отметку «выполнена» с create-миграции, если в БД нет ни одной её таблицы
+	 * (безопасный повторный накат). Частично созданные multi-create не трогаем — допишет GenerateMigrations.
+	 */
+	private function unmarkCreateMigrationsWithAllTablesMissing(Migrations\Migrator $migrator): void {
+		$migrationTable = PREFIX . '_devcraft_migrations';
+
+		if(!$this->tableExists($migrationTable)) {
+			return;
+		}
+
+		foreach($migrator->getMigrations() as $migration) {
+			$state = $migration->getState();
+
+			if($state->getStatus() !== State::STATUS_EXECUTED) {
+				continue;
+			}
+
+			$tables = $this->createTableNamesFromMigration($state->getName());
+
+			if($tables === []) {
+				continue;
+			}
+
+			$anyPresent = false;
+
+			foreach($tables as $tableName) {
+				if($this->tableExists($tableName)) {
+					$anyPresent = true;
+					break;
+				}
+			}
+
+			if(!$anyPresent) {
+				$this->unmarkMigrationAsExecuted($migrationTable, $state->getName());
+			}
 		}
 	}
 
@@ -497,6 +598,13 @@ final class SchemaSyncService {
 
 		$this->gateway->query(
 			"INSERT INTO `{$migrationTable}` (`migration`, `time_executed`, `created_at`) VALUES (:migration, NOW(), NOW())",
+			['migration' => $migrationName],
+		);
+	}
+
+	private function unmarkMigrationAsExecuted(string $migrationTable, string $migrationName): void {
+		$this->gateway->query(
+			"DELETE FROM `{$migrationTable}` WHERE `migration` = :migration",
 			['migration' => $migrationName],
 		);
 	}

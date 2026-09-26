@@ -1,11 +1,13 @@
 {
-	"version": "200.4.0",
+	"version": "200.4.1",
 	"status": "Stable",
 	"dle": [
-		"20.x"
+		"20.x",
+		"21.x"
 	],
 	"php": [
-		"8.3"
+		"8.3",
+		"8.4"
 	],
 	"name": "DevCraft Admin",
 	"description": "Административная панель для DLE"

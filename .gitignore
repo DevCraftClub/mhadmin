@@ -4,46 +4,39 @@
 .cursor/*
 .specify/
 .specify/*
+/graphify-out/
 
-upload/engine/inc/maharder/_cache
-upload/engine/inc/maharder/_cache/*
-upload/engine/inc/maharder/_cache/**/
-upload/engine/inc/maharder/_cache/**/*
-upload/engine/inc/maharder/_config
-upload/engine/inc/maharder/_config/*
-upload/engine/inc/maharder/_logs
-upload/engine/inc/maharder/_logs/*
-upload/engine/inc/maharder/_logs/**/
-upload/engine/inc/maharder/_logs/**/*
-upload/engine/inc/maharder/_migrations
-upload/engine/inc/maharder/_migrations/*
-
+# DevCraft — runtime / сгенерированное (не канон пакета)
+upload/devcraft/cache/**
+!upload/devcraft/cache/**/
+!upload/devcraft/cache/**/.htaccess
+upload/devcraft/config/*.json
 # Cycle ORM — миграции генерируются на каждой установке, не в каноне пакета
 upload/devcraft/src/database/migrations/
-upload/devcraft/src/database/migrations/*
+upload/devcraft/src/database/migrations/**
+upload/devcraft/composer.lock
+upload/devcraft/composer.phar
+upload/devcraft/vendor/
+upload/devcraft/vendor/**
 
-upload/engine/inc/maharder/_includes/assets.json
-upload/engine/inc/maharder/admin/composer.lock
-upload/engine/inc/maharder/admin/composer.phar
-!upload/engine/inc/maharder/_cache/.htaccess
+# Composer — зависимости нигде не в каноне
+**/vendor/
+vendor/
+**/composer.lock
+composer.lock
+**/composer.phar
+composer.phar
 
 # Analysis tool specific
 analysis/
-analysis/*
-analysis/**/
-analysis/**/*
-vendor/
-vendor/*
-vendor/**/
-vendor/**/*
-composer.lock
+analysis/**
 *.log
 *.cache
 .env
 .env.*
 !.env.example
 
-# PHP specific
+# PHP / IDE
 *.php~
 *.php.bak
 *.php.orig
@@ -60,3 +53,5 @@ Thumbs.db
 # Analysis tool output
 *.md.bak
 *.md.tmp
+
+*.zip

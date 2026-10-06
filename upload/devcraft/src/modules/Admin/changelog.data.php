@@ -50,6 +50,7 @@ return [
 			__('Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.'),
 		])
 		->fixed([
+			__('Синхронизация таблиц Cycle: индекс `kind` + `local_path` у `dc_public_assets` на utf8mb4 превышал лимит ключа MySQL (3072 байта). Индекс по длинному пути убран.'),
 			__('Cycle ORM: при пересборке схемы (нет или устарел `cycle_orm_schema.ser`) всегда включается GenerateMigrations — таблицы сателлитов (в т.ч. `api_*`) создаются после установки ядра Admin, а не только при первом bootstrap.'),
 			__('SDK: `create()` любой Schema падал с «Table `PREFIX_PREFIX_*` doesn\'t exist» — INSERT шёл через builder Cycle, у которого префикс уже настроен. Теперь префикс не удваивается.'),
 			__('SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.'),

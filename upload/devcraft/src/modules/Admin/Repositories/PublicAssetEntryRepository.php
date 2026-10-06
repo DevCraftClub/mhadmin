@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DevCraft\Modules\Admin\Repositories;
 
 use DevCraft\Core\Abstracts\AbstractRepository;
+use DevCraft\Core\Admin\FilterFormService;
 use DevCraft\Modules\Admin\Models\PublicAssetEntry;
 
 /**
@@ -54,6 +55,42 @@ class PublicAssetEntryRepository extends AbstractRepository {
 		return $count;
 	}
 
+	/**
+	 * @param   list<array{column: string, op: string, value: mixed}>  $criteria
+	 * @param   list<string>                                           $allowedOrderColumns
+	 *
+	 * @return array{items: object[], total: int}
+	 */
+	public function findFilteredForKind(
+		string $kind,
+		array  $criteria,
+		int    $page,
+		int    $perPage,
+		string $order,
+		string $sort,
+		array  $allowedOrderColumns,
+		string $defaultOrder = 'sort_order',
+	): array {
+		$select = $this->select()->where('kind', $kind);
+		$this->applyCriteria($select, $criteria);
+
+		$total = $select->count();
+		$page  = max(1, $page);
+		$order = in_array($order, $allowedOrderColumns, true) ? $order : $defaultOrder;
+
+		/** @var object[] $items */
+		$items = $select
+			->orderBy($order, FilterFormService::getSort($sort))
+			->limit($perPage)
+			->offset(($page - 1) * $perPage)
+			->fetchAll();
+
+		return [
+			'items' => $items,
+			'total' => $total,
+		];
+	}
+
 	public function maxSortOrder(string $kind): int {
 		$row = $this->select()
 			->where('kind', $kind)
@@ -62,6 +99,44 @@ class PublicAssetEntryRepository extends AbstractRepository {
 			->fetchOne();
 
 		return $row instanceof PublicAssetEntry ? $row->sort_order : 0;
+	}
+
+	/**
+	 * @return list<PublicAssetEntry>
+	 */
+	public function listByKind(string $kind): array {
+		/** @var list<PublicAssetEntry> */
+		return $this->select()->where('kind', $kind)->orderBy('sort_order', 'ASC')->fetchAll();
+	}
+
+	/**
+	 * @return list<PublicAssetEntry>
+	 */
+	public function findDependents(int $id, string $kind): array {
+		$result = [];
+
+		foreach($this->listByKind($kind) as $entry) {
+			if(in_array($id, $entry->dependsOnIds(), true)) {
+				$result[] = $entry;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param   array<int, int>  $sortById
+	 */
+	public function bulkUpdateSortOrder(array $sortById): void {
+		foreach($sortById as $id => $order) {
+			$entry = $this->findByPK((int) $id);
+			if(!$entry instanceof PublicAssetEntry) {
+				continue;
+			}
+
+			$entry->sort_order = (int) $order;
+			$this->saveEntity($entry);
+		}
 	}
 
 }

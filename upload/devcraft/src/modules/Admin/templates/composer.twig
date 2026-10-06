@@ -1,6 +1,12 @@
 <h2>{{ 'Composer'|trans }}</h2>
 
-<div class="mb-2">
+<div class="mb-2 d-flex flex-wrap gap-1">
+    <button type="button"
+            class="button small primary js-composer-action"
+            data-action-type="install_all"
+            data-package="devcraft/composer-install-all">
+        <span class="mif-download2 mr-1"></span>{{ 'Установить все из composer.json'|trans }}
+    </button>
     <button type="button" class="button small warning js-composer-sync">
         <span class="mif-loop2 mr-1"></span>{{ 'Синхронизировать с composer.lock'|trans }}
     </button>
@@ -18,7 +24,7 @@
 } only %}
 
 <div class="remark info mb-2">
-    {{ 'В таблице отображаются пакеты из composer.json и manifest модулей. Обязательные пакеты (hardRequired) помечены в колонке «Обязательный».'|trans }}
+    {{ 'В таблице отображаются пакеты из composer.json и manifest модулей. Обязательные пакеты (hardRequired) помечены в колонке «Обязательный». Если чего-то не хватает — сверху строка «Установить все» (composer install).'|trans }}
 </div>
 
 <table id="{{ table_id|default('dc-composer-table') }}"

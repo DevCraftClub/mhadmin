@@ -17,9 +17,11 @@ namespace DevCraft\Core\Composer;
 final class ComposerRuntimeAdapter {
 
 	/**
-	 * Задаёт HOME и COMPOSER_HOME для запуска Composer из веб-контекста (php-fpm/apache).
+	 * Каталоги HOME / COMPOSER_HOME под `devcraft/` (создаёт `.composer` при необходимости).
+	 *
+	 * @return array{home: string, composer_home: string}
 	 */
-	public static function applyProcessEnvironment(): void {
+	public static function composerEnvironmentPaths(): array {
 		$home         = ROOT_DIR . '/devcraft';
 		$composerHome = $home . '/.composer';
 
@@ -27,8 +29,31 @@ final class ComposerRuntimeAdapter {
 			throw new \RuntimeException('Не удалось создать каталог COMPOSER_HOME: ' . $composerHome);
 		}
 
-		putenv('HOME=' . $home);
-		putenv('COMPOSER_HOME=' . $composerHome);
+		return [
+			'home'          => $home,
+			'composer_home' => $composerHome,
+		];
+	}
+
+	/**
+	 * Задаёт HOME и COMPOSER_HOME для запуска Composer из веб-контекста (php-fpm/apache).
+	 *
+	 * На хостингах `putenv` часто в `disable_functions`: тогда пишем только $_ENV / $_SERVER,
+	 * а для дочернего процесса переменные передаём через префикс `env` в {@see run()}.
+	 */
+	public static function applyProcessEnvironment(): void {
+		$paths = self::composerEnvironmentPaths();
+
+		$_ENV['HOME']              = $paths['home'];
+		$_SERVER['HOME']           = $paths['home'];
+		$_ENV['COMPOSER_HOME']     = $paths['composer_home'];
+		$_SERVER['COMPOSER_HOME']  = $paths['composer_home'];
+
+		// putenv часто отключён на shared-хостинге — не падаем, а опираемся на env-префикс в run().
+		if(function_exists('putenv')) {
+			\putenv('HOME=' . $paths['home']);
+			\putenv('COMPOSER_HOME=' . $paths['composer_home']);
+		}
 	}
 
 	public function install(string $package, ?string $version = NULL): ComposerActionResult {
@@ -54,14 +79,23 @@ final class ComposerRuntimeAdapter {
 	}
 
 	/**
-	 * @return array{status:string,details:array<string,mixed>}
+	 * Ставит все зависимости из `composer.json` / lock (`composer install`).
+	 */
+	public function installAllFromComposerJson(): ComposerActionResult {
+		return $this->run(['install'], 'Все пакеты из composer.json установлены');
+	}
+
+	/**
+	 * @return array{status:string,details:array<string,mixed>,message?:string}
 	 */
 	public function runInstallDefaults(): array {
-		$result = $this->run(['install'], 'Пакеты по умолчанию установлены');
+		$result = $this->installAllFromComposerJson();
+		$data   = $result->toArray();
 
 		return [
-			'status'  => $result->status,
-			'details' => $result->details,
+			'status'  => $data['status'],
+			'details' => $data['details'],
+			'message' => $data['message'],
 		];
 	}
 
@@ -84,6 +118,21 @@ final class ComposerRuntimeAdapter {
 		$cmd .= ' --working-dir=' . escapeshellarg(ROOT_DIR . '/devcraft') . ' --no-interaction';
 
 		self::applyProcessEnvironment();
+		$paths = self::composerEnvironmentPaths();
+
+		if(!function_exists('exec')) {
+			return ComposerActionResult::error(
+				'На сервере отключена функция exec (disable_functions). Нужны exec и putenv.',
+			);
+		}
+
+		// Явный env для дочернего процесса: putenv может быть недоступен (disable_functions).
+		$cmd = sprintf(
+			'env HOME=%s COMPOSER_HOME=%s %s',
+			escapeshellarg($paths['home']),
+			escapeshellarg($paths['composer_home']),
+			$cmd,
+		);
 
 		$output = [];
 		$code   = 1;
@@ -98,6 +147,15 @@ final class ComposerRuntimeAdapter {
 					'output'    => implode(PHP_EOL, $output),
 				],
 			);
+		}
+
+		if($code === 0) {
+			$verb = (string) ($args[0] ?? '');
+
+			if($verb === 'install' || $verb === 'update') {
+				require_once ROOT_DIR . '/devcraft/src/bootstrap/composer_marker.php';
+				dc_composer_mark_initialized(true);
+			}
 		}
 
 		return ComposerActionResult::ok($successMessage, [

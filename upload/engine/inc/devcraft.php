@@ -15,15 +15,31 @@ if (!defined('DATALIFEENGINE') || !defined('LOGGED_IN')) {
     exit('Hacking attempt!');
 }
 
-require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
+$dcRoot   = rtrim((string) ROOT_DIR, '/\\') . '/devcraft';
+$dcVendor = $dcRoot . '/vendor/autoload.php';
 
-if (defined('DEVCRAFT_VENDOR_MISSING')) {
-    require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/bootstrap.php');
+require_once $dcRoot . '/src/bootstrap/composer_marker.php';
+
+// Не DLEPlugins::Check: копия init.php в кэше плагина ищет vendor рядом с собой и не видит пакеты.
+// Готово, если есть autoload и composer.lock либо .composer_initialized.
+if (!is_file($dcVendor) || !dc_composer_initialized()) {
+    require_once $dcRoot . '/bootstrap.php';
+
     return;
 }
 
+dc_composer_ensure_stamp();
+
 if (!defined('DEVCRAFT_BOOTSTRAPPED')) {
-    return;
+    require_once $dcRoot . '/init.php';
+}
+
+if (!defined('DEVCRAFT_BOOTSTRAPPED')) {
+    require_once $dcVendor;
+    require_once $dcRoot . '/src/sdk/dle/bootstrap.php';
+    define('DEVCRAFT_BOOTSTRAPPED', true);
+    DevCraft\Core\Config\Paths::register();
+    DevCraft\Core\Application::instance()->boot();
 }
 
 if (!DevCraft\Core\Support\AdminAccess::allowsDevCraftAdmin()) {

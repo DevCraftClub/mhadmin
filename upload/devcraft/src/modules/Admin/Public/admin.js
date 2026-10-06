@@ -690,21 +690,7 @@
 				const textarea = document.getElementById(targetId);
 				const text = textarea ? textarea.value : '';
 
-				if (text && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-					navigator.clipboard.writeText(text).then(function () {
-						DevCraftMetro.notifySuccess(t('Готово'), t('Текст скопирован в буфер обмена'));
-					}).catch(function () {
-						if (textarea) {
-							textarea.focus();
-							textarea.select();
-							DevCraftMetro.notifySuccess(t('Готово'), t('Текст выделен — используйте Ctrl+C'));
-						}
-					});
-				} else if (textarea) {
-					textarea.focus();
-					textarea.select();
-					DevCraftMetro.notifySuccess(t('Готово'), t('Текст выделен — используйте Ctrl+C'));
-				}
+				copyText(text, textarea);
 				return;
 			}
 
@@ -837,6 +823,167 @@
 		});
 	}
 
+	function publicDependentsDialogHtml(probe) {
+		const count = probe.dependents_count || 0;
+		let list = '';
+
+		(probe.dependents || []).forEach(function (row) {
+			list += '<li><code>#' + row.id + '</code> ' + (row.label || '') + ' (' + (row.origin || '') + ')</li>';
+		});
+
+		return '<p>' + t('На эту запись ссылаются другие:') + ' <strong>' + count + '</strong></p>'
+			+ (list ? '<ul class="mt-2">' + list + '</ul>' : '')
+			+ '<p class="text-small text-muted mt-2">' + (probe.auto_note || t('Автозаписи при удалении вместе не удаляются — только отвязываются')) + '</p>';
+	}
+
+	function publicDeleteWithDependents(action, payload, onRemoved) {
+		return DevCraftAjax.post(action, payload)
+			.then(function (res) {
+				if (res.success && res.data && res.data.needs_confirm) {
+					return new Promise(function (resolve) {
+						DevCraftMetro.dialogCreate({
+							title: t('Удалить с зависимыми?'),
+							content: publicDependentsDialogHtml(res.data),
+							width: 560,
+							customButtons: [
+								{
+									text: t('Отмена'),
+									cls: 'js-dialog-close',
+									onclick: function () {
+										resolve(false);
+									},
+								},
+								{
+									text: t('Отвязать и удалить'),
+									cls: 'secondary js-dialog-close',
+									onclick: function () {
+										DevCraftAjax.post(action, Object.assign({}, payload, { mode: 'unlink' }))
+											.then(function (done) {
+												DevCraftAjax.handleNotice(done);
+												if (done.success && typeof onRemoved === 'function') {
+													onRemoved();
+												}
+												resolve(done.success);
+											})
+											.catch(function (err) {
+												DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
+												resolve(false);
+											});
+									},
+								},
+								{
+									text: t('Каскадное удаление'),
+									cls: 'alert js-dialog-close',
+									onclick: function () {
+										DevCraftAjax.post(action, Object.assign({}, payload, { mode: 'cascade' }))
+											.then(function (done) {
+												DevCraftAjax.handleNotice(done);
+												if (done.success && typeof onRemoved === 'function') {
+													onRemoved();
+												}
+												resolve(done.success);
+											})
+											.catch(function (err) {
+												DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
+												resolve(false);
+											});
+									},
+								},
+							],
+						});
+					});
+				}
+
+				DevCraftAjax.handleNotice(res);
+
+				if (res.success && typeof onRemoved === 'function') {
+					onRemoved();
+				}
+
+				return res.success;
+			});
+	}
+
+	function publicCollectEditPayload(form) {
+		const data = DevCraftAjax.serializeForm(form);
+		const activeInput = form.querySelector('input[name="active"], #active');
+
+		data.edit = '1';
+		data.active = activeInput && activeInput.checked ? 1 : 0;
+
+		return data;
+	}
+
+	function initPublicAssetEditPage() {
+		const root = document.querySelector('[data-dc-public-asset-edit]');
+
+		if (!root || root.dataset.dcBound === '1') {
+			return;
+		}
+
+		root.dataset.dcBound = '1';
+
+		const form = document.getElementById('dc-public-asset-edit-form');
+		const listUrl = root.getAttribute('data-list-url') || '';
+		const saveBtn = root.querySelector('[data-dc-public-edit-save]');
+
+		if (!form || !saveBtn) {
+			return;
+		}
+
+		saveBtn.addEventListener('click', function () {
+			const data = publicCollectEditPayload(form);
+
+			DevCraftAjax.post('public_asset_save', data)
+				.then(function (payload) {
+					DevCraftAjax.handleNotice(payload);
+
+					if (payload.success) {
+						const redirect = payload.data && payload.data.redirect;
+						global.location.href = redirect || listUrl || global.location.href;
+					}
+				})
+				.catch(function (err) {
+					DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось сохранить'), err);
+				});
+		});
+	}
+
+	function initPublicHeaderEditPage() {
+		const root = document.querySelector('[data-dc-public-header-edit]');
+
+		if (!root || root.dataset.dcBound === '1') {
+			return;
+		}
+
+		root.dataset.dcBound = '1';
+
+		const form = document.getElementById('dc-public-header-edit-form');
+		const listUrl = root.getAttribute('data-list-url') || '';
+		const saveBtn = root.querySelector('[data-dc-public-edit-save]');
+
+		if (!form || !saveBtn) {
+			return;
+		}
+
+		saveBtn.addEventListener('click', function () {
+			const data = publicCollectEditPayload(form);
+
+			DevCraftAjax.post('public_header_save', data)
+				.then(function (payload) {
+					DevCraftAjax.handleNotice(payload);
+
+					if (payload.success) {
+						const redirect = payload.data && payload.data.redirect;
+						global.location.href = redirect || listUrl || global.location.href;
+					}
+				})
+				.catch(function (err) {
+					DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось сохранить'), err);
+				});
+		});
+	}
+
 	function publicBindDrag(list, onDrop) {
 		const MetroLib = global.Metro;
 
@@ -897,6 +1044,92 @@
 
 		return ids.filter(function (id) {
 			return id > 0;
+		});
+	}
+
+	/** Переставляет строки таблицы по порядку id с сервера (после topo-корректировки). */
+	function publicApplyOrder(list, ids) {
+		if (!list || !ids || !ids.length) {
+			return;
+		}
+
+		const body = list.tBodies && list.tBodies[0] ? list.tBodies[0] : list;
+
+		ids.forEach(function (id) {
+			const row = list.querySelector('tr[data-id="' + id + '"]');
+
+			if (row) {
+				body.appendChild(row);
+			}
+		});
+	}
+
+	function publicPersistOrder(list, method, payload) {
+		return publicPostSilent(method, payload).then(function (response) {
+			const ordered = response && response.data && response.data.ids;
+
+			if (ordered && ordered.length) {
+				publicApplyOrder(list, ordered);
+			}
+
+			return response;
+		});
+	}
+
+	/**
+	 * Metro Switch оборачивает checkbox в label и переносит CSS-класс на обёртку,
+	 * а data-id остаётся на input. Клик по label+input может дать два change.
+	 */
+	function publicBindRowSwitch(root, method) {
+		root.addEventListener('change', function (event) {
+			const input = event.target;
+
+			if (!input || input.type !== 'checkbox') {
+				return;
+			}
+
+			const row = input.closest('tr[data-id]');
+
+			if (!row) {
+				return;
+			}
+
+			const id = parseInt(row.getAttribute('data-id') || input.getAttribute('data-id') || '0', 10);
+
+			if (!id || input._dcToggleQueued || input._dcToggleBusy) {
+				return;
+			}
+
+			input._dcToggleQueued = true;
+			const active = input.checked ? 1 : 0;
+			const previous = active ? 0 : 1;
+
+			window.setTimeout(function () {
+				input._dcToggleQueued = false;
+				input.checked = active === 1;
+
+				if (input._dcToggleBusy) {
+					return;
+				}
+
+				input._dcToggleBusy = true;
+
+				DevCraftAjax.post(method, {
+					id: id,
+					active: active,
+				}).then(function (payload) {
+					DevCraftAjax.handleNotice(payload);
+
+					if (!payload.success) {
+						input.checked = previous === 1;
+					}
+				}).catch(function (err) {
+					input.checked = previous === 1;
+					DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
+				}).then(function () {
+					input._dcToggleBusy = false;
+				});
+			}, 0);
 		});
 	}
 
@@ -1020,9 +1253,11 @@
 	function initPublicAssetsPage() {
 		const root = document.querySelector('[data-dc-public-assets-page]');
 
-		if (!root) {
+		if (!root || root.dataset.dcBound === '1') {
 			return;
 		}
+
+		root.dataset.dcBound = '1';
 
 		const kind = root.getAttribute('data-kind') || '';
 		const list = document.getElementById('dc-public-assets-list');
@@ -1038,12 +1273,14 @@
 				return;
 			}
 
-			publicPostSilent('public_asset_reorder', { kind: kind, ids: ids });
+			publicPersistOrder(list, 'public_asset_reorder', { kind: kind, ids: ids });
 		};
 
-		window.setTimeout(function () {
-			publicBindDrag(list, persistOrder);
-		}, 50);
+		if (root.getAttribute('data-dc-dnd') !== '0') {
+			window.setTimeout(function () {
+				publicBindDrag(list, persistOrder);
+			}, 50);
+		}
 
 		const openAddDialog = function () {
 			publicOpenFormDialog({
@@ -1085,61 +1322,33 @@
 			if (delBtn) {
 				const id = parseInt(delBtn.getAttribute('data-id'), 10);
 
-				publicConfirmDelete(t('Удалить ручную запись?')).then(function (ok) {
-					if (!ok || !id) {
-						return;
+				if (!id) {
+					return;
+				}
+
+				publicDeleteWithDependents('public_asset_delete', { id: id, kind: kind }, function () {
+					const row = delBtn.closest('tr');
+
+					if (row) {
+						row.remove();
 					}
-
-					DevCraftAjax.post('public_asset_delete', { id: id, kind: kind })
-						.then(function (payload) {
-							DevCraftAjax.handleNotice(payload);
-
-							if (payload.success) {
-								const row = delBtn.closest('tr');
-
-								if (row) {
-									row.remove();
-								}
-							}
-						})
-						.catch(function (err) {
-							DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
-						});
+				}).catch(function (err) {
+					DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
 				});
 			}
 		});
 
-		root.addEventListener('change', function (event) {
-			const toggle = event.target.closest('.js-dc-asset-toggle');
-
-			if (!toggle) {
-				return;
-			}
-
-			const id = parseInt(toggle.getAttribute('data-id'), 10);
-
-			DevCraftAjax.post('public_asset_toggle', {
-				id: id,
-				active: toggle.checked ? 1 : 0,
-			}).then(function (payload) {
-				DevCraftAjax.handleNotice(payload);
-
-				if (!payload.success) {
-					toggle.checked = !toggle.checked;
-				}
-			}).catch(function (err) {
-				toggle.checked = !toggle.checked;
-				DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
-			});
-		});
+		publicBindRowSwitch(root, 'public_asset_toggle');
 	}
 
 	function initPublicHeadersPage() {
 		const root = document.querySelector('[data-dc-public-headers-page]');
 
-		if (!root) {
+		if (!root || root.dataset.dcBound === '1') {
 			return;
 		}
+
+		root.dataset.dcBound = '1';
 
 		const list = document.getElementById('dc-public-headers-list');
 
@@ -1154,12 +1363,14 @@
 				return;
 			}
 
-			publicPostSilent('public_header_reorder', { ids: ids });
+			publicPersistOrder(list, 'public_header_reorder', { ids: ids });
 		};
 
-		window.setTimeout(function () {
-			publicBindDrag(list, persistOrder);
-		}, 50);
+		if (root.getAttribute('data-dc-dnd') !== '0') {
+			window.setTimeout(function () {
+				publicBindDrag(list, persistOrder);
+			}, 50);
+		}
 
 		const openAddDialog = function (defaults) {
 			publicOpenFormDialog({
@@ -1208,57 +1419,76 @@
 			if (delBtn) {
 				const id = parseInt(delBtn.getAttribute('data-id'), 10);
 
-				publicConfirmDelete(t('Удалить ручной заголовок?')).then(function (ok) {
-					if (!ok || !id) {
-						return;
+				if (!id) {
+					return;
+				}
+
+				publicDeleteWithDependents('public_header_delete', { id: id }, function () {
+					const row = delBtn.closest('tr');
+
+					if (row) {
+						row.remove();
 					}
-
-					DevCraftAjax.post('public_header_delete', { id: id })
-						.then(function (payload) {
-							DevCraftAjax.handleNotice(payload);
-
-							if (payload.success) {
-								const row = delBtn.closest('tr');
-
-								if (row) {
-									row.remove();
-								}
-							}
-						})
-						.catch(function (err) {
-							DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
-						});
+				}).catch(function (err) {
+					DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось удалить'), err);
 				});
 			}
 		});
 
-		root.addEventListener('change', function (event) {
-			const toggle = event.target.closest('.js-dc-header-toggle');
+		publicBindRowSwitch(root, 'public_header_toggle');
+	}
 
-			if (!toggle) {
-				return;
-			}
+	/**
+	 * Копирует текст в буфер обмена (делегирует в ядро DevCraft.copyText).
+	 *
+	 * @param {string} text
+	 * @param {HTMLTextAreaElement|HTMLInputElement|null} [fallbackEl] поле для выделения при отказе
+	 * @returns {Promise<boolean>}
+	 */
+	function copyText(text, fallbackEl) {
+		if (typeof DevCraft.copyText === 'function' && DevCraft.copyText !== copyText) {
+			return DevCraft.copyText(text, fallbackEl);
+		}
 
-			const id = parseInt(toggle.getAttribute('data-id'), 10);
+		const value = text == null ? '' : String(text);
 
-			DevCraftAjax.post('public_header_toggle', {
-				id: id,
-				active: toggle.checked ? 1 : 0,
-			}).then(function (payload) {
-				DevCraftAjax.handleNotice(payload);
+		if (value === '') {
+			return Promise.resolve(false);
+		}
 
-				if (!payload.success) {
-					toggle.checked = !toggle.checked;
+		const fallbackSelect = function () {
+			if (fallbackEl && typeof fallbackEl.focus === 'function') {
+				fallbackEl.focus();
+				if (typeof fallbackEl.select === 'function') {
+					fallbackEl.select();
 				}
-			}).catch(function (err) {
-				toggle.checked = !toggle.checked;
-				DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось обновить'), err);
+			}
+			DevCraftMetro.notify(t('Готово'), t('Текст выделен — используйте Ctrl+C'), 'info');
+		};
+
+		if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
+			return navigator.clipboard.writeText(value).then(function () {
+				DevCraftMetro.notify(t('Готово'), t('Текст скопирован в буфер обмена'), 'success');
+				return true;
+			}).catch(function () {
+				fallbackSelect();
+				return false;
 			});
-		});
+		}
+
+		fallbackSelect();
+		return Promise.resolve(false);
+	}
+
+	// Не перезаписываем ядро, если уже есть DevCraft.copyText из devcraft.js
+	if (typeof DevCraft.copyText !== 'function') {
+		DevCraft.copyText = copyText;
 	}
 
 	DevCraftPublicAssets.initAssets = initPublicAssetsPage;
 	DevCraftPublicAssets.initHeaders = initPublicHeadersPage;
+	DevCraftPublicAssets.initAssetEdit = initPublicAssetEditPage;
+	DevCraftPublicAssets.initHeaderEdit = initPublicHeaderEditPage;
 
 	const DevCraftAdmin = {
 		Filter: DevCraft.Filter,
@@ -1271,6 +1501,8 @@
 			DevCraftAdmin.Composer.initTable();
 			DevCraftAdmin.PublicAssets.initAssets();
 			DevCraftAdmin.PublicAssets.initHeaders();
+			DevCraftAdmin.PublicAssets.initAssetEdit();
+			DevCraftAdmin.PublicAssets.initHeaderEdit();
 			if (DevCraft.Debug.isEnabled()) {
 				DevCraft.Debug.log('Admin', 'boot', { message: t('Модуль Admin инициализирован') });
 			}

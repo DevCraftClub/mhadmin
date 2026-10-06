@@ -22,6 +22,7 @@ use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Admin\Router;
 use DevCraft\Enums\AdminErrorKind;
 use DevCraft\Core\Module\Registry;
+use DevCraft\Core\Module\ModulePsr4Registrar;
 use DevCraft\Core\Twig\EnvironmentFactory;
 use DevCraft\Core\Admin\AdminErrorRenderer;
 use DevCraft\Core\Database\DatabaseGateway;
@@ -144,6 +145,8 @@ final class Application {
 		$this->registry = new Registry();
 		$this->twig     = EnvironmentFactory::create();
 		$this->booted   = true;
+		// После booted: загрузка манифестов может снова вызвать boot() (БД и т.п.).
+		ModulePsr4Registrar::registerAll();
 	}
 
 	/**

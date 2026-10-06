@@ -6,8 +6,9 @@ if(!defined('DATALIFEENGINE')) {
 	exit('Hacking attempt!');
 }
 
-$baseUrl = rtrim((string) (($config['http_home_url'] ?? '/') ?: '/'), '/');
-$ajaxUrl = $baseUrl . '/devcraft/bootstrap.ajax.php';
+$baseUrl  = rtrim((string) (($config['http_home_url'] ?? '/') ?: '/'), '/');
+$ajaxUrl  = $baseUrl . '/devcraft/bootstrap.ajax.php';
+$adminUrl = $baseUrl . '/admin.php?mod=devcraft';
 ?>
 <!doctype html>
 <html lang="ru">
@@ -41,7 +42,7 @@ $ajaxUrl = $baseUrl . '/devcraft/bootstrap.ajax.php';
     </div>
     <div style="margin-top:12px;">
         <button id="dc-bootstrap-retry" style="display:none;">Повторить</button>
-        <a id="dc-bootstrap-dashboard" href="?mod=devcraft" style="display:none;">Перейти в DevCraft Admin</a>
+        <a id="dc-bootstrap-dashboard" href="<?= htmlspecialchars($adminUrl, ENT_QUOTES); ?>" style="display:none;">Перейти в DevCraft Admin</a>
     </div>
 </div>
 <script>
@@ -83,6 +84,7 @@ $ajaxUrl = $baseUrl . '/devcraft/bootstrap.ajax.php';
 
       if (payload.status === 'in_progress') {
         setLoading(true);
+        try { sessionStorage.removeItem('dcBootstrapReloaded'); } catch (err) {}
         return;
       }
 
@@ -96,6 +98,15 @@ $ajaxUrl = $baseUrl . '/devcraft/bootstrap.ajax.php';
 
       if (payload.status === 'completed') {
         dashboard.style.display = 'inline-block';
+        appendLine('[' + (payload.currentStep || 'finalize') + '] ' + (payload.message || 'Инициализация завершена'));
+        var alreadyReloaded = false;
+        try { alreadyReloaded = sessionStorage.getItem('dcBootstrapReloaded') === '1'; } catch (err) {}
+        if (!alreadyReloaded) {
+          try { sessionStorage.setItem('dcBootstrapReloaded', '1'); } catch (err) {}
+          window.location.reload();
+          return;
+        }
+        appendLine('Пакеты на месте, но админка снова открыла этот экран. Обновите страницу вручную: ' + dashboard.href);
       }
     }
 
@@ -149,7 +160,14 @@ $ajaxUrl = $baseUrl . '/devcraft/bootstrap.ajax.php';
       retry.style.display = 'none';
       dashboard.style.display = 'none';
       log.textContent = '';
+      try { sessionStorage.removeItem('dcBootstrapReloaded'); } catch (err) {}
       request('retry');
+    });
+
+    dashboard.addEventListener('click', function (event) {
+      event.preventDefault();
+      try { sessionStorage.removeItem('dcBootstrapReloaded'); } catch (err) {}
+      window.location.reload();
     });
 
     request('start');

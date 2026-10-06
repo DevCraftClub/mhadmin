@@ -27,12 +27,17 @@
 declare(strict_types=1);
 
 if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
-	$vendor_autoload = __DIR__ . '/vendor/autoload.php';
+	$dcRoot          = defined('ROOT_DIR') ? rtrim((string) ROOT_DIR, '/\\') . '/devcraft' : __DIR__;
+	$vendor_autoload = $dcRoot . '/vendor/autoload.php';
 
-	if(!is_file($vendor_autoload)) {
+	require_once $dcRoot . '/src/bootstrap/composer_marker.php';
+
+	if(!is_file($vendor_autoload) || !dc_composer_initialized()) {
 		define('DEVCRAFT_VENDOR_MISSING', true);
 		return;
 	}
+
+	dc_composer_ensure_stamp();
 
 	define('DEVCRAFT_BOOTSTRAPPED', true);
 
@@ -40,7 +45,7 @@ if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
 	require_once $vendor_autoload;
 
 	/** Подключает in-process DLE SDK: глобальные шимы `prepare()` / `query()` и fallback-автозагрузку. */
-	require_once DLEPlugins::Check(__DIR__ . '/src/sdk/dle/bootstrap.php');
+	require_once DLEPlugins::Check($dcRoot . '/src/sdk/dle/bootstrap.php');
 
 	/** Регистрирует пути каталогов DevCraft в среде выполнения. */
 	DevCraft\Core\Config\Paths::register();

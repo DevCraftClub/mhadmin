@@ -21,7 +21,9 @@ use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Core\Application;
 use DevCraft\Core\Module\PluginContext;
 use DevCraft\Core\Abstracts\AbstractPage;
+use DevCraft\Core\Composer\ComposerInstallAllPlaceholder;
 use DevCraft\Modules\Admin\Services\DashboardPackageMetricService;
+use DevCraft\Modules\Admin\Services\PublicAssetSeedService;
 
 /**
  * Главная страница (панель) модуля DevCraft Admin.
@@ -43,6 +45,8 @@ final class DashboardPage extends AbstractPage {
 	 *     $result = (new DashboardPage())->handle();
 	 */
 	public function handle(): array {
+		(new PublicAssetSeedService())->ensureRegistered();
+
 		$registry = Application::instance()->registry();
 		$plugin   = $registry->forMod(AdminIdentity::mod());
 		$meta     = $plugin?->meta() ?? [];
@@ -97,10 +101,12 @@ final class DashboardPage extends AbstractPage {
 					'show_assets'      => true,
 					'show_update'      => true,
 					'composer'         => [
-						'url'               => $composerUrl,
-						'missing_required'  => $metrics->missingRequiredCount(),
-						'packages'          => $metrics->packagesForDashboard(),
-						'dump_autoload_url' => 'dump_autoload',
+						'url'                 => $composerUrl,
+						'missing_required'    => $metrics->missingRequiredCount(),
+						'has_uninstalled'     => $metrics->hasUninstalledPackages(),
+						'install_all_package' => ComposerInstallAllPlaceholder::PACKAGE,
+						'packages'            => $metrics->packagesForDashboard(),
+						'dump_autoload_url'   => 'dump_autoload',
 					],
 					'crowdin'          => $crowdin,
 				],

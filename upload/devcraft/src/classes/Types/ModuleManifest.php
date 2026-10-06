@@ -169,13 +169,17 @@ final readonly class ModuleManifest {
 			$author = self::defaultAuthor();
 		}
 
-		$dirName = basename(rtrim($modulePath, '/\\'));
+		$dirName   = basename(rtrim($modulePath, '/\\'));
+		$namespace = self::resolveNamespace(
+			isset($manifest['namespace'])? (string) $manifest['namespace'] : '',
+			$dirName,
+		);
 
 		return new self(
 			id              : $mod,
 			name            : (string) ($meta['name'] ?? $mod),
 			version         : (string) ($meta['version'] ?? '0.0.0'),
-			namespace       : 'DevCraft\\Modules\\' . $dirName,
+			namespace       : $namespace,
 			path            : $modulePath,
 			pages           : $pages,
 			description     : isset($meta['description'])? (string) $meta['description'] : NULL,
@@ -230,6 +234,7 @@ final readonly class ModuleManifest {
 		return [
 			'mod'               => $this->id,
 			'code'              => $this->code,
+			'namespace'         => $this->namespace,
 			'crowdinName'       => $this->crowdinName,
 			'crowdinStatId'     => $this->crowdinStatId,
 			'meta'              => [
@@ -251,6 +256,36 @@ final readonly class ModuleManifest {
 			'composer_required' => $this->composerRequired,
 			'extends'           => $this->extends,
 		];
+	}
+
+	/**
+	 * Нормализует PSR-4 префикс: без завершающего «\» → с «\»; пусто → fallback каталога.
+	 *
+	 * @since 200.4.1
+	 */
+	public static function normalizeNamespace(string $namespace): string {
+		$namespace = trim($namespace);
+
+		if($namespace === '') {
+			return '';
+		}
+
+		return rtrim($namespace, '\\') . '\\';
+	}
+
+	/**
+	 * Выбирает пространство имён из манифеста или `DevCraft\Modules\{dir}\`.
+	 *
+	 * @since 200.4.1
+	 */
+	public static function resolveNamespace(string $fromManifest, string $dirName): string {
+		$normalized = self::normalizeNamespace($fromManifest);
+
+		if($normalized !== '') {
+			return $normalized;
+		}
+
+		return self::normalizeNamespace('DevCraft\\Modules\\' . $dirName);
 	}
 
 	/**

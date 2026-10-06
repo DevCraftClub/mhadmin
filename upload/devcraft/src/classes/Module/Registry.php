@@ -110,15 +110,24 @@ final class Registry {
 			return NULL;
 		}
 
-		foreach($this->listModuleDirectories() as $dirName) {
-			$context = $this->forModuleDir($dirName);
+		$manifests = DataManager::readManifest();
 
-			if($context !== NULL && $context->mod() === $mod) {
-				return $context;
+		if(!isset($manifests[$mod])) {
+			foreach($manifests as $candidate) {
+				if($candidate->code === $mod) {
+					$dirName = basename(rtrim($candidate->path, '/\\'));
+
+					return $this->forModuleDir($dirName, $candidate->id);
+				}
 			}
+
+			return NULL;
 		}
 
-		return NULL;
+		$manifest = $manifests[$mod];
+		$dirName  = basename(rtrim($manifest->path, '/\\'));
+
+		return $this->forModuleDir($dirName, $mod);
 	}
 
 	/**

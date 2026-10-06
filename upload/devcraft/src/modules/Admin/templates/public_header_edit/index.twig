@@ -1,0 +1,39 @@
+{# Страница правки публичного meta-заголовка #}
+<div id="dc-public-header-edit-page"
+	 class="dc-public-header-edit-page"
+	 data-dc-public-header-edit="1"
+	 data-list-url="{{ list_url|default('')|e('html_attr') }}">
+	<div class="d-flex flex-align-center flex-justify-between mb-3">
+		<div>
+			<h2 class="mb-0">{{ page_title|default('Правка заголовка'|trans) }}</h2>
+			{% if origin is defined %}
+				<p class="text-muted text-small mb-0">
+					{{ 'Источник'|trans }}:
+					<span class="badge {{ origin == 'auto' ? 'info' : 'secondary' }}">
+						{{ origin == 'auto' ? 'авто'|trans : 'ручной'|trans }}
+					</span>
+				</p>
+			{% endif %}
+		</div>
+		<a class="button" href="{{ list_url|default('?mod=' ~ mod ~ '&action=public_headers') }}">
+			{{ 'Назад к списку'|trans }}
+		</a>
+	</div>
+
+	{% if error is defined and error %}
+		<div class="remark alert">{{ error }}</div>
+	{% elseif form is defined %}
+		<form id="dc-public-header-edit-form" class="form" method="post" action="#" onsubmit="return false;">
+			{% include 'core/includes/ui/sections_layout.twig' with {
+				sections: form.sections,
+				layout: form.layout|default('stack')
+			} %}
+			<div class="form-actions mt-3">
+				<button type="button" class="button primary" data-dc-public-edit-save>
+					{{ 'Сохранить'|trans }}
+				</button>
+				<a class="button" href="{{ list_url }}">{{ 'Отмена'|trans }}</a>
+			</div>
+		</form>
+	{% endif %}
+</div>

@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Ajax;
 
-use DevCraft\Core\Application;
 use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Interfaces\ResponseInterface;
-use DevCraft\Core\Support\DataManager;
-use DevCraft\Modules\Admin\AdminIdentity;
-use DevCraft\Modules\Admin\Models\PublicHeaderEntry;
-use DevCraft\Modules\Admin\Repositories\PublicHeaderEntryRepository;
+use DevCraft\Modules\Admin\Services\PublicHeaderWriteService;
 use Throwable;
 
 /** DnD-порядок meta-заголовков. */
@@ -25,25 +21,22 @@ final class PublicHeaderReorderHandler implements AjaxHandlerInterface {
 				$ids = [];
 			}
 
-			/** @var PublicHeaderEntryRepository $repo */
-			$repo  = Application::instance()->database()->repository(PublicHeaderEntry::class);
-			$order = 0;
+			$result = (new PublicHeaderWriteService())->reorder($ids);
+			$data   = [
+				'ids'      => $result['ids'],
+				'adjusted' => $result['reordered'],
+			];
 
-			foreach($ids as $rawId) {
-				$entry = $repo->findByPK((int) $rawId);
-				if(!$entry instanceof PublicHeaderEntry) {
-					continue;
-				}
-
-				$entry->sort_order = $order++;
-				$repo->saveEntity($entry);
+			if($result['reordered']) {
+				return JsonResponse::notify(
+					__('Порядок сохранён'),
+					__('Желаемый порядок скорректирован из‑за зависимостей между записями'),
+					JsonResponse::TYPE_WARNING,
+					$data,
+				);
 			}
 
-			$config = DataManager::getConfig(AdminIdentity::code());
-			$config['public_assets_list_manually_ordered_meta'] = true;
-			DataManager::saveConfig(AdminIdentity::code(), $config);
-
-			return JsonResponse::toast(__('Порядок сохранён'));
+			return JsonResponse::toast(__('Порядок сохранён'), $data);
 		} catch(Throwable $e) {
 			return JsonResponse::fail(__('Ошибка'), $e->getMessage(), 'error', 400);
 		}

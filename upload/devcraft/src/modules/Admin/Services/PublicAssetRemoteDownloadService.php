@@ -57,6 +57,8 @@ final class PublicAssetRemoteDownloadService {
 		$this->assertAllowedContentType($kind, $contentType, $url);
 
 		$dir = Paths::cache() . '/public_assets/remote';
+		(new PublicAssetBundleCacheService())->ensureCacheDir();
+
 		if(!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
 			throw new RuntimeException(__('Не удалось создать каталог для внешних ресурсов'));
 		}

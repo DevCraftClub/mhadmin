@@ -22,6 +22,8 @@ use DevCraft\Modules\Admin\Repositories\PublicHeaderEntryRepository;
 #[Index(columns: ['module_code'], name: 'idx_dc_pub_header_module')]
 class PublicHeaderEntry extends AbstractEntity {
 
+	use PublicResourceDepsColumnsTrait;
+
 	/** auto | manual */
 	#[Column(type: 'string', size: 16)]
 	public string $origin = 'manual';

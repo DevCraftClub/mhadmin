@@ -25,7 +25,7 @@ use Cycle\Schema\Compiler;
 use Cycle\Schema\Generator;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
-use Cycle\Schema\Generator\Migrations\Strategy\SingleFileStrategy;
+use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
 use Cycle\Schema\Generator\SyncTables;
 use Cycle\Schema\Registry as SchemaRegistry;
 use DevCraft\Core\Config\DevCraftConfig;
@@ -89,7 +89,7 @@ final class SchemaSyncService {
 		$needPending   = $this->migrationFilesNeedApply($migrationsDir);
 		$cached        = $bootstrap ? null : $this->loadCachedSchema($fingerprint);
 
-		if($cached !== null && !$needPending && !$bootstrap) {
+		if($cached !== null && !$needPending && !$bootstrap && $this->schemaTablesExist($cached)) {
 			return $cached;
 		}
 
@@ -102,7 +102,7 @@ final class SchemaSyncService {
 
 		$debug = (bool) DevCraftConfig::get('debug', false);
 
-		if($cached !== null && !$bootstrap && !$debug) {
+		if($cached !== null && !$bootstrap && !$debug && $this->schemaTablesExist($cached)) {
 			return $cached;
 		}
 
@@ -123,6 +123,14 @@ final class SchemaSyncService {
 		$wroteNew     = array_diff($after, $before) !== [];
 
 		if($wroteNew) {
+			$this->runPending($migrator);
+		}
+
+		// Таблиц нет, а create уже «выполнен» или файл не появился — только миграции, не SyncTables.
+		if(!$this->schemaTablesExist($schema_array)) {
+			$this->unmarkCreateMigrationsWithAllTablesMissing($migrator);
+			$registry     = new SchemaRegistry($this->gateway->databaseManager());
+			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, true, false);
 			$this->runPending($migrator);
 		}
 
@@ -167,23 +175,115 @@ final class SchemaSyncService {
 
 	private function runPending(Migrations\Migrator $migrator): void {
 		$capsule = new Capsule($this->gateway->databaseManager()->database());
+		$migrator->configure();
 		$this->skipCreateMigrationsForExistingTables($migrator);
+		// Create недостающих таблиц — раньше старых change: иначе change падает и очередь стоит.
+		$this->runMissingTableCreates($migrator, $capsule);
 
-		try {
-			while($migrator->run($capsule) !== null) {
-				$this->skipCreateMigrationsForExistingTables($migrator);
-			}
-		} catch(\Throwable) {
-			$this->skipCreateMigrationsForExistingTables($migrator);
+		$guard = 0;
+
+		while($guard < 30) {
+			$guard++;
 
 			try {
 				while($migrator->run($capsule) !== null) {
 					$this->skipCreateMigrationsForExistingTables($migrator);
 				}
-			} catch(\Throwable) {
-				// Таблица уже есть / дубликат create — схема всё равно собирается дальше.
+
+				return;
+			} catch(\Throwable $e) {
+				$this->skipCreateMigrationsForExistingTables($migrator);
+
+				if(!$this->markAlreadyAppliedMigrationExecuted($migrator, $e)) {
+					return;
+				}
 			}
 		}
+	}
+
+	/**
+	 * Накатывает create, у которых в БД ещё нет ни одной таблицы, не дожидаясь более старых change.
+	 */
+	private function runMissingTableCreates(Migrations\Migrator $migrator, Capsule $capsule): void {
+		foreach($migrator->getMigrations() as $migration) {
+			if($migration->getState()->getStatus() !== State::STATUS_PENDING) {
+				continue;
+			}
+
+			$tables = $this->createTableNamesFromMigration($migration->getState()->getName());
+
+			if($tables === []) {
+				continue;
+			}
+
+			foreach($tables as $tableName) {
+				if($this->tableExists($tableName)) {
+					continue 2;
+				}
+			}
+
+			try {
+				$capsule->getDatabase()->transaction(
+					static function () use ($migration, $capsule): void {
+						$migration->withCapsule($capsule)->up();
+					},
+				);
+			} catch(\Throwable $e) {
+				if(!$this->migrationFailureAlreadyApplied($e)) {
+					continue;
+				}
+			}
+
+			$this->markMigrationAsExecuted(
+				PREFIX . '_devcraft_migrations',
+				$migration->getState(),
+			);
+		}
+	}
+
+	/**
+	 * Снимает с очереди миграцию, которая упала потому что таблица или колонка уже есть.
+	 */
+	private function markAlreadyAppliedMigrationExecuted(Migrations\Migrator $migrator, \Throwable $e): bool {
+		if(!$this->migrationFailureAlreadyApplied($e)) {
+			return false;
+		}
+
+		foreach($migrator->getMigrations() as $migration) {
+			if($migration->getState()->getStatus() !== State::STATUS_PENDING) {
+				continue;
+			}
+
+			$this->markMigrationAsExecuted(
+				PREFIX . '_devcraft_migrations',
+				$migration->getState(),
+			);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private function migrationFailureAlreadyApplied(\Throwable $e): bool {
+		$current = $e;
+
+		while($current !== null) {
+			$message = $current->getMessage();
+
+			if(
+				str_contains($message, '42S01')
+				|| str_contains($message, '42S21')
+				|| str_contains($message, '1050')
+				|| str_contains($message, '1060')
+			) {
+				return true;
+			}
+
+			$current = $current->getPrevious();
+		}
+
+		return false;
 	}
 
 	private function ormSchemaBootstrapNeeded(): bool {
@@ -361,10 +461,12 @@ final class SchemaSyncService {
 		];
 
 		if($generateMigrations) {
+			// По файлу на таблицу: общий файл откатывает создание журнала и заголовков,
+			// если соседняя таблица в том же шаге уже есть.
 			$generators[] = new GenerateMigrations(
 				$migrator->getRepository(),
 				$migrator->getConfig(),
-				new SingleFileStrategy(
+				new MultipleFilesStrategy(
 					$migrator->getConfig(),
 					new NameBasedOnChangesGenerator(),
 				),
@@ -397,37 +499,134 @@ final class SchemaSyncService {
 			}
 
 			$migrationName = $state->getName();
-			$tableKey      = '';
+			$createTables  = $this->createTableNamesFromMigration($migrationName);
+			$missing       = 0;
 
-			if(preg_match('/_create_(?:dle_)?([a-z0-9_]+?)(?:_create_|_change_|$)/', $migrationName, $matches) === 1) {
-				$tableKey = (string) ($matches[1] ?? '');
+			foreach($createTables as $tableName) {
+				if(!$this->tableExists($tableName)) {
+					$missing++;
+				}
 			}
 
-			$alreadyThere = false;
-			$tableName    = '';
-
-			if(str_contains($migrationName, '_add_fk_') || str_contains($migrationName, '_add_foreign_')) {
-				// Cycle пытается вешать FK INT UNSIGNED → BIGINT (id AbstractEntity) — MySQL errno 150.
-				$this->markMigrationAsExecuted($migrationTable, $migrationName);
+			// Внешний ключ INT UNSIGNED → BIGINT (id AbstractEntity) даёт MySQL errno 150.
+			// Файл, который ещё должен создать таблицу, из очереди не снимаем.
+			if(
+				$missing === 0
+				&& (str_contains($migrationName, '_add_fk_') || str_contains($migrationName, '_add_foreign_'))
+			) {
+				$this->markMigrationAsExecuted($migrationTable, $state);
 				continue;
 			}
 
-			if($tableKey !== '') {
-				$tableName    = PREFIX . '_' . $tableKey;
-				$alreadyThere = $this->tableExists($tableName);
-			} elseif(preg_match('/_change_dle_(.+?)_add_(.+)$/', $migrationName, $change) === 1) {
-				$tableKey     = (string) $change[1];
-				$tableName    = PREFIX . '_' . $tableKey;
-				$ops          = 'add_' . $change[2];
-				$alreadyThere = $this->tableExists($tableName)
-					&& $this->changeMigrationFirstOpExists($tableName, $ops);
-			}
+			if($createTables !== []) {
+				// Часть таблиц уже есть: повтор up() падает на CREATE и откатывает весь шаг,
+				// в том числе журнал или заголовки. Недостающее — отдельный новый файл.
+				if($missing < count($createTables)) {
+					$this->markMigrationAsExecuted($migrationTable, $state);
+				}
 
-			if(!$alreadyThere) {
 				continue;
 			}
 
-			$this->markMigrationAsExecuted($migrationTable, $migrationName);
+			if(preg_match('/_change_dle_(.+?)_add_(.+)$/', $migrationName, $change) === 1) {
+				$tableName = PREFIX . '_' . (string) $change[1];
+				$ops       = 'add_' . $change[2];
+
+				if($this->tableExists($tableName) && $this->changeMigrationFirstOpExists($tableName, $ops)) {
+					$this->markMigrationAsExecuted($migrationTable, $state);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Имена таблиц с префиксом из сегментов `_create_` в имени миграции.
+	 *
+	 * @return list<string>
+	 */
+	private function createTableNamesFromMigration(string $migrationName): array {
+		if(preg_match_all('/_create_(?:dle_)?([a-z0-9_]+?)(?=_create_|_change_|$)/', $migrationName, $matches) < 1) {
+			return [];
+		}
+
+		$tables = [];
+
+		foreach($matches[1] as $key) {
+			$key = (string) $key;
+
+			if($key === '') {
+				continue;
+			}
+
+			$tables[] = PREFIX . '_' . $key;
+		}
+
+		return array_values(array_unique($tables));
+	}
+
+	/**
+	 * Все таблицы из скомпилированной схемы Cycle существуют в БД.
+	 *
+	 * @param   array<string, mixed>  $schema
+	 */
+	private function schemaTablesExist(array $schema): bool {
+		foreach($schema as $def) {
+			if(!is_array($def)) {
+				continue;
+			}
+
+			$table = $def[\Cycle\ORM\SchemaInterface::TABLE] ?? null;
+
+			if(!is_string($table) || $table === '') {
+				continue;
+			}
+
+			$full = str_starts_with($table, PREFIX . '_')? $table : PREFIX . '_' . $table;
+
+			if(!$this->tableExists($full)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Снимает отметку «выполнена» с create-миграции, если в БД нет ни одной её таблицы
+	 * (безопасный повторный накат). Если часть таблиц уже есть, файл не запускают снова.
+	 */
+	private function unmarkCreateMigrationsWithAllTablesMissing(Migrations\Migrator $migrator): void {
+		$migrationTable = PREFIX . '_devcraft_migrations';
+
+		if(!$this->tableExists($migrationTable)) {
+			return;
+		}
+
+		foreach($migrator->getMigrations() as $migration) {
+			$state = $migration->getState();
+
+			if($state->getStatus() !== State::STATUS_EXECUTED) {
+				continue;
+			}
+
+			$tables = $this->createTableNamesFromMigration($state->getName());
+
+			if($tables === []) {
+				continue;
+			}
+
+			$anyPresent = false;
+
+			foreach($tables as $tableName) {
+				if($this->tableExists($tableName)) {
+					$anyPresent = true;
+					break;
+				}
+			}
+
+			if(!$anyPresent) {
+				$this->unmarkMigrationAsExecuted($migrationTable, $state->getName());
+			}
 		}
 	}
 
@@ -483,10 +682,15 @@ final class SchemaSyncService {
 		return $total > 0;
 	}
 
-	private function markMigrationAsExecuted(string $migrationTable, string $migrationName): void {
-		$existsResult = $this->gateway->query(
-			"SELECT COUNT(*) AS total FROM `{$migrationTable}` WHERE `migration` = :migration",
-			['migration' => $migrationName],
+	private function markMigrationAsExecuted(string $migrationTable, State $state): void {
+		$migrationName = $state->getName();
+		$createdAt     = $state->getTimeCreated()->format('Y-m-d H:i:s');
+		$existsResult  = $this->gateway->query(
+			"SELECT COUNT(*) AS total FROM `{$migrationTable}` WHERE `migration` = :migration AND `created_at` = :created_at",
+			[
+				'migration'  => $migrationName,
+				'created_at' => $createdAt,
+			],
 		)->fetchAll();
 
 		$exists = isset($existsResult[0]['total']) ? (int) $existsResult[0]['total'] : 0;
@@ -495,8 +699,20 @@ final class SchemaSyncService {
 			return;
 		}
 
+		// created_at — время из имени файла: Cycle ищет строку по паре имя + это время, не по NOW().
 		$this->gateway->query(
-			"INSERT INTO `{$migrationTable}` (`migration`, `time_executed`, `created_at`) VALUES (:migration, NOW(), NOW())",
+			"INSERT INTO `{$migrationTable}` (`migration`, `time_executed`, `created_at`) VALUES (:migration, :executed, :created_at)",
+			[
+				'migration'  => $migrationName,
+				'executed'   => date('Y-m-d H:i:s'),
+				'created_at' => $createdAt,
+			],
+		);
+	}
+
+	private function unmarkMigrationAsExecuted(string $migrationTable, string $migrationName): void {
+		$this->gateway->query(
+			"DELETE FROM `{$migrationTable}` WHERE `migration` = :migration",
 			['migration' => $migrationName],
 		);
 	}

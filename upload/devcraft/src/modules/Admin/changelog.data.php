@@ -33,26 +33,35 @@ return [
 	ChangelogBuilder::create('200.4.1')
 		->date('2026-09-10')
 		->added([
-			__('In-process SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.'),
-			__('Мост equality между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.'),
+			__('Встроенный SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.'),
+			__('Мост равенств между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.'),
 			__('`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).'),
 			__('SDK Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` по DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); константы `SchemaTableNames`, связи в `RelationMap`, refs в `TableRowUnion`.'),
 			__('Канон сателлитов: публичный слой `Controller/`; патчи DLE через систему плагинов — маркеры `// DevCraft {Name}: start` / `end`.'),
 			__('Публичный `dle_template`: у `[if]` — опциональный `[else]`; новый блок `[has value="…" condition="!=" comparison=""]` с `[else]` — только при `compile(..., true)`, патч `engine/classes/templates.class.php` (маркеры `// DevCraft Admin`) через `install.xml`.'),
+			__('Публичные ресурсы оболочки: зависимости между записями, список разделов показа и список исключений, отдельные страницы правки, справочник режимов страницы DLE (`$do`). Зависимости подтягиваются в оболочку даже если раздел не совпал; при удалении — отвязать ссылки или удалить зависимые ручные записи; при перетаскивании с нарушением порядка — предупреждение и исправленный порядок. В `siteAssets` те же поля задаются в `js()` / `css()` (`dependsOn`, `available`, `notAvailable`, `active`) и пишутся только если записи ещё нет в БД.'),
 		])
 		->changed([
 			__('Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.'),
 			__('Поставка расширений условий шаблонов — в `install.xml` Admin (`plugins_files`), без отдельного DLE-плагина.'),
+			__('Собранные публичные CSS/JS хранятся отдельно для каждого раздела сайта; в оболочке зависимости идут раньше зависимых записей.'),
 		])
 		->deprecated([
 			__('Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.'),
 		])
 		->fixed([
+			__('Синхронизация таблиц Cycle: индекс `kind` + `local_path` у `dc_public_assets` на utf8mb4 превышал лимит ключа MySQL (3072 байта). Индекс по длинному пути убран.'),
 			__('Cycle ORM: при пересборке схемы (нет или устарел `cycle_orm_schema.ser`) всегда включается GenerateMigrations — таблицы сателлитов (в т.ч. `api_*`) создаются после установки ядра Admin, а не только при первом bootstrap.'),
 			__('SDK: `create()` любой Schema падал с «Table `PREFIX_PREFIX_*` doesn\'t exist» — INSERT шёл через builder Cycle, у которого префикс уже настроен. Теперь префикс не удваивается.'),
 			__('SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.'),
 			__('SDK Schema типы по install/dump DLE 21: `category.schema_org` и `storage.name` / `vote.date` — string; `rss.category` — int.'),
 			__('Генератор модулей: latin/`toTranslit` сохраняет `_` и `-`; Identity `MODULE=%dir%`, `CODE=%latin%`; каталог модуля — PascalCase от имени; `engine/inc` — slug без префикса `dle_`.'),
+			__('Собранные публичные CSS/JS: в `cache/public_assets/` пишется `.htaccess` с доступом — иначе родительский `devcraft/.htaccess` отдаёт 403 на `bundle.css` / `bundle.js`.'),
+			__('Подстановка файлов из `siteAssets` описания модуля: если файлов в описании больше нет (или список пуст), старые автозаписи модуля выключаются — на сайт не попадает лишний админский JS.'),
+			__('Подстановка из `siteAssets` больше не включает снова автозаписи, которые выключили вручную в админке.'),
+			__('`DevCraft.copyText` в ядре (`devcraft.js`): копирование в буфер на всех страницах админки, в т.ч. по HTTP (запасной `execCommand`).'),
+			__('Публичные стили/скрипты/заголовки: переключатель «Активен» брал id с обёртки Metro Switch (класс уехал с checkbox, data-id остался на input) — «Запись не найдена» и два запроса/уведомления. Id берётся из строки таблицы; повторный сигнал change сливается в один запрос.'),
+			__('Публичные списки: таблица Metro пересобирала строки (терялся `data-id`, ломалось перетаскивание) и искала колонки не по тем именам (поиск ничего не находил). Теперь штатная полоса фильтра и обычная таблица; перетаскивание по живым строкам, при фильтре порядок не пишется.'),
 		])
 		->build(),
 	ChangelogBuilder::create('200.4.0')
@@ -77,7 +86,7 @@ return [
 			__('Файлы плагина находятся в каталоге devcraft/ на сайте, а не в engine/inc/maharder/.'),
 			__('Настройки по-прежнему в одном месте (кеш, язык, логирование, Telegram), оформлены вкладками; можно сохранить только корректные поля.'),
 			__('Меню «Страницы DLE» — быстрый переход в стандартную админку DLE из боковой панели DevCraft.'),
-			__('История изменений: те же release notes, новый формат с группами «Добавлено», «Изменено» и т.д.'),
+			__('История изменений: те же записи о выпуске, новый формат с группами «Добавлено», «Изменено» и т.д.'),
 		])
 		->fixed([
 			__('Фильтры на странице логов (в том числе по дате) работают стабильнее.'),

@@ -2,7 +2,8 @@
 <div id="dc-public-headers-page"
 	 class="dc-public-headers-page"
 	 data-dc-public-headers-page="1"
-	 data-mod="{{ mod }}">
+	 data-mod="{{ mod }}"
+	 data-dc-dnd="{{ dnd_enabled|default(true) ? '1' : '0' }}">
 	<div class="d-flex flex-align-center flex-justify-between mb-3">
 		<div>
 			<h2 class="mb-0">{{ page_title }}</h2>
@@ -14,20 +15,25 @@
 	</div>
 
 	<div class="remark info mb-2">
-		{{ 'Meta name/content для head. Автозаписи нельзя удалить — только выключить. DnD меняет порядок.'|trans }}
+		{{ 'Meta name/content для head. Автозаписи нельзя удалить — только выключить. Порядок — за ручку слева.'|trans }}
+		{% if not dnd_enabled|default(true) %}
+			{{ 'При активном фильтре порядок не меняется — сначала снимите правила.'|trans }}
+		{% endif %}
 	</div>
 
-	<p class="text-small mb-2">{{ rows|length }} {{ 'записей'|trans }}</p>
+	{% include 'core/includes/form/filter_bar.twig' with {
+		mod: mod,
+		action: action,
+		filter_catalog: filter_catalog,
+		filter_rules: filter_rules,
+		filter_chips: filter_chips,
+		order: order,
+		sort: sort
+	} only %}
 
-	<table class="table striped table-border row-hover mt-2 dc-public-headers-table"
-		   data-role="table"
-		   data-show-search="true"
-		   data-show-rows-steps="false"
-		   data-show-table-info="false"
-		   data-show-pagination="false"
-		   data-rows="200"
-		   data-search-fields="name,content,module"
-		   data-table-search-placeholder="{{ 'Поиск…'|trans }}">
+	<p class="text-small mb-2">{{ total|default(rows|length) }} {{ 'записей'|trans }}</p>
+
+	<table id="dc-public-headers-table" class="table striped table-border row-hover mt-2 dc-public-headers-table">
 		<thead>
 			<tr>
 				<th data-sortable="false" style="width:2.5rem;"></th>
@@ -43,12 +49,14 @@
 			{% for row in rows %}
 				<tr class="dc-public-header-row" data-id="{{ row.id }}">
 					<td class="dc-public-drag-cell">
-						<button type="button"
-								class="button cycle outline dc-public-drag"
-								title="{{ 'Перетащить'|trans }}"
-								aria-label="{{ 'Перетащить'|trans }}">
-							<span class="mif-move"></span>
-						</button>
+						{% if dnd_enabled|default(true) %}
+							<button type="button"
+									class="button cycle outline dc-public-drag"
+									title="{{ 'Перетащить'|trans }}"
+									aria-label="{{ 'Перетащить'|trans }}">
+								<span class="mif-line-spacing"></span>
+							</button>
+						{% endif %}
 					</td>
 					<td>
 						<span class="badge {{ row.origin == 'auto' ? 'info' : 'secondary' }}">
@@ -67,6 +75,10 @@
 							   {% if row.active %}checked{% endif %}>
 					</td>
 					<td>
+						<a class="button small secondary"
+						   href="?mod={{ mod }}&action=public_header_edit&id={{ row.id }}">
+							{{ 'Изменить'|trans }}
+						</a>
 						{% if row.origin == 'manual' %}
 							<button type="button"
 									class="button small secondary js-dc-header-copy"

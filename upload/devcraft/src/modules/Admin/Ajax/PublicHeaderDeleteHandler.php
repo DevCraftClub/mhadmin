@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\Ajax;
 
-use DevCraft\Core\Application;
 use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Interfaces\ResponseInterface;
-use DevCraft\Modules\Admin\Models\PublicHeaderEntry;
-use DevCraft\Modules\Admin\Repositories\PublicHeaderEntryRepository;
-use RuntimeException;
+use DevCraft\Modules\Admin\Services\PublicHeaderWriteService;
 use Throwable;
 
 /** Удаление ручного meta-заголовка. */
@@ -19,20 +16,19 @@ final class PublicHeaderDeleteHandler implements AjaxHandlerInterface {
 
 	public function handle(AjaxRequest $request): ResponseInterface {
 		try {
-			$id = (int) ($request->data['id'] ?? 0);
-			/** @var PublicHeaderEntryRepository $repo */
-			$repo  = Application::instance()->database()->repository(PublicHeaderEntry::class);
-			$entry = $repo->findByPK($id);
-
-			if(!$entry instanceof PublicHeaderEntry) {
-				throw new RuntimeException(__('Запись не найдена'));
+			$id   = (int) ($request->data['id'] ?? 0);
+			$mode = isset($request->data['mode']) ? (string) $request->data['mode'] : null;
+			if($mode === '') {
+				$mode = null;
 			}
 
-			if($entry->origin === 'auto') {
-				throw new RuntimeException(__('Автозапись нельзя удалить — только выключить'));
-			}
+			$result = (new PublicHeaderWriteService())->delete($id, $mode);
 
-			$repo->deleteEntity($entry);
+			if(!$result['deleted']) {
+				return JsonResponse::ok(array_merge($result['probe'] ?? [], [
+					'needs_confirm' => true,
+				]));
+			}
 
 			return JsonResponse::toast(__('Удалено'));
 		} catch(Throwable $e) {

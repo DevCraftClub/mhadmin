@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Cache;
 
-use Devcraft\Cache\FileCachePool;
 use DevCraft\Core\Abstracts\AbstractType;
 use DevCraft\Core\Config\DevCraftConfig;
 use DevCraft\Core\Config\Paths;
@@ -24,7 +23,10 @@ use DevCraft\Core\Support\DataManager;
 use Throwable;
 
 /**
- * Фасад файлового кэша DevCraft поверх PSR-6 {@see FileCachePool} (dev-tools).
+ * Фасад файлового кэша DevCraft поверх PSR-6 FileCachePool (пакет `devcraftclub/dev-tools`).
+ *
+ * Если пакет ещё не установлен — используется {@see NullFileCachePool} (без записи на диск),
+ * чтобы админка и переводы не падали на свежей установке.
  *
  * Ключ = `{type}/{name}` после translit. Новым кодом предпочтителен {@see pool()}.
  *
@@ -52,8 +54,12 @@ final class CacheControl {
 
 	/**
 	 * @since 200.4.0
+	 *
+	 * @var \Devcraft\Cache\FileCachePool|NullFileCachePool|null
 	 */
-	private static ?FileCachePool $pool = NULL;
+	private static mixed $pool = NULL;
+
+	private static bool $missingPoolLogged = false;
 
 	/**
 	 * Инициализирует путь к кэшу из конфигурации или переданного аргумента.
@@ -105,11 +111,13 @@ final class CacheControl {
 	}
 
 	/**
-	 * PSR-6 pool (dev-tools).
+	 * PSR-6 pool (dev-tools или пустой запасной вариант).
 	 *
 	 * @since 200.4.0
+	 *
+	 * @return \Devcraft\Cache\FileCachePool|NullFileCachePool
 	 */
-	public static function pool(): FileCachePool {
+	public static function pool(): object {
 		self::ensureInitialized();
 
 		return self::$pool;
@@ -260,9 +268,29 @@ final class CacheControl {
 			self::init();
 		}
 
-		if(self::$pool === NULL || self::$pool->getBaseDir() !== self::$path) {
+		$baseDir = (string) self::$path;
+
+		if(self::$pool !== NULL && self::$pool->getBaseDir() === $baseDir) {
+			return;
+		}
+
+		if(class_exists(\Devcraft\Cache\FileCachePool::class, true)) {
 			$ttl        = self::cacheTimer();
-			self::$pool = new FileCachePool((string) self::$path, $ttl > 0 ? $ttl : 0);
+			self::$pool = new \Devcraft\Cache\FileCachePool($baseDir, $ttl > 0 ? $ttl : 0);
+
+			return;
+		}
+
+		self::$pool = new NullFileCachePool($baseDir);
+
+		if(!self::$missingPoolLogged) {
+			self::$missingPoolLogged = true;
+			LogGenerator::for('CacheControl')->log(
+				[
+					__('Пакет devcraftclub/dev-tools не установлен: файловый кэш отключён до composer install.'),
+				],
+				'warning',
+			);
 		}
 	}
 

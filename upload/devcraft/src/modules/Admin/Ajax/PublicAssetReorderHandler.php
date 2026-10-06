@@ -22,9 +22,22 @@ final class PublicAssetReorderHandler implements AjaxHandlerInterface {
 				$ids = [];
 			}
 
-			(new PublicAssetWriteService())->reorder($kind, $ids);
+			$result = (new PublicAssetWriteService())->reorder($kind, $ids);
+			$data   = [
+				'ids'      => $result['ids'],
+				'adjusted' => $result['reordered'],
+			];
 
-			return JsonResponse::toast(__('Порядок сохранён'));
+			if($result['reordered']) {
+				return JsonResponse::notify(
+					__('Порядок сохранён'),
+					__('Желаемый порядок скорректирован из‑за зависимостей между записями'),
+					JsonResponse::TYPE_WARNING,
+					$data,
+				);
+			}
+
+			return JsonResponse::toast(__('Порядок сохранён'), $data);
 		} catch(Throwable $e) {
 			return JsonResponse::fail(__('Ошибка'), $e->getMessage(), 'error', 400);
 		}

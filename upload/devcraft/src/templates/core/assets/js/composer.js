@@ -34,6 +34,8 @@
 
   function actionLabel(actionType) {
     switch (actionType) {
+      case 'install_all':
+        return t('Установка всех пакетов из composer.json…');
       case 'install':
         return t('Установка пакета…');
       case 'update':
@@ -111,6 +113,8 @@
           const table = getComposerTablePlugin();
           if (table && typeof table.reload === 'function') {
             table.reload();
+          } else if (actionType === 'install_all') {
+            global.location.reload();
           }
         } else if (response.error && response.error.detail && response.error.detail.output) {
           if (DevCraftMetro && typeof DevCraftMetro.dialogCreate === 'function') {

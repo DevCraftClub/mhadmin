@@ -9,6 +9,7 @@ use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Composer\PackagePolicyService;
 use DevCraft\Core\Composer\ComposerDbSyncService;
 use DevCraft\Core\Composer\ComposerRuntimeAdapter;
+use DevCraft\Core\Composer\ComposerInstallAllPlaceholder;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 
 final class ComposerActionHandler implements AjaxHandlerInterface {
@@ -17,6 +18,14 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 		$actionType = (string) ($request->data['actionType'] ?? '');
 		$package    = (string) ($request->data['packageName'] ?? '');
 		$version    = (string) ($request->data['version'] ?? '');
+
+		$isInstallAll = $actionType === 'install_all'
+			|| ($actionType === 'install' && ComposerInstallAllPlaceholder::is($package));
+
+		if($isInstallAll) {
+			$actionType = 'install_all';
+			$package    = ComposerInstallAllPlaceholder::PACKAGE;
+		}
 
 		if($actionType === '' || $package === '') {
 			return JsonResponse::fail(__('Ошибка'), __('Не переданы обязательные параметры'), 'validation', 422);
@@ -47,10 +56,11 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 
 		$runtime = new ComposerRuntimeAdapter();
 		$result  = match ($actionType) {
-			'install' => $runtime->install($package, $version !== ''? $version : NULL),
-			'update'  => $runtime->update($package, $version !== ''? $version : NULL),
-			'remove'  => $runtime->remove($package),
-			default   => NULL,
+			'install_all' => $runtime->installAllFromComposerJson(),
+			'install'     => $runtime->install($package, $version !== ''? $version : NULL),
+			'update'      => $runtime->update($package, $version !== ''? $version : NULL),
+			'remove'      => $runtime->remove($package),
+			default       => NULL,
 		};
 
 		if($result === NULL) {
@@ -77,11 +87,16 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 			], 500);
 		}
 
-		(new ComposerDbSyncService())->applySuccessfulAction(
-			$actionType,
-			$package,
-			$version !== ''? $version : NULL,
-		);
+		$sync = new ComposerDbSyncService();
+		if($actionType === 'install_all') {
+			$sync->syncFromRuntimeSnapshot();
+		} else {
+			$sync->applySuccessfulAction(
+				$actionType,
+				$package,
+				$version !== ''? $version : NULL,
+			);
+		}
 
 		return JsonResponse::ok($data, __('Операция Composer выполнена'));
 	}

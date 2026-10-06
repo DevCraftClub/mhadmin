@@ -53,45 +53,6 @@ final class AjaxController {
 		$request  = AjaxRequest::fromGlobals();
 		$isPublic = $request->controller === 'public';
 
-		$requestHash = (string) ($_REQUEST['user_hash'] ?? '');
-
-		if($requestHash === '' || !isset($dle_login_hash) || $requestHash !== $dle_login_hash) {
-			$this->sendTimed(JsonResponse::fail(
-				__('Ошибка'),
-				__('Недопустимый хеш сессии'),
-				'auth_failed',
-				403,
-			), $mark);
-
-			return;
-		}
-
-		$mark('auth_ok');
-
-		if(!$isPublic && empty($is_loged_in)) {
-			$this->sendTimed(JsonResponse::fail(
-				__('Ошибка'),
-				__('Требуется аутентификация'),
-				'auth_failed',
-				403,
-			), $mark);
-
-			return;
-		}
-
-		if(!$isPublic && !AdminAccess::allowsAjaxMod($request->mod)) {
-			$this->sendTimed(JsonResponse::fail(
-				__('Ошибка'),
-				__('Недостаточно прав'),
-				'forbidden',
-				403,
-			), $mark);
-
-			return;
-		}
-
-		$mark('access_ok');
-
 		$registry    = new AjaxRouteRegistry();
 		$adminPlugin = Application::instance()->registry()->forMod('devcraft');
 
@@ -124,7 +85,50 @@ final class AjaxController {
 			return;
 		}
 
-		if($isPublic && !$registry->allowsGuest($request->controller, $request->method) && empty($is_logged)) {
+		$allowGuest = $isPublic && $registry->allowsGuest($request->controller, $request->method);
+
+		if(!$allowGuest) {
+			$requestHash = (string) ($_REQUEST['user_hash'] ?? '');
+
+			if($requestHash === '' || !isset($dle_login_hash) || $requestHash !== $dle_login_hash) {
+				$this->sendTimed(JsonResponse::fail(
+					__('Ошибка'),
+					__('Недопустимый хеш сессии'),
+					'auth_failed',
+					403,
+				), $mark);
+
+				return;
+			}
+		}
+
+		$mark('auth_ok');
+
+		if(!$isPublic && empty($is_loged_in)) {
+			$this->sendTimed(JsonResponse::fail(
+				__('Ошибка'),
+				__('Требуется аутентификация'),
+				'auth_failed',
+				403,
+			), $mark);
+
+			return;
+		}
+
+		if(!$isPublic && !AdminAccess::allowsAjaxMod($request->mod)) {
+			$this->sendTimed(JsonResponse::fail(
+				__('Ошибка'),
+				__('Недостаточно прав'),
+				'forbidden',
+				403,
+			), $mark);
+
+			return;
+		}
+
+		$mark('access_ok');
+
+		if($isPublic && !$allowGuest && empty($is_logged)) {
 			$this->sendTimed(JsonResponse::fail(
 				__('Ошибка'),
 				__('Требуется авторизация на сайте'),

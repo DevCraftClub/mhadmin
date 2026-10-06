@@ -23,6 +23,11 @@ class ComposerDataRepository extends AbstractRepository {
 		return $entity;
 	}
 
+	/** Есть ли хотя бы один пакет со статусом «не установлен». */
+	public function hasUninstalled(): bool {
+		return $this->select()->where('installed', false)->fetchOne() !== NULL;
+	}
+
 	/**
 	 * @param   array{name:string,version:string,installed:bool,required:bool,plugin?:string,appCode?:string}  $payload
 	 */

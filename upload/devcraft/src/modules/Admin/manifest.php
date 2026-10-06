@@ -30,6 +30,8 @@ use DevCraft\Modules\Admin\Pages\NewModulePage;
 use DevCraft\Modules\Admin\Pages\PublicStylesPage;
 use DevCraft\Modules\Admin\Pages\PublicScriptsPage;
 use DevCraft\Modules\Admin\Pages\PublicHeadersPage;
+use DevCraft\Modules\Admin\Pages\PublicAssetEditPage;
+use DevCraft\Modules\Admin\Pages\PublicHeaderEditPage;
 use DevCraft\Builders\ModuleSiteAssetsBuilder;
 use DevCraft\Modules\Admin\Ajax\DumpAutoloadHandler;
 use DevCraft\Modules\Admin\Ajax\SettingsHandler;
@@ -80,6 +82,8 @@ return ModuleManifestBuilder::create()
 		AdminLink::page(__('Публичные стили'), 'public_styles', PublicStylesPage::class, 'mif-palette'),
 		AdminLink::page(__('Публичные скрипты'), 'public_scripts', PublicScriptsPage::class, 'mif-file-code'),
 		AdminLink::page(__('Публичные заголовки'), 'public_headers', PublicHeadersPage::class, 'mif-tags'),
+		AdminLink::hidden('public_asset_edit', PublicAssetEditPage::class),
+		AdminLink::hidden('public_header_edit', PublicHeaderEditPage::class),
 		AdminLink::page(__('Вывод логов'), 'logs', LogsPage::class, 'mif-list'),
 		AdminLink::page(__('Composer'), 'composer', ComposerPage::class, 'mif-tools'),
 		AdminLink::page(__('История изменений'), 'changelog', ChangelogPage::class, 'mif-library'),

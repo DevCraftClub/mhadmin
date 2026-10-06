@@ -19,9 +19,10 @@ use DevCraft\Modules\Admin\Repositories\PublicAssetEntryRepository;
 	table: 'dc_public_assets',
 )]
 #[Index(columns: ['kind', 'sort_order'], name: 'idx_dc_pub_asset_kind_sort')]
-#[Index(columns: ['kind', 'local_path'], name: 'idx_dc_pub_asset_kind_path')]
 #[Index(columns: ['module_code'], name: 'idx_dc_pub_asset_module')]
 class PublicAssetEntry extends AbstractEntity {
+
+	use PublicResourceDepsColumnsTrait;
 
 	/** css | js */
 	#[Column(type: 'string', size: 8)]
@@ -43,6 +44,7 @@ class PublicAssetEntry extends AbstractEntity {
 	#[Column(type: 'string', size: 1024, nullable: true, default: null)]
 	public ?string $source_url = null;
 
+	/** Не индексировать: utf8mb4 × 1024 превышает лимит ключа MySQL (3072 байта). */
 	#[Column(type: 'string', size: 1024)]
 	public string $local_path = '';
 

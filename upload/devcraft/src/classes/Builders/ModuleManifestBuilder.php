@@ -56,6 +56,9 @@ final class ModuleManifestBuilder {
 
 	private ?string $extends = NULL;
 
+	/** PSR-4 префикс; null — fallback `DevCraft\Modules\{каталог}\` при build. */
+	private ?string $namespace = NULL;
+
 	public static function create(): self {
 		return new self();
 	}
@@ -65,6 +68,20 @@ final class ModuleManifestBuilder {
 	 */
 	public function extends(string $hostMod): self {
 		$this->extends = $hostMod;
+
+		return $this;
+	}
+
+	/**
+	 * Задаёт PSR-4 префикс модуля (завершающий «\» нормализуется).
+	 *
+	 * Пустая строка сбрасывает кастомный префикс — при build сработает fallback каталога.
+	 *
+	 * @since 200.4.1
+	 */
+	public function namespace(string $ns): self {
+		$normalized = ModuleManifest::normalizeNamespace($ns);
+		$this->namespace = $normalized !== ''? $normalized : NULL;
 
 		return $this;
 	}
@@ -299,6 +316,10 @@ final class ModuleManifestBuilder {
 
 		if($this->extends !== NULL && $this->extends !== '') {
 			$data['extends'] = $this->extends;
+		}
+
+		if($this->namespace !== NULL && $this->namespace !== '') {
+			$data['namespace'] = $this->namespace;
 		}
 
 		if($this->crowdinName !== NULL) {

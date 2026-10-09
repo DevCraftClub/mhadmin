@@ -99,16 +99,31 @@ final class JsonResponse implements ResponseInterface {
 	) {}
 
 	/**
-	 * Возвращает копию ответа с дополнительными ключами в data (для диагностики).
+	 * Возвращает копию ответа с дополнительными ключами диагностики.
 	 *
-	 * @param   array<string, mixed>  $extra  Данные для слияния в data.
+	 * Если `data` — список строк (таблица Metro: header/data/total), ключи
+	 * пишутся в корень ответа, иначе таблица принимает замер времени за отдельную строку.
+	 * Если `data` — ассоциативный массив (`JsonResponse::ok()`), ключи сливаются в `data`.
+	 *
+	 * @param   array<string, mixed>  $extra  Данные диагностики (например `pipeline_ms`).
 	 */
 	public function withData(array $extra): self {
-		$payload         = $this->payload;
-		$payload['data'] = array_merge(
-			is_array($payload['data'] ?? null) ? $payload['data'] : [],
-			$extra,
-		);
+		$payload = $this->payload;
+		$current = is_array($payload['data'] ?? null) ? $payload['data'] : [];
+
+		if(array_is_list($current)) {
+			foreach($extra as $key => $value) {
+				if($key === 'data' || $key === 'header' || $key === 'total') {
+					continue;
+				}
+
+				$payload[$key] = $value;
+			}
+
+			return new self($payload, $this->status_code);
+		}
+
+		$payload['data'] = array_merge($current, $extra);
 
 		return new self($payload, $this->status_code);
 	}

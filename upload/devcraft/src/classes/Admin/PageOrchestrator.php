@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace DevCraft\Core\Admin;
 
 use DevCraft\Types\Changelog;
+use DevCraft\Core\Application;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Module\PluginContext;
 use DevCraft\Core\Module\ModuleExtensionMerger;
@@ -58,8 +59,11 @@ final class PageOrchestrator {
 	public function prepare(PageInterface $page, PluginContext $plugin, string $action): array {
 		$vars = [];
 
+		$registry  = Application::instance()->registry();
+		$extension = ModuleExtensionMerger::extensionForAction($plugin, $action, $registry);
+
 		if($page instanceof SettingsPageInterface) {
-			$schema = $plugin->settingsSchema();
+			$schema = ModuleExtensionMerger::settingsSchemaForAction($plugin, $action, $registry);
 
 			if($schema === NULL) {
 				$vars['schema_error'] = __('Схема настроек не найдена.');
@@ -77,13 +81,14 @@ final class PageOrchestrator {
 				$plugin->mod(),
 				$plugin->ajaxController(),
 			);
-			$vars['modInfo']  = $plugin->meta();
+			$vars['modInfo']  = $extension?->meta() ?? $plugin->meta();
 		}
 
-		if($action === 'changelog') {
+		if($action === 'changelog' || str_ends_with($action, '_changelog')) {
+			$logPlugin = $extension ?? $plugin;
 			$vars['changelog'] = array_map(
 				static fn(Changelog $entry): array => $entry->toArray(),
-				$plugin->changelog(),
+				$logPlugin->changelog(),
 			);
 		}
 

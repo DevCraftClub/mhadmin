@@ -21,6 +21,7 @@ use DevCraft\Types\FormSchema;
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Core\Module\ModuleExtensionMerger;
 
 /**
  * Строит view-model и валидирует данные формы настроек модуля.
@@ -56,7 +57,10 @@ final class SettingsFormService {
 	): array {
 		global $config;
 
-		$settings = DataManager::getConfig($schema->codename);
+		$settings = ModuleExtensionMerger::hydrateSettings(
+			DataManager::getConfig($schema->codename),
+			$schema,
+		);
 		$fields   = [];
 
 		foreach($schema->allFields() as $field) {
@@ -81,6 +85,7 @@ final class SettingsFormService {
 				$description .= ' => <b>' . $newsNumber . '</b>.';
 			}
 
+			$options   = $this->fieldOptions($field, $supplements);
 			$fieldData = [
 				'id'          => $field->id,
 				'type'        => $field->type,
@@ -91,8 +96,8 @@ final class SettingsFormService {
 				'metro'       => $field->metro,
 			];
 
-			if($field->options !== [] || isset($supplements[$field->id])) {
-				$fieldData['options'] = $supplements[$field->id] ?? $field->options;
+			if($options !== []) {
+				$fieldData['options'] = $options;
 			}
 
 			$fields[] = $fieldData;
@@ -122,6 +127,29 @@ final class SettingsFormService {
 			'sections' => $sections,
 			'save_url' => Paths::ajaxUrl('settings', $controller, $mod),
 		];
+	}
+
+	/**
+	 * Options поля: сначала id с префиксом соседнего модуля `{code}__{field}`, затем имя без префикса.
+	 *
+	 * @param   array<string, array<string, string>>  $supplements
+	 *
+	 * @return array<string, string>
+	 */
+	private function fieldOptions(FormField $field, array $supplements): array {
+		if(isset($supplements[$field->id]) && is_array($supplements[$field->id])) {
+			return $supplements[$field->id];
+		}
+
+		if(str_contains($field->id, '__')) {
+			[, $suffix] = explode('__', $field->id, 2);
+
+			if($suffix !== '' && isset($supplements[$suffix]) && is_array($supplements[$suffix])) {
+				return $supplements[$suffix];
+			}
+		}
+
+		return $field->options;
 	}
 
 	/**

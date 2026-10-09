@@ -122,6 +122,64 @@ final class ModuleExtensionMerger {
 		return $parts['host'];
 	}
 
+	/**
+	 * Соседний модуль, в меню которого есть это действие (после встраивания в основной).
+	 */
+	public static function extensionForAction(PluginContext $host, string $action, Registry $registry): ?PluginContext {
+		if($action === '') {
+			return NULL;
+		}
+
+		foreach($registry->extensionsOf($host->mod()) as $extension) {
+			if($extension->pageClass($action) !== NULL) {
+				return $extension;
+			}
+		}
+
+		return NULL;
+	}
+
+	/**
+	 * Схема формы для страницы: у соседнего модуля — только его поля `{code}__…`.
+	 */
+	public static function settingsSchemaForAction(PluginContext $host, string $action, Registry $registry): ?FormSchema {
+		$schema = $host->settingsSchema();
+
+		if($schema === NULL) {
+			return NULL;
+		}
+
+		$extension = self::extensionForAction($host, $action, $registry);
+
+		if($extension === NULL) {
+			return $schema;
+		}
+
+		$code   = $extension->moduleData()->code ?? $extension->mod();
+		$prefix = $code . '__';
+		$keep   = [];
+
+		foreach($schema->sections as $section) {
+			$fields = [];
+
+			foreach($section->fields as $field) {
+				if(str_starts_with($field->id, $prefix)) {
+					$fields[] = $field;
+				}
+			}
+
+			if($fields !== []) {
+				$keep[] = new FormSection($section->title, $fields);
+			}
+		}
+
+		if($keep === []) {
+			return $schema;
+		}
+
+		return new FormSchema($schema->codename, $keep, $schema->layout);
+	}
+
 	private static function mergeInto(PluginContext $host, PluginContext $extension): void {
 		$hostMod = $host->mod();
 		$meta    = $extension->meta();

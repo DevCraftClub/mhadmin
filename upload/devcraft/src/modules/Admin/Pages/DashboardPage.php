@@ -62,7 +62,6 @@ final class DashboardPage extends AbstractPage {
 		$mod         = $plugin?->mod() ?? AdminIdentity::mod();
 		$menu        = [];
 		$composerUrl = '?mod=' . $mod . '&action=composer';
-		$crowdin     = $this->buildCrowdinDisplay($plugin);
 		$metrics     = new DashboardPackageMetricService();
 
 		foreach($context->menu() as $link) {
@@ -83,16 +82,7 @@ final class DashboardPage extends AbstractPage {
 			'data' => [
 				'page_title' => (string) ($meta['name'] ?? 'DevCraft'),
 				'dashboard'  => [
-					'app'              => [
-						'name'        => (string) ($meta['name'] ?? 'DevCraft'),
-						'version'     => (string) ($meta['version'] ?? '0.0.0'),
-						'description' => (string) ($meta['description'] ?? ''),
-						'icon'        => (string) ($meta['icon'] ?? ''),
-						'docs_link'   => (string) ($meta['docsLink'] ?? ''),
-						'site_link'   => (string) ($meta['siteLink'] ?? ''),
-						'site_id'     => (int) ($meta['siteId'] ?? 0),
-						'code'        => (string) ($meta['module_code'] ?? $mod),
-					],
+					'app'              => $meta,
 					'author'           => $context->author()->toArray(),
 					'lic_link'         => $context->licLink(),
 					'menu'             => $menu,
@@ -107,36 +97,9 @@ final class DashboardPage extends AbstractPage {
 						'install_all_package' => ComposerInstallAllPlaceholder::PACKAGE,
 						'packages'            => $metrics->packagesForDashboard(),
 						'dump_autoload_url'   => 'dump_autoload',
-					],
-					'crowdin'          => $crowdin,
+					]
 				],
 			],
-		];
-	}
-
-	/**
-	 * Формирует данные для статического Crowdin-бейджа на панели.
-	 *
-	 * @since 200.4.0
-	 *
-	 * @param   PluginContext|null  $plugin  Контекст модуля из реестра.
-	 *
-	 * @return  array<string, string>|null  URL и идентификаторы или null без конфигурации.
-	 */
-	private function buildCrowdinDisplay(?PluginContext $plugin): ?array {
-		$data   = $plugin?->moduleData();
-		$name   = $data?->crowdinName !== NULL? trim($data->crowdinName) : '';
-		$statId = $data?->crowdinStatId !== NULL? trim($data->crowdinStatId) : '';
-
-		if($name === '' || $statId === '') {
-			return NULL;
-		}
-
-		return [
-			'name'        => $name,
-			'stat_id'     => $statId,
-			'badge_url'   => 'https://d322cqt584bo4o.cloudfront.net/' . rawurlencode($statId) . '.png',
-			'project_url' => 'https://crowdin.com/project/' . rawurlencode($name),
 		];
 	}
 

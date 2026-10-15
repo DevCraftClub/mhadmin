@@ -2,7 +2,7 @@
 	"name": "devcraftclub/admin-panel",
 	"description": "DevCraft — DLE >= 20.х admin plugin",
 	"license": "MIT",
-	"version": "200.4.1",
+	"version": "200.4.2",
 	"require": {
 		"php": "^8.3",
 		"ext-curl": "*",

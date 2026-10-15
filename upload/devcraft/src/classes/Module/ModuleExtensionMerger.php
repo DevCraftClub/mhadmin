@@ -185,6 +185,11 @@ final class ModuleExtensionMerger {
 		$meta    = $extension->meta();
 		$title   = (string) ($meta['name'] ?? $extension->mod());
 
+
+		if (count($extension->menu()) > 0) {
+			$host->appendMenuLink(new AdminLink("{$title}, v{$meta['version']}", type: 'divider'));
+		}
+
 		foreach($extension->menu() as $link) {
 			$host->appendMenuLink(self::rewriteLink($link, $hostMod));
 		}

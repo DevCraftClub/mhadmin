@@ -3,50 +3,59 @@
 {% set app = d.app %}
 
 <div class="dc-dashboard"
-     data-site-id="{{ app.site_id|default(0) }}"
+     data-site-id="{{ app.siteId|default(0) }}"
      data-version="{{ app.version }}">
-    <div class="remark info dc-dashboard-card dc-dashboard-hero mb-4">
-        <div class="dc-dashboard-app-header">
-            {% if app.icon %}
-                <span class="dc-dashboard-app-icon {{ app.icon }}" aria-hidden="true"></span>
-            {% endif %}
-            <div>
-                <h2 class="m-0">{{ app.name }}</h2>
-                <span class="badge inline bg-cyan fg-white mt-1">v{{ app.version }}</span>
-            </div>
+    <div class="more-info-box mb-4">
+
+        <div class="icon">
+            <span class="{{ app.icon }}"></span>
         </div>
-        {% if app.description %}
-            <p class="mt-3 mb-2">{{ app.description }}</p>
-        {% endif %}
-        <div class="mt-2">
-            {% if app.site_link %}
-                <a href="{{ app.site_link }}" class="button outline small mr-1" target="_blank" rel="noopener">
+        <div class="content p-2">
+            <div class="value">{{ app.name }} </div>
+            {% if app.description %}<p class="title">{{ app.description }}</p>{% endif %}
+        </div>
+
+        <div class="more">
+            {% if app.siteLink %}
+                <a href="{{ app.siteLink }}" class="button outline mini mr-1" target="_blank" rel="noopener">
                     <span class="mif-earth mr-1"></span> {{ 'Сайт'|trans }}
                 </a>
             {% endif %}
-            {% if app.docs_link %}
-                <a href="{{ app.docs_link }}" class="button outline small mr-1" target="_blank" rel="noopener">
+            {% if app.docsLink %}
+                <a href="{{ app.docsLink }}" class="button outline mini mr-1" target="_blank" rel="noopener">
                     <span class="mif-library mr-1"></span> {{ 'Документация'|trans }}
                 </a>
             {% endif %}
+            {% if app.licLink %}
+            <a href="{{ app.licLink }}" class="button outline mini mr-1" target="_blank" rel="noopener">
+                <span class="mif-grading mr-1"></span> {{ 'Пользовательское соглашение'|trans }}
+            </a>
+            {% endif %}
             {% if d.show_assets|default(false) %}
-                <button type="button" class="button outline small mr-1 js-check-assets">
+                <button type="button" class="button outline mini mr-1 js-check-assets">
                     <span class="mif-loop2 mr-1 js-check-assets-icon"></span> {{ 'Проверить ресурсы'|trans }}
                     <span class="badge inline bg-red fg-white ml-1 dc-assets-badge d-none" id="dc-assets-badge">0</span>
                 </button>
             {% endif %}
-            {% if d.show_update|default(false) %}
-                {% if app.site_id|default(0) > 0 %}
-                    <button type="button" class="button outline small js-check-update">
-                        <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
-                    </button>
-                {% else %}
-                    <button type="button" class="button outline small" disabled title="{{ 'ID ресурса не настроен в manifest.php'|trans }}">
-                        <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
-                    </button>
-                {% endif %}
+
+            {% if app.siteId|default(0) > 0 %}
+                <button type="button" class="button outline mini js-check-update">
+                    <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
+                </button>
+            {% else %}
+                <button type="button" class="button outline mini" disabled title="{{ 'ID ресурса не настроен в manifest.php'|trans }}">
+                    <span class="mif-cloud-upload mr-1"></span> {{ 'Проверить версию'|trans }}
+                </button>
+            {% endif %}
+            <span class="badge badge-red">v{{ app.version }}</span>
+
+            {% if app.crowdinName and app.crowdinStatId %}
+                <a href="https://crowdin.com/project/{{ app.crowdinName }}" class="button outline mini mr-1" target="_blank" rel="noopener">
+                    <img src="https://img.shields.io/badge/dynamic/json?color=blue&label={{ devcraft_html_lang }}&style=flat&logo=crowdin&query=%24.progress.0.data.translationProgress&url=https%3A%2F%2Fbadges.awesome-crowdin.com%2Fstats-{{ app.crowdinStatId }}.json" />
+                </a>
             {% endif %}
         </div>
+
     </div>
 
     {% if d.stats is defined and d.stats|length > 0 %}
@@ -83,15 +92,6 @@
     {% endif %}
 
     {% include 'core/includes/dashboard/composer_panel.twig' %}
-
-    {% if d.crowdin %}
-        <div class="remark dc-dashboard-card mb-4">
-            <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Переводы Crowdin'|trans }}</h4>
-            <a href="{{ d.crowdin.project_url }}" target="_blank" rel="noopener">
-                <img src="{{ d.crowdin.badge_url }}" alt="Crowdin" />
-            </a>
-        </div>
-    {% endif %}
 
     <div class="grid dc-dashboard-grid">
         <div class="row">

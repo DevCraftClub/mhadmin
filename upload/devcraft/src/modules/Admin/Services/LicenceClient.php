@@ -30,7 +30,7 @@ final class LicenceClient {
 		if($response === null) {
 			return [
 				'hide'    => false,
-				'message' => 'Сервер не ответил',
+				'message' => __('Сервер не ответил'),
 			];
 		}
 
@@ -38,14 +38,14 @@ final class LicenceClient {
 		if($error === 'unknown_key' || (($response['ok'] ?? false) === false && $error === 'unknown_key')) {
 			return [
 				'hide'    => false,
-				'message' => 'Ключ не найден',
+				'message' => __('Ключ не найден'),
 			];
 		}
 
 		if(($response['ok'] ?? false) !== true) {
 			$message = match ($error) {
-				'empty_site' => 'Адрес сайта пустой',
-				default      => 'Ключ не найден',
+				'empty_site' => __('Адрес сайта пустой'),
+				default      => __('Ключ не найден'),
 			};
 
 			return [
@@ -56,7 +56,7 @@ final class LicenceClient {
 
 		$message = '';
 		if(!empty($response['support_ended'])) {
-			$message = 'Помощь по этой лицензии уже кончилась';
+			$message = __('Помощь по этой лицензии уже кончилась');
 		}
 
 		return [

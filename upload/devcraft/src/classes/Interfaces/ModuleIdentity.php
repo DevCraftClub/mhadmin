@@ -38,4 +38,34 @@ interface ModuleIdentity {
 	 */
 	public static function code(): string;
 
+	/**
+	 * Версия модуля (номер выпуска, например, `1.0.0`).
+	 *
+	 * @since 200.4.2
+	 */
+	public static function version(): string;
+
+	/**
+	 * Название модуля (название, например, `DLE API`).
+	 *
+	 * @since 200.4.2
+	 */
+	public static function name(): string;
+
+	public static function description(): string|null;
+
+	public static function icon(): string|null;
+
+	public static function crowdInName(): string|null;
+
+	public static function crowdInStats(): string|null;
+
+	public static function siteUrl(): string|null;
+
+	public static function docsUrl(): string|null;
+
+	public static function siteId(): int|null;
+
+	public static function licenceAgreement(): string|null;
+
 }

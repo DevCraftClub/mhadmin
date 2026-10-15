@@ -23,9 +23,7 @@ final class PublicAssetSaveHandler implements AjaxHandlerInterface {
 				|| array_key_exists('not_available', $request->data);
 
 			$service = new PublicAssetWriteService();
-			$entry   = $isEdit
-				? $service->saveEdit($request->data)
-				: $service->save($request->data);
+			$entry   = $isEdit ? $service->saveEdit($request->data)	: $service->save($request->data);
 
 			$kind       = $entry->kind;
 			$listAction = $kind === 'css' ? 'public_styles' : 'public_scripts';

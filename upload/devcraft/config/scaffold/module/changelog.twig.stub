@@ -1,4 +1,4 @@
-<h2>История изменений</h2>
+<h2>{{ "Журнал изменений"|trans }}</h2>
 
 {% if changelog is defined and changelog|length > 0 %}
     <ul class="timeline dc-changelog-timeline">
@@ -28,5 +28,5 @@
         {% endfor %}
     </ul>
 {% else %}
-    <p class="fg-gray">Записей журнала изменений пока нет.</p>
+    <p class="fg-gray">{{ "Записей журнала изменений пока нет."|trans }}</p>
 {% endif %}

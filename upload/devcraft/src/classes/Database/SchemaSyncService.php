@@ -21,6 +21,7 @@ use Cycle\Migrations;
 use Cycle\Migrations\Capsule;
 use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Migrations\State;
+use Cycle\ORM\SchemaInterface;
 use Cycle\Schema\Compiler;
 use Cycle\Schema\Generator;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
@@ -287,7 +288,7 @@ final class SchemaSyncService {
 	}
 
 	private function ormSchemaBootstrapNeeded(): bool {
-		foreach(['devcraft_migrations', 'devcraft_logs', 'devcraft_composer_data'] as $suffix) {
+		foreach(['devcraft_migrations', 'devcraft_logs', 'devcraft_composer_data', 'dc_public_headers', 'dc_public_assets'] as $suffix) {
 			if(!$this->tableExists(PREFIX . '_' . $suffix)) {
 				return true;
 			}
@@ -311,10 +312,10 @@ final class SchemaSyncService {
 		$composerModels = Paths::src() . '/classes/Composer/Models';
 
 		if(is_dir($composerModels)) {
-			$parts[] = $composerModels . ':' . (string) (@filemtime($composerModels) ?: 0);
+			$parts[] = $composerModels . ':' . (@filemtime($composerModels) ?: 0);
 
 			foreach(glob($composerModels . '/*.php') ?: [] as $file) {
-				$parts[] = $file . ':' . (string) (@filemtime($file) ?: 0);
+				$parts[] = $file . ':' . (@filemtime($file) ?: 0);
 			}
 		}
 
@@ -508,8 +509,6 @@ final class SchemaSyncService {
 				}
 			}
 
-			// Внешний ключ INT UNSIGNED → BIGINT (id AbstractEntity) даёт MySQL errno 150.
-			// Файл, который ещё должен создать таблицу, из очереди не снимаем.
 			if(
 				$missing === 0
 				&& (str_contains($migrationName, '_add_fk_') || str_contains($migrationName, '_add_foreign_'))
@@ -519,8 +518,6 @@ final class SchemaSyncService {
 			}
 
 			if($createTables !== []) {
-				// Часть таблиц уже есть: повтор up() падает на CREATE и откатывает весь шаг,
-				// в том числе журнал или заголовки. Недостающее — отдельный новый файл.
 				if($missing < count($createTables)) {
 					$this->markMigrationAsExecuted($migrationTable, $state);
 				}
@@ -575,7 +572,7 @@ final class SchemaSyncService {
 				continue;
 			}
 
-			$table = $def[\Cycle\ORM\SchemaInterface::TABLE] ?? null;
+			$table = $def[SchemaInterface::TABLE] ?? null;
 
 			if(!is_string($table) || $table === '') {
 				continue;
@@ -699,7 +696,6 @@ final class SchemaSyncService {
 			return;
 		}
 
-		// created_at — время из имени файла: Cycle ищет строку по паре имя + это время, не по NOW().
 		$this->gateway->query(
 			"INSERT INTO `{$migrationTable}` (`migration`, `time_executed`, `created_at`) VALUES (:migration, :executed, :created_at)",
 			[

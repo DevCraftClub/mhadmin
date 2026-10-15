@@ -82,7 +82,7 @@ final class AssetsCheckerService {
 	 * @param   string|null  $manifestPath  Путь к assets.json или null для Paths::config().
 	 */
 	public function __construct(?string $manifestPath = NULL) {
-		$this->manifestPath = $manifestPath ?? Paths::config() . '/assets.json';
+		$this->manifestPath = $manifestPath ?? Paths::cache() . '/assets.json';
 	}
 
 	/**
@@ -423,7 +423,6 @@ final class AssetsCheckerService {
 
 		$blockedPrefixes = [
 			'/devcraft/vendor/',
-			'/devcraft/src/',
 			'/devcraft/config/',
 			'/devcraft/locales/',
 			'/devcraft/var/',

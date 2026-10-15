@@ -14,7 +14,6 @@
 declare(strict_types=1);
 
 use DevCraft\Modules\Admin\AdminIdentity;
-
 use DevCraft\Types\AdminLink;
 use DevCraft\Types\ModuleManifest;
 use DevCraft\Builders\ModuleManifestBuilder;
@@ -60,22 +59,13 @@ use DevCraft\Modules\Admin\Ajax\PublicHeaderToggleHandler;
  *
  * @package    DevCraft
  * @since      200.4.0
+ * @version    200.4.2
  * @subpackage Modules.Admin
  *
  * @return ModuleManifest
  */
 return ModuleManifestBuilder::create()
-	->mod(AdminIdentity::mod())
-	->code(AdminIdentity::code())
-	->crowdinName('mhadmin')
-	->crowdinStatId('16830581-755131')
-	->name('DevCraft Admin')
-	->version('200.4.2')
-	->description(__('DevCraft — админ-оболочка для плагинов DLE'))
-	->icon('mif-construction')
-	->docsLink('https://readme.devcraft.club/latest/dev/devcraft_admin/install/')
-	->siteLink('https://devcraft.club/')
-	->siteId(4)
+	->identify(AdminIdentity::class)
 	->menu([
 		AdminLink::page(__('Главная'), 'dashboard', DashboardPage::class, 'mif-home'),
 		AdminLink::page(__('Настройки'), 'settings', SettingsPage::class, 'mif-cog'),
@@ -116,12 +106,12 @@ return ModuleManifestBuilder::create()
 			])
 	)
 	->composerRequired([
-		ComposerTypeBuilder::create('devcraftclub/dev-tools')->minVersion('^1.0')->hardRequired()->build(),
+		ComposerTypeBuilder::create('devcraftclub/dev-tools')->minVersion('^1.1')->hardRequired()->build(),
 		ComposerTypeBuilder::create('twig/twig')->minVersion('3.14')->hardRequired()->build(),
 		ComposerTypeBuilder::create('cycle/orm')->minVersion('2.9')->hardRequired()->build(),
 		ComposerTypeBuilder::create('symfony/translation')->minVersion('7.4')->hardRequired()->build(),
 	])
-	->changelog(require DLEPlugins::Check(DEVCRAFT_MODULES . '/Admin/changelog.data.php'))
+	->changelog(require DLEPlugins::Check(__DIR__ . '/changelog.data.php'))
 	->assets(ModuleAssetsBuilder::create()->js('admin.js'))
 	->siteAssets(
 		ModuleSiteAssetsBuilder::create()

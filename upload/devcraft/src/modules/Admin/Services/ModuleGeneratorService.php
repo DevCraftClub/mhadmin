@@ -55,7 +55,7 @@ final class ModuleGeneratorService {
 			return str_replace('.', '', (string) VERSIONID) . '.1.0';
 		}
 
-		return '200.1.0';
+		return '210.1.0';
 	}
 
 	/**

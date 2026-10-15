@@ -15,10 +15,4 @@ if (!defined('DATALIFEENGINE') || !defined('LOGGED_IN')) {
     exit('Hacking attempt!');
 }
 
-require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
-
-if (!defined('DEVCRAFT_BOOTSTRAPPED')) {
-    return;
-}
-
 DevCraft\Core\Application::instance()->runAdmin(moduleDir: '%dir%');

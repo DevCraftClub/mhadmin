@@ -9,12 +9,12 @@ use DevCraft\Core\Abstracts\AbstractPage;
 final class ChangelogPage extends AbstractPage {
 
     public function handle(): array {
-        $this->addBreadcrumb('История изменений');
+        $this->addBreadcrumb(__('Журнал изменений'));
 
         return [
             'view' => '%latin%/changelog.twig',
             'data' => [
-                'page_title' => 'История изменений',
+                'page_title' => __('Журнал изменений'),
             ],
         ];
     }

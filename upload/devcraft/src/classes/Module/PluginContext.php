@@ -164,17 +164,7 @@ final class PluginContext {
 	 * @return array<string, mixed>
 	 */
 	public function meta(): array {
-		$meta = [
-			'name'        => $this->manifest->name,
-			'version'     => $this->manifest->version,
-			'description' => $this->manifest->description,
-			'icon'        => $this->manifest->icon,
-			'docsLink'    => $this->manifest->docsLink,
-			'siteLink'    => $this->manifest->siteLink,
-			'siteId'      => $this->manifest->siteId,
-			'licLink'     => $this->manifest->licLink,
-			'module_code' => $this->manifest->code ?? $this->mod,
-		];
+		$meta = $this->manifest->toArray();
 
 		if($this->manifest->author !== NULL) {
 			$meta['author'] = $this->manifest->author->toArray();

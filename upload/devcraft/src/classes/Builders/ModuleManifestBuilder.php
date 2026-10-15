@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace DevCraft\Builders;
 
 use Closure;
+use DevCraft\Core\Abstracts\AbstractModuleIdentity;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 use InvalidArgumentException;
 use DevCraft\Core\Types\ComposerType;
 use DevCraft\Types\AdminLink;
@@ -61,6 +64,54 @@ final class ModuleManifestBuilder {
 
 	public static function create(): self {
 		return new self();
+	}
+
+	/**
+	 * Обновляет информацию о модуле.
+	 *
+	 * @param   string  $identity
+	 *
+	 * @return $this
+	 * @throws \ReflectionException
+	 */
+	public function identify(string $identity): self {
+		try {
+			$reflection = new \ReflectionClass($identity);
+		}
+		catch (\ReflectionException $e) {
+			LogGenerator::for(ModuleManifestBuilder::class)
+			            ->log(__('Не удалось получить информацию о модуле: {message}', ['{message}' => $e->getMessage()]));
+
+			return $this;
+		}
+
+		if (!$reflection->isSubclassOf(AbstractModuleIdentity::class)) {
+			LogGenerator::for(ModuleManifestBuilder::class)
+			            ->log(__('Идентификация плагина должна быть подклассом AbstractModuleIdentity'));
+
+			return $this;
+		}
+
+		/** @var AbstractModuleIdentity $id */
+		$id = $reflection->newInstance();
+
+		$this->mod($id->mod());
+		$this->code($id->code());
+		$this->name($id->name());
+		$this->description($id->description());
+		$this->version($id->version());
+		$this->icon($id->icon());
+
+		$this->siteLink($id->siteUrl());
+		$this->siteId($id->siteId());
+		$this->docsLink($id->docsUrl());
+
+		$this->crowdinName($id->crowdinName());
+		$this->crowdinStatId($id->crowdInStats());
+
+		$this->meta['licLink'] = $id->licenceAgreement();
+
+		return $this;
 	}
 
 	/**
@@ -243,6 +294,8 @@ final class ModuleManifestBuilder {
 
 	/**
 	 * @param   list<Changelog|array<string, mixed>>|Changelog  $entries
+	 *
+	 * @throws \DateMalformedStringException
 	 */
 	public function changelog(array|Changelog $entries): self {
 		if($entries instanceof Changelog) {

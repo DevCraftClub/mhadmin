@@ -16,8 +16,10 @@ declare(strict_types=1);
 
 namespace DevCraft\Types;
 
+use DevCraft\Core\Abstracts\AbstractModuleIdentity;
 use DevCraft\Core\Types\ComposerType;
 use DevCraft\Builders\AuthorBuilder;
+use Exception;
 
 /**
  * Метаданные зарегистрированного модуля DevCraft.
@@ -113,7 +115,7 @@ final readonly class ModuleManifest {
 	/**
 	 * Создаёт метаданные модуля из массива манифеста.
 	 *
-	 * @since 200.4.0
+	 * @since   200.4.0
 	 *
 	 * @param   string                $mod         Код модуля.
 	 * @param   array<string, mixed>  $manifest    Данные `manifest.php`.
@@ -126,21 +128,21 @@ final readonly class ModuleManifest {
 	 */
 	public static function fromManifest(string $mod, array $manifest, string $modulePath): self {
 		/** @var array<string, mixed> $meta */
-		$meta  = is_array($manifest['meta'] ?? NULL)? $manifest['meta'] : [];
+		$meta  = is_array($manifest['meta'] ?? NULL) ? $manifest['meta'] : [];
 		$menu  = self::parseMenu($manifest['menu'] ?? []);
 		$pages = self::pagesFromMenu($menu);
 
 		$changelogRaw = $manifest['changelog'] ?? [];
-		$changelog    = is_array($changelogRaw)? Changelog::listFromManifest($changelogRaw) : [];
+		$changelog    = is_array($changelogRaw) ? Changelog::listFromManifest($changelogRaw) : [];
 
 		$composerRaw = $manifest['composer_required'] ?? [];
 		$composer    = [];
 
-		if(is_array($composerRaw)) {
-			foreach($composerRaw as $rule) {
-				if($rule instanceof ComposerType) {
+		if (is_array($composerRaw)) {
+			foreach ($composerRaw as $rule) {
+				if ($rule instanceof ComposerType) {
 					$composer[] = $rule;
-				} elseif(is_array($rule)) {
+				} elseif (is_array($rule)) {
 					$composer[] = ComposerType::fromArray($rule);
 				}
 			}
@@ -149,21 +151,21 @@ final readonly class ModuleManifest {
 		$ajaxRaw = $manifest['ajax'] ?? [];
 		$ajax    = $ajaxRaw instanceof ModuleAjaxConfig
 			? $ajaxRaw
-			: ModuleAjaxConfig::fromArray(is_array($ajaxRaw)? $ajaxRaw : []);
+			: ModuleAjaxConfig::fromArray(is_array($ajaxRaw) ? $ajaxRaw : []);
 
 		$assetsRaw = $manifest['assets'] ?? [];
 		$assets    = $assetsRaw instanceof ModuleAssets
 			? $assetsRaw
-			: ModuleAssets::fromArray(is_array($assetsRaw)? $assetsRaw : []);
+			: ModuleAssets::fromArray(is_array($assetsRaw) ? $assetsRaw : []);
 
 		$siteAssetsRaw = $manifest['siteAssets'] ?? [];
 		$siteAssets    = $siteAssetsRaw instanceof ModuleSiteAssets
 			? $siteAssetsRaw
-			: ModuleSiteAssets::fromArray(is_array($siteAssetsRaw)? $siteAssetsRaw : []);
+			: ModuleSiteAssets::fromArray(is_array($siteAssetsRaw) ? $siteAssetsRaw : []);
 
-		if(($meta['author'] ?? NULL) instanceof Author) {
+		if (($meta['author'] ?? NULL) instanceof Author) {
 			$author = $meta['author'];
-		} elseif(is_array($meta['author'] ?? NULL)) {
+		} elseif (is_array($meta['author'] ?? NULL)) {
 			$author = Author::fromArray($meta['author']);
 		} else {
 			$author = self::defaultAuthor();
@@ -171,7 +173,7 @@ final readonly class ModuleManifest {
 
 		$dirName   = basename(rtrim($modulePath, '/\\'));
 		$namespace = self::resolveNamespace(
-			isset($manifest['namespace'])? (string) $manifest['namespace'] : '',
+			isset($manifest['namespace']) ? (string) $manifest['namespace'] : '',
 			$dirName,
 		);
 
@@ -182,19 +184,19 @@ final readonly class ModuleManifest {
 			namespace       : $namespace,
 			path            : $modulePath,
 			pages           : $pages,
-			description     : isset($meta['description'])? (string) $meta['description'] : NULL,
-			code            : isset($manifest['code'])? (string) $manifest['code'] : NULL,
-			siteId          : isset($meta['siteId'])? (int) $meta['siteId'] : NULL,
-			icon            : isset($meta['icon'])? (string) $meta['icon'] : NULL,
-			siteLink        : isset($meta['siteLink'])? (string) $meta['siteLink'] : NULL,
-			docsLink        : isset($meta['docsLink'])? (string) $meta['docsLink'] : NULL,
-			licLink         : isset($meta['licLink'])? (string) $meta['licLink'] : self::DEFAULT_LIC_LINK,
+			description     : isset($meta['description']) ? (string) $meta['description'] : NULL,
+			code            : isset($manifest['code']) ? (string) $manifest['code'] : NULL,
+			siteId          : isset($meta['siteId']) ? (int) $meta['siteId'] : NULL,
+			icon            : isset($meta['icon']) ? (string) $meta['icon'] : NULL,
+			siteLink        : isset($meta['siteLink']) ? (string) $meta['siteLink'] : NULL,
+			docsLink        : isset($meta['docsLink']) ? (string) $meta['docsLink'] : NULL,
+			licLink         : isset($meta['licLink']) ? (string) $meta['licLink'] : AbstractModuleIdentity::DEFAULT_LIC_LINK,
 			crowdinName     : isset($manifest['crowdinName'])
 				? (string) $manifest['crowdinName']
-				: (isset($meta['crowdinName'])? (string) $meta['crowdinName'] : NULL),
+				: (isset($meta['crowdinName']) ? (string) $meta['crowdinName'] : NULL),
 			crowdinStatId   : isset($manifest['crowdinStatId'])
 				? (string) $manifest['crowdinStatId']
-				: (isset($meta['crowdinStatId'])? (string) $meta['crowdinStatId'] : NULL),
+				: (isset($meta['crowdinStatId']) ? (string) $meta['crowdinStatId'] : NULL),
 			author          : $author,
 			menu            : $menu,
 			ajax            : $ajax,
@@ -214,8 +216,8 @@ final readonly class ModuleManifest {
 	 * @param   array<string, mixed>|self  $raw
 	 */
 	public static function fromLoaded(string $mod, array|self $raw, string $modulePath): self {
-		if($raw instanceof self) {
-			if($raw->path === $modulePath && $raw->id === $mod) {
+		if ($raw instanceof self) {
+			if ($raw->path === $modulePath && $raw->id === $mod) {
 				return $raw;
 			}
 
@@ -266,7 +268,7 @@ final readonly class ModuleManifest {
 	public static function normalizeNamespace(string $namespace): string {
 		$namespace = trim($namespace);
 
-		if($namespace === '') {
+		if ($namespace === '') {
 			return '';
 		}
 
@@ -281,7 +283,7 @@ final readonly class ModuleManifest {
 	public static function resolveNamespace(string $fromManifest, string $dirName): string {
 		$normalized = self::normalizeNamespace($fromManifest);
 
-		if($normalized !== '') {
+		if ($normalized !== '') {
 			return $normalized;
 		}
 
@@ -300,8 +302,8 @@ final readonly class ModuleManifest {
 	private static function parseMenu(array $rawMenu): array {
 		$menu = [];
 
-		foreach($rawMenu as $item) {
-			if($item instanceof AdminLink) {
+		foreach ($rawMenu as $item) {
+			if ($item instanceof AdminLink) {
 				$menu[] = $item;
 			}
 		}
@@ -321,8 +323,8 @@ final readonly class ModuleManifest {
 	private static function pagesFromMenu(array $menu): array {
 		$pages = [];
 
-		foreach($menu as $item) {
-			if($item->action === NULL || $item->pageClass === NULL) {
+		foreach ($menu as $item) {
+			if ($item->action === NULL || $item->pageClass === NULL) {
 				continue;
 			}
 
@@ -331,15 +333,6 @@ final readonly class ModuleManifest {
 
 		return $pages;
 	}
-
-	/**
-	 * Ссылка на лицензионное соглашение по умолчанию.
-	 *
-	 * Используется, если модуль не указал свой `licLink` в `meta` манифеста.
-	 *
-	 * @since 200.4.0
-	 */
-	private const DEFAULT_LIC_LINK = 'https://devcraft.club/pages/licence-agreement/';
 
 	/**
 	 * Автор DevCraft по умолчанию.
@@ -351,17 +344,17 @@ final readonly class ModuleManifest {
 	 */
 	private static function defaultAuthor(): Author {
 		return AuthorBuilder::create('Maxim Harder')
-			->contact(__('E-Mail'), 'mailto:dev@devcraft.club')
-			->contact(__('Telegram'), 'https://t.me/MaHarder')
-			->contact(__('Сайт'), 'https://devcraft.club/misc/contact')
-			->donation('PayPal', 'paypal.me/MaximH', 'https://paypal.me/MaximH')
-			->donation('Ko-Fi', 'ko-fi.com/devcraft', 'https://ko-fi.com/J3J118N1C')
-			->donation('YooMoney', '41001454367103', 'https://yoomoney.ru/to/41001454367103')
-			->donation('DALink', 'maharder', 'https://dalink.to/maharder')
-			->donation('Buy Me a Coffee', 'maharder', 'https://buymeacoffee.com/maharder')
-			->donation('thanks.dev', 'gh/MaximHarder', 'https://thanks.dev/gh/MaximHarder')
-			->donation('GitHub Sponsors', 'sponsors/MaximHarder', 'https://github.com/sponsors/MaximHarder')
-			->build();
+		                    ->contact(__('E-Mail'), 'mailto:dev@devcraft.club')
+		                    ->contact(__('Telegram'), 'https://t.me/MaHarder')
+		                    ->contact(__('Сайт'), 'https://devcraft.club/misc/contact')
+		                    ->donation('PayPal', 'paypal.me/MaximH', 'https://paypal.me/MaximH')
+		                    ->donation('Ko-Fi', 'ko-fi.com/devcraft', 'https://ko-fi.com/J3J118N1C')
+		                    ->donation('YooMoney', '41001454367103', 'https://yoomoney.ru/to/41001454367103')
+		                    ->donation('DALink', 'maharder', 'https://dalink.to/maharder')
+		                    ->donation('Buy Me a Coffee', 'maharder', 'https://buymeacoffee.com/maharder')
+		                    ->donation('thanks.dev', 'gh/MaximHarder', 'https://thanks.dev/gh/MaximHarder')
+		                    ->donation('GitHub Sponsors', 'sponsors/MaximHarder', 'https://github.com/sponsors/MaximHarder')
+		                    ->build();
 	}
 
 	/**
@@ -383,52 +376,52 @@ final readonly class ModuleManifest {
 		$pages = $config['pages'] ?? [];
 
 		$menu = [];
-		if(isset($config['menu']) && is_array($config['menu'])) {
-			foreach($config['menu'] as $item) {
-				if($item instanceof AdminLink) {
+		if (isset($config['menu']) && is_array($config['menu'])) {
+			foreach ($config['menu'] as $item) {
+				if ($item instanceof AdminLink) {
 					$menu[] = $item;
-				} elseif(is_array($item)) {
+				} elseif (is_array($item)) {
 					$menu[] = AdminLink::fromArray($item);
 				}
 			}
 		}
 
 		$changelog = [];
-		if(isset($config['changelog']) && is_array($config['changelog'])) {
-			foreach($config['changelog'] as $entry) {
-				if($entry instanceof Changelog) {
+		if (isset($config['changelog']) && is_array($config['changelog'])) {
+			foreach ($config['changelog'] as $entry) {
+				if ($entry instanceof Changelog) {
 					$changelog[] = $entry;
-				} elseif(is_array($entry)) {
+				} elseif (is_array($entry)) {
 					$changelog[] = Changelog::fromArray($entry);
 				}
 			}
 		}
 
 		$composer = [];
-		if(isset($config['composerRequired']) && is_array($config['composerRequired'])) {
-			foreach($config['composerRequired'] as $rule) {
-				if($rule instanceof ComposerType) {
+		if (isset($config['composerRequired']) && is_array($config['composerRequired'])) {
+			foreach ($config['composerRequired'] as $rule) {
+				if ($rule instanceof ComposerType) {
 					$composer[] = $rule;
-				} elseif(is_array($rule)) {
+				} elseif (is_array($rule)) {
 					$composer[] = ComposerType::fromArray($rule);
 				}
 			}
 		}
 
-		$ajax   = $config['ajax'] ?? $config['ajaxData'] ?? [];
-		$assets = $config['assets'] ?? [];
+		$ajax          = $config['ajax'] ?? $config['ajaxData'] ?? [];
+		$assets        = $config['assets'] ?? [];
 		$siteAssetsRaw = $config['siteAssets'] ?? [];
 
 		$author = NULL;
-		if(isset($config['author'])) {
-			if($config['author'] instanceof Author) {
+		if (isset($config['author'])) {
+			if ($config['author'] instanceof Author) {
 				$author = $config['author'];
-			} elseif(is_array($config['author'])) {
+			} elseif (is_array($config['author'])) {
 				$author = Author::fromArray($config['author']);
 			}
 		}
 
-		if($author === NULL) {
+		if ($author === NULL) {
 			$author = self::defaultAuthor();
 		}
 
@@ -439,24 +432,25 @@ final readonly class ModuleManifest {
 			namespace       : (string) ($config['namespace'] ?? ''),
 			path            : (string) ($config['path'] ?? ''),
 			pages           : $pages,
-			description     : isset($config['description'])? (string) $config['description'] : NULL,
-			code            : isset($config['code'])? (string) $config['code'] : NULL,
-			siteId          : isset($config['siteId'])? (int) $config['siteId'] : NULL,
-			icon            : isset($config['icon'])? (string) $config['icon'] : NULL,
-			siteLink        : isset($config['siteLink'])? (string) $config['siteLink'] : NULL,
-			docsLink        : isset($config['docsLink'])? (string) $config['docsLink'] : NULL,
-			licLink         : isset($config['licLink'])? (string) $config['licLink'] : self::DEFAULT_LIC_LINK,
-			crowdinName     : isset($config['crowdinName'])? (string) $config['crowdinName'] : NULL,
-			crowdinStatId   : isset($config['crowdinStatId'])? (string) $config['crowdinStatId'] : NULL,
+			description     : isset($config['description']) ? (string) $config['description'] : NULL,
+			code            : isset($config['code']) ? (string) $config['code'] : NULL,
+			siteId          : isset($config['siteId']) ? (int) $config['siteId'] : NULL,
+			icon            : isset($config['icon']) ? (string) $config['icon'] : NULL,
+			siteLink        : isset($config['siteLink']) ? (string) $config['siteLink'] : NULL,
+			docsLink        : isset($config['docsLink']) ? (string) $config['docsLink'] : NULL,
+			licLink         : isset($config['licLink']) ? (string) $config['licLink'] : AbstractModuleIdentity::DEFAULT_LIC_LINK,
+			crowdinName     : isset($config['crowdinName']) ? (string) $config['crowdinName'] : NULL,
+			crowdinStatId   : isset($config['crowdinStatId']) ? (string) $config['crowdinStatId'] : NULL,
 			author          : $author,
 			menu            : $menu,
-			ajax            : $ajax instanceof ModuleAjaxConfig? $ajax : ModuleAjaxConfig::fromArray(is_array($ajax)? $ajax : []),
-			assets          : $config['assets'] instanceof ModuleAssets? $config['assets'] : ModuleAssets::fromArray(is_array($assets)? $assets : []),
+			ajax            : $ajax instanceof ModuleAjaxConfig ? $ajax : ModuleAjaxConfig::fromArray(is_array($ajax) ? $ajax : []),
+			assets          : $config['assets'] instanceof ModuleAssets ? $config['assets']
+				: ModuleAssets::fromArray(is_array($assets) ? $assets : []),
 			changelog       : $changelog,
 			composerRequired: $composer,
 			siteAssets      : $config['siteAssets'] instanceof ModuleSiteAssets
 				? $config['siteAssets']
-				: ModuleSiteAssets::fromArray(is_array($siteAssetsRaw)? $siteAssetsRaw : []),
+				: ModuleSiteAssets::fromArray(is_array($siteAssetsRaw) ? $siteAssetsRaw : []),
 		);
 	}
 
@@ -489,18 +483,18 @@ final readonly class ModuleManifest {
 			'crowdinStatId'    => $this->crowdinStatId,
 			'author'           => $this->author?->toArray(),
 			'menu'             => array_map(
-				static fn(AdminLink $link): array => $link->toArray(),
+				static fn (AdminLink $link): array => $link->toArray(),
 				$this->menu,
 			),
 			'ajax'             => $this->ajax->toArray(),
 			'assets'           => $this->assets->toArray(),
 			'siteAssets'       => $this->siteAssets->toArray(),
 			'changelog'        => array_map(
-				static fn(Changelog $entry): array => $entry->toArray(),
+				static fn (Changelog $entry): array => $entry->toArray(),
 				$this->changelog,
 			),
 			'composerRequired' => array_map(
-				static fn(ComposerType $rule): array => $rule->toArray(),
+				static fn (ComposerType $rule): array => $rule->toArray(),
 				$this->composerRequired,
 			),
 			'extends'          => $this->extends,

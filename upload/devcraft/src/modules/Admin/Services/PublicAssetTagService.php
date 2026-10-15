@@ -222,7 +222,7 @@ final class PublicAssetTagService {
 
 	private function compressEnabled(): bool {
 		try {
-			$config = DataManager::getConfig(AdminIdentity::code());
+			$config = DataManager::getConfig(Identity::code());
 
 			return (bool) ($config['public_assets_compress'] ?? true);
 		} catch(\Throwable) {

@@ -18,6 +18,7 @@ namespace DevCraft\Core\Twig;
 
 use Twig\Environment;
 use DevCraft\Core\Config\Paths;
+use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extra\Cache\CacheRuntime;
 use DevCraft\Core\I18n\Translation;
@@ -165,6 +166,10 @@ final class EnvironmentFactory {
 		});
 
 		$twig->addExtension(new CacheExtension());
+
+		if ($twig->isDebug()) {
+			$twig->addExtension(new DebugExtension());
+		}
 	}
 
 }

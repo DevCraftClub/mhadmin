@@ -18,14 +18,7 @@ use DevCraft\Modules\%dir%\Ajax\SettingsHandler;
  * @return ModuleManifest
  */
 return ModuleManifestBuilder::create()
-	->mod(%dir%Identity::mod())
-	->code(%dir%Identity::code())
-	->name('%name%')
-	->version('%version%')
-	->description('%description%')
-	->icon('%icon%')
-	->docsLink('%docs%')
-	->siteLink('%link%')
+	->identify(%dir%Identity::class)
 	->menu([
 		AdminLink::page(__('Панель'), 'dashboard', DashboardPage::class, '%icon%', %dir%Identity::mod()),
 		AdminLink::page(__('Настройки'), 'settings', SettingsPage::class, 'mif-cog', %dir%Identity::mod()),

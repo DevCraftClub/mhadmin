@@ -9,7 +9,7 @@ use DevCraft\Core\Abstracts\AbstractPage;
 final class DashboardPage extends AbstractPage {
 
     public function handle(): array {
-        $this->addBreadcrumb('Панель');
+        $this->addBreadcrumb(__('Панель'));
 
         return [
             'view' => '%latin%/dashboard.twig',

@@ -1,75 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dleplugin>
-	<name>DevCraft Admin</name>
-	<description>DevCraft Admin - панель администрирования для плагинов от DevCraft</description>
-	<icon>devcraft/src/modules/Admin/Public/icon.png</icon>
-	<version>200.4.2</version>
-	<dleversion>20</dleversion>
-	<versioncompare>greater</versioncompare>
-	<upgradeurl></upgradeurl>
-	<filedelete>1</filedelete>
-	<needplugin></needplugin>
-	<mnotice>1</mnotice>
-	<mysqlinstall><![CDATA[]]></mysqlinstall>
-	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
-	<mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
+  <name>DevCraft Admin</name>
+  <description>DevCraft Admin - панель администрирования для плагинов от DevCraft</description>
+  <icon>devcraft/src/modules/Admin/Public/icon.png</icon>
+  <version>200.4.2</version>
+  <dleversion>20</dleversion>
+  <versioncompare>greater</versioncompare>
+  <upgradeurl></upgradeurl>
+  <filedelete>1</filedelete>
+  <needplugin></needplugin>
+  <mnotice>1</mnotice>
+  <mysqlinstall><![CDATA[]]></mysqlinstall>
+  <mysqlupgrade><![CDATA[]]></mysqlupgrade>
+  <mysqlenable><![CDATA[INSERT INTO {prefix}_admin_sections (name, title, descr, icon, allow_groups)
 VALUES('devcraft', 'DevCraft Admin v200.4.2', 'Панель администрирования для плагинов от DevCraft', 'devcraft/src/modules/Admin/Public/icon.png', '1,2')
 ON DUPLICATE KEY UPDATE title = 'DevCraft Admin v200.4.2';]]></mysqlenable>
-	<mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';]]></mysqldisable>
-	<mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';
+  <mysqldisable><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';]]></mysqldisable>
+  <mysqldelete><![CDATA[DELETE FROM {prefix}_admin_sections WHERE name = 'devcraft';
 DROP TABLE IF EXISTS {prefix}_devcraft_logs;
 DROP TABLE IF EXISTS {prefix}_devcraft_migrations;
-DROP TABLE IF EXISTS {prefix}_devcraft_composer_data;]]></mysqldelete>
-	<phpinstall><![CDATA[]]></phpinstall>
-	<phpupgrade><![CDATA[]]></phpupgrade>
-	<phpenable><![CDATA[]]></phpenable>
-	<phpdisable><![CDATA[]]></phpdisable>
-	<phpdelete><![CDATA[]]></phpdelete>
-	<notice><![CDATA[]]></notice>
-	<file name="engine/init.php">
-		<operation action="after">
-			<searchcode><![CDATA[include_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));]]></searchcode>
-			<replacecode><![CDATA[
+DROP TABLE IF EXISTS {prefix}_devcraft_composer_data;
+DROP TABLE IF EXISTS {prefix}_dc_public_headers;
+DROP TABLE IF EXISTS {prefix}_dc_public_assets;
+]]></mysqldelete>
+  <phpinstall><![CDATA[]]></phpinstall>
+  <phpupgrade><![CDATA[]]></phpupgrade>
+  <phpenable><![CDATA[]]></phpenable>
+  <phpdisable><![CDATA[]]></phpdisable>
+  <phpdelete><![CDATA[]]></phpdelete>
+  <notice><![CDATA[]]></notice>
+  <file name="engine/init.php">
+    <operation action="after">
+      <searchcode><![CDATA[include_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));]]></searchcode>
+      <replacecode><![CDATA[
 // DevCraft Init: Start
 if (is_file(ROOT_DIR . '/devcraft/init.php')) {
 	require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
 }
 // DevCraft Init: Stop
 ]]></replacecode>
-			<searchcount>1</searchcount>
-			<replacecount>1</replacecount>
-			<enabled>1</enabled>
-			<dleversion>20</dleversion>
-			<versioncompare>greater</versioncompare>
-		</operation>
-	</file>
-	<file name="engine/inc/include/init.php">
-		<operation action="after">
-			<searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php'));]]></searchcode>
-			<replacecode><![CDATA[
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+  </file>
+  <file name="engine/inc/include/init.php">
+    <operation action="after">
+      <searchcode><![CDATA[require_once (DLEPlugins::Check(ENGINE_DIR . '/inc/include/functions.inc.php'));]]></searchcode>
+      <replacecode><![CDATA[
 // DevCraft Init: Start
 if (is_file(ROOT_DIR . '/devcraft/init.php')) {
 	require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/init.php');
 }
 // DevCraft Init: Stop
 ]]></replacecode>
-			<searchcount>1</searchcount>
-			<replacecount>1</replacecount>
-			<enabled>1</enabled>
-			<dleversion>20</dleversion>
-			<versioncompare>greater</versioncompare>
-		</operation>
-	</file>
-	<file name="engine/classes/templates.class.php">
-		<operation action="replace">
-			<searchcode><![CDATA[		if( $compile_if AND stripos( $this->copy_template, "[if" ) !== false){
-		
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+  </file>
+  <file name="engine/classes/templates.class.php">
+    <operation action="replace">
+      <searchcode><![CDATA[		if( $compile_if AND stripos( $this->copy_template, "[if" ) !== false){
+
 			$this->copy_template = $this->if_check($this->copy_template);
 		}
-		
+
 		if (stripos($this->copy_template, "{catmenu") !== false) {]]></searchcode>
-			<replacecode><![CDATA[		if( $compile_if AND stripos( $this->copy_template, "[if" ) !== false){
-		
+      <replacecode><![CDATA[		if( $compile_if AND stripos( $this->copy_template, "[if" ) !== false){
+
 			$this->copy_template = $this->if_check($this->copy_template);
 		}
 
@@ -78,17 +81,17 @@ if (is_file(ROOT_DIR . '/devcraft/init.php')) {
 			$this->copy_template = $this->has_check($this->copy_template);
 		}
 		// DevCraft Admin: end
-		
+
 		if (stripos($this->copy_template, "{catmenu") !== false) {]]></replacecode>
-			<searchcount>1</searchcount>
-			<replacecount>1</replacecount>
-			<enabled>1</enabled>
-			<dleversion>20</dleversion>
-			<versioncompare>greater</versioncompare>
-		</operation>
-		<operation action="before">
-			<searchcode><![CDATA[	function if_check($text){]]></searchcode>
-			<replacecode><![CDATA[	// DevCraft Admin: start
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+    <operation action="before">
+      <searchcode><![CDATA[	function if_check($text){]]></searchcode>
+      <replacecode><![CDATA[	// DevCraft Admin: start
 	/**
 	 * Проверяет «пустое» значение для [has] / сравнения с "".
 	 * Пусто: null-подобное, "", только ASCII whitespace. Не пусто: &nbsp;, U+00A0.
@@ -145,34 +148,34 @@ if (is_file(ROOT_DIR . '/devcraft/init.php')) {
 	// DevCraft Admin: end
 
 ]]></replacecode>
-			<searchcount>1</searchcount>
-			<replacecount>1</replacecount>
-			<enabled>1</enabled>
-			<dleversion>20</dleversion>
-			<versioncompare>greater</versioncompare>
-		</operation>
-		<operation action="replace">
-			<searchcode><![CDATA[				$replacement = $is_condition_met ? $process_if_block($block_content) : '';
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+    <operation action="replace">
+      <searchcode><![CDATA[				$replacement = $is_condition_met ? $process_if_block($block_content) : '';
 				$text = substr_replace($text, $replacement, $start_pos, $end_pos - $start_pos);]]></searchcode>
-			<replacecode><![CDATA[				// DevCraft Admin: start
+      <replacecode><![CDATA[				// DevCraft Admin: start
 				$parts = $this->dc_split_else_block($block_content);
 				$then  = $parts[0];
 				$else  = $parts[1];
 				$replacement = $is_condition_met ? $process_if_block($then) : ($else !== '' ? $process_if_block($else) : '');
 				// DevCraft Admin: end
 				$text = substr_replace($text, $replacement, $start_pos, $end_pos - $start_pos);]]></replacecode>
-			<searchcount>1</searchcount>
-			<replacecount>1</replacecount>
-			<enabled>1</enabled>
-			<dleversion>20</dleversion>
-			<versioncompare>greater</versioncompare>
-		</operation>
-		<operation action="replace">
-			<searchcode><![CDATA[		return $process_if_block($text);	
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+    <operation action="replace">
+      <searchcode><![CDATA[		return $process_if_block($text);
 	}
 
 	function evaluate_condition($condition, $row, $xfields) {]]></searchcode>
-			<replacecode><![CDATA[		return $process_if_block($text);	
+      <replacecode><![CDATA[		return $process_if_block($text);
 	}
 
 	// DevCraft Admin: start
@@ -252,17 +255,17 @@ if (is_file(ROOT_DIR . '/devcraft/init.php')) {
 	// DevCraft Admin: end
 
 	function evaluate_condition($condition, $row, $xfields) {]]></replacecode>
-			<searchcount>1</searchcount>
-			<replacecount>1</replacecount>
-			<enabled>1</enabled>
-			<dleversion>20</dleversion>
-			<versioncompare>greater</versioncompare>
-		</operation>
-	</file>
-	<file name="engine/modules/main.php">
-		<operation action="after">
-			<searchcode><![CDATA[$tpl->load_template ( 'main.tpl' );]]></searchcode>
-			<replacecode><![CDATA[$tpl->load_template ( 'main.tpl' );
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+  </file>
+  <file name="engine/modules/main.php">
+    <operation action="after">
+      <searchcode><![CDATA[$tpl->load_template ( 'main.tpl' );]]></searchcode>
+      <replacecode><![CDATA[$tpl->load_template ( 'main.tpl' );
 
 // DevCraft Admin: start
 try {
@@ -278,11 +281,11 @@ try {
 }
 // DevCraft Admin: end
 ]]></replacecode>
-			<searchcount>1</searchcount>
-			<replacecount>1</replacecount>
-			<enabled>1</enabled>
-			<dleversion>20</dleversion>
-			<versioncompare>greater</versioncompare>
-		</operation>
-	</file>
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+  </file>
 </dleplugin>

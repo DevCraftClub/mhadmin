@@ -6,7 +6,7 @@
     {% if author.contacts is defined and author.contacts|length > 0 %}
         <div class="mb-2">
             <div class="text-small fg-gray mb-1">{{ 'Контакты'|trans }}</div>
-            <ul class="unstyled-list">
+            <ul class="unstyled-list" data-role="list">
                 {% for contact in author.contacts %}
                     <li><a href="{{ contact.link }}" target="_blank" rel="noopener">{{ contact.name }}</a></li>
                 {% endfor %}

@@ -135,7 +135,7 @@ final class ModulePsr4Registrar {
 			$file     = $base . str_replace('\\', DIRECTORY_SEPARATOR, $relative) . '.php';
 
 			if(is_file($file)) {
-				require $file;
+				require (class_exists('DLEPlugins', false) ? \DLEPlugins::Check($file) : $file);
 			}
 		});
 	}

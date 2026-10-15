@@ -7,8 +7,6 @@ namespace DevCraft\Builders;
 use Closure;
 use DevCraft\Core\Abstracts\AbstractModuleIdentity;
 use DevCraft\Core\Logging\LogGenerator;
-use DevCraft\Modules\Admin\AdminIdentity;
-use InvalidArgumentException;
 use DevCraft\Core\Types\ComposerType;
 use DevCraft\Types\AdminLink;
 use DevCraft\Types\Author;
@@ -17,8 +15,7 @@ use DevCraft\Types\ModuleAjaxConfig;
 use DevCraft\Types\ModuleAssets;
 use DevCraft\Types\ModuleManifest;
 use DevCraft\Types\ModuleSiteAssets;
-use Lcobucci\JWT\Exception;
-use Throwable;
+use InvalidArgumentException;
 
 /**
  * Fluent-строитель манифеста модуля DevCraft.
@@ -114,7 +111,7 @@ final class ModuleManifestBuilder {
 
 			$this->meta['licLink'] = $id->licenceAgreement();
 
-		} catch (Throwable|Exception $e) {
+		} catch (\Throwable|\Exception $e) {
 			LogGenerator::for(ModuleManifestBuilder::class)
 			            ->log(__('Ошибка при инициализации идентификации модуля: {error}', ['error' => $e->getMessage()]));
 		}
@@ -125,7 +122,7 @@ final class ModuleManifestBuilder {
 	/**
 	 * Объявляет модуль сателлитом host-mod (меню/страницы/настройки встраиваются в host).
 	 */
-	public function extends(string $hostMod): self {
+	public function extends(?string $hostMod): self {
 		$this->extends = $hostMod;
 
 		return $this;
@@ -157,13 +154,13 @@ final class ModuleManifestBuilder {
 		return $this;
 	}
 
-	public function crowdinName(?string $name): self {
+	public function crowdinName(string $name): self {
 		$this->crowdinName = $name;
 
 		return $this;
 	}
 
-	public function crowdinStatId(?string $id): self {
+	public function crowdinStatId(string $id): self {
 		$this->crowdinStatId = $id;
 
 		return $this;
@@ -196,7 +193,7 @@ final class ModuleManifestBuilder {
 		return $this;
 	}
 
-	public function icon(?string $icon): self {
+	public function icon(string $icon): self {
 		$this->meta['icon'] = $icon;
 
 		return $this;
@@ -214,7 +211,7 @@ final class ModuleManifestBuilder {
 		return $this;
 	}
 
-	public function siteId(?int $siteId): self {
+	public function siteId(int $siteId): self {
 		$this->meta['siteId'] = $siteId;
 
 		return $this;

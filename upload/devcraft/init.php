@@ -42,7 +42,25 @@ if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
 	define('DEVCRAFT_BOOTSTRAPPED', true);
 
 	/** Подключает автозагрузчик Composer (исключение: без DLEPlugins::Check()). */
-	require_once $vendor_autoload;
+	$dcLoader = require $vendor_autoload;
+	$dcSourceRoot = realpath($dcRoot . '/src') . DIRECTORY_SEPARATOR;
+
+	// Composer определяет путь, а DLE применяет изменения плагинов к классам DevCraft.
+	spl_autoload_register(static function (string $class) use ($dcLoader, $dcSourceRoot): void {
+		$file = $dcLoader->findFile($class);
+
+		if($file === false) {
+			return;
+		}
+
+		$path = realpath($file);
+
+		if($path === false || !str_starts_with($path, $dcSourceRoot)) {
+			return;
+		}
+
+		require (class_exists('DLEPlugins', false) ? DLEPlugins::Check($path) : $path);
+	}, true, true);
 
 	/** Подключает in-process DLE SDK: глобальные шимы `prepare()` / `query()` и fallback-автозагрузку. */
 	require_once DLEPlugins::Check($dcRoot . '/src/sdk/dle/bootstrap.php');

@@ -140,7 +140,7 @@ final class ModuleExtensionMerger {
 	}
 
 	/**
-	 * Схема формы для страницы: у соседнего модуля — только его поля `{code}__…`.
+	 * Схема формы для страницы сателлита содержит только его поля.
 	 */
 	public static function settingsSchemaForAction(PluginContext $host, string $action, Registry $registry): ?FormSchema {
 		$schema = $host->settingsSchema();
@@ -156,14 +156,19 @@ final class ModuleExtensionMerger {
 		}
 
 		$code   = $extension->moduleData()->code ?? $extension->mod();
-		$prefix = $code . '__';
+		$extensionSchema = $extension->settingsSchema();
+		$prefix = $extensionSchema?->codename === $schema->codename ? '' : $code . '__';
+		$fieldIds = array_map(
+			static fn(FormField $field): string => $prefix . $field->id,
+			$extensionSchema?->allFields() ?? [],
+		);
 		$keep   = [];
 
 		foreach($schema->sections as $section) {
 			$fields = [];
 
 			foreach($section->fields as $field) {
-				if(str_starts_with($field->id, $prefix)) {
+				if(in_array($field->id, $fieldIds, true)) {
 					$fields[] = $field;
 				}
 			}
@@ -240,13 +245,15 @@ final class ModuleExtensionMerger {
 		string $satelliteTitle,
 	): FormSchema {
 		$sections = $host->sections;
+		// Общий код схемы означает хранение полей в настройках основного модуля.
+		$prefix = $extension->codename === $host->codename ? '' : $code . '__';
 
 		foreach($extension->sections as $section) {
 			$fields = [];
 
 			foreach($section->fields as $field) {
 				$fields[] = new FormField(
-					id         : $code . '__' . $field->id,
+					id         : $prefix . $field->id,
 					type       : $field->type,
 					label      : $field->label,
 					description: $field->description,

@@ -27,9 +27,9 @@
                 </a>
             {% endif %}
             {% if app.licLink %}
-            <a href="{{ app.licLink }}" class="button outline mini mr-1" target="_blank" rel="noopener">
-                <span class="mif-grading mr-1"></span> {{ 'Пользовательское соглашение'|trans }}
-            </a>
+                <a href="{{ app.licLink }}" class="button outline mini mr-1" target="_blank" rel="noopener">
+                    <span class="mif-grading mr-1"></span> {{ 'Пользовательское соглашение'|trans }}
+                </a>
             {% endif %}
             {% if d.show_assets|default(false) %}
                 <button type="button" class="button outline mini mr-1 js-check-assets">
@@ -59,33 +59,33 @@
     </div>
 
     {% if d.stats is defined and d.stats|length > 0 %}
-        <div class="remark dc-dashboard-card dc-dashboard-stats mb-4">
-            {% if d.stats_title|default('') %}
-                <h4 class="border-bottom bd-default pb-2 mb-3">{{ d.stats_title }}</h4>
-            {% endif %}
-            <div class="row flex-justify-center">
-                {% for stat in d.stats %}
-                    <div class="cell-md-2 cell-sm-4 cell-6 mb-2">
-                        {% if stat.url %}
-                            <a href="{{ stat.url }}" class="dc-dashboard-stat dc-dashboard-stat-link">
-                        {% else %}
-                            <div class="dc-dashboard-stat">
+    <div class="remark dc-dashboard-card dc-dashboard-stats mb-4">
+        {% if d.stats_title|default('') %}
+            <h4 class="border-bottom bd-default pb-2 mb-3">{{ d.stats_title }}</h4>
+        {% endif %}
+        <div class="row flex-justify-center">
+            {% for stat in d.stats %}
+            <div class="cell-md-2 cell-sm-4 cell-6 mb-2">
+                {% if stat.url %}
+                <a href="{{ stat.url }}" class="dc-dashboard-stat dc-dashboard-stat-link">
+                    {% else %}
+                    <div class="dc-dashboard-stat">
                         {% endif %}
-                            {% if stat.icon|default('') %}
-                                <span class="dc-dashboard-stat-icon {{ stat.icon }}" aria-hidden="true"></span>
-                            {% endif %}
-                            <div class="dc-dashboard-stat-value">{{ stat.value }}</div>
-                            <div class="dc-dashboard-stat-label">{{ stat.label }}</div>
-                        {% if stat.url %}
-                            </a>
-                        {% else %}
-                            </div>
+                        {% if stat.icon|default('') %}
+                            <span class="dc-dashboard-stat-icon {{ stat.icon }}" aria-hidden="true"></span>
                         {% endif %}
-                    </div>
-                {% endfor %}
+                        <div class="dc-dashboard-stat-value">{{ stat.value }}</div>
+                        <div class="dc-dashboard-stat-label">{{ stat.label }}</div>
+                        {% if stat.url %}
+                </a>
+                {% else %}
             </div>
+            {% endif %}
         </div>
-    {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
     {% if d.show_assets|default(false) %}
         <div id="dc-assets-status" class="remark info dc-assets-status mb-4 d-none" data-auto-check="1"></div>
@@ -93,74 +93,71 @@
 
     {% include 'core/includes/dashboard/composer_panel.twig' %}
 
-    <div class="grid dc-dashboard-grid">
-        <div class="row">
-            <div class="cell-md-6">
-                <div class="remark dc-dashboard-card">
-                    <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Автор'|trans }}</h4>
-                    {{ author.dashboard_card(d.author, d.lic_link) }}
-                </div>
-            </div>
-            <div class="cell-md-6">
-                <div class="remark dc-dashboard-card">
-                    <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Разделы'|trans }}</h4>
-                    {% if d.menu|length > 0 %}
-                        <table class="table striped subcompact">
-                            <thead>
+<div class="grid dc-dashboard-grid">
+    <div class="row">
+        <div class="cell-md-6">
+            {{ author.dashboard_card(d.author) }}
+        </div>
+        <div class="cell-md-6">
+            <div class="remark dc-dashboard-card">
+                <h4 class="border-bottom bd-default pb-2 mb-3">{{ 'Разделы'|trans }}</h4>
+                {% if d.menu|length > 0 %}
+                    <table class="table striped subcompact">
+                        <thead>
+                        <tr>
+                            <th>{{ 'Раздел'|trans }}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in d.menu %}
                             <tr>
-                                <th>{{ 'Раздел'|trans }}</th>
-                                <th></th>
+                                <td>
+                                    {% if item.icon %}<span class="{{ item.icon }} mr-1"></span>{% endif %}
+                                    {{ item.name }}
+                                </td>
+                                <td class="text-right">
+                                    <a href="{{ item.link }}" class="button small">{{ 'Открыть'|trans }}</a>
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in d.menu %}
-                                <tr>
-                                    <td>
-                                        {% if item.icon %}<span class="{{ item.icon }} mr-1"></span>{% endif %}
-                                        {{ item.name }}
-                                    </td>
-                                    <td class="text-right">
-                                        <a href="{{ item.link }}" class="button small">{{ 'Открыть'|trans }}</a>
-                                    </td>
-                                </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="fg-gray">{{ 'Разделы не настроены.'|trans }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if d.changelog_latest %}
+        <div class="row">
+            <div class="cell-12">
+                <div class="remark dc-dashboard-card">
+                    <h4 class="border-bottom bd-default pb-2 mb-3">
+                        {{ 'Последние изменения'|trans }}
+                        <a href="{{ d.changelog_url }}" class="button small link float-right">{{ 'Вся история'|trans }}</a>
+                    </h4>
+                    <p class="mb-2">
+                        {% if d.changelog_latest.version == 'Неопубликованное'|trans %}
+                            <strong>{% trans %}Неопубликованное{% endtrans %}</strong>
+                        {% else %}
+                            <strong>v{{ d.changelog_latest.version }}</strong>
+                        {% endif %}
+                        {% if d.changelog_latest.date %}
+                            <span class="text-small fg-gray">({{ d.changelog_latest.date }})</span>
+                        {% endif %}
+                    </p>
+                    {% if d.changelog_latest.teaser_items is defined and d.changelog_latest.teaser_items|length > 0 %}
+                        <ul class="mt-2">
+                            {% for item in d.changelog_latest.teaser_items %}
+                                <li><span class="text-small fg-gray">{{ item.title }}:</span> {{ item.text|raw }}</li>
                             {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p class="fg-gray">{{ 'Разделы не настроены.'|trans }}</p>
+                        </ul>
                     {% endif %}
                 </div>
             </div>
         </div>
-
-        {% if d.changelog_latest %}
-            <div class="row">
-                <div class="cell-12">
-                    <div class="remark dc-dashboard-card">
-                        <h4 class="border-bottom bd-default pb-2 mb-3">
-                            {{ 'Последние изменения'|trans }}
-                            <a href="{{ d.changelog_url }}" class="button small link float-right">{{ 'Вся история'|trans }}</a>
-                        </h4>
-                        <p class="mb-2">
-                            {% if d.changelog_latest.version == 'Неопубликованное'|trans %}
-                                <strong>{% trans %}Неопубликованное{% endtrans %}</strong>
-                            {% else %}
-                                <strong>v{{ d.changelog_latest.version }}</strong>
-                            {% endif %}
-                            {% if d.changelog_latest.date %}
-                                <span class="text-small fg-gray">({{ d.changelog_latest.date }})</span>
-                            {% endif %}
-                        </p>
-                        {% if d.changelog_latest.teaser_items is defined and d.changelog_latest.teaser_items|length > 0 %}
-                            <ul class="mt-2">
-                                {% for item in d.changelog_latest.teaser_items %}
-                                    <li><span class="text-small fg-gray">{{ item.title }}:</span> {{ item.text|raw }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    </div>
+    {% endif %}
+</div>
 </div>

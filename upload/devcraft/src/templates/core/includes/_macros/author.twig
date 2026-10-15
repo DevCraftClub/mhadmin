@@ -1,94 +1,94 @@
 {# Макрос блока автора для dashboard и других экранов #}
 {% macro dashboard_card(author) %}
 
-    {% if author is defined and author.name is not empty %}
-        <div class="dc-dashboard-author">
+{% if author is defined and author.name is not empty %}
+<div class="dc-dashboard-author">
 
-            <div class="social-box">
-                <div class="header">
+    <div class="social-box">
+        <div class="header">
             <span class="avatar">
                 <span class="mif-person"></span>
             </span>
-                    <div class="title">{{ author.name }}</div>
-                    <div class="subtitle">{{ "Разработчик"|trans }}</div>
-                </div>
+            <div class="title">{{ author.name }}</div>
+            <div class="subtitle">{{ "Разработчик"|trans }}</div>
+        </div>
 
-                <div class="content">
-                    <ul class="skills">
-                        {% if author.contacts is defined and author.contacts|length > 0 %}
-                            <li id="author_contacts">
-                                <div class="text-bold">{{ author.contacts|length }}</div>
-                                <div>{{ "Контактная информация" }}</div>
-                            </li>
-                        {% endif %}
-                        {% if author.donations is defined and author.donations|length > 0 %}
-                            <li id="author_donations">
-                                <div class="text-bold">{{ author.donations|length  }}</div>
-                                <div>{{ "Финансовая поддержка"|trans }}</div>
-                            </li>
-                        {% endif %}
+        <div class="content">
+            <ul class="skills">
+                {% if author.contacts is defined and author.contacts|length > 0 %}
+                    <li id="author_contacts">
+                        <div class="text-bold">{{ author.contacts|length }}</div>
+                        <div>{{ "Контактная информация" }}</div>
+                    </li>
+                {% endif %}
+                {% if author.donations is defined and author.donations|length > 0 %}
+                    <li id="author_donations">
+                        <div class="text-bold">{{ author.donations|length  }}</div>
+                        <div>{{ "Финансовая поддержка"|trans }}</div>
+                    </li>
+                {% endif %}
 
-                    </ul>
-                </div>
+            </ul>
+        </div>
 
-            </div>
+    </div>
 
-            {% set contacts_content %}
-                <ul class="items-list" data-role="list" data-show-pagination="true" data-show-search="true" data-items="10">
-                    {% for contact in author.contacts|default([]) %}
-                        <li>
-                            <span class="label">{{ contact.name }}</span>
-                            <span class="second-label"><a href="{{ contact.link }}" class="list-title" target="_blank">{{ "перейти"|trans }}</a></span>
-                            <span class="second-action mif-new-tab"></span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endset %}
+    {% set contacts_content %}
+        <ul class="items-list" data-role="list" data-show-pagination="true" data-show-search="true" data-items="10">
+            {% for contact in author.contacts|default([]) %}
+                <li>
+                    <span class="label">{{ contact.name }}</span>
+                    <span class="second-label"><a href="{{ contact.link }}" class="list-title" target="_blank">{{ "перейти"|trans }}</a></span>
+                    <span class="second-action mif-new-tab"></span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endset %}
 
-            {% set donations_content %}
-                <ul class="items-list" data-role="list" data-show-pagination="true" data-show-search="true" data-items="10">
-                    {% for donation in author.donations|default([]) %}
-                        <li>
-                            <span class="label">{{ donation.name }}</span>
-                            <span class="second-label"><a href="{{ donation.link }}" class="list-title" target="_blank">{{ donation.value }}</a></span>
-                            <span class="second-action mif-new-tab"></span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endset %}
-            <script>
-              document.addEventListener('DOMContentLoaded', function () {
+    {% set donations_content %}
+        <ul class="items-list" data-role="list" data-show-pagination="true" data-show-search="true" data-items="10">
+            {% for donation in author.donations|default([]) %}
+                <li>
+                    <span class="label">{{ donation.name }}</span>
+                    <span class="second-label"><a href="{{ donation.link }}" class="list-title" target="_blank">{{ donation.value }}</a></span>
+                    <span class="second-action mif-new-tab"></span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endset %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
-                  {% if author.contacts is defined and author.contacts|length > 0 %}
+            {% if author.contacts is defined and author.contacts|length > 0 %}
                 const contactsElement = document.getElementById('author_contacts');
 
                 if (contactsElement) {
-                  contactsElement.addEventListener('click', function() {
-                    DevCraft.Metro.dialogCreate({
-                      title: "{{ 'Контактная информация'|trans|e('js') }}",
-                      content: {{ contacts_content|json_encode(15)|raw }},
-                      closeButton: true,
+                    contactsElement.addEventListener('click', function() {
+                        DevCraft.Metro.dialogCreate({
+                           title: "{{ 'Контактная информация'|trans|e('js') }}",
+                           content: {{ contacts_content|json_encode(15)|raw }},
+                           closeButton: true,
+                        });
                     });
-                  });
                 }
-                  {% endif %}
-                  {% if author.donations is defined and author.donations|length > 0 %}
+            {% endif %}
+            {% if author.donations is defined and author.donations|length > 0 %}
 
-                const financeElement = document.getElementById('author_donations');
+                  const financeElement = document.getElementById('author_donations');
 
-                if (financeElement) {
-                  financeElement.addEventListener('click', function() {
-                    DevCraft.Metro.dialogCreate({
-                      title: "{{ 'Финансовая поддержка'|trans|e('js') }}",
-                      content: {{ donations_content|json_encode(15)|raw }},
-                      closeButton: true,
+                  if (financeElement) {
+                    financeElement.addEventListener('click', function() {
+                      DevCraft.Metro.dialogCreate({
+                        title: "{{ 'Финансовая поддержка'|trans|e('js') }}",
+                        content: {{ donations_content|json_encode(15)|raw }},
+                        closeButton: true,
+                      });
                     });
-                  });
-                }
+                  }
 
-                  {% endif %}
-              });
-            </script>
-        </div>
-    {% endif %}
+            {% endif %}
+        });
+    </script>
+</div>
+{% endif %}
 {% endmacro %}

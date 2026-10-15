@@ -17,6 +17,8 @@ use DevCraft\Types\ModuleAjaxConfig;
 use DevCraft\Types\ModuleAssets;
 use DevCraft\Types\ModuleManifest;
 use DevCraft\Types\ModuleSiteAssets;
+use Lcobucci\JWT\Exception;
+use Throwable;
 
 /**
  * Fluent-строитель манифеста модуля DevCraft.
@@ -95,21 +97,27 @@ final class ModuleManifestBuilder {
 		/** @var AbstractModuleIdentity $id */
 		$id = $reflection->newInstance();
 
-		$this->mod($id->mod());
-		$this->code($id->code());
-		$this->name($id->name());
-		$this->description($id->description());
-		$this->version($id->version());
-		$this->icon($id->icon());
+		try {
+			$this->mod($id->mod());
+			$this->code($id->code());
+			$this->name($id->name());
+			$this->description($id->description());
+			$this->version($id->version());
+			$this->icon($id->icon());
 
-		$this->siteLink($id->siteUrl());
-		$this->siteId($id->siteId());
-		$this->docsLink($id->docsUrl());
+			$this->siteLink($id->siteUrl());
+			$this->siteId($id->siteId());
+			$this->docsLink($id->docsUrl());
 
-		$this->crowdinName($id->crowdinName());
-		$this->crowdinStatId($id->crowdInStats());
+			$this->crowdinName($id->crowdinName());
+			$this->crowdinStatId($id->crowdInStats());
 
-		$this->meta['licLink'] = $id->licenceAgreement();
+			$this->meta['licLink'] = $id->licenceAgreement();
+
+		} catch (Throwable|Exception $e) {
+			LogGenerator::for(ModuleManifestBuilder::class)
+			            ->log(__('Ошибка при инициализации идентификации модуля: {error}', ['error' => $e->getMessage()]));
+		}
 
 		return $this;
 	}
@@ -149,13 +157,13 @@ final class ModuleManifestBuilder {
 		return $this;
 	}
 
-	public function crowdinName(string $name): self {
+	public function crowdinName(?string $name): self {
 		$this->crowdinName = $name;
 
 		return $this;
 	}
 
-	public function crowdinStatId(string $id): self {
+	public function crowdinStatId(?string $id): self {
 		$this->crowdinStatId = $id;
 
 		return $this;
@@ -188,25 +196,25 @@ final class ModuleManifestBuilder {
 		return $this;
 	}
 
-	public function icon(string $icon): self {
+	public function icon(?string $icon): self {
 		$this->meta['icon'] = $icon;
 
 		return $this;
 	}
 
-	public function docsLink(string $url): self {
+	public function docsLink(?string $url): self {
 		$this->meta['docsLink'] = $url;
 
 		return $this;
 	}
 
-	public function siteLink(string $url): self {
+	public function siteLink(?string $url): self {
 		$this->meta['siteLink'] = $url;
 
 		return $this;
 	}
 
-	public function siteId(int $siteId): self {
+	public function siteId(?int $siteId): self {
 		$this->meta['siteId'] = $siteId;
 
 		return $this;

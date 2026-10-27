@@ -1,19 +1,23 @@
 {% set current_locale = devcraft_locale|default('ru_RU') %}
-{% set matched_language = devcraft_languages|default([])|filter(v => v.tag == current_locale)|first %}
 <div class="dc-topbar">
     <div class="dropdown-button dc-topbar__lang">
-        <button type="button" class="button flat" data-dc-language-current="{{ current_locale }}" aria-label="{{ 'Язык админки'|trans }}">
+        <button type="button" class="button square flat" data-dc-language-current="{{ current_locale }}" aria-label="{{ 'Язык админки'|trans }}" title="{{ 'Язык админки'|trans }}">
             <span class="mif-translate"></span>
-            <span class="dc-topbar__lang-name">{{ matched_language ? matched_language.name : current_locale }}</span>
         </button>
         <ul class="d-menu" data-role="dropdown">
             {% for language in devcraft_languages|default([]) %}
-                <li>
-                    <a href="#" data-dc-language="{{ language.tag }}">{{ language.name }}</a>
+                <li{% if language.tag == current_locale %} class="active"{% endif %}>
+                    <a href="#" data-dc-language="{{ language.tag }}"{% if language.tag == current_locale %} aria-current="true"{% endif %}>{{ language.name }}</a>
                 </li>
             {% endfor %}
         </ul>
     </div>
+    <a class="button square outline dc-topbar__cache"
+       href="?mod={{ mod|default('devcraft')|url_encode }}&action=clear_cache&user_hash={{ dle_login_hash|default('')|url_encode }}&return={{ action|default('dashboard')|url_encode }}"
+       title="{{ 'Очистить кеш'|trans }}"
+       aria-label="{{ 'Очистить кеш'|trans }}">
+        <span class="mif-bin"></span>
+    </a>
     <button type="button"
             class="button square outline dc-topbar__theme"
             data-dc-theme="{{ devcraft_theme|default('light') }}"

@@ -224,7 +224,7 @@ final class Application {
 	}
 
 	/**
-	 * Очищает кэш DLE и DevCraft, затем возвращает пользователя на главную админки модуля.
+	 * Очищает кэш DLE и DevCraft, затем возвращает на указанный раздел или на главную.
 	 *
 	 * @since 200.4.2
 	 */
@@ -253,7 +253,13 @@ final class Application {
 		DataManager::clearCacheContents(Paths::cache());
 		DevCraftConfig::resetCache();
 
-		$target = '?mod=' . rawurlencode($mod) . '&action=dashboard';
+		$return = (string) ($_GET['return'] ?? '');
+
+		if($return === '' || preg_match('/^[a-z0-9_-]{1,64}$/i', $return) !== 1 || $return === 'clear_cache') {
+			$return = 'dashboard';
+		}
+
+		$target = '?mod=' . rawurlencode($mod) . '&action=' . rawurlencode($return);
 		header('Location: ' . $target);
 		exit;
 	}

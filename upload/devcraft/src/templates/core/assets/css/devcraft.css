@@ -1,8 +1,61 @@
 /**
  * DevCraft-Admin-Basis-Assets (CSS)
- * Version: 200.4.0
+ * Version: 200.4.2
  * Build: 100
  */
+.navview-content {
+  position: relative;
+}
+
+.dc-topbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  height: 52px;
+  padding: 0 1rem;
+  background: var(--default-background, #fff);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+html.dark-side .dc-topbar {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+.dc-topbar__lang .button, .dc-topbar__theme, .dc-topbar__cache {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.dc-topbar__lang .dropdown-caret {
+  display: none;
+}
+.dc-topbar__lang .d-menu li.active > a {
+  color: var(--d-menu-item-color-hover);
+  background-color: var(--d-menu-item-background-hover);
+  box-shadow: inset 3px 0 0 var(--navview-item-marker-color, #468cff);
+}
+.dc-topbar__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+.dc-topbar__avatar--empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+.dc-topbar__name {
+  margin-left: 0.4rem;
+}
+
 .dc-settings-tabs {
   margin: 1rem 0 0;
 }
@@ -63,6 +116,11 @@
   background: var(--color-light-gray);
 }
 
+.dark-side .dc-field-row:not(.dc-field-head):hover {
+  background: var(--table-hover-background);
+  color: var(--table-hover-color);
+}
+
 .dc-settings-save-bar.form-actions {
   margin-bottom: 0;
 }
@@ -90,6 +148,7 @@
 .dc-dashboard-hero {
   padding: 1.25rem 1.5rem;
 }
+
 .dc-dashboard-stats {
   overflow: visible;
 }
@@ -372,6 +431,26 @@
 .dark-side .dc-error-cog {
   color: #212225 !important;
 }
+.dark-side .button.flat,
+.dark-side button.flat,
+.dark-side .button.link,
+.dark-side button.link {
+  --button-color: var(--default-color);
+}
+.dark-side .button.outline,
+.dark-side button.outline,
+.dark-side a.button.outline {
+  color: var(--default-color);
+  border-color: var(--border-color);
+}
+.dark-side .button.outline:hover, .dark-side .button.outline:active,
+.dark-side button.outline:hover,
+.dark-side button.outline:active,
+.dark-side a.button.outline:hover,
+.dark-side a.button.outline:active {
+  color: var(--button-color);
+  border-color: var(--button-background);
+}
 
 .dc-filter-bar .dc-filter-chips {
   gap: 0.25rem;
@@ -404,6 +483,7 @@
   text-decoration: underline;
 }
 
+/* Публичные CSS/JS/meta — DnD как у Connections */
 .dc-public-assets-page .dc-public-drag-cell,
 .dc-public-headers-page .dc-public-drag-cell {
   width: 2.5rem;

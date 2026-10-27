@@ -93,6 +93,14 @@
 
     {% include 'core/includes/dashboard/composer_panel.twig' %}
 
+    {% if mod|default('') == 'devcraft' %}
+        <div class="remark info mt-4">
+            <h5>{{ 'База данных'|trans }}</h5>
+            <p>{{ 'Создаёт недостающие таблицы ядра и модулей. Уже записанные строки не удаляет.'|trans }}</p>
+            <button type="button" class="button primary" id="dc-schema-sync">{{ 'Создать / обновить таблицы'|trans }}</button>
+        </div>
+    {% endif %}
+
     <div class="grid dc-dashboard-grid">
         <div class="row">
             <div class="cell-md-6">

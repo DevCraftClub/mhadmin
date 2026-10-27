@@ -1,7 +1,2 @@
 <h2>{{ 'Настройки'|trans }}</h2>
 {% include 'core/includes/form/settings_page.twig' with { form: form } %}
-<div class="remark info mt-4">
-    <h5>{{ 'База данных'|trans }}</h5>
-    <p>{{ 'Создаёт недостающие таблицы ядра и модулей. Уже записанные строки не удаляет.'|trans }}</p>
-    <button type="button" class="button primary" id="dc-schema-sync">{{ 'Создать / обновить таблицы'|trans }}</button>
-</div>

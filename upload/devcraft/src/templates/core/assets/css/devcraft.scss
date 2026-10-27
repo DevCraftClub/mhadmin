@@ -1,8 +1,70 @@
 /**
  * DevCraft-Admin-Basis-Assets (CSS)
- * Version: 200.4.0
+ * Version: 200.4.2
  * Build: 100
  */
+
+.navview-content {
+  position: relative;
+}
+
+.dc-topbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  height: 52px;
+  padding: 0 1rem;
+  background: var(--default-background, #fff);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+  html.dark-side & {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  &__lang .button,
+  &__theme,
+  &__cache {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__lang .dropdown-caret {
+    display: none;
+  }
+
+  &__lang .d-menu li.active > a {
+    color: var(--d-menu-item-color-hover);
+    background-color: var(--d-menu-item-background-hover);
+    box-shadow: inset 3px 0 0 var(--navview-item-marker-color, #468cff);
+  }
+
+  &__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+
+    &--empty {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__name {
+    margin-left: 0.4rem;
+  }
+}
 
 .dc-settings-tabs {
   margin: 1rem 0 0;
@@ -68,6 +130,12 @@
   &:not(.dc-field-head):hover {
     background: var(--color-light-gray);
   }
+}
+
+// --color-light-gray в тёмной теме остаётся почти белым, текст при этом светлый.
+.dark-side .dc-field-row:not(.dc-field-head):hover {
+  background: var(--table-hover-background);
+  color: var(--table-hover-color);
 }
 
 .dc-settings-save-bar.form-actions {
@@ -439,6 +507,27 @@
 .dark-side {
   .dc-error-cog {
     color: #212225 !important;
+  }
+
+  // Metro держит у плоских, контурных и ссылок-кнопок цвет #191919. В тёмной теме это чёрный текст на тёмном фоне.
+  .button.flat,
+  button.flat,
+  .button.link,
+  button.link {
+    --button-color: var(--default-color);
+  }
+
+  .button.outline,
+  button.outline,
+  a.button.outline {
+    color: var(--default-color);
+    border-color: var(--border-color);
+
+    &:hover,
+    &:active {
+      color: var(--button-color);
+      border-color: var(--button-background);
+    }
   }
 }
 

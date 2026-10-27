@@ -17,6 +17,7 @@ use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Exception\JsonResponseException;
 use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Support\AdminAccess;
+use DevCraft\Core\Support\ExceptionDetailFormatter;
 
 /**
  * Диспетчер AJAX-запросов DevCraft: аутентификация, маршрутизация, ответ.
@@ -217,10 +218,14 @@ final class AjaxController {
 		global $config;
 
 		$showDetail = !empty($config['display_php_errors']);
+		$isSchema   = str_contains($e->getMessage(), 'Undefined schema');
 		$extra      = [];
 
-		if($showDetail) {
-			$extra['detail'] = $e->getMessage();
+		// Схема Cycle — всегда с подсказкой: иначе на боевом сайте не видно, почему нет модели.
+		if($showDetail || $isSchema) {
+			$extra['detail'] = (new ExceptionDetailFormatter(
+				Application::instance()->registry(),
+			))->formatBrief($e);
 		}
 
 		JsonResponse::fail(

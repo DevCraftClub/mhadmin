@@ -2,7 +2,7 @@
 //===============================================================
 // Файл: SchemaSyncService.php                                  =
 // Путь: devcraft/src/classes/Database/SchemaSyncService.php    =
-// Последнее изменение: 2026-09-14 16:20:00                     =
+// Последнее изменение: 2026-10-27 16:15:00                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
 // Сайт: https://devcraft.club                                  =
@@ -31,6 +31,7 @@ use Cycle\Schema\Generator\SyncTables;
 use Cycle\Schema\Registry as SchemaRegistry;
 use DevCraft\Core\Config\DevCraftConfig;
 use DevCraft\Core\Config\Paths;
+use DevCraft\Core\Module\ModulePsr4Registrar;
 use DevCraft\Core\Module\Registry;
 use Spiral\Tokenizer\ClassLocator;
 use Symfony\Component\Finder\Finder;
@@ -106,6 +107,7 @@ final class SchemaSyncService {
 	 */
 	private function ensureSchemaReadyLocked(): array {
 		$this->gateway->databaseManager();
+		ModulePsr4Registrar::registerAll();
 
 		$migrationsDir = Paths::src() . '/database/migrations';
 		$fingerprint   = $this->quickModelsSignature();
@@ -307,6 +309,7 @@ final class SchemaSyncService {
 				|| str_contains($message, '42S21')
 				|| str_contains($message, '1050')
 				|| str_contains($message, '1060')
+				|| str_contains($message, 'already exists')
 			) {
 				return true;
 			}
@@ -402,7 +405,9 @@ final class SchemaSyncService {
 		/** @var mixed $payload */
 		$payload = @unserialize($raw);
 
+		// version=2: старые запасы без моделей Admin отбрасываем один раз.
 		if(!is_array($payload)
+			|| (int) ($payload['version'] ?? 0) < 2
 			|| ($payload['fingerprint'] ?? null) !== $fingerprint
 			|| !is_array($payload['schema'] ?? null)
 		) {
@@ -427,6 +432,7 @@ final class SchemaSyncService {
 
 		$path = $dir . '/cycle_orm_schema.ser';
 		@file_put_contents($path, serialize([
+			'version'     => 2,
 			'fingerprint' => $fingerprint,
 			'schema'      => $schema,
 		]), LOCK_EX);
@@ -468,6 +474,22 @@ final class SchemaSyncService {
 		bool $syncTables,
 	): array {
 		$model_directories = $this->normalizeModelDirectories($model_directories);
+		ModulePsr4Registrar::registerAll();
+
+		// ClassLocator молча пропускает класс, который не загрузился — подгружаем файлы заранее.
+		foreach($model_directories as $directory) {
+			foreach(glob(rtrim($directory, '/\\') . '/*.php') ?: [] as $file) {
+				if(!is_file($file)) {
+					continue;
+				}
+
+				try {
+					require_once $file;
+				} catch(\Throwable) {
+					continue;
+				}
+			}
+		}
 
 		if($model_directories === []) {
 			$class_locator = new ClassLocator(new \ArrayIterator([]));

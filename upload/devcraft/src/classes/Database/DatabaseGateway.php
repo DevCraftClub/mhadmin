@@ -19,10 +19,12 @@ namespace DevCraft\Core\Database;
 use Cycle\ORM;
 use Cycle\Database\Config;
 use Cycle\ORM\EntityManager;
+use Cycle\ORM\SchemaInterface;
 use DevCraft\Core\Config\Paths;
 use Spiral\Pagination\Paginator;
 use Cycle\ORM\RepositoryInterface;
 use DevCraft\Core\Module\Registry;
+use DevCraft\Core\Module\ModulePsr4Registrar;
 use Cycle\Database\DatabaseManager;
 use Cycle\Database\DatabaseInterface;
 use Cycle\Database\StatementInterface;
@@ -364,9 +366,12 @@ final class DatabaseGateway {
 		}
 
 		Paths::register();
+		// Псевдонимы FQCN → роль в Cycle строятся только если class_exists на момент new Schema.
+		ModulePsr4Registrar::registerAll();
 
-		$schema_array      = (new SchemaSyncService($this->registry, $this))->ensureSchemaReady();
-		$schema            = new ORM\Schema($schema_array);
+		$schema_array = (new SchemaSyncService($this->registry, $this))->ensureSchemaReady();
+		$this->warmSchemaEntityClasses($schema_array);
+		$schema = new ORM\Schema($schema_array);
 		$factory           = new ORM\Factory($this->generateManager());
 		$container         = new Container();
 		$command_generator = new ORM\Entity\Behavior\EventDrivenCommandGenerator($schema, $container);
@@ -380,6 +385,31 @@ final class DatabaseGateway {
 		$this->setManager();
 
 		return $this->orm;
+	}
+
+	/**
+	 * Подгружает классы ENTITY из массива схемы до new Schema — иначе Cycle не ставит псевдоним FQCN → роль.
+	 *
+	 * @param   array<string, mixed>  $schema
+	 */
+	private function warmSchemaEntityClasses(array $schema): void {
+		foreach($schema as $def) {
+			if(!is_array($def)) {
+				continue;
+			}
+
+			$entity = $def[SchemaInterface::ENTITY] ?? null;
+
+			if(!is_string($entity) || $entity === '') {
+				continue;
+			}
+
+			try {
+				class_exists($entity, true);
+			} catch(\Throwable) {
+				// Класс битый — псевдонима не будет; подсказка попадёт в 500.
+			}
+		}
 	}
 
 	/**

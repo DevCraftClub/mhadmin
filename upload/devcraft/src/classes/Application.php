@@ -30,6 +30,7 @@ use DevCraft\Core\Database\DatabaseGateway;
 use DevCraft\Core\Exception\DevCraftException;
 use DevCraft\Core\Support\AssetsCheckerService;
 use DevCraft\Core\Support\DataManager;
+use DevCraft\Core\Support\ExceptionDetailFormatter;
 use DevCraft\Core\Config\DevCraftConfig;
 
 /**
@@ -212,12 +213,14 @@ final class Application {
 				$plugin,
 			);
 		} catch(Throwable $exception) {
+			$detail = (new ExceptionDetailFormatter($this->registry))->format($exception);
+
 			$errorRenderer->render(
 				AdminErrorKind::ServerError,
 				__('Внутренняя ошибка'),
 				__('Что-то пошло не так. Повторите попытку позже.'),
 				500,
-				$exception->getMessage(),
+				$detail,
 				$plugin,
 			);
 		}

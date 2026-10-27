@@ -58,6 +58,29 @@ final class SchemaSyncService {
 	) {}
 
 	/**
+	 * Сбрасывает запас копии схемы и заново приводит таблицы к моделям.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @return array{present: int, missing: list<string>} Сколько таблиц на месте и какие ещё отсутствуют.
+	 */
+	public function forceEnsure(): array {
+		$path = rtrim(Paths::cache(), '/\\') . '/cycle_orm_schema.ser';
+
+		if(is_file($path)) {
+			@unlink($path);
+		}
+
+		$schema  = $this->ensureSchemaReady();
+		$missing = $this->missingSchemaTables($schema);
+
+		return [
+			'present' => count($schema) - count($missing),
+			'missing' => $missing,
+		];
+	}
+
+	/**
 	 * Приводит схему к актуальному виду и возвращает скомпилированный массив схемы.
 	 *
 	 * @since 200.4.1
@@ -133,6 +156,13 @@ final class SchemaSyncService {
 			$registry     = new SchemaRegistry($this->gateway->databaseManager());
 			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, true, false);
 			$this->runPending($migrator);
+		}
+
+		// Файлы миграций не создали таблицы (чистая база или ложная отметка «выполнена»).
+		// Один проход «на лету», не на каждый запрос.
+		if(!$this->schemaTablesExist($schema_array)) {
+			$registry     = new SchemaRegistry($this->gateway->databaseManager());
+			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, false, true);
 		}
 
 		$this->storeCachedSchema($fingerprint, $schema_array);
@@ -595,6 +625,35 @@ final class SchemaSyncService {
 	 *
 	 * @param   array<string, mixed>  $schema
 	 */
+	/**
+	 * @param   array<string, mixed>  $schema
+	 *
+	 * @return list<string>
+	 */
+	private function missingSchemaTables(array $schema): array {
+		$missing = [];
+
+		foreach($schema as $def) {
+			if(!is_array($def)) {
+				continue;
+			}
+
+			$table = $def[SchemaInterface::TABLE] ?? null;
+
+			if(!is_string($table) || $table === '') {
+				continue;
+			}
+
+			$full = str_starts_with($table, PREFIX . '_') ? $table : PREFIX . '_' . $table;
+
+			if(!$this->tableExists($full)) {
+				$missing[] = $full;
+			}
+		}
+
+		return $missing;
+	}
+
 	private function schemaTablesExist(array $schema): bool {
 		foreach($schema as $def) {
 			if(!is_array($def)) {

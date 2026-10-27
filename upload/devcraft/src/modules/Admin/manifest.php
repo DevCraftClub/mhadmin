@@ -34,6 +34,7 @@ use DevCraft\Modules\Admin\Pages\PublicHeaderEditPage;
 use DevCraft\Builders\ModuleSiteAssetsBuilder;
 use DevCraft\Modules\Admin\Ajax\DumpAutoloadHandler;
 use DevCraft\Modules\Admin\Ajax\SettingsHandler;
+use DevCraft\Modules\Admin\Ajax\SchemaSyncHandler;
 use DevCraft\Modules\Admin\Ajax\DeleteLogHandler;
 use DevCraft\Modules\Admin\Ajax\NewModuleHandler;
 use DevCraft\Modules\Admin\Ajax\SaveAssetHandler;
@@ -83,6 +84,7 @@ return ModuleManifestBuilder::create()
 		ModuleAjaxConfigBuilder::create('admin')
 			->methods([
 				'settings'               => SettingsHandler::class,
+				'schema_sync'            => SchemaSyncHandler::class,
 				'delete_log'             => DeleteLogHandler::class,
 				'check_assets'           => CheckAssetsHandler::class,
 				'sync_assets'            => SyncAssetsHandler::class,

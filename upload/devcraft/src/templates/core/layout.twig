@@ -99,6 +99,7 @@
         {% include 'core/includes/menu.twig' with { menu: admin.menu, current: admin.current_action } %}
     </div>
     <div class="navview-content">
+        {% include 'core/includes/topbar.twig' %}
         <div id="page-content">
             {% include 'core/includes/breadcrumbs.twig' with { breadcrumbs: admin.breadcrumbs } %}
             {{ content|raw }}

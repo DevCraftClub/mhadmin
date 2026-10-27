@@ -177,6 +177,8 @@ final class Router {
 		$data['devcraft_debug']           = LogGenerator::isDebugEnabled();
 		$data['devcraft_theme']           = $theme;
 		$data['devcraft_locale']          = $locale;
+		$data['devcraft_languages']       = Translation::getFormattedLanguageList();
+		$data                             = array_merge($data, $this->adminUserBar());
 		$data['devcraft_metro_locale']    = $metroLocale;
 		$data['devcraft_html_lang']       = Translation::loadLanguageMeta($locale)->iso2;
 		$data['devcraft_metro_i18n_url']  = $this->buildMetroI18nUrl($metroLocale);
@@ -310,6 +312,60 @@ final class Router {
 			'version' => $version,
 			'admin'   => $adminContext->toArray(),
 		]));
+	}
+
+	/**
+	 * Данные текущего администратора для верхней панели.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @return array{admin_user_name: string, admin_user_avatar_url: string, admin_user_profile_url: string, admin_logout_url: string}
+	 */
+	private function adminUserBar(): array {
+		global $config, $member_id, $user_group;
+
+		$member  = is_array($member_id ?? null) ? $member_id : [];
+		$name    = trim((string) ($member['name'] ?? ''));
+		$foto    = trim((string) ($member['foto'] ?? ''));
+		$groupId = (int) ($member['user_group'] ?? 0);
+		$maxFoto = 64;
+
+		if(isset($user_group[$groupId]['max_foto'])) {
+			$maxFoto = (int) $user_group[$groupId]['max_foto'];
+		}
+
+		if($maxFoto < 1) {
+			$maxFoto = 64;
+		}
+
+		$home = '/';
+
+		if(is_array($config ?? null) && isset($config['http_home_url'])) {
+			$home = (string) $config['http_home_url'];
+		}
+
+		$home = rtrim($home, '/') . '/';
+		$avatarUrl = '';
+
+		if($foto !== '' && substr_count($foto, '@') === 1) {
+			$avatarUrl = 'https://www.gravatar.com/avatar/' . md5($foto) . '?s=' . $maxFoto;
+		} elseif($foto !== '') {
+			$candidate = str_starts_with($foto, '//') ? 'http:' . $foto : $foto;
+			$parts     = parse_url($candidate);
+
+			if(is_array($parts) && !empty($parts['host'])) {
+				$avatarUrl = str_starts_with($foto, '//') ? 'https:' . $foto : $foto;
+			} else {
+				$avatarUrl = $home . 'uploads/fotos/' . ltrim($foto, '/');
+			}
+		}
+
+		return [
+			'admin_user_name'        => $name,
+			'admin_user_avatar_url'  => $avatarUrl,
+			'admin_user_profile_url' => $name !== '' ? $home . 'user/' . rawurlencode($name) . '/' : '',
+			'admin_logout_url'       => '?action=logout',
+		];
 	}
 
 }

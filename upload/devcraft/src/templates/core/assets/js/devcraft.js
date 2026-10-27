@@ -97,6 +97,7 @@
 
         static boot() {
             DevCraftSettings.bind();
+            bindTopbar();
 
             if (global.DevCraft && global.DevCraft.Filter && typeof global.DevCraft.Filter.boot === 'function') {
                 global.DevCraft.Filter.boot();
@@ -593,6 +594,65 @@
         return typeof window.dle_login_hash === 'string' ? window.dle_login_hash : '';
     }
 
+    function bindTopbar() {
+        const themeBtn = document.querySelector('[data-dc-theme]');
+        const langCurrent = document.querySelector('[data-dc-language-current]');
+        const schemaBtn = document.getElementById('dc-schema-sync');
+
+        if (themeBtn) {
+            themeBtn.addEventListener('click', function () {
+                const current = themeBtn.getAttribute('data-dc-theme') === 'dark' ? 'dark' : 'light';
+                const next = current === 'dark' ? 'light' : 'dark';
+
+                postAjax('settings', { theme: next, __loaderText: t('Сохраняем тему…') }).then(function (payload) {
+                    if (payload && payload.success) {
+                        window.location.reload();
+                        return;
+                    }
+                    dcNotifyError(t('Ошибка'), t('Не удалось сохранить тему'), payload);
+                }).catch(function (err) {
+                    dcNotifyError(t('Ошибка'), t('Сеть или сервер недоступен'), err);
+                });
+            });
+        }
+
+        document.querySelectorAll('[data-dc-language]').forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const language = link.getAttribute('data-dc-language') || '';
+                const current = langCurrent ? langCurrent.getAttribute('data-dc-language-current') : '';
+
+                if (!language || language === current) {
+                    return;
+                }
+
+                postAjax('settings', { language: language, __loaderText: t('Сохраняем язык…') }).then(function (payload) {
+                    if (payload && payload.success) {
+                        window.location.reload();
+                        return;
+                    }
+                    dcNotifyError(t('Ошибка'), t('Не удалось сохранить язык'), payload);
+                }).catch(function (err) {
+                    dcNotifyError(t('Ошибка'), t('Сеть или сервер недоступен'), err);
+                });
+            });
+        });
+
+        if (schemaBtn) {
+            schemaBtn.addEventListener('click', function () {
+                postAjax('schema_sync', { __loaderText: t('Обновляем таблицы…') }).then(function (payload) {
+                    if (payload && payload.success) {
+                        dcNotify(t('Готово'), (payload.notice && payload.notice.message) || t('Таблицы базы в актуальном состоянии'), 'success');
+                        return;
+                    }
+                    dcNotifyError(t('Ошибка'), t('Не удалось обновить таблицы'), payload);
+                }).catch(function (err) {
+                    dcNotifyError(t('Ошибка'), t('Сеть или сервер недоступен'), err);
+                });
+            });
+        }
+    }
+
     function postAjax(method, data) {
         const params = {
             controller: 'admin',
@@ -604,14 +664,18 @@
             params.mod = mod;
         }
 
-        dcLoaderShow(data && typeof data.__loaderText === 'string' ? data.__loaderText : t('Выполняем запрос, пожалуйста подождите…'));
+        const payload = Object.assign({}, data || {});
+        const loaderText = typeof payload.__loaderText === 'string' ? payload.__loaderText : '';
+        delete payload.__loaderText;
+
+        dcLoaderShow(loaderText || t('Выполняем запрос, пожалуйста подождите…'));
 
         return fetch(ajaxUrl(ajaxBaseUrl(), params), {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
                 user_hash: getUserHash(),
-                data: JSON.stringify(data || {})
+                data: JSON.stringify(payload)
             }).toString()
         }).then(parseJsonResponse).finally(function () {
             dcLoaderHide();

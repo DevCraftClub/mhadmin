@@ -1,0 +1,39 @@
+{% set current_locale = devcraft_locale|default('ru_RU') %}
+{% set matched_language = devcraft_languages|default([])|filter(v => v.tag == current_locale)|first %}
+<div class="dc-topbar">
+    <div class="dropdown-button dc-topbar__lang">
+        <button type="button" class="button flat" data-dc-language-current="{{ current_locale }}" aria-label="{{ 'Язык админки'|trans }}">
+            <span class="mif-translate"></span>
+            <span class="dc-topbar__lang-name">{{ matched_language ? matched_language.name : current_locale }}</span>
+        </button>
+        <ul class="d-menu" data-role="dropdown">
+            {% for language in devcraft_languages|default([]) %}
+                <li>
+                    <a href="#" data-dc-language="{{ language.tag }}">{{ language.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="button"
+            class="button square outline dc-topbar__theme"
+            data-dc-theme="{{ devcraft_theme|default('light') }}"
+            title="{{ 'Тема оформления админки'|trans }}">
+        <span class="mif-dark-light"></span>
+    </button>
+    <div class="dropdown-button dc-topbar__user">
+        <button type="button" class="button flat">
+            {% if admin_user_avatar_url %}
+                <img class="dc-topbar__avatar" src="{{ admin_user_avatar_url }}" alt="">
+            {% else %}
+                <span class="mif-user-settings dc-topbar__avatar dc-topbar__avatar--empty"></span>
+            {% endif %}
+            <span class="dc-topbar__name">{{ admin_user_name|default('') }}</span>
+        </button>
+        <ul class="d-menu" data-role="dropdown">
+            {% if admin_user_profile_url %}
+                <li><a href="{{ admin_user_profile_url }}" target="_blank" rel="noopener">{{ 'Профиль'|trans }}</a></li>
+            {% endif %}
+            <li><a href="{{ admin_logout_url|default('?action=logout') }}">{{ 'Выход'|trans }}</a></li>
+        </ul>
+    </div>
+</div>

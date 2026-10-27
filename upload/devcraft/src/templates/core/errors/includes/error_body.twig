@@ -32,4 +32,9 @@
     <a href="{{ dashboard_url }}" class="button alert">
         <span class="mif-arrow-left mr-2"></span> {{ 'На главную'|trans }}
     </a>
+    {% if clear_cache_url is defined and clear_cache_url is not empty %}
+    <a href="{{ clear_cache_url }}" class="button warning ml-2">
+        <span class="mif-bin mr-2"></span> {{ 'Очистить кеш'|trans }}
+    </a>
+    {% endif %}
 </div>

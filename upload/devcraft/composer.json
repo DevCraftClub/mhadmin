@@ -52,8 +52,5 @@
 	"config": {
 		"sort-packages": true,
 		"platform-check": false,
-		"platform": {
-			"php": "8.3"
-		}
 	}
 }

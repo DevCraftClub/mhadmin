@@ -46,14 +46,39 @@ if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
 	$dcSourceRoot = realpath($dcRoot . '/src') . DIRECTORY_SEPARATOR;
 
 	// Composer определяет путь, а DLE применяет изменения плагинов к классам DevCraft.
+	// Если classmap устарел и путь не существует, пробуем PSR-4 fallback для локальных классов.
 	spl_autoload_register(static function (string $class) use ($dcLoader, $dcSourceRoot): void {
 		$file = $dcLoader->findFile($class);
+		$path = ($file !== false) ? realpath($file) : false;
 
-		if($file === false) {
-			return;
+		if($path === false) {
+			$prefixMap = [
+				'DevCraft\\Core\\'          => 'classes/',
+				'DevCraft\\Builders\\'      => 'classes/Builders/',
+				'DevCraft\\Form\\'          => 'classes/Form/',
+				'DevCraft\\Modules\\'       => 'modules/',
+				'DevCraft\\Enums\\'         => 'classes/Enums/',
+				'DevCraft\\Types\\'         => 'classes/Types/',
+				'DevCraft\\Utils\\'         => 'classes/Utils/',
+				'DevCraft\\Dle\\'           => 'sdk/dle/',
+				'JetBrains\\PhpStorm\\'     => 'sdk/dle/Support/PhpStorm/',
+			];
+
+			foreach($prefixMap as $prefix => $baseDir) {
+				if(!str_starts_with($class, $prefix)) {
+					continue;
+				}
+
+				$relative = substr($class, strlen($prefix));
+				$fallback = $dcSourceRoot . $baseDir . str_replace('\\', '/', $relative) . '.php';
+
+				if(is_file($fallback)) {
+					$path = realpath($fallback);
+				}
+
+				break;
+			}
 		}
-
-		$path = realpath($file);
 
 		if($path === false || !str_starts_with($path, $dcSourceRoot)) {
 			return;

@@ -154,13 +154,13 @@ final class ModuleManifestBuilder {
 		return $this;
 	}
 
-	public function crowdinName(?string $name = null): self {
+	public function crowdinName(?string $name): self {
 		$this->crowdinName = $name;
 
 		return $this;
 	}
 
-	public function crowdinStatId(?string $id = null): self {
+	public function crowdinStatId(?string $id): self {
 		$this->crowdinStatId = $id;
 
 		return $this;
@@ -169,31 +169,31 @@ final class ModuleManifestBuilder {
 	/**
 	 * @param   array<string, mixed>  $meta
 	 */
-	public function meta(array $meta = []): self {
+	public function meta(array $meta): self {
 		$this->meta = array_merge($this->meta, $meta);
 
 		return $this;
 	}
 
-	public function name(?string $name): self {
+	public function name(string $name): self {
 		$this->meta['name'] = $name;
 
 		return $this;
 	}
 
-	public function version(?string $version): self {
+	public function version(string $version): self {
 		$this->meta['version'] = $version;
 
 		return $this;
 	}
 
-	public function description(?string $description = null): self {
+	public function description(string $description): self {
 		$this->meta['description'] = $description;
 
 		return $this;
 	}
 
-	public function icon(?string $icon): self {
+	public function icon(string $icon): self {
 		$this->meta['icon'] = $icon;
 
 		return $this;
@@ -211,7 +211,7 @@ final class ModuleManifestBuilder {
 		return $this;
 	}
 
-	public function siteId(?int $siteId): self {
+	public function siteId(int $siteId): self {
 		$this->meta['siteId'] = $siteId;
 
 		return $this;

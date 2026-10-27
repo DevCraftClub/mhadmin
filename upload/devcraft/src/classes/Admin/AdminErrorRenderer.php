@@ -59,6 +59,8 @@ final class AdminErrorRenderer {
 		?string        $detail = NULL,
 		?PluginContext $plugin = NULL,
 	): void {
+		global $dle_login_hash;
+
 		if(!headers_sent()) {
 			http_response_code($status);
 		}
@@ -77,6 +79,10 @@ final class AdminErrorRenderer {
 			AdminErrorKind::Generic     => '',
 		};
 
+		$clearCacheUrl = $kind === AdminErrorKind::ServerError
+			? '?mod=' . rawurlencode($mod) . '&action=clear_cache&user_hash=' . rawurlencode((string) ($dle_login_hash ?? ''))
+			: '';
+
 		$assetBase = Application::instance()->public_asset_url();
 
 		$locale = (string) DevCraftConfig::get('language', 'ru_RU');
@@ -90,6 +96,7 @@ final class AdminErrorRenderer {
 				'detail'        => $detail,
 				'code'          => $code,
 				'dashboard_url' => '?mod=' . rawurlencode($mod) . '&action=dashboard',
+				'clear_cache_url' => $clearCacheUrl,
 			]),
 			'asset_base'         => $assetBase,
 			'css_urls'           => [

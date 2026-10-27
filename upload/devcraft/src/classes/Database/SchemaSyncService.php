@@ -437,6 +437,8 @@ final class SchemaSyncService {
 		bool $generateMigrations,
 		bool $syncTables,
 	): array {
+		$model_directories = $this->normalizeModelDirectories($model_directories);
+
 		if($model_directories === []) {
 			$class_locator = new ClassLocator(new \ArrayIterator([]));
 		} else {
@@ -483,6 +485,33 @@ final class SchemaSyncService {
 		$compiler = new Compiler();
 
 		return $compiler->compile($registry, $generators);
+	}
+
+	/**
+	 * Оставляет только существующие каталоги моделей и убирает дубликаты.
+	 *
+	 * @param   list<string>  $directories
+	 *
+	 * @return list<string>
+	 */
+	private function normalizeModelDirectories(array $directories): array {
+		$normalized = [];
+
+		foreach($directories as $directory) {
+			if(!is_string($directory) || $directory === '') {
+				continue;
+			}
+
+			$real = realpath($directory);
+
+			if($real === false || !is_dir($real)) {
+				continue;
+			}
+
+			$normalized[$real] = $real;
+		}
+
+		return array_values($normalized);
 	}
 
 	private function skipCreateMigrationsForExistingTables(Migrations\Migrator $migrator): void {

@@ -21,6 +21,7 @@ use Twig\Environment;
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Admin\Router;
 use DevCraft\Enums\AdminErrorKind;
+use DevCraft\Core\Cache\CacheControl;
 use DevCraft\Core\Module\Registry;
 use DevCraft\Core\Module\ModulePsr4Registrar;
 use DevCraft\Core\Twig\EnvironmentFactory;
@@ -28,6 +29,8 @@ use DevCraft\Core\Admin\AdminErrorRenderer;
 use DevCraft\Core\Database\DatabaseGateway;
 use DevCraft\Core\Exception\DevCraftException;
 use DevCraft\Core\Support\AssetsCheckerService;
+use DevCraft\Core\Support\DataManager;
+use DevCraft\Core\Config\DevCraftConfig;
 
 /**
  * Главный контейнер приложения DevCraft (Singleton).
@@ -175,6 +178,11 @@ final class Application {
 			$action = (string) $_GET['sites'];
 		}
 
+		if($action === 'clear_cache') {
+			$this->handleClearCacheAction($mod ?? 'devcraft');
+			return;
+		}
+
 		$errorRenderer = new AdminErrorRenderer();
 		$plugin        = NULL;
 
@@ -213,6 +221,41 @@ final class Application {
 				$plugin,
 			);
 		}
+	}
+
+	/**
+	 * Очищает кэш DLE и DevCraft, затем возвращает пользователя на главную админки модуля.
+	 *
+	 * @since 200.4.2
+	 */
+	private function handleClearCacheAction(string $mod): void {
+		global $dle_login_hash;
+
+		$requestHash = (string) ($_REQUEST['user_hash'] ?? '');
+		$sessionHash = (string) ($dle_login_hash ?? '');
+
+		if($requestHash === '' || $sessionHash === '' || $requestHash !== $sessionHash) {
+			(new AdminErrorRenderer())->render(
+				AdminErrorKind::Generic,
+				__('Ошибка'),
+				__('Недопустимый хеш сессии. Обновите страницу и повторите.'),
+				403,
+			);
+
+			return;
+		}
+
+		if(function_exists('clear_cache')) {
+			clear_cache();
+		}
+
+		CacheControl::clearCache('all');
+		DataManager::clearCacheContents(Paths::cache());
+		DevCraftConfig::resetCache();
+
+		$target = '?mod=' . rawurlencode($mod) . '&action=dashboard';
+		header('Location: ' . $target);
+		exit;
 	}
 
 	/**

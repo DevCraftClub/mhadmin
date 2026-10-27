@@ -51,6 +51,6 @@
 	},
 	"config": {
 		"sort-packages": true,
-		"platform-check": false,
+		"platform-check": false
 	}
 }

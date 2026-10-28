@@ -20,6 +20,7 @@ use Cycle\Database\Config\DriverConfig;
 use Cycle\Database\Driver\Driver;
 use Cycle\Database\Driver\MySQL\MySQLDriver;
 use Cycle\Database\Query\Interpolator;
+use Cycle\Database\StatementInterface;
 
 /**
  * Драйвер MySQL, который читает базу как обычно, а изменяющие команды только записывает.
@@ -64,6 +65,51 @@ final class SqlCaptureDriver extends MySQLDriver {
 		$this->statements[] = $parameters === []? $query : Interpolator::interpolate($query, $parameters);
 
 		return 0;
+	}
+
+	/**
+	 * Таблиц «нет»: схема собирается с нуля, иначе Cycle отказывается писать CREATE по уже существующим колонкам.
+	 *
+	 * @since 200.4.2
+	 */
+	public function query(string $statement, array $parameters = []): StatementInterface {
+		if(preg_match('/information_schema[`.\' ]*tables/i', $statement) === 1) {
+			return new class($statement) implements StatementInterface, \IteratorAggregate {
+				public function __construct(private string $query) {}
+
+				public function getQueryString(): string {
+					return $this->query;
+				}
+
+				public function fetch(int $mode = StatementInterface::FETCH_ASSOC): mixed {
+					return null;
+				}
+
+				public function fetchColumn(?int $columnNumber = null): mixed {
+					return 0;
+				}
+
+				public function fetchAll(int $mode = StatementInterface::FETCH_ASSOC): array {
+					return [];
+				}
+
+				public function rowCount(): int {
+					return 1;
+				}
+
+				public function columnCount(): int {
+					return 1;
+				}
+
+				public function close(): void {}
+
+				public function getIterator(): \Traversable {
+					return new \ArrayIterator([]);
+				}
+			};
+		}
+
+		return parent::query($statement, $parameters);
 	}
 
 	/**

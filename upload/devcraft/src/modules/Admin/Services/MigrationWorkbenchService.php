@@ -26,6 +26,7 @@ use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Database\DatabaseGateway;
 use DevCraft\Core\Database\SchemaSyncService;
 use DevCraft\Core\Database\SqlCaptureDriver;
+use DevCraft\Core\Database\SqlExportCapsule;
 
 /**
  * Действия страницы миграций: список, создание, накат, откат шага, отметка без SQL, выгрузка SQL.
@@ -180,8 +181,8 @@ final class MigrationWorkbenchService {
 	/**
 	 * Собирает SQL миграции без изменения базы.
 	 *
-	 * Если SQL собрать нельзя (состояние базы не совпадает с шагом), в текст идёт исходник метода
-	 * с пометкой.
+	 * Схема берётся пустой (не из живых таблиц): иначе Cycle отказывается строить CREATE/ALTER,
+	 * если таблица уже есть.
 	 *
 	 * @since 200.4.2
 	 *
@@ -190,7 +191,7 @@ final class MigrationWorkbenchService {
 	 *
 	 * @return array{name: string, sql: string} Имя файла для скачивания и текст.
 	 *
-	 * @throws \RuntimeException Если миграция не найдена.
+	 * @throws \RuntimeException Если миграция не найдена или SQL не собрался.
 	 */
 	public function sql(string $id, string $direction): array {
 		$migration = $this->find($id);
@@ -201,23 +202,13 @@ final class MigrationWorkbenchService {
 			throw new \RuntimeException(__('Драйвер базы не поддерживает выгрузку SQL'));
 		}
 
-		$driver  = SqlCaptureDriver::fromDriver($main);
-		$capsule = new Capsule(new Database('default', PREFIX . '_', $driver));
+		$driver     = SqlCaptureDriver::fromDriver($main);
+		$create     = str_contains($this->methodBody($migration, 'up'), '->create()');
+		$asExisting = !$create;
+		$captured   = $this->captureSql($migration, $driver, $asExisting);
 
-		// Шаги идут по очереди на одном снимке схемы: для выполненной сначала down, иначе up.
-		$order    = $state->getStatus() === State::STATUS_EXECUTED? ['down', 'up'] : ['up', 'down'];
-		$captured = [];
-
-		foreach($order as $step) {
-			try {
-				$migration->withCapsule($capsule)->{$step}();
-				$captured[$step] = implode(";\n", $driver->takeStatements()) . ';';
-			} catch(\Throwable $e) {
-				$driver->takeStatements();
-				$captured[$step] = '-- ' . __('SQL собрать не удалось: {error}', ['{error}' => $e->getMessage()]) . "\n"
-				                   . '-- ' . __('Ниже исходник метода {method} из файла миграции.', ['{method}' => $step]) . "\n"
-				                   . '/*' . "\n" . $this->methodBody($migration, $step) . "\n" . '*/';
-			}
+		if(($captured['up'] ?? '') === '' && !$asExisting) {
+			$captured = $this->captureSql($migration, $driver, true);
 		}
 
 		$driver->disconnect();
@@ -226,13 +217,67 @@ final class MigrationWorkbenchService {
 		$text  = '-- ' . __('Миграция: {name}', ['{name}' => $state->getName()]) . "\n";
 
 		foreach($steps as $step) {
-			$text .= "\n-- ---------- {$step} ----------\n" . $captured[$step] . "\n";
+			$sql = $captured[$step] ?? '';
+
+			if($sql === '') {
+				throw new \RuntimeException(__('Не удалось собрать SQL для {step}', ['{step}' => $step]));
+			}
+
+			$text .= "\n-- ---------- {$step} ----------\n" . $sql . "\n";
 		}
 
 		return [
 			'name' => $state->getName() . '.' . implode('_', $steps) . '.sql',
 			'sql'  => $text,
 		];
+	}
+
+	/**
+	 * Прогоняет up, затем down на изолированной схеме и возвращает SQL обоих шагов.
+	 *
+	 * @return array{up: string, down: string}
+	 */
+	private function captureSql(MigrationInterface $migration, SqlCaptureDriver $driver, bool $asExisting): array {
+		$capsule  = new SqlExportCapsule(new Database('default', PREFIX . '_', $driver), $asExisting);
+		$captured = ['up' => '', 'down' => ''];
+
+		foreach(['up', 'down'] as $step) {
+			try {
+				$migration->withCapsule($capsule)->{$step}();
+				$captured[$step] = $this->joinSql($driver->takeStatements());
+			} catch(\Throwable $e) {
+				$driver->takeStatements();
+
+				if($step === 'down' && $captured['up'] !== '') {
+					continue;
+				}
+
+				throw new \RuntimeException(
+					__('Не удалось собрать SQL: {error}', ['{error}' => $e->getMessage()]),
+					0,
+					$e,
+				);
+			}
+		}
+
+		return $captured;
+	}
+
+	/**
+	 * @param   list<string>  $statements
+	 */
+	private function joinSql(array $statements): string {
+		$lines = [];
+
+		foreach($statements as $statement) {
+			$statement = rtrim(trim($statement), ';');
+
+			if($statement !== '') {
+				$lines[] = $statement . ';';
+			}
+		}
+
+		return implode("\n", $lines);
 	}
 
 	private static function key(State $state): string {

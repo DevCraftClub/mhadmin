@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace DevCraft\Core\Http;
 
 use DevCraft\Core\Application;
+use DevCraft\Core\Admin\AdminErrorRenderer;
 use DevCraft\Core\I18n\Translation;
 use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
@@ -226,6 +227,10 @@ final class AjaxController {
 			$extra['detail'] = (new ExceptionDetailFormatter(
 				Application::instance()->registry(),
 			))->formatBrief($e);
+		}
+
+		if($isSchema) {
+			$extra['data'] = ['migrations_url' => AdminErrorRenderer::migrationsUrl()];
 		}
 
 		JsonResponse::fail(

@@ -747,7 +747,160 @@
 			if (newModuleBtn && document.getElementById('new-module-form')) {
 				handleNewModuleSubmit();
 			}
+
+			const migrationsOpBtn = event.target.closest('.js-migrations-op');
+
+			if (migrationsOpBtn && !migrationsOpBtn.disabled) {
+				runMigrationsOp(migrationsOpBtn);
+				return;
+			}
+
+			const migrationSqlBtn = event.target.closest('.js-migration-sql');
+
+			if (migrationSqlBtn) {
+				chooseMigrationSql(migrationSqlBtn.dataset.id, migrationSqlBtn.dataset.hasDown === '1');
+				return;
+			}
+
+			const logsZipBtn = event.target.closest('.js-logs-zip');
+
+			if (logsZipBtn) {
+				downloadSelectedLogs(logsZipBtn.dataset.table || '#dc-logs-table');
+			}
 		});
+	}
+
+	function confirmAction(message) {
+		return new Promise(function (resolve) {
+			DevCraftMetro.dialogCreate({
+				title: t('Подтверждение'),
+				content: '<p>' + message + '</p>',
+				customButtons: [
+					{ text: t('Отмена'), cls: 'js-dialog-close', onclick: function () { resolve(false); } },
+					{ text: t('Да'), cls: 'primary js-dialog-close', onclick: function () { resolve(true); } },
+				],
+			});
+		});
+	}
+
+	function runMigrationsOp(btn) {
+		const data = { op: btn.dataset.op, id: btn.dataset.id || '', __loaderText: t('Работаем с миграциями…') };
+		const ask = btn.dataset.confirm ? confirmAction(btn.dataset.confirm) : Promise.resolve(true);
+
+		ask.then(function (ok) {
+			if (!ok) {
+				return;
+			}
+
+			DevCraftAjax.post('migrations_action', data).then(function (payload) {
+				DevCraftAjax.handleNotice(payload);
+
+				if (payload && payload.success) {
+					setTimeout(function () { window.location.reload(); }, 600);
+				}
+			}).catch(function (err) {
+				DevCraftMetro.notifyError(t('Ошибка'), t('Сеть или сервер недоступен'), err);
+			});
+		});
+	}
+
+	/**
+	 * POST в devcraft/ajax.php: JSON — уведомление, иначе файл скачивается браузером.
+	 */
+	function downloadPost(method, data) {
+		const params = { controller: 'admin', method: method };
+		const mod = document.body.dataset.mod;
+
+		if (mod) {
+			params.mod = mod;
+		}
+
+		if (DevCraft.Loader && DevCraft.Loader.show) {
+			DevCraft.Loader.show(t('Готовим файл…'));
+		}
+
+		return fetch(DevCraftAjax.url(DevCraftAjax.baseUrl(), params), {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URLSearchParams({
+				user_hash: DevCraftAjax.getUserHash(),
+				data: JSON.stringify(data || {}),
+			}).toString(),
+		}).then(function (response) {
+			const type = response.headers.get('content-type') || '';
+
+			if (type.indexOf('json') !== -1) {
+				return DevCraftAjax.parseResponse(response).then(DevCraftAjax.handleNotice);
+			}
+
+			const disposition = response.headers.get('content-disposition') || '';
+			const match = /filename="([^"]+)"/.exec(disposition);
+
+			return response.blob().then(function (blob) {
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.download = match ? match[1] : 'download';
+				document.body.appendChild(link);
+				link.click();
+				link.remove();
+				setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
+			});
+		}).catch(function (err) {
+			DevCraftMetro.notifyError(t('Ошибка'), t('Не удалось скачать файл'), err);
+		}).finally(function () {
+			if (DevCraft.Loader && DevCraft.Loader.hide) {
+				DevCraft.Loader.hide();
+			}
+		});
+	}
+
+	function chooseMigrationSql(id, hasDown) {
+		if (!hasDown) {
+			downloadPost('migration_sql', { id: id, direction: 'up' });
+			return;
+		}
+
+		const pick = function (direction) {
+			return function () { downloadPost('migration_sql', { id: id, direction: direction }); };
+		};
+
+		DevCraftMetro.dialogCreate({
+			title: t('Скачать SQL миграции'),
+			content: '<p>' + t('У миграции есть откат. Какой SQL скачать?') + '</p>',
+			customButtons: [
+				{ text: t('Вперёд (up)'), cls: 'primary js-dialog-close', onclick: pick('up') },
+				{ text: t('Назад (down)'), cls: 'warning js-dialog-close', onclick: pick('down') },
+				{ text: t('Оба'), cls: 'js-dialog-close', onclick: pick('both') },
+			],
+		});
+	}
+
+	function downloadSelectedLogs(tableSelector) {
+		const plugin = DevCraft.Metro.getLogsTablePlugin ? DevCraft.Metro.getLogsTablePlugin() : null;
+		let ids = [];
+
+		if (plugin && typeof plugin.getSelectedItems === 'function') {
+			ids = plugin.getSelectedItems().map(function (row) { return row[0]; });
+		}
+
+		if (!ids.length) {
+			document.querySelectorAll(tableSelector + ' input[name="table_row_check[]"]:checked').forEach(function (input) {
+				ids.push(input.value);
+			});
+		}
+
+		ids = ids.map(Number).filter(function (id) { return id > 0; });
+
+		if (!ids.length) {
+			DevCraftMetro.dialogCreate({
+				title: t('Скачать логи'),
+				content: '<p>' + t('Отметьте хотя бы одну строку') + '</p>',
+				customButtons: [{ text: t('Понятно'), cls: 'primary js-dialog-close' }],
+			});
+			return;
+		}
+
+		downloadPost('logs_zip', { ids: ids });
 	}
 
 	// selectVal / calendarVal / getLogsTablePlugin — в filter.js

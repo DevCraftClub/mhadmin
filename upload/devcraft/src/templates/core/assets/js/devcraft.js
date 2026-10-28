@@ -413,6 +413,23 @@
             console.error('[DevCraft]', payload.error);
         }
 
+        if (!payload.success && payload.data && payload.data.migrations_url) {
+            dcMetroDialogCreate({
+                title: (payload.error && payload.error.title) || t('Ошибка'),
+                content: '<p>' + t('Модель базы не найдена. Проверьте миграции: возможно, таблица ещё не создана.') + '</p>',
+                actions: [
+                    { text: t('Закрыть'), cls: 'js-dialog-close' },
+                    {
+                        text: t('Проверить миграции'),
+                        cls: 'primary js-dialog-close',
+                        onclick: function () { window.location.href = payload.data.migrations_url; }
+                    }
+                ]
+            });
+
+            return;
+        }
+
         const notice = payload.notice;
 
         if (!notice || !notice.message) {

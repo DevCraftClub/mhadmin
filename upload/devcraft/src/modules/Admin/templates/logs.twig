@@ -12,7 +12,12 @@
     table_total_id: 'dc-logs-total'
 } only %}
 
-<p class="text-small" id="dc-logs-total" data-records-suffix="{{ 'записей'|trans }}">{{ total }} {{ 'записей'|trans }}</p>
+<div class="d-flex flex-align-center flex-justify-between flex-wrap gap-2">
+    <p class="text-small" id="dc-logs-total" data-records-suffix="{{ 'записей'|trans }}">{{ total }} {{ 'записей'|trans }}</p>
+    <button type="button" class="button small js-logs-zip" data-table="#{{ table_id|default('dc-logs-table') }}">
+        <span class="mif-download mr-2"></span>{{ 'Скачать логи'|trans }}
+    </button>
+</div>
 
 <table id="{{ table_id|default('dc-logs-table') }}"
        class="table striped row-hover border responsive-md fixed-header mt-2"

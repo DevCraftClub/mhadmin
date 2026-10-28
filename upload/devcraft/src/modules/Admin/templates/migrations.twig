@@ -1,0 +1,68 @@
+<h2>{{ 'Миграции'|trans }}</h2>
+
+<p class="text-small">
+    {{ 'Выполнено'|trans }}: <b>{{ executed }}</b>,
+    {{ 'ожидают'|trans }}: <b>{{ pending }}</b>{% if orphans > 0 %},
+    {{ 'учёт без файла'|trans }}: <b>{{ orphans }}</b>{% endif %}
+</p>
+
+<div class="d-flex flex-wrap gap-2 mb-2">
+    <button type="button" class="button primary js-migrations-op" data-op="generate"{% if pending > 0 %} disabled title="{{ 'Сначала накатите ожидающие миграции'|trans }}"{% endif %}>
+        <span class="mif-plus mr-2"></span>{{ 'Создать из моделей'|trans }}
+    </button>
+    <button type="button" class="button success js-migrations-op" data-op="migrate"{% if pending == 0 %} disabled{% endif %}>
+        <span class="mif-play mr-2"></span>{{ 'Накатить ожидающие'|trans }}
+    </button>
+    <button type="button" class="button warning js-migrations-op" data-op="rollback" data-confirm="{{ 'Откатить последнюю выполненную миграцию?'|trans }}"{% if executed == 0 %} disabled{% endif %}>
+        <span class="mif-undo mr-2"></span>{{ 'Откатить шаг'|trans }}
+    </button>
+    {% if orphans > 0 %}
+    <button type="button" class="button alert js-migrations-op" data-op="prune" data-confirm="{{ 'Удалить записи учёта, для которых нет файла? Таблицы данных не меняются.'|trans }}">
+        <span class="mif-bin mr-2"></span>{{ 'Удалить учёт без файлов'|trans }}
+    </button>
+    {% endif %}
+</div>
+
+<table class="table striped row-hover border responsive-md mt-2" data-role="table" data-rows="50" data-rows-steps="20, 50, 100, -1" data-show-activity="false">
+    <thead>
+    <tr>
+        <th data-sortable="true">{{ 'Модуль'|trans }}</th>
+        <th data-sortable="true">{{ 'Миграция'|trans }}</th>
+        <th data-sortable="true">{{ 'Создана'|trans }}</th>
+        <th data-sortable="true">{{ 'Статус'|trans }}</th>
+        <th>{{ 'Выполнена'|trans }}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in rows %}
+    <tr>
+        <td>{{ row.module }}</td>
+        <td><div class="text-ellipsis" style="max-width: 420px;" title="{{ row.file }}">{{ row.name }}</div></td>
+        <td>{{ row.created }}</td>
+        <td>
+            {% if row.status == 'executed' %}
+                <span class="badge inline bg-green fg-white">{{ 'выполнена'|trans }}</span>
+            {% elseif row.status == 'pending' %}
+                <span class="badge inline bg-orange fg-white">{{ 'ожидает'|trans }}</span>
+            {% else %}
+                <span class="badge inline bg-gray fg-white" title="{{ 'Запись учёта есть, файла нет'|trans }}">{{ 'нет файла'|trans }}</span>
+            {% endif %}
+        </td>
+        <td>{{ row.executed }}</td>
+        <td>
+            {% if row.id is not empty %}
+            <div class="d-flex flex-wrap gap-1">
+                <button type="button" class="button small js-migration-sql" data-id="{{ row.id }}" data-has-down="{{ row.has_down ? '1' : '0' }}">{{ 'SQL'|trans }}</button>
+                {% if row.status == 'pending' %}
+                <button type="button" class="button small js-migrations-op" data-op="fake" data-id="{{ row.id }}" data-confirm="{{ 'Пометить выполненной без запуска SQL?'|trans }}">{{ 'Пометить выполненной'|trans }}</button>
+                {% endif %}
+            </div>
+            {% endif %}
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">{{ 'Файлов миграций пока нет'|trans }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>

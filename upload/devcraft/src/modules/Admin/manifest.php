@@ -21,6 +21,7 @@ use DevCraft\Builders\ModuleAjaxConfigBuilder;
 use DevCraft\Builders\ModuleAssetsBuilder;
 use DevCraft\Builders\ComposerTypeBuilder;
 use DevCraft\Modules\Admin\Pages\LogsPage;
+use DevCraft\Modules\Admin\Pages\MigrationsPage;
 use DevCraft\Modules\Admin\Pages\SettingsPage;
 use DevCraft\Modules\Admin\Pages\ChangelogPage;
 use DevCraft\Modules\Admin\Pages\DashboardPage;
@@ -39,6 +40,9 @@ use DevCraft\Modules\Admin\Ajax\DeleteLogHandler;
 use DevCraft\Modules\Admin\Ajax\NewModuleHandler;
 use DevCraft\Modules\Admin\Ajax\SaveAssetHandler;
 use DevCraft\Modules\Admin\Ajax\LogsTableHandler;
+use DevCraft\Modules\Admin\Ajax\LogsZipHandler;
+use DevCraft\Modules\Admin\Ajax\MigrationsActionHandler;
+use DevCraft\Modules\Admin\Ajax\MigrationSqlHandler;
 use DevCraft\Modules\Admin\Ajax\ComposerTableHandler;
 use DevCraft\Modules\Admin\Ajax\ComposerActionHandler;
 use DevCraft\Modules\Admin\Ajax\ComposerPolicyHandler;
@@ -76,6 +80,7 @@ return ModuleManifestBuilder::create()
 		AdminLink::hidden('public_asset_edit', PublicAssetEditPage::class),
 		AdminLink::hidden('public_header_edit', PublicHeaderEditPage::class),
 		AdminLink::page(__('Вывод логов'), 'logs', LogsPage::class, 'mif-list'),
+		AdminLink::page(__('Миграции'), 'migrations', MigrationsPage::class, 'mif-database'),
 		AdminLink::page(__('Composer'), 'composer', ComposerPage::class, 'mif-tools'),
 		AdminLink::page(__('История изменений'), 'changelog', ChangelogPage::class, 'mif-library'),
 		AdminLink::page(__('Генератор модулей'), 'generator', NewModulePage::class, 'mif-plus'),
@@ -91,6 +96,9 @@ return ModuleManifestBuilder::create()
 				'save_asset'             => SaveAssetHandler::class,
 				'check_update'           => CheckUpdateHandler::class,
 				'logs_table'             => LogsTableHandler::class,
+				'logs_zip'               => LogsZipHandler::class,
+				'migrations_action'      => MigrationsActionHandler::class,
+				'migration_sql'          => MigrationSqlHandler::class,
 				'new_module'             => NewModuleHandler::class,
 				'composer_table'         => ComposerTableHandler::class,
 				'composer_action'        => ComposerActionHandler::class,

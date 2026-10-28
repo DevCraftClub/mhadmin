@@ -21,6 +21,7 @@ use DevCraft\Enums\AdminErrorKind;
 use DevCraft\Core\I18n\Translation;
 use DevCraft\Core\Module\PluginContext;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Modules\Admin\AdminIdentity;
 
 /**
  * Рендерит страницы ошибок админки (404, 500, общая) через Twig.
@@ -97,6 +98,7 @@ final class AdminErrorRenderer {
 				'code'          => $code,
 				'dashboard_url' => '?mod=' . rawurlencode($mod) . '&action=dashboard',
 				'clear_cache_url' => $clearCacheUrl,
+				'migrations_url'  => $kind === AdminErrorKind::ServerError? self::migrationsUrl() : '',
 			]),
 			'asset_base'         => $assetBase,
 			'css_urls'           => [
@@ -105,6 +107,17 @@ final class AdminErrorRenderer {
 				$assetBase . 'css/devcraft.css',
 			],
 		]);
+	}
+
+	/**
+	 * Адрес страницы миграций Admin (для кнопки на 500 и ответов AJAX).
+	 *
+	 * @since 200.4.2
+	 *
+	 * @return string Относительный адрес `?mod=…&action=migrations`.
+	 */
+	public static function migrationsUrl(): string {
+		return '?mod=' . rawurlencode(AdminIdentity::mod()) . '&action=migrations';
 	}
 
 }

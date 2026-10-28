@@ -70,7 +70,7 @@ final class LogsZipExportService {
 			$files[$path][] = self::SEPARATOR . "\n"
 			                  . '#' . $record->id() . ":\t" . $record->time->format('Y-m-d H:i:s') . "\n"
 			                  . self::SEPARATOR . "\n"
-			                  . $record->message;
+			                  . LogMessagePresenter::plainText($record->message);
 		}
 
 		$zipPath = TempDownload::path('zip');

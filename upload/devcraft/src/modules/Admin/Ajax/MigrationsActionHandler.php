@@ -22,6 +22,7 @@ use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Modules\Admin\Services\MigrationWorkbenchService;
 use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 use Throwable;
 
 /**
@@ -57,7 +58,7 @@ final class MigrationsActionHandler implements AjaxHandlerInterface {
 				default    => null,
 			};
 		} catch(Throwable $e) {
-			LogGenerator::for('Admin')->log($op . ': ' . $e->getMessage(), 'error');
+			LogGenerator::for(AdminIdentity::name())->log($op . ': ' . $e->getMessage(), 'error');
 
 			return JsonResponse::fail(__('Ошибка'), $e->getMessage(), 'migrations', 500);
 		}
@@ -66,7 +67,7 @@ final class MigrationsActionHandler implements AjaxHandlerInterface {
 			return JsonResponse::fail(__('Ошибка'), __('Неизвестное действие'), 'validation');
 		}
 
-		LogGenerator::for('Admin')->log($message . ($id !== ''? ' (' . $id . ')' : ''), 'info');
+		LogGenerator::for(AdminIdentity::name())->log($message . ($id !== ''? ' (' . $id . ')' : ''), 'info');
 
 		return JsonResponse::ok(['reload' => true], $message);
 	}

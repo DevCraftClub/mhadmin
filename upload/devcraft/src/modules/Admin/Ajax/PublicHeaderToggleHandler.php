@@ -9,6 +9,8 @@ use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Interfaces\ResponseInterface;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Modules\Admin\Models\PublicHeaderEntry;
 use DevCraft\Modules\Admin\Repositories\PublicHeaderEntryRepository;
 use RuntimeException;
@@ -34,6 +36,13 @@ final class PublicHeaderToggleHandler implements AjaxHandlerInterface {
 
 			$entry->active = $active;
 			$repo->saveEntity($entry);
+			LogGenerator::for(AdminIdentity::name())->log(
+				__('Публичный заголовок {id}: {state}', [
+					'{id}'    => (string) $entry->id(),
+					'{state}' => $active ? __('включён') : __('выключен'),
+				]),
+				'info',
+			);
 
 			return JsonResponse::toast(__('Обновлено'), ['active' => $entry->active]);
 		} catch(Throwable $e) {

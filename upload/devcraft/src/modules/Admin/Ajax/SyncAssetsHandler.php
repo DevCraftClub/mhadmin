@@ -20,6 +20,8 @@ use DevCraft\Core\Application;
 use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 
 /**
  * AJAX-обработчик массовой синхронизации ресурсов DevCraft.
@@ -65,6 +67,11 @@ final class SyncAssetsHandler implements AjaxHandlerInterface {
 				['downloaded' => $downloaded],
 			);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(
+			__('Синхронизация ресурсов: {count}', ['{count}' => $downloaded]),
+			'info',
+		);
 
 		return JsonResponse::toast(__('Синхронизация завершена'), [
 			'downloaded' => $downloaded,

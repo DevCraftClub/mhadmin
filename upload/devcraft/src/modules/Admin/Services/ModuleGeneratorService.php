@@ -158,7 +158,7 @@ final class ModuleGeneratorService {
 			'manifest.php.stub'        => DEVCRAFT_MODULES . '/' . $dirName . '/manifest.php',
 			'DashboardPage.php.stub'   => DEVCRAFT_MODULES . '/' . $dirName . '/Pages/DashboardPage.php',
 			'ChangelogPage.php.stub'   => DEVCRAFT_MODULES . '/' . $dirName . '/Pages/ChangelogPage.php',
-			'SettingsPage.php.stub'    => DEVCRAFT_MODULES . '/' . $dirName . '/Pages/SettingsPage.php',
+			'PushTestPage.php.stub'    => DEVCRAFT_MODULES . '/' . $dirName . '/Pages/PushTestPage.php',
 			'SettingsHandler.php.stub' => DEVCRAFT_MODULES . '/' . $dirName . '/Ajax/SettingsHandler.php',
 			'settings.schema.php.stub' => DEVCRAFT_MODULES . '/' . $dirName . '/settings.schema.php',
 			'changelog.data.php.stub'  => DEVCRAFT_MODULES . '/' . $dirName . '/changelog.data.php',
@@ -185,6 +185,13 @@ final class ModuleGeneratorService {
 		$report['success'] = $report['files']['fails'] === []
 		                     && $report['dirs']['fails'] === []
 		                     && ($normalized['db'] === false || $report['plugin']['fails'] === []);
+
+		if($report['success']) {
+			LogGenerator::for(self::class)->log(
+				__('Каркас модуля {dir} записан', ['{dir}' => $dirName]),
+				'info',
+			);
+		}
 
 		return $report;
 	}

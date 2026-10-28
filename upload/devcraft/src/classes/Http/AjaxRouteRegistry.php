@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Http;
 
+use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Module\PluginContext;
 
 /**
@@ -53,6 +54,16 @@ final class AjaxRouteRegistry {
 	public function register(string $controller, string $method, string $handlerClass, bool $allowGuest = false): void {
 		$this->routes[$controller][$method]     = $handlerClass;
 		$this->guestFlags[$controller][$method] = $allowGuest;
+
+		LogGenerator::for(AjaxRouteRegistry::class)->debug(__('Регистрирую {method} для {controller}', [
+			'{method}'     => $method,
+			'{controller}' => $controller,
+		]), [
+			'controller' => $controller,
+			'method'     => $method,
+			'handler'    => $handlerClass,
+			'allowGuest' => $allowGuest,
+		]);
 	}
 
 	/**
@@ -69,6 +80,15 @@ final class AjaxRouteRegistry {
 	 *     $class = $registry->resolve('admin', 'saveSettings');
 	 */
 	public function resolve(string $controller, string $method): ?string {
+		LogGenerator::for(AjaxRouteRegistry::class)->debug(__('Запрашиваю {method} у {controller}', [
+			'{method}'     => $method,
+			'{controller}' => $controller,
+		]), [
+			'controller' => $controller,
+			'method'     => $method,
+			'routes'     => $this->routes,
+		]);
+
 		return $this->routes[$controller][$method] ?? NULL;
 	}
 
@@ -79,7 +99,7 @@ final class AjaxRouteRegistry {
 	 * @param   string  $method      Имя метода.
 	 */
 	public function allowsGuest(string $controller, string $method): bool {
-		return (bool) ($this->guestFlags[$controller][$method] ?? false);
+		return $this->guestFlags[$controller][$method] ?? false;
 	}
 
 	/**

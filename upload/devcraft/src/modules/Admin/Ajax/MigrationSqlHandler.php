@@ -23,6 +23,8 @@ use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Modules\Admin\Services\MigrationWorkbenchService;
 use DevCraft\Modules\Admin\Services\TempDownload;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 use Throwable;
 
 /**
@@ -52,6 +54,14 @@ final class MigrationSqlHandler implements AjaxHandlerInterface {
 		} catch(Throwable $e) {
 			return JsonResponse::fail(__('Ошибка'), $e->getMessage(), 'migrations', 500);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(
+			__('Скачан SQL миграции {id} ({direction})', [
+				'{id}'        => $id,
+				'{direction}' => $direction,
+			]),
+			'info',
+		);
 
 		return new FileResponse(TempDownload::write($export['sql'], 'sql'), $export['name'], 'application/sql; charset=utf-8');
 	}

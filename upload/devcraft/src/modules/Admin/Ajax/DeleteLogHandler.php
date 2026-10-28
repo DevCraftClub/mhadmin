@@ -22,6 +22,8 @@ use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Modules\Admin\Models\LogRecord;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Modules\Admin\Repositories\LogRecordRepository;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 
 /**
  * AJAX-обработчик удаления записи журнала по UUID.
@@ -70,6 +72,11 @@ final class DeleteLogHandler implements AjaxHandlerInterface {
 				404,
 			);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(
+			__('Запись журнала удалена: {uuid}', ['{uuid}' => $uuid]),
+			'info',
+		);
 
 		return JsonResponse::toast(__('Запись удалена'), ['deleted' => true]);
 	}

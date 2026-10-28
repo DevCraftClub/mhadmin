@@ -25,6 +25,8 @@ use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Modules\Admin\Models\LogRecord;
 use DevCraft\Modules\Admin\Repositories\LogRecordRepository;
 use DevCraft\Modules\Admin\Services\LogsZipExportService;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 use Throwable;
 
 /**
@@ -62,6 +64,11 @@ final class LogsZipHandler implements AjaxHandlerInterface {
 		} catch(Throwable $e) {
 			return JsonResponse::fail(__('Ошибка'), $e->getMessage(), 'logs_zip', 500);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(
+			__('Скачан ZIP журнала: {count} записей', ['{count}' => count($ids)]),
+			'info',
+		);
 
 		return new FileResponse($path, 'devcraft_logs_' . date('Ymd_His') . '.zip', 'application/zip');
 	}

@@ -30,6 +30,7 @@ use DevCraft\Core\Config\DevCraftConfig;
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Module\ModulePsr4Registrar;
 use DevCraft\Core\Module\Registry;
+use DevCraft\Core\Logging\LogGenerator;
 use Spiral\Tokenizer\ClassLocator;
 use Symfony\Component\Finder\Finder;
 use Cycle\Annotated\Locator\TokenizerEmbeddingLocator;
@@ -50,8 +51,8 @@ final class SchemaSyncService {
 	/**
 	 * @since 200.4.1
 	 *
-	 * @param   Registry          $registry  Реестр модулей для путей Models.
-	 * @param   DatabaseGateway   $gateway   Шлюз: менеджер БД и SQL без ORM.
+	 * @param   Registry         $registry  Реестр модулей для путей Models.
+	 * @param   DatabaseGateway  $gateway   Шлюз: менеджер БД и SQL без ORM.
 	 */
 	public function __construct(
 		private readonly Registry        $registry,
@@ -70,9 +71,27 @@ final class SchemaSyncService {
 
 		$schema  = $this->ensureSchemaReady();
 		$missing = $this->missingSchemaTables($schema);
+		$present = count($schema) - count($missing);
+
+		if ($missing !== []) {
+			LogGenerator::for('SchemaSyncService')->log([
+				'error'   => __('Не созданы таблицы: {list}', ['{list}' => implode(', ', $missing)]),
+				'schema'  => $schema,
+				'missing' => $missing,
+				'present' => $present,
+			]);
+		} else {
+			LogGenerator::for('SchemaSyncService')->log(
+				[
+					'info'   => __('Таблицы на месте: {count}', ['{count}' => $present]),
+					'schema' => $schema,
+				],
+				'debug',
+			);
+		}
 
 		return [
-			'present' => count($schema) - count($missing),
+			'present' => $present,
 			'missing' => $missing,
 		];
 	}
@@ -97,8 +116,13 @@ final class SchemaSyncService {
 
 			$path_resolver = new EntityPathResolver($this->registry);
 
-			foreach($this->migrator($path_resolver)->getMigrations() as $migration) {
-				if($migration->getState()->getStatus() === State::STATUS_PENDING) {
+			foreach ($this->migrator($path_resolver)->getMigrations() as $migration) {
+				if ($migration->getState()->getStatus() === State::STATUS_PENDING) {
+					LogGenerator::for('SchemaSyncService')->log([
+						'error'         => __('Сначала накатите ожидающие миграции'),
+						'path_resolver' => $path_resolver,
+						'migration'     => $migration,
+					]);
 					throw new \RuntimeException(__('Сначала накатите ожидающие миграции'));
 				}
 			}
@@ -107,8 +131,8 @@ final class SchemaSyncService {
 				new SchemaRegistry($this->gateway->databaseManager()),
 				$path_resolver->entityModelDirectories(),
 				$path_resolver,
-				true,
-				false,
+				TRUE,
+				FALSE,
 			);
 			$this->dropCachedSchema();
 
@@ -152,6 +176,7 @@ final class SchemaSyncService {
 	public function markExecuted(State $state): void {
 		$this->markMigrationAsExecuted(PREFIX . '_devcraft_migrations', $state);
 		$this->dropCachedSchema();
+		LogGenerator::for('SchemaSyncService')->log(__('Статус миграции: {state}', ['{state}' => $state]), 'debug');
 	}
 
 	/**
@@ -168,26 +193,28 @@ final class SchemaSyncService {
 	public function pruneRecordsWithoutFiles(Migrations\Migrator $migrator): int {
 		$table = PREFIX . '_devcraft_migrations';
 
-		if(!$this->tableExists($table)) {
+		if (!$this->tableExists($table)) {
 			return 0;
 		}
 
 		$known = [];
 
-		foreach($migrator->getMigrations() as $migration) {
-			$known[$migration->getState()->getName()] = true;
+		foreach ($migrator->getMigrations() as $migration) {
+			$known[$migration->getState()->getName()] = TRUE;
 		}
 
 		$removed = 0;
 
-		foreach($this->gateway->query("SELECT `id`, `migration` FROM `{$table}`")->fetchAll() as $row) {
-			if(isset($known[(string) $row['migration']])) {
+		foreach ($this->gateway->query("SELECT `id`, `migration` FROM `{$table}`")->fetchAll() as $row) {
+			if (isset($known[(string) $row['migration']])) {
 				continue;
 			}
 
 			$this->gateway->query("DELETE FROM `{$table}` WHERE `id` = :id", ['id' => (int) $row['id']]);
 			$removed++;
 		}
+
+		LogGenerator::for('SchemaSyncService')->log(__('Записей миграций удалено: {count}', ['{count}' => $removed]), 'debug');
 
 		return $removed;
 	}
@@ -200,7 +227,8 @@ final class SchemaSyncService {
 	public function dropCachedSchema(): void {
 		$path = rtrim(Paths::cache(), '/\\') . '/cycle_orm_schema.ser';
 
-		if(is_file($path)) {
+		if (is_file($path)) {
+			LogGenerator::for('SchemaSyncService')->log(__('Кеш скомпелированных схем удалён'), 'debug');
 			@unlink($path);
 		}
 	}
@@ -208,11 +236,13 @@ final class SchemaSyncService {
 	private function pendingCount(Migrations\Migrator $migrator): int {
 		$count = 0;
 
-		foreach($migrator->getMigrations() as $migration) {
-			if($migration->getState()->getStatus() === State::STATUS_PENDING) {
+		foreach ($migrator->getMigrations() as $migration) {
+			if ($migration->getState()->getStatus() === State::STATUS_PENDING) {
 				$count++;
 			}
 		}
+
+		LogGenerator::for('SchemaSyncService')->log([__('Количество ожидающих миграций: {count}', ['{count}' => $count]), $migrator], 'debug');
 
 		return $count;
 	}
@@ -250,9 +280,9 @@ final class SchemaSyncService {
 		$fingerprint   = $this->quickModelsSignature();
 		$bootstrap     = $this->ormSchemaBootstrapNeeded();
 		$needPending   = $this->migrationFilesNeedApply($migrationDirs);
-		$cached        = $bootstrap ? null : $this->loadCachedSchema($fingerprint);
+		$cached        = $bootstrap ? NULL : $this->loadCachedSchema($fingerprint);
 
-		if($cached !== null && !$needPending && !$bootstrap && $this->schemaTablesExist($cached)) {
+		if ($cached !== NULL && !$needPending && !$bootstrap && $this->schemaTablesExist($cached)) {
 			return $cached;
 		}
 
@@ -262,43 +292,43 @@ final class SchemaSyncService {
 
 		$fingerprint = $this->quickModelsSignature();
 		$bootstrap   = $this->ormSchemaBootstrapNeeded();
-		$cached      = $bootstrap ? null : $this->loadCachedSchema($fingerprint);
+		$cached      = $bootstrap ? NULL : $this->loadCachedSchema($fingerprint);
 
-		$debug = (bool) DevCraftConfig::get('debug', false);
+		$debug = (bool) DevCraftConfig::get('debug', FALSE);
 
-		if($cached !== null && !$bootstrap && !$debug && $this->schemaTablesExist($cached)) {
+		if ($cached !== NULL && !$bootstrap && !$debug && $this->schemaTablesExist($cached)) {
 			return $cached;
 		}
 
 		$model_directories = $path_resolver->entityModelDirectories();
 		$registry          = new SchemaRegistry($this->gateway->databaseManager());
 
-		if($debug) {
-			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, false, true);
+		if ($debug) {
+			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, FALSE, TRUE);
 			$this->storeCachedSchema($fingerprint, $schema_array);
 
 			return $schema_array;
 		}
 
-		$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, true, false);
+		$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, TRUE, FALSE);
 
-		if($this->lastWritten !== []) {
+		if ($this->lastWritten !== []) {
 			$this->runPending($migrator);
 		}
 
 		// Таблиц нет, а create уже «выполнен» или файл не появился — только миграции, не SyncTables.
-		if(!$this->schemaTablesExist($schema_array)) {
+		if (!$this->schemaTablesExist($schema_array)) {
 			$this->unmarkCreateMigrationsWithAllTablesMissing($migrator);
 			$registry     = new SchemaRegistry($this->gateway->databaseManager());
-			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, true, false);
+			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, TRUE, FALSE);
 			$this->runPending($migrator);
 		}
 
 		// Файлы миграций не создали таблицы (чистая база или ложная отметка «выполнена»).
 		// Один проход «на лету», не на каждый запрос.
-		if(!$this->schemaTablesExist($schema_array)) {
+		if (!$this->schemaTablesExist($schema_array)) {
 			$registry     = new SchemaRegistry($this->gateway->databaseManager());
-			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, false, true);
+			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, FALSE, TRUE);
 		}
 
 		$this->storeCachedSchema($fingerprint, $schema_array);
@@ -312,15 +342,15 @@ final class SchemaSyncService {
 	private function acquireLock() {
 		$dir = rtrim(Paths::cache(), '/\\');
 
-		if(!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
-			return null;
+		if (!is_dir($dir) && !@mkdir($dir, 0775, TRUE) && !is_dir($dir)) {
+			return NULL;
 		}
 
 		$path   = $dir . '/cycle_orm_schema.lock';
 		$handle = @fopen($path, 'c');
 
-		if($handle === false) {
-			return null;
+		if ($handle === FALSE) {
+			return NULL;
 		}
 
 		flock($handle, LOCK_EX);
@@ -332,7 +362,7 @@ final class SchemaSyncService {
 	 * @param   resource|null  $handle
 	 */
 	private function releaseLock(mixed $handle): void {
-		if(!is_resource($handle)) {
+		if (!is_resource($handle)) {
 			return;
 		}
 
@@ -344,24 +374,26 @@ final class SchemaSyncService {
 		$capsule = new Capsule($this->gateway->databaseManager()->database());
 		$migrator->configure();
 		$this->skipCreateMigrationsForExistingTables($migrator);
-		// Create недостающих таблиц — раньше старых change: иначе change падает и очередь стоит.
+		// Создание недостающих таблиц — раньше старых change: иначе change падает и очередь стоит.
 		$this->runMissingTableCreates($migrator, $capsule);
 
 		$guard = 0;
 
-		while($guard < 30) {
+		while ($guard < 30) {
 			$guard++;
 
 			try {
-				while($migrator->run($capsule) !== null) {
+				while ($migrator->run($capsule) !== NULL) {
 					$this->skipCreateMigrationsForExistingTables($migrator);
 				}
 
 				return;
-			} catch(\Throwable $e) {
+			} catch (\Throwable $e) {
 				$this->skipCreateMigrationsForExistingTables($migrator);
 
-				if(!$this->markAlreadyAppliedMigrationExecuted($migrator, $e)) {
+				if (!$this->markAlreadyAppliedMigrationExecuted($migrator, $e)) {
+					LogGenerator::for('SchemaSyncService')->log($e->getMessage());
+
 					return;
 				}
 			}
@@ -372,19 +404,19 @@ final class SchemaSyncService {
 	 * Накатывает create, у которых в БД ещё нет ни одной таблицы, не дожидаясь более старых change.
 	 */
 	private function runMissingTableCreates(Migrations\Migrator $migrator, Capsule $capsule): void {
-		foreach($migrator->getMigrations() as $migration) {
-			if($migration->getState()->getStatus() !== State::STATUS_PENDING) {
+		foreach ($migrator->getMigrations() as $migration) {
+			if ($migration->getState()->getStatus() !== State::STATUS_PENDING) {
 				continue;
 			}
 
 			$tables = $this->createTableNamesFromMigration($migration->getState()->getName());
 
-			if($tables === []) {
+			if ($tables === []) {
 				continue;
 			}
 
-			foreach($tables as $tableName) {
-				if($this->tableExists($tableName)) {
+			foreach ($tables as $tableName) {
+				if ($this->tableExists($tableName)) {
 					continue 2;
 				}
 			}
@@ -395,8 +427,10 @@ final class SchemaSyncService {
 						$migration->withCapsule($capsule)->up();
 					},
 				);
-			} catch(\Throwable $e) {
-				if(!$this->migrationFailureAlreadyApplied($e)) {
+			} catch (\Throwable $e) {
+				if (!$this->migrationFailureAlreadyApplied($e)) {
+					LogGenerator::for('SchemaSyncService')->log($e->getMessage());
+
 					continue;
 				}
 			}
@@ -412,12 +446,12 @@ final class SchemaSyncService {
 	 * Снимает с очереди миграцию, которая упала потому что таблица или колонка уже есть.
 	 */
 	private function markAlreadyAppliedMigrationExecuted(Migrations\Migrator $migrator, \Throwable $e): bool {
-		if(!$this->migrationFailureAlreadyApplied($e)) {
-			return false;
+		if (!$this->migrationFailureAlreadyApplied($e)) {
+			return FALSE;
 		}
 
-		foreach($migrator->getMigrations() as $migration) {
-			if($migration->getState()->getStatus() !== State::STATUS_PENDING) {
+		foreach ($migrator->getMigrations() as $migration) {
+			if ($migration->getState()->getStatus() !== State::STATUS_PENDING) {
 				continue;
 			}
 
@@ -426,63 +460,63 @@ final class SchemaSyncService {
 				$migration->getState(),
 			);
 
-			return true;
+			return TRUE;
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	private function migrationFailureAlreadyApplied(\Throwable $e): bool {
 		$current = $e;
 
-		while($current !== null) {
+		while ($current !== NULL) {
 			$message = $current->getMessage();
 
-			if(
+			if (
 				str_contains($message, '42S01')
 				|| str_contains($message, '42S21')
 				|| str_contains($message, '1050')
 				|| str_contains($message, '1060')
 				|| str_contains($message, 'already exists')
 			) {
-				return true;
+				return TRUE;
 			}
 
 			$current = $current->getPrevious();
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	private function ormSchemaBootstrapNeeded(): bool {
-		foreach(['devcraft_migrations', 'devcraft_logs', 'devcraft_composer_data', 'dc_public_headers', 'dc_public_assets'] as $suffix) {
-			if(!$this->tableExists(PREFIX . '_' . $suffix)) {
-				return true;
+		foreach (['devcraft_migrations', 'devcraft_logs', 'devcraft_composer_data', 'dc_public_headers', 'dc_public_assets'] as $suffix) {
+			if (!$this->tableExists(PREFIX . '_' . $suffix)) {
+				return TRUE;
 			}
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	private function quickModelsSignature(): string {
 		$parts   = [];
 		$modules = Paths::src() . '/modules';
 
-		foreach(glob($modules . '/*/Models') ?: [] as $dir) {
-			$parts[] = $dir . ':' . (string) (@filemtime($dir) ?: 0);
+		foreach (glob($modules . '/*/Models') ? : [] as $dir) {
+			$parts[] = $dir . ':' . (@filemtime($dir) ? : 0);
 
-			foreach(glob($dir . '/*.php') ?: [] as $file) {
-				$parts[] = $file . ':' . (string) (@filemtime($file) ?: 0);
+			foreach (glob($dir . '/*.php') ? : [] as $file) {
+				$parts[] = $file . ':' . (@filemtime($file) ? : 0);
 			}
 		}
 
 		$composerModels = Paths::src() . '/classes/Composer/Models';
 
-		if(is_dir($composerModels)) {
-			$parts[] = $composerModels . ':' . (@filemtime($composerModels) ?: 0);
+		if (is_dir($composerModels)) {
+			$parts[] = $composerModels . ':' . (@filemtime($composerModels) ? : 0);
 
-			foreach(glob($composerModels . '/*.php') ?: [] as $file) {
-				$parts[] = $file . ':' . (@filemtime($file) ?: 0);
+			foreach (glob($composerModels . '/*.php') ? : [] as $file) {
+				$parts[] = $file . ':' . (@filemtime($file) ? : 0);
 			}
 		}
 
@@ -497,14 +531,14 @@ final class SchemaSyncService {
 	private function migrationFilesNeedApply(array $migrationDirs): bool {
 		$fileCount = count($this->migrationPhpFiles($migrationDirs));
 
-		if($fileCount === 0) {
-			return false;
+		if ($fileCount === 0) {
+			return FALSE;
 		}
 
 		$migrationTable = PREFIX . '_devcraft_migrations';
 
-		if(!$this->tableExists($migrationTable)) {
-			return true;
+		if (!$this->tableExists($migrationTable)) {
+			return TRUE;
 		}
 
 		$result   = $this->gateway->query("SELECT COUNT(*) AS total FROM `{$migrationTable}`")->fetchAll();
@@ -521,8 +555,8 @@ final class SchemaSyncService {
 	private function migrationPhpFiles(array $migrationDirs): array {
 		$files = [];
 
-		foreach($migrationDirs as $dir) {
-			array_push($files, ...(glob($dir . '/*.php') ?: []));
+		foreach ($migrationDirs as $dir) {
+			array_push($files, ...(glob($dir . '/*.php') ? : []));
 		}
 
 		sort($files);
@@ -536,26 +570,26 @@ final class SchemaSyncService {
 	private function loadCachedSchema(string $fingerprint): ?array {
 		$path = rtrim(Paths::cache(), '/\\') . '/cycle_orm_schema.ser';
 
-		if(!is_file($path)) {
-			return null;
+		if (!is_file($path)) {
+			return NULL;
 		}
 
 		$raw = @file_get_contents($path);
 
-		if($raw === false || $raw === '') {
-			return null;
+		if ($raw === FALSE || $raw === '') {
+			return NULL;
 		}
 
 		/** @var mixed $payload */
 		$payload = @unserialize($raw);
 
 		// version=2: старые запасы без моделей Admin отбрасываем один раз.
-		if(!is_array($payload)
-			|| (int) ($payload['version'] ?? 0) < 2
-			|| ($payload['fingerprint'] ?? null) !== $fingerprint
-			|| !is_array($payload['schema'] ?? null)
+		if (!is_array($payload)
+		    || (int) ($payload['version'] ?? 0) < 2
+		    || ($payload['fingerprint'] ?? NULL) !== $fingerprint
+		    || !is_array($payload['schema'] ?? NULL)
 		) {
-			return null;
+			return NULL;
 		}
 
 		/** @var array<string, mixed> $schema */
@@ -565,12 +599,12 @@ final class SchemaSyncService {
 	}
 
 	/**
-	 * @param array<string, mixed> $schema
+	 * @param   array<string, mixed>  $schema
 	 */
 	private function storeCachedSchema(string $fingerprint, array $schema): void {
 		$dir = rtrim(Paths::cache(), '/\\');
 
-		if(!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+		if (!is_dir($dir) && !@mkdir($dir, 0775, TRUE) && !is_dir($dir)) {
 			return;
 		}
 
@@ -591,7 +625,7 @@ final class SchemaSyncService {
 	 *
 	 * @return Migrations\Migrator Настроенный Migrator.
 	 */
-	public function migrator(?EntityPathResolver $path_resolver = null): Migrations\Migrator {
+	public function migrator(?EntityPathResolver $path_resolver = NULL): Migrations\Migrator {
 		$directories = ($path_resolver ?? new EntityPathResolver($this->registry))->migrationDirectories();
 
 		$migrator_config = new MigrationConfig(
@@ -599,7 +633,7 @@ final class SchemaSyncService {
 				'directory'         => array_shift($directories),
 				'vendorDirectories' => $directories,
 				'table'             => 'devcraft_migrations',
-				'safe'              => true,
+				'safe'              => TRUE,
 			],
 		);
 
@@ -619,32 +653,37 @@ final class SchemaSyncService {
 	 * @return array<string, mixed>
 	 */
 	private function compileSchema(
-		SchemaRegistry $registry,
-		array $model_directories,
+		SchemaRegistry     $registry,
+		array              $model_directories,
 		EntityPathResolver $path_resolver,
-		bool $generateMigrations,
-		bool $syncTables,
+		bool               $generateMigrations,
+		bool               $syncTables,
 	): array {
 		$this->lastWritten = [];
 		$model_directories = $this->normalizeModelDirectories($model_directories);
 		ModulePsr4Registrar::registerAll();
 
 		// ClassLocator молча пропускает класс, который не загрузился — подгружаем файлы заранее.
-		foreach($model_directories as $directory) {
-			foreach(glob(rtrim($directory, '/\\') . '/*.php') ?: [] as $file) {
-				if(!is_file($file)) {
+		foreach ($model_directories as $directory) {
+			foreach (glob(rtrim($directory, '/\\') . '/*.php') ? : [] as $file) {
+				if (!is_file($file)) {
 					continue;
 				}
 
 				try {
 					require_once $file;
-				} catch(\Throwable) {
+				} catch (\Throwable $e) {
+					LogGenerator::for('SchemaSyncService')->debug(
+						__('Не загружена модель {file}', ['{file}' => $file]),
+						['error' => $e->getMessage()],
+					);
+
 					continue;
 				}
 			}
 		}
 
-		if($model_directories === []) {
+		if ($model_directories === []) {
 			$class_locator = new ClassLocator(new \ArrayIterator([]));
 		} else {
 			$finder        = new Finder();
@@ -670,13 +709,13 @@ final class SchemaSyncService {
 
 		// По файлу на таблицу, в Migrations модуля-владельца: общий файл откатывает создание журнала
 		// и заголовков, если соседняя таблица в том же шаге уже есть.
-		$migrationsGenerator = $generateMigrations? new ModuleMigrationsGenerator($path_resolver) : null;
+		$migrationsGenerator = $generateMigrations ? new ModuleMigrationsGenerator($path_resolver) : NULL;
 
-		if($migrationsGenerator !== null) {
+		if ($migrationsGenerator !== NULL) {
 			$generators[] = $migrationsGenerator;
 		}
 
-		if($syncTables) {
+		if ($syncTables) {
 			$generators[] = new SyncTables();
 		}
 
@@ -686,6 +725,22 @@ final class SchemaSyncService {
 		$schema   = $compiler->compile($registry, $generators);
 
 		$this->lastWritten = $migrationsGenerator?->written() ?? [];
+
+		LogGenerator::for('SchemaSyncService')->log([
+			'info'                 => __('Компиляция схем завершена'),
+			'lastWritten'          => $this->lastWritten,
+			'generated'            => $schema,
+			'generatedCount'       => count($schema),
+			'generatedTables'      => array_keys($schema),
+			'generatedTablesCount' => count(array_keys($schema)),
+			'schema'               => $schema,
+			'generators'           => $generators,
+			'registry'             => $registry,
+			'schema_dirs'          => $model_directories,
+			'path'                 => $path_resolver,
+			'generateMigrations'   => $generateMigrations,
+			'synchronizeTables'    => $syncTables,
+		], 'debug');
 
 		return $schema;
 	}
@@ -700,14 +755,14 @@ final class SchemaSyncService {
 	private function normalizeModelDirectories(array $directories): array {
 		$normalized = [];
 
-		foreach($directories as $directory) {
-			if(!is_string($directory) || $directory === '') {
+		foreach ($directories as $directory) {
+			if (!is_string($directory) || $directory === '') {
 				continue;
 			}
 
 			$real = realpath($directory);
 
-			if($real === false || !is_dir($real)) {
+			if ($real === FALSE || !is_dir($real)) {
 				continue;
 			}
 
@@ -720,14 +775,14 @@ final class SchemaSyncService {
 	private function skipCreateMigrationsForExistingTables(Migrations\Migrator $migrator): void {
 		$migrationTable = PREFIX . '_devcraft_migrations';
 
-		if(!$this->tableExists($migrationTable)) {
+		if (!$this->tableExists($migrationTable)) {
 			return;
 		}
 
-		foreach($migrator->getMigrations() as $migration) {
+		foreach ($migrator->getMigrations() as $migration) {
 			$state = $migration->getState();
 
-			if($state->getStatus() === State::STATUS_EXECUTED) {
+			if ($state->getStatus() === State::STATUS_EXECUTED) {
 				continue;
 			}
 
@@ -735,13 +790,13 @@ final class SchemaSyncService {
 			$createTables  = $this->createTableNamesFromMigration($migrationName);
 			$missing       = 0;
 
-			foreach($createTables as $tableName) {
-				if(!$this->tableExists($tableName)) {
+			foreach ($createTables as $tableName) {
+				if (!$this->tableExists($tableName)) {
 					$missing++;
 				}
 			}
 
-			if(
+			if (
 				$missing === 0
 				&& (str_contains($migrationName, '_add_fk_') || str_contains($migrationName, '_add_foreign_'))
 			) {
@@ -749,19 +804,19 @@ final class SchemaSyncService {
 				continue;
 			}
 
-			if($createTables !== []) {
-				if($missing < count($createTables)) {
+			if ($createTables !== []) {
+				if ($missing < count($createTables)) {
 					$this->markMigrationAsExecuted($migrationTable, $state);
 				}
 
 				continue;
 			}
 
-			if(preg_match('/_change_dle_(.+?)_add_(.+)$/', $migrationName, $change) === 1) {
-				$tableName = PREFIX . '_' . (string) $change[1];
+			if (preg_match('/_change_dle_(.+?)_add_(.+)$/', $migrationName, $change) === 1) {
+				$tableName = PREFIX . '_' . $change[1];
 				$ops       = 'add_' . $change[2];
 
-				if($this->tableExists($tableName) && $this->changeMigrationFirstOpExists($tableName, $ops)) {
+				if ($this->tableExists($tableName) && $this->changeMigrationFirstOpExists($tableName, $ops)) {
 					$this->markMigrationAsExecuted($migrationTable, $state);
 				}
 			}
@@ -774,16 +829,16 @@ final class SchemaSyncService {
 	 * @return list<string>
 	 */
 	private function createTableNamesFromMigration(string $migrationName): array {
-		if(preg_match_all('/_create_(?:dle_)?([a-z0-9_]+?)(?=_create_|_change_|$)/', $migrationName, $matches) < 1) {
+		if (preg_match_all('/_create_(?:dle_)?([a-z0-9_]+?)(?=_create_|_change_|$)/', $migrationName, $matches) < 1) {
 			return [];
 		}
 
 		$tables = [];
 
-		foreach($matches[1] as $key) {
+		foreach ($matches[1] as $key) {
 			$key = (string) $key;
 
-			if($key === '') {
+			if ($key === '') {
 				continue;
 			}
 
@@ -806,20 +861,20 @@ final class SchemaSyncService {
 	private function missingSchemaTables(array $schema): array {
 		$missing = [];
 
-		foreach($schema as $def) {
-			if(!is_array($def)) {
+		foreach ($schema as $def) {
+			if (!is_array($def)) {
 				continue;
 			}
 
-			$table = $def[SchemaInterface::TABLE] ?? null;
+			$table = $def[SchemaInterface::TABLE] ?? NULL;
 
-			if(!is_string($table) || $table === '') {
+			if (!is_string($table) || $table === '') {
 				continue;
 			}
 
 			$full = str_starts_with($table, PREFIX . '_') ? $table : PREFIX . '_' . $table;
 
-			if(!$this->tableExists($full)) {
+			if (!$this->tableExists($full)) {
 				$missing[] = $full;
 			}
 		}
@@ -828,25 +883,25 @@ final class SchemaSyncService {
 	}
 
 	private function schemaTablesExist(array $schema): bool {
-		foreach($schema as $def) {
-			if(!is_array($def)) {
+		foreach ($schema as $def) {
+			if (!is_array($def)) {
 				continue;
 			}
 
-			$table = $def[SchemaInterface::TABLE] ?? null;
+			$table = $def[SchemaInterface::TABLE] ?? NULL;
 
-			if(!is_string($table) || $table === '') {
+			if (!is_string($table) || $table === '') {
 				continue;
 			}
 
-			$full = str_starts_with($table, PREFIX . '_')? $table : PREFIX . '_' . $table;
+			$full = str_starts_with($table, PREFIX . '_') ? $table : PREFIX . '_' . $table;
 
-			if(!$this->tableExists($full)) {
-				return false;
+			if (!$this->tableExists($full)) {
+				return FALSE;
 			}
 		}
 
-		return true;
+		return TRUE;
 	}
 
 	/**
@@ -856,48 +911,48 @@ final class SchemaSyncService {
 	private function unmarkCreateMigrationsWithAllTablesMissing(Migrations\Migrator $migrator): void {
 		$migrationTable = PREFIX . '_devcraft_migrations';
 
-		if(!$this->tableExists($migrationTable)) {
+		if (!$this->tableExists($migrationTable)) {
 			return;
 		}
 
-		foreach($migrator->getMigrations() as $migration) {
+		foreach ($migrator->getMigrations() as $migration) {
 			$state = $migration->getState();
 
-			if($state->getStatus() !== State::STATUS_EXECUTED) {
+			if ($state->getStatus() !== State::STATUS_EXECUTED) {
 				continue;
 			}
 
 			$tables = $this->createTableNamesFromMigration($state->getName());
 
-			if($tables === []) {
+			if ($tables === []) {
 				continue;
 			}
 
-			$anyPresent = false;
+			$anyPresent = FALSE;
 
-			foreach($tables as $tableName) {
-				if($this->tableExists($tableName)) {
-					$anyPresent = true;
+			foreach ($tables as $tableName) {
+				if ($this->tableExists($tableName)) {
+					$anyPresent = TRUE;
 					break;
 				}
 			}
 
-			if(!$anyPresent) {
+			if (!$anyPresent) {
 				$this->unmarkMigrationAsExecuted($migrationTable, $state->getName());
 			}
 		}
 	}
 
 	private function changeMigrationFirstOpExists(string $tableName, string $ops): bool {
-		if(preg_match('/^add_index_([a-z0-9_]+?)(?=_add_|$)/', $ops, $m) === 1) {
+		if (preg_match('/^add_index_([a-z0-9_]+?)(?=_add_|$)/', $ops, $m) === 1) {
 			return $this->indexExists($tableName, $m[1]);
 		}
 
-		if(preg_match('/^add_([a-z0-9_]+?)(?=_add_|$)/', $ops, $m) === 1) {
+		if (preg_match('/^add_([a-z0-9_]+?)(?=_add_|$)/', $ops, $m) === 1) {
 			return $this->columnExists($tableName, $m[1]);
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	private function indexExists(string $tableName, string $indexName): bool {
@@ -953,7 +1008,7 @@ final class SchemaSyncService {
 
 		$exists = isset($existsResult[0]['total']) ? (int) $existsResult[0]['total'] : 0;
 
-		if($exists > 0) {
+		if ($exists > 0) {
 			return;
 		}
 

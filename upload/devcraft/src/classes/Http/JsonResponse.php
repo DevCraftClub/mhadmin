@@ -16,8 +16,10 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Http;
 
+use DevCraft\Core\Application;
 use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Core\Exception\JsonResponseException;
+use DevCraft\Core\Logging\LogGenerator;
 
 /**
  * JSON-ответ AJAX с единым контрактом success/data/notice/error.
@@ -255,6 +257,8 @@ final class JsonResponse implements ResponseInterface {
 
 		$data = isset($extra['data']) && is_array($extra['data'])? $extra['data'] : [];
 
+		self::recordFailure($title, $message, $code, $status);
+
 		return self::build([
 			'success' => false,
 			'data'    => $data,
@@ -337,6 +341,31 @@ final class JsonResponse implements ResponseInterface {
 	 */
 	private static function build(array $body, int $status): self {
 		return new self($body, $status);
+	}
+
+	/**
+	 * Пишет ошибку AJAX в журнал, кроме проверки полей и уже записанного сбоя обработчика.
+	 */
+	private static function recordFailure(string $title, string $message, string $code, int $status): void {
+		if($code === 'validation' || $code === 'internal_error') {
+			return;
+		}
+
+		try {
+			$plugin = 'DevCraft';
+			$mod    = (string) ($_POST['mod'] ?? $_GET['mod'] ?? '');
+
+			if($mod !== '') {
+				$manifest = Application::instance()->registry()->module($mod);
+				$plugin   = ($manifest !== null && $manifest->name !== '') ? $manifest->name : $mod;
+			}
+
+			LogGenerator::for($plugin)->log(
+				$title . ': ' . $message . ' [' . $code . ']',
+				$status >= 500 ? 'error' : 'warn',
+			);
+		} catch(\Throwable) {
+		}
 	}
 
 	/**

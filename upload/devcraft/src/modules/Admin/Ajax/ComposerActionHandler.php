@@ -11,6 +11,8 @@ use DevCraft\Core\Composer\ComposerDbSyncService;
 use DevCraft\Core\Composer\ComposerRuntimeAdapter;
 use DevCraft\Core\Composer\ComposerInstallAllPlaceholder;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 
 final class ComposerActionHandler implements AjaxHandlerInterface {
 
@@ -35,6 +37,10 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 		$policyError   = $policyService->validateAction($actionType, $package, $version !== ''? $version : NULL);
 		if($policyError !== NULL) {
 			$status = $policyError->toArray();
+			LogGenerator::for(AdminIdentity::name())->log(
+				__('Политика пакетов: {message}', ['{message}' => (string) $status['message']]),
+				'warn',
+			);
 
 			return new JsonResponse([
 				'success' => false,
@@ -69,6 +75,15 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 
 		$data = $result->toArray();
 		if($data['status'] !== 'ok') {
+			LogGenerator::for(AdminIdentity::name())->log(
+				__('Composer {action} {package}: {message}', [
+					'{action}'  => $actionType,
+					'{package}' => $package,
+					'{message}' => (string) $data['message'],
+				]),
+				'error',
+			);
+
 			return new JsonResponse([
 				'success' => false,
 				'data'    => [],
@@ -97,6 +112,14 @@ final class ComposerActionHandler implements AjaxHandlerInterface {
 				$version !== ''? $version : NULL,
 			);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(
+			__('Composer {action} {package}', [
+				'{action}'  => $actionType,
+				'{package}' => $package,
+			]),
+			'info',
+		);
 
 		return JsonResponse::ok($data, __('Операция Composer выполнена'));
 	}

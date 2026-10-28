@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Composer;
 
+use DevCraft\Core\Logging\LogGenerator;
+
 /**
  * Выполняет команды Composer CLI и возвращает нормализованный результат.
  *
@@ -107,6 +109,8 @@ final class ComposerRuntimeAdapter {
 		$composerJson = ROOT_DIR . '/devcraft/composer.json';
 
 		if(!is_file($composerJson)) {
+			LogGenerator::for('Composer')->log('Файл composer.json не найден');
+
 			return ComposerActionResult::error('Файл composer.json не найден');
 		}
 
@@ -121,6 +125,8 @@ final class ComposerRuntimeAdapter {
 		$paths = self::composerEnvironmentPaths();
 
 		if(!function_exists('exec')) {
+			LogGenerator::for('Composer')->log('На сервере отключена функция exec', 'error');
+
 			return ComposerActionResult::error(
 				'На сервере отключена функция exec (disable_functions). Нужны exec и putenv.',
 			);
@@ -139,6 +145,11 @@ final class ComposerRuntimeAdapter {
 		exec($cmd . ' 2>&1', $output, $code);
 
 		if($code !== 0) {
+			LogGenerator::for('Composer')->log(
+				implode(' ', $args) . ': код ' . $code,
+				'error',
+			);
+
 			return ComposerActionResult::requiresDecision(
 				'Команда Composer завершилась с ошибкой',
 				[
@@ -157,6 +168,8 @@ final class ComposerRuntimeAdapter {
 				dc_composer_mark_initialized(true);
 			}
 		}
+
+		LogGenerator::for('Composer')->log($successMessage . ' (' . implode(' ', $args) . ')', 'info');
 
 		return ComposerActionResult::ok($successMessage, [
 			'command' => $cmd,

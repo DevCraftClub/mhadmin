@@ -8,6 +8,8 @@ use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Composer\ComposerRuntimeAdapter;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 
 final class DumpAutoloadHandler implements AjaxHandlerInterface {
 
@@ -18,6 +20,8 @@ final class DumpAutoloadHandler implements AjaxHandlerInterface {
 				'detail' => $result['details'],
 			]);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(__('Autoload успешно обновлён'), 'info');
 
 		return JsonResponse::ok($result, __('Autoload успешно обновлён'));
 	}

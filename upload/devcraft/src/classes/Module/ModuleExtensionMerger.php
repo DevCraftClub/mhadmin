@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Module;
 
+use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Types\AdminLink;
 use DevCraft\Types\FormField;
@@ -20,6 +21,11 @@ final class ModuleExtensionMerger {
 	 */
 	public static function enrich(PluginContext $host, Registry $registry): void {
 		$hostMod = $host->mod();
+
+		LogGenerator::for(ModuleExtensionMerger::class)->debug(
+			__('Подмешиваем сателлиты модуля: {host}', ['host' => $hostMod]),
+			['host' => $host, 'registry' => $registry]
+		);
 
 		foreach($registry->extensionsOf($hostMod) as $extension) {
 			self::mergeInto($host, $extension);

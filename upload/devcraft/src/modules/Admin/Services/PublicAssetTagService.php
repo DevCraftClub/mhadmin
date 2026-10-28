@@ -6,6 +6,7 @@ namespace DevCraft\Modules\Admin\Services;
 
 use DevCraft\Core\Application;
 use DevCraft\Core\Config\Paths;
+use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Modules\Admin\Models\PublicAssetEntry;
@@ -170,7 +171,9 @@ final class PublicAssetTagService {
 			}
 
 			return $result;
-		} catch(\Throwable) {
+		} catch(\Throwable $e) {
+			$this->swallowed('outputAssets', $e);
+
 			return [];
 		}
 	}
@@ -215,7 +218,9 @@ final class PublicAssetTagService {
 			}
 
 			return $result;
-		} catch(\Throwable) {
+		} catch(\Throwable $e) {
+			$this->swallowed('outputHeaders', $e);
+
 			return [];
 		}
 	}
@@ -225,7 +230,9 @@ final class PublicAssetTagService {
 			$config = DataManager::getConfig(AdminIdentity::code());
 
 			return (bool) ($config['public_assets_compress'] ?? true);
-		} catch(\Throwable) {
+		} catch(\Throwable $e) {
+			$this->swallowed('compressEnabled', $e);
+
 			return true;
 		}
 	}
@@ -248,7 +255,9 @@ final class PublicAssetTagService {
 			$relative = str_replace(ROOT_DIR, '', $file);
 
 			return $this->siteBase() . ltrim(str_replace('\\', '/', $relative), '/') . '?v=' . rawurlencode($v);
-		} catch(\Throwable) {
+		} catch(\Throwable $e) {
+			$this->swallowed('bundleUrl', $e);
+
 			return null;
 		}
 	}
@@ -289,6 +298,10 @@ final class PublicAssetTagService {
 
 	private function escapeAttr(string $value): string {
 		return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	}
+
+	private function swallowed(string $where, \Throwable $e): void {
+		LogGenerator::for(AdminIdentity::name())->debug($where, ['error' => $e->getMessage()]);
 	}
 
 }

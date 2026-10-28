@@ -32,6 +32,7 @@ use DevCraft\Core\Support\AssetsCheckerService;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Support\ExceptionDetailFormatter;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Core\Logging\LogGenerator;
 
 /**
  * Главный контейнер приложения DevCraft (Singleton).
@@ -204,6 +205,7 @@ final class Application {
 
 			(new Router())->dispatch($plugin, $action);
 		} catch(DevCraftException $exception) {
+			LogGenerator::for($plugin?->moduleData()->name ?? 'DevCraft')->log($exception->getMessage(), 'error');
 			$errorRenderer->render(
 				AdminErrorKind::Generic,
 				__('Ошибка'),
@@ -213,6 +215,10 @@ final class Application {
 				$plugin,
 			);
 		} catch(Throwable $exception) {
+			LogGenerator::for($plugin?->moduleData()->name ?? 'DevCraft')->log(
+				$exception::class . ': ' . $exception->getMessage(),
+				'error',
+			);
 			$detail = (new ExceptionDetailFormatter($this->registry))->format($exception);
 
 			$errorRenderer->render(

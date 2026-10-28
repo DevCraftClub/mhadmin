@@ -21,6 +21,8 @@ use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Interfaces\ResponseInterface;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 use Throwable;
 
 /**
@@ -65,6 +67,8 @@ final class SchemaSyncHandler implements AjaxHandlerInterface {
 				500,
 			);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(__('Таблицы базы в актуальном состоянии'), 'info');
 
 		return JsonResponse::ok(
 			['tables' => $report['present']],

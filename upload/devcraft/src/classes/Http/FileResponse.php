@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace DevCraft\Core\Http;
 
 use DevCraft\Core\Interfaces\ResponseInterface;
+use DevCraft\Core\Logging\LogGenerator;
 
 /**
  * HTTP-ответ с потоковой отдачей файла (скачивание).
@@ -83,21 +84,42 @@ final class FileResponse implements ResponseInterface {
 	 * @throws \RuntimeException Если файл недоступен для чтения.
 	 */
 	public function send(): void {
-		if(!is_file($this->filePath) || !is_readable($this->filePath)) {
+		if (!is_file($this->filePath) || !is_readable($this->filePath)) {
+			LogGenerator::for(FileResponse::class)->log([
+				'error'        => __('Файл недоступен для чтения'),
+				'filePath'     => $this->filePath,
+				'fileInfo'     => [
+					'is_file'     => is_file($this->filePath),
+					'is_readable' => is_readable($this->filePath),
+				],
+				'downloadName' => $this->downloadName,
+				'mimeType'     => $this->mimeType,
+			]);
+
 			throw new \RuntimeException(__('Файл недоступен для чтения'));
 		}
 
 		$fileSize = filesize($this->filePath);
 
-		if($fileSize === false) {
+		if ($fileSize === FALSE) {
+			LogGenerator::for(FileResponse::class)->log([
+				'error'        => __('Не удалось определить размер файла'),
+				'filePath'     => $this->filePath,
+				'fileInfo'     => [
+					'is_file'     => is_file($this->filePath),
+					'is_readable' => is_readable($this->filePath),
+				],
+				'downloadName' => $this->downloadName,
+				'mimeType'     => $this->mimeType,
+			]);
 			throw new \RuntimeException(__('Не удалось определить размер файла'));
 		}
 
-		while(ob_get_level() > 0) {
+		while (ob_get_level() > 0) {
 			ob_end_clean();
 		}
 
-		if(!headers_sent()) {
+		if (!headers_sent()) {
 			http_response_code(200);
 			header('Content-Type: ' . $this->mimeType);
 			header('Content-Disposition: attachment; filename="' . $this->escapeFilename($this->downloadName) . '"');
@@ -108,7 +130,18 @@ final class FileResponse implements ResponseInterface {
 
 		$readResult = readfile($this->filePath);
 
-		if($readResult === false) {
+		if ($readResult === FALSE) {
+			LogGenerator::for(FileResponse::class)->log([
+				'error'        => __('Ошибка чтения файла'),
+				'filePath'     => $this->filePath,
+				'fileInfo'     => [
+					'is_file'     => is_file($this->filePath),
+					'is_readable' => is_readable($this->filePath),
+				],
+				'downloadName' => $this->downloadName,
+				'mimeType'     => $this->mimeType,
+				'fileSize'     => $fileSize,
+			]);
 			throw new \RuntimeException(__('Ошибка чтения файла'));
 		}
 	}
@@ -125,7 +158,7 @@ final class FileResponse implements ResponseInterface {
 	private function escapeFilename(string $filename): string {
 		$sanitized = str_replace(['"', "\r", "\n"], '', $filename);
 
-		return $sanitized !== ''? $sanitized : 'download.bin';
+		return $sanitized !== '' ? $sanitized : 'download.bin';
 	}
 
 }

@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace DevCraft\Core\Http;
 
+use DevCraft\Core\Logging\LogGenerator;
+
 /**
  * DTO входящего AJAX-запроса DevCraft.
  *
@@ -66,19 +68,27 @@ final readonly class AjaxRequest {
 		$mod        = (string) ($_REQUEST['mod'] ?? 'devcraft');
 		$data       = [];
 
-		if(isset($_POST['data'])) {
-			if(is_array($_POST['data'])) {
+		if (isset($_POST['data'])) {
+			if (is_array($_POST['data'])) {
 				$data = $_POST['data'];
-			} elseif(is_string($_POST['data']) && $_POST['data'] !== '') {
-				$decoded = json_decode($_POST['data'], true);
+			} elseif (is_string($_POST['data']) && $_POST['data'] !== '') {
+				$decoded = json_decode($_POST['data'], TRUE);
 
-				if(is_array($decoded)) {
+				if (is_array($decoded)) {
 					$data = $decoded;
 				}
 			}
-		} elseif($_POST !== []) {
+		} elseif ($_POST !== []) {
 			$data = $_POST;
 		}
+
+		LogGenerator::for(AjaxRequest::class)->debug([
+			'controller' => $controller,
+			'method'     => $method,
+			'data'       => $data,
+			'mod'        => $mod,
+			'post'       => $_POST,
+		]);
 
 		return new self($controller, $method, $data, $mod);
 	}

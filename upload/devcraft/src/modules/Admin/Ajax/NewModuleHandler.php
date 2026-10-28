@@ -19,6 +19,8 @@ namespace DevCraft\Modules\Admin\Ajax;
 use DevCraft\Core\Http\AjaxRequest;
 use DevCraft\Core\Http\JsonResponse;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
+use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Modules\Admin\Services\ModuleGeneratorInput;
 use DevCraft\Modules\Admin\Services\ModuleGeneratorService;
 
@@ -63,6 +65,10 @@ final class NewModuleHandler implements AjaxHandlerInterface {
 		}
 
 		if(!$report['success']) {
+			LogGenerator::for(AdminIdentity::name())->log(
+				(string) ($report['error'] ?? __('Не удалось создать модуль')),
+				'error',
+			);
 			$message = match (true) {
 				$report['files']['fails'] !== [] || $report['plugin']['fails'] !== [] => __('Создание завершено с ошибками'),
 				default                                                               => match ((string) ($report['error'] ?? '')) {
@@ -86,6 +92,11 @@ final class NewModuleHandler implements AjaxHandlerInterface {
 				],
 			);
 		}
+
+		LogGenerator::for(AdminIdentity::name())->log(
+			__('Модуль «{name}» создан', ['{name}' => $input->name]),
+			'info',
+		);
 
 		return JsonResponse::ok(
 			['report' => $report],

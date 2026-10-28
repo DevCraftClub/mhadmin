@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DevCraft\Modules\Admin\Services;
 
 use DevCraft\Core\Application;
+use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Modules\Admin\Models\PublicHeaderEntry;
@@ -124,8 +125,10 @@ final class PublicHeaderWriteService {
 			throw new RuntimeException(__('Неизвестный режим удаления'));
 		}
 
+		$id = $entry->id();
 		$repo->deleteEntity($entry);
 		(new PublicAssetBundleCacheService())->invalidateAllSections('meta');
+		$this->audit(__('Публичный заголовок удалён: {id}', ['{id}' => (string) $id]));
 
 		return ['deleted' => true];
 	}
@@ -161,6 +164,7 @@ final class PublicHeaderWriteService {
 
 		$repo->bulkUpdateSortOrder($sortById);
 		$this->markManuallyOrdered();
+		$this->audit(__('Порядок публичных заголовков изменён'));
 
 		return [
 			'reordered' => $adjusted,
@@ -198,6 +202,7 @@ final class PublicHeaderWriteService {
 		}
 
 		(new PublicAssetBundleCacheService())->invalidateAllSections('meta');
+		$this->audit(__('Публичный заголовок сохранён: {name}', ['{name}' => $saved->name]));
 
 		return $saved;
 	}
@@ -375,6 +380,10 @@ final class PublicHeaderWriteService {
 		}
 
 		return (bool) $raw;
+	}
+
+	private function audit(string $message): void {
+		LogGenerator::for(AdminIdentity::name())->log($message, 'info');
 	}
 
 }

@@ -26,6 +26,7 @@ use DevCraft\Core\Interfaces\ResponseInterface;
 use DevCraft\Core\Interfaces\AjaxHandlerInterface;
 use DevCraft\Core\Module\ModuleExtensionMerger;
 use DevCraft\Types\FormSchema;
+use DevCraft\Core\Logging\LogGenerator;
 
 /**
  * Базовый AJAX-обработчик частичного сохранения настроек модуля по схеме.
@@ -52,7 +53,12 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 		$plugin = Application::instance()->registry()->forMod($request->mod);
 		$schema = $plugin?->settingsSchema();
 
-		if($schema === NULL) {
+		if ($schema === NULL) {
+			LogGenerator::for(AbstractSettingsHandler::class)->log(['error'   => __('Схема настроек недоступна'),
+			                                                        'context' => $plugin,
+			                                                        'request' => $request,
+			]);
+
 			return JsonResponse::fail(
 				__('Ошибка'),
 				__('Схема настроек недоступна'),
@@ -63,7 +69,12 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 		$configDir  = Paths::config();
 		$configFile = $configDir . '/' . $schema->codename . '.json';
 
-		if(is_file($configFile) && !is_writable($configFile)) {
+		if (is_file($configFile) && !is_writable($configFile)) {
+			LogGenerator::for(AbstractSettingsHandler::class)->log(['error'   => __('Файл конфигурации недоступен для записи'),
+			                                                        'context' => $plugin,
+			                                                        'request' => $request,
+			]);
+
 			return JsonResponse::fail(
 				__('Ошибка'),
 				__('Файл конфигурации недоступен для записи'),
@@ -72,7 +83,12 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 			);
 		}
 
-		if(!is_dir($configDir) && !DataManager::createDir($configDir)) {
+		if (!is_dir($configDir) && !DataManager::createDir($configDir)) {
+			LogGenerator::for(AbstractSettingsHandler::class)->log(['error'   => __('Каталог конфигурации недоступен для записи'),
+			                                                        'context' => $plugin,
+			                                                        'request' => $request,
+			]);
+
 			return JsonResponse::fail(
 				__('Ошибка'),
 				__('Каталог конфигурации недоступен для записи'),
@@ -84,7 +100,12 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 		$service = new SettingsFormService();
 		$result  = $service->validatePartial($request->data, $schema);
 
-		if($result['valid'] === [] && $result['errors'] !== []) {
+		if ($result['valid'] === [] && $result['errors'] !== []) {
+			LogGenerator::for(AbstractSettingsHandler::class)->log(['error'   => __('Каталог конфигурации недоступен для записи'),
+			                                                        'fields'  => $result['errors'],
+			                                                        'context' => $result,
+			]);
+
 			return JsonResponse::fail(
 				__('Ошибка'),
 				__('Все поля недействительны'),
@@ -94,7 +115,7 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 			);
 		}
 
-		if($result['valid'] !== []) {
+		if ($result['valid'] !== []) {
 			$hostValid = ModuleExtensionMerger::splitAndSaveExtensions($result['valid']);
 			$existing  = DataManager::getConfig($schema->codename, NULL, $this->configName());
 			$prepared  = $this->prepareConfig(
@@ -103,12 +124,22 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 				$schema,
 			);
 
-			if($prepared instanceof JsonResponse) {
+			if ($prepared instanceof JsonResponse) {
 				return $prepared;
 			}
 
-			if($hostValid !== [] || $prepared !== (is_array($existing) ? $existing : [])) {
-				if(!DataManager::saveConfig($schema->codename, $prepared)) {
+			if ($hostValid !== [] || $prepared !== (is_array($existing) ? $existing : [])) {
+				if (!DataManager::saveConfig($schema->codename, $prepared)) {
+					LogGenerator::for(AbstractSettingsHandler::class)->log([
+						'error'     => __('Не удалось сохранить настройки'),
+						'hostValid' => $hostValid,
+						'context'   => $result,
+						'request'   => $request,
+						'prepared'  => $prepared,
+						'existing'  => $existing,
+						'schema'    => $schema,
+					]);
+
 					return JsonResponse::fail(
 						__('Ошибка'),
 						__('Не удалось сохранить настройки'),
@@ -120,17 +151,21 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 
 			DevCraftConfig::resetCache();
 			$this->afterSave($prepared, $schema);
+			LogGenerator::for($plugin?->moduleData()->name ?? 'DevCraft')->log(
+				__('Настройки сохранены ({code})', ['{code}' => $schema->codename]),
+				'debug',
+			);
 		}
 
-		if(function_exists('clear_cache')) {
+		if (function_exists('clear_cache')) {
 			clear_cache();
 		}
 
-		if($result['errors'] !== []) {
+		if ($result['errors'] !== []) {
 			return $this->partialErrorResponse($result['errors']);
 		}
 
-		return JsonResponse::toast(__('Сохранено'), ['saved' => true]);
+		return JsonResponse::toast(__('Сохранено'), ['saved' => TRUE]);
 	}
 
 	/**
@@ -165,8 +200,7 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 	 * @param   array<string, mixed>  $saved   Записанный конфиг.
 	 * @param   FormSchema            $schema  Схема формы модуля.
 	 */
-	protected function afterSave(array $saved, FormSchema $schema): void {
-	}
+	protected function afterSave(array $saved, FormSchema $schema): void {}
 
 	/**
 	 * Ответ при частичном сохранении с ошибками в отдельных полях.
@@ -178,13 +212,15 @@ abstract class AbstractSettingsHandler implements AjaxHandlerInterface {
 	protected function partialErrorResponse(array $fields): JsonResponse {
 		$partialMessage = __('Частичное сохранение завершено с ошибками в полях');
 
+		LogGenerator::for(AbstractSettingsHandler::class)->log(['message' => $partialMessage, 'fields' => $fields,], 'warning');
+
 		return JsonResponse::notify(
 			__('Внимание'),
 			$partialMessage,
 			JsonResponse::TYPE_WARNING,
 			[],
 			422,
-			false,
+			FALSE,
 			[
 				'code'    => 'validation',
 				'message' => $partialMessage,

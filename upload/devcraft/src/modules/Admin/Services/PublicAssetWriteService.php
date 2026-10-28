@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DevCraft\Modules\Admin\Services;
 
 use DevCraft\Core\Application;
+use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Modules\Admin\Models\PublicAssetEntry;
@@ -80,6 +81,7 @@ final class PublicAssetWriteService {
 		/** @var PublicAssetEntry $saved */
 		$saved = $repo->saveEntity($entry);
 		(new PublicAssetBundleCacheService())->invalidateAllSections($saved->kind);
+		$this->audit(__('Публичный ресурс сохранён: {path}', ['{path}' => $saved->local_path]));
 
 		return $saved;
 	}
@@ -139,8 +141,14 @@ final class PublicAssetWriteService {
 
 		$entry->active = $active;
 
-		/** @var PublicAssetEntry */
-		return $repo->saveEntity($entry);
+		/** @var PublicAssetEntry $saved */
+		$saved = $repo->saveEntity($entry);
+		$this->audit(__('Публичный ресурс {id}: {state}', [
+			'{id}'    => (string) $saved->id(),
+			'{state}' => $active ? __('включён') : __('выключен'),
+		]));
+
+		return $saved;
 	}
 
 	/**
@@ -177,8 +185,10 @@ final class PublicAssetWriteService {
 		}
 
 		$kind = $entry->kind;
+		$id   = $entry->id();
 		$repo->deleteEntity($entry);
 		(new PublicAssetBundleCacheService())->invalidateAllSections($kind);
+		$this->audit(__('Публичный ресурс удалён: {id}', ['{id}' => (string) $id]));
 
 		return ['deleted' => true];
 	}
@@ -214,6 +224,7 @@ final class PublicAssetWriteService {
 		$repo->bulkUpdateSortOrder($sortById);
 		$this->markManuallyOrdered($kind);
 		(new PublicAssetBundleCacheService())->invalidateAllSections($kind);
+		$this->audit(__('Порядок публичных ресурсов {kind} изменён', ['{kind}' => $kind]));
 
 		return [
 			'reordered' => $adjusted,
@@ -251,6 +262,7 @@ final class PublicAssetWriteService {
 		}
 
 		(new PublicAssetBundleCacheService())->invalidateAllSections($entry->kind);
+		$this->audit(__('Публичный ресурс сохранён: {id}', ['{id}' => (string) $saved->id()]));
 
 		return $saved;
 	}
@@ -430,6 +442,10 @@ final class PublicAssetWriteService {
 		}
 
 		return (bool) $raw;
+	}
+
+	private function audit(string $message): void {
+		LogGenerator::for(AdminIdentity::name())->log($message, 'info');
 	}
 
 }

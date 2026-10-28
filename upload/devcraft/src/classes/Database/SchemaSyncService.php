@@ -2,7 +2,7 @@
 //===============================================================
 // Файл: SchemaSyncService.php                                  =
 // Путь: devcraft/src/classes/Database/SchemaSyncService.php    =
-// Последнее изменение: 2026-10-27 16:15:00                     =
+// Последнее изменение: 2026-10-28 12:00:00                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
 // Сайт: https://devcraft.club                                  =
@@ -24,9 +24,6 @@ use Cycle\Migrations\State;
 use Cycle\ORM\SchemaInterface;
 use Cycle\Schema\Compiler;
 use Cycle\Schema\Generator;
-use Cycle\Schema\Generator\Migrations\GenerateMigrations;
-use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
-use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
 use Cycle\Schema\Generator\SyncTables;
 use Cycle\Schema\Registry as SchemaRegistry;
 use DevCraft\Core\Config\DevCraftConfig;
@@ -47,6 +44,9 @@ use Cycle\Annotated\Locator\TokenizerEntityLocator;
  */
 final class SchemaSyncService {
 
+	/** @var list<string> Файлы миграций, созданные последней компиляцией схемы. */
+	private array $lastWritten = [];
+
 	/**
 	 * @since 200.4.1
 	 *
@@ -66,11 +66,7 @@ final class SchemaSyncService {
 	 * @return array{present: int, missing: list<string>} Сколько таблиц на месте и какие ещё отсутствуют.
 	 */
 	public function forceEnsure(): array {
-		$path = rtrim(Paths::cache(), '/\\') . '/cycle_orm_schema.ser';
-
-		if(is_file($path)) {
-			@unlink($path);
-		}
+		$this->dropCachedSchema();
 
 		$schema  = $this->ensureSchemaReady();
 		$missing = $this->missingSchemaTables($schema);
@@ -79,6 +75,146 @@ final class SchemaSyncService {
 			'present' => count($schema) - count($missing),
 			'missing' => $missing,
 		];
+	}
+
+	/**
+	 * Создаёт файлы миграций по отличиям моделей от базы (как `makemigrations`), ничего не накатывая.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @return list<string> Пути созданных файлов.
+	 *
+	 * @throws \RuntimeException Если есть ожидающие миграции: сравнение с базой дало бы их копии.
+	 */
+	public function generateMigrations(): array {
+		Paths::register();
+
+		$lock = $this->acquireLock();
+
+		try {
+			$this->gateway->databaseManager();
+			ModulePsr4Registrar::registerAll();
+
+			$path_resolver = new EntityPathResolver($this->registry);
+
+			foreach($this->migrator($path_resolver)->getMigrations() as $migration) {
+				if($migration->getState()->getStatus() === State::STATUS_PENDING) {
+					throw new \RuntimeException(__('Сначала накатите ожидающие миграции'));
+				}
+			}
+
+			$this->compileSchema(
+				new SchemaRegistry($this->gateway->databaseManager()),
+				$path_resolver->entityModelDirectories(),
+				$path_resolver,
+				true,
+				false,
+			);
+			$this->dropCachedSchema();
+
+			return $this->lastWritten;
+		} finally {
+			$this->releaseLock($lock);
+		}
+	}
+
+	/**
+	 * Накатывает все ожидающие миграции (уже существующие таблицы помечаются выполненными).
+	 *
+	 * @since 200.4.2
+	 *
+	 * @return int Сколько миграций стало выполненными.
+	 */
+	public function applyPending(): int {
+		Paths::register();
+
+		$lock = $this->acquireLock();
+
+		try {
+			$migrator = $this->migrator();
+			$before   = $this->pendingCount($migrator);
+			$this->runPending($migrator);
+			$this->dropCachedSchema();
+
+			return $before - $this->pendingCount($migrator);
+		} finally {
+			$this->releaseLock($lock);
+		}
+	}
+
+	/**
+	 * Помечает миграцию выполненной без запуска SQL.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @param   State  $state  Состояние миграции из Migrator.
+	 */
+	public function markExecuted(State $state): void {
+		$this->markMigrationAsExecuted(PREFIX . '_devcraft_migrations', $state);
+		$this->dropCachedSchema();
+	}
+
+	/**
+	 * Удаляет из учёта записи, для которых нет файла ни в одном каталоге `Migrations`.
+	 *
+	 * Таблицы данных не трогает. Так убирается учёт удалённых легаси-файлов `database/migrations`.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @param   Migrations\Migrator  $migrator  Migrator над текущими каталогами.
+	 *
+	 * @return int Сколько записей удалено.
+	 */
+	public function pruneRecordsWithoutFiles(Migrations\Migrator $migrator): int {
+		$table = PREFIX . '_devcraft_migrations';
+
+		if(!$this->tableExists($table)) {
+			return 0;
+		}
+
+		$known = [];
+
+		foreach($migrator->getMigrations() as $migration) {
+			$known[$migration->getState()->getName()] = true;
+		}
+
+		$removed = 0;
+
+		foreach($this->gateway->query("SELECT `id`, `migration` FROM `{$table}`")->fetchAll() as $row) {
+			if(isset($known[(string) $row['migration']])) {
+				continue;
+			}
+
+			$this->gateway->query("DELETE FROM `{$table}` WHERE `id` = :id", ['id' => (int) $row['id']]);
+			$removed++;
+		}
+
+		return $removed;
+	}
+
+	/**
+	 * Удаляет запас копии скомпилированной схемы.
+	 *
+	 * @since 200.4.2
+	 */
+	public function dropCachedSchema(): void {
+		$path = rtrim(Paths::cache(), '/\\') . '/cycle_orm_schema.ser';
+
+		if(is_file($path)) {
+			@unlink($path);
+		}
+	}
+
+	private function pendingCount(Migrations\Migrator $migrator): int {
+		$count = 0;
+
+		foreach($migrator->getMigrations() as $migration) {
+			if($migration->getState()->getStatus() === State::STATUS_PENDING) {
+				$count++;
+			}
+		}
+
+		return $count;
 	}
 
 	/**
@@ -109,17 +245,19 @@ final class SchemaSyncService {
 		$this->gateway->databaseManager();
 		ModulePsr4Registrar::registerAll();
 
-		$migrationsDir = Paths::src() . '/database/migrations';
+		$path_resolver = new EntityPathResolver($this->registry);
+		$migrationDirs = $path_resolver->migrationDirectories();
 		$fingerprint   = $this->quickModelsSignature();
 		$bootstrap     = $this->ormSchemaBootstrapNeeded();
-		$needPending   = $this->migrationFilesNeedApply($migrationsDir);
+		$needPending   = $this->migrationFilesNeedApply($migrationDirs);
 		$cached        = $bootstrap ? null : $this->loadCachedSchema($fingerprint);
 
 		if($cached !== null && !$needPending && !$bootstrap && $this->schemaTablesExist($cached)) {
 			return $cached;
 		}
 
-		$migrator = $this->createMigratorForDirectory($migrationsDir);
+		$migrator = $this->migrator($path_resolver);
+		$this->pruneRecordsWithoutFiles($migrator);
 		$this->runPending($migrator);
 
 		$fingerprint = $this->quickModelsSignature();
@@ -132,23 +270,19 @@ final class SchemaSyncService {
 			return $cached;
 		}
 
-		$path_resolver     = new EntityPathResolver($this->registry);
 		$model_directories = $path_resolver->entityModelDirectories();
 		$registry          = new SchemaRegistry($this->gateway->databaseManager());
 
 		if($debug) {
-			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, false, true);
+			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, false, true);
 			$this->storeCachedSchema($fingerprint, $schema_array);
 
 			return $schema_array;
 		}
 
-		$before       = $this->migrationPhpFiles($migrationsDir);
-		$schema_array = $this->compileSchema($registry, $model_directories, $migrator, true, false);
-		$after        = $this->migrationPhpFiles($migrationsDir);
-		$wroteNew     = array_diff($after, $before) !== [];
+		$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, true, false);
 
-		if($wroteNew) {
+		if($this->lastWritten !== []) {
 			$this->runPending($migrator);
 		}
 
@@ -156,7 +290,7 @@ final class SchemaSyncService {
 		if(!$this->schemaTablesExist($schema_array)) {
 			$this->unmarkCreateMigrationsWithAllTablesMissing($migrator);
 			$registry     = new SchemaRegistry($this->gateway->databaseManager());
-			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, true, false);
+			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, true, false);
 			$this->runPending($migrator);
 		}
 
@@ -164,7 +298,7 @@ final class SchemaSyncService {
 		// Один проход «на лету», не на каждый запрос.
 		if(!$this->schemaTablesExist($schema_array)) {
 			$registry     = new SchemaRegistry($this->gateway->databaseManager());
-			$schema_array = $this->compileSchema($registry, $model_directories, $migrator, false, true);
+			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, false, true);
 		}
 
 		$this->storeCachedSchema($fingerprint, $schema_array);
@@ -357,8 +491,11 @@ final class SchemaSyncService {
 		return hash('sha256', implode('|', $parts));
 	}
 
-	private function migrationFilesNeedApply(string $migrationsDir): bool {
-		$fileCount = count($this->migrationPhpFiles($migrationsDir));
+	/**
+	 * @param   list<string>  $migrationDirs
+	 */
+	private function migrationFilesNeedApply(array $migrationDirs): bool {
+		$fileCount = count($this->migrationPhpFiles($migrationDirs));
 
 		if($fileCount === 0) {
 			return false;
@@ -377,13 +514,20 @@ final class SchemaSyncService {
 	}
 
 	/**
+	 * @param   list<string>  $migrationDirs
+	 *
 	 * @return list<string>
 	 */
-	private function migrationPhpFiles(string $migrationsDir): array {
-		$files = glob($migrationsDir . '/*.php') ?: [];
+	private function migrationPhpFiles(array $migrationDirs): array {
+		$files = [];
+
+		foreach($migrationDirs as $dir) {
+			array_push($files, ...(glob($dir . '/*.php') ?: []));
+		}
+
 		sort($files);
 
-		return array_values($files);
+		return $files;
 	}
 
 	/**
@@ -438,16 +582,24 @@ final class SchemaSyncService {
 		]), LOCK_EX);
 	}
 
-	private function createMigratorForDirectory(string $directory): Migrations\Migrator {
-		if(!is_dir($directory)) {
-			@mkdir($directory, 0775, true);
-		}
+	/**
+	 * Migrator Cycle над каталогами `Migrations` всех модулей (Admin — основной, остальные — vendorDirectories).
+	 *
+	 * @since 200.4.2
+	 *
+	 * @param   EntityPathResolver|null  $path_resolver  Резолвер путей; по умолчанию из реестра.
+	 *
+	 * @return Migrations\Migrator Настроенный Migrator.
+	 */
+	public function migrator(?EntityPathResolver $path_resolver = null): Migrations\Migrator {
+		$directories = ($path_resolver ?? new EntityPathResolver($this->registry))->migrationDirectories();
 
 		$migrator_config = new MigrationConfig(
 			[
-				'directory' => $directory,
-				'table'     => 'devcraft_migrations',
-				'safe'      => true,
+				'directory'         => array_shift($directories),
+				'vendorDirectories' => $directories,
+				'table'             => 'devcraft_migrations',
+				'safe'              => true,
 			],
 		);
 
@@ -469,10 +621,11 @@ final class SchemaSyncService {
 	private function compileSchema(
 		SchemaRegistry $registry,
 		array $model_directories,
-		Migrations\Migrator $migrator,
+		EntityPathResolver $path_resolver,
 		bool $generateMigrations,
 		bool $syncTables,
 	): array {
+		$this->lastWritten = [];
 		$model_directories = $this->normalizeModelDirectories($model_directories);
 		ModulePsr4Registrar::registerAll();
 
@@ -515,17 +668,12 @@ final class SchemaSyncService {
 			new Annotated\MergeIndexes(),
 		];
 
-		if($generateMigrations) {
-			// По файлу на таблицу: общий файл откатывает создание журнала и заголовков,
-			// если соседняя таблица в том же шаге уже есть.
-			$generators[] = new GenerateMigrations(
-				$migrator->getRepository(),
-				$migrator->getConfig(),
-				new MultipleFilesStrategy(
-					$migrator->getConfig(),
-					new NameBasedOnChangesGenerator(),
-				),
-			);
+		// По файлу на таблицу, в Migrations модуля-владельца: общий файл откатывает создание журнала
+		// и заголовков, если соседняя таблица в том же шаге уже есть.
+		$migrationsGenerator = $generateMigrations? new ModuleMigrationsGenerator($path_resolver) : null;
+
+		if($migrationsGenerator !== null) {
+			$generators[] = $migrationsGenerator;
 		}
 
 		if($syncTables) {
@@ -535,8 +683,11 @@ final class SchemaSyncService {
 		$generators[] = new Generator\GenerateTypecast();
 
 		$compiler = new Compiler();
+		$schema   = $compiler->compile($registry, $generators);
 
-		return $compiler->compile($registry, $generators);
+		$this->lastWritten = $migrationsGenerator?->written() ?? [];
+
+		return $schema;
 	}
 
 	/**

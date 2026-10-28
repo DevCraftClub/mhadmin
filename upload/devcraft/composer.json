@@ -36,7 +36,6 @@
 			"DevCraft\\Enums\\": "src/classes/Enums/",
 			"DevCraft\\Types\\": "src/classes/Types/",
 			"DevCraft\\Utils\\": "src/classes/Utils/",
-			"Migration\\": "src/database/migrations/",
 			"DevCraft\\Dle\\": "src/sdk/dle/",
 			"JetBrains\\PhpStorm\\": "src/sdk/dle/Support/PhpStorm/"
 		},

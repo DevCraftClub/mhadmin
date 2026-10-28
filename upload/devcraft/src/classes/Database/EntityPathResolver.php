@@ -2,7 +2,7 @@
 //===============================================================
 // Файл: EntityPathResolver.php                                 =
 // Путь: devcraft/src/classes/Database/EntityPathResolver.php   =
-// Последнее изменение: 2026-06-13 19:29:35                     =
+// Последнее изменение: 2026-10-28 12:00:00                     =
 // ==============================================================
 // Автор: Maxim Harder <dev@devcraft.club> © 2024 - 2026        =
 // Сайт: https://devcraft.club                                  =
@@ -79,17 +79,66 @@ final class EntityPathResolver {
 	}
 
 	/**
-	 * Возвращает каталог миграций DevCraft, создавая его при необходимости.
+	 * Возвращает основной каталог миграций (модуль Admin), создавая его при необходимости.
 	 *
 	 * @since 200.4.0
 	 *
-	 * @return string Абсолютный путь к каталогу миграций.
+	 * @return string Абсолютный путь к `modules/Admin/Migrations`.
 	 *
 	 * @example
 	 *     $path = $resolver->migrationsDirectory();
 	 */
 	public function migrationsDirectory(): string {
-		$directory = Paths::src() . '/database/migrations';
+		$directory = Paths::modules() . '/Admin/Migrations';
+
+		DataManager::createDir($directory);
+
+		return $directory;
+	}
+
+	/**
+	 * Возвращает все каталоги `Migrations` модулей: сначала Admin, затем остальные существующие.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @return list<string> Абсолютные пути к каталогам миграций.
+	 */
+	public function migrationDirectories(): array {
+		$main        = $this->migrationsDirectory();
+		$directories = [realpath($main) ?: $main];
+
+		foreach($this->registry->modules() as $module) {
+			$dir = $module->path === ''? false : realpath($module->path . DIRECTORY_SEPARATOR . 'Migrations');
+
+			if($dir !== false && is_dir($dir) && !in_array($dir, $directories, true)) {
+				$directories[] = $dir;
+			}
+		}
+
+		return $directories;
+	}
+
+	/**
+	 * Каталог миграций модуля, которому принадлежит файл модели.
+	 *
+	 * Модели из `modules/{Name}/Models` → `modules/{Name}/Migrations`; прочие (Composer) → Admin.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @param   string  $modelFile  Абсолютный путь к файлу модели.
+	 *
+	 * @return string Абсолютный путь к каталогу миграций (создаётся при необходимости).
+	 */
+	public function migrationsDirectoryForModel(string $modelFile): string {
+		$modelsDir = dirname($modelFile);
+		$modules   = realpath(Paths::modules()) ?: Paths::modules();
+		$moduleDir = dirname($modelsDir);
+
+		if(basename($modelsDir) !== 'Models' || (realpath(dirname($moduleDir)) ?: '') !== $modules) {
+			return $this->migrationsDirectory();
+		}
+
+		$directory = $moduleDir . DIRECTORY_SEPARATOR . 'Migrations';
 
 		DataManager::createDir($directory);
 

@@ -120,6 +120,7 @@ final class ModuleGeneratorService {
 			DEVCRAFT_MODULES . '/' . $dirName,
 			DEVCRAFT_MODULES . '/' . $dirName . '/Pages',
 			DEVCRAFT_MODULES . '/' . $dirName . '/Ajax',
+			DEVCRAFT_MODULES . '/' . $dirName . '/Migrations',
 			DEVCRAFT_MODULES . '/' . $dirName . '/assets',
 			DEVCRAFT_MODULES . '/' . $dirName . '/templates',
 			DEVCRAFT_LOCALES,

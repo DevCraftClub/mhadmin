@@ -12,8 +12,8 @@ upload/devcraft/cache/**
 !upload/devcraft/cache/**/.htaccess
 upload/devcraft/config/*.json
 # Cycle ORM — миграции генерируются на каждой установке, не в каноне пакета
-upload/devcraft/src/database/migrations/
-upload/devcraft/src/database/migrations/**
+upload/devcraft/src/modules/*/Migrations/
+upload/devcraft/src/modules/*/Migrations/**
 upload/devcraft/composer.lock
 upload/devcraft/.composer_initialized
 upload/devcraft/composer.phar

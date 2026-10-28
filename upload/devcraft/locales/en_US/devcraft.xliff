@@ -1942,6 +1942,662 @@
         <source>Модуль Admin инициализирован</source>
         <target state="needs-translation">Модуль Admin инициализирован</target>
       </trans-unit>
+      <trans-unit id="6cfff539a39a7ced31d046ca282675df">
+        <source>Панель</source>
+        <target state="needs-translation">Панель</target>
+      </trans-unit>
+      <trans-unit id="6b961afd635bed9fc64045bd99367d9d">
+        <source>Включено</source>
+        <target state="needs-translation">Включено</target>
+      </trans-unit>
+      <trans-unit id="65f433db41656ea6a36513660f4c1ddf">
+        <source>Установка всех пакетов из composer.json…</source>
+        <target state="needs-translation">Установка всех пакетов из composer.json…</target>
+      </trans-unit>
+      <trans-unit id="659627d9f8e6e058239d74d1bc8f4516">
+        <source>Пожалуйста, подождите, идёт обработка…</source>
+        <target state="needs-translation">Пожалуйста, подождите, идёт обработка…</target>
+      </trans-unit>
+      <trans-unit id="0b4bb442cf6cb1b69fd4a98388244173">
+        <source>Сохраняем изменения, пожалуйста подождите…</source>
+        <target state="needs-translation">Сохраняем изменения, пожалуйста подождите…</target>
+      </trans-unit>
+      <trans-unit id="8632c8dc9f5894f26504166dbef2f8ca">
+        <source>Выполняем запрос, пожалуйста подождите…</source>
+        <target state="needs-translation">Выполняем запрос, пожалуйста подождите…</target>
+      </trans-unit>
+      <trans-unit id="e9666d81e24a38994c5ffdc594673ce0">
+        <source>Загружаем данные, пожалуйста подождите…</source>
+        <target state="needs-translation">Загружаем данные, пожалуйста подождите…</target>
+      </trans-unit>
+      <trans-unit id="3bfa3edd78fe0ed37287fbdabfd1f8c1">
+        <source>Установить все из composer.json</source>
+        <target state="needs-translation">Установить все из composer.json</target>
+      </trans-unit>
+      <trans-unit id="3f43041a76b80ed9f9f297b3c3661ec9">
+        <source>Одна команда composer install — все зависимости из файла, не по одному пакету.</source>
+        <target state="needs-translation">Одна команда composer install — все зависимости из файла, не по одному пакету.</target>
+      </trans-unit>
+      <trans-unit id="3b2097914379b13085e21ebad9157ae8">
+        <source>Все пакеты из composer.json</source>
+        <target state="needs-translation">Все пакеты из composer.json</target>
+      </trans-unit>
+      <trans-unit id="bac5b4b04bde8aee5e5320bfee8bd3d7">
+        <source>Недостаточно прав</source>
+        <target state="needs-translation">Недостаточно прав</target>
+      </trans-unit>
+      <trans-unit id="cb94f80662910b312ca50884ca9a3304">
+        <source>Неизвестное направление сортировки: {dir}</source>
+        <target state="needs-translation">Неизвестное направление сортировки: {dir}</target>
+      </trans-unit>
+      <trans-unit id="e5fff5eda785d6b3e41d9091a7baac13">
+        <source>mod манифеста не может быть пустым</source>
+        <target state="needs-translation">mod манифеста не может быть пустым</target>
+      </trans-unit>
+      <trans-unit id="a813022c24444e31b28ac7ca80fa9032">
+        <source>Некорректный manifest.php в «{dir}» — модуль пропущен</source>
+        <target state="needs-translation">Некорректный manifest.php в «{dir}» — модуль пропущен</target>
+      </trans-unit>
+      <trans-unit id="a79785c9aaffb6d577c2729a924a0efe">
+        <source>Манифест без mod в каталоге «{dir}» пропущен</source>
+        <target state="needs-translation">Манифест без mod в каталоге «{dir}» пропущен</target>
+      </trans-unit>
+      <trans-unit id="bd9d5fdfe0ff92cb8830921aa343cafa">
+        <source>Дубликат mod «{mod}»: каталог «{prev}» вытеснен «{next}» (побеждает последний)</source>
+        <target state="needs-translation">Дубликат mod «{mod}»: каталог «{prev}» вытеснен «{next}» (побеждает последний)</target>
+      </trans-unit>
+      <trans-unit id="359250bef6d309bad58cf066c405970d">
+        <source>Ошибка манифеста «{dir}»: {msg}</source>
+        <target state="needs-translation">Ошибка манифеста «{dir}»: {msg}</target>
+      </trans-unit>
+      <trans-unit id="2e699ea2b673d16f58ac9305ded3bfe9">
+        <source>Хеш не совпал: {manifestKey}</source>
+        <target state="needs-translation">Хеш не совпал: {manifestKey}</target>
+      </trans-unit>
+      <trans-unit id="8ffe1fdaad15955a2ff7af46529fba13">
+        <source>Не удалось заменить файл: {targetPath}</source>
+        <target state="needs-translation">Не удалось заменить файл: {targetPath}</target>
+      </trans-unit>
+      <trans-unit id="bc0207715adc4fba10e03bcad96b4e59">
+        <source>Пакет devcraftclub/dev-tools не установлен: файловый кэш отключён до composer install.</source>
+        <target state="needs-translation">Пакет devcraftclub/dev-tools не установлен: файловый кэш отключён до composer install.</target>
+      </trans-unit>
+      <trans-unit id="ab7bdeb7cdfd483ccdd0123c509bccd5">
+        <source>Не удалось загрузить манифесты для PSR-4: {msg}</source>
+        <target state="needs-translation">Не удалось загрузить манифесты для PSR-4: {msg}</target>
+      </trans-unit>
+      <trans-unit id="c7f318cce51e51718b46ad3fa6b6667c">
+        <source>PSR-4 модуля «{mod}»: {msg}</source>
+        <target state="needs-translation">PSR-4 модуля «{mod}»: {msg}</target>
+      </trans-unit>
+      <trans-unit id="dfa776d62af86a62e39d98b7e95f68e7">
+        <source>PSR-4: каталог модуля «{mod}» недоступен: {path}</source>
+        <target state="needs-translation">PSR-4: каталог модуля «{mod}» недоступен: {path}</target>
+      </trans-unit>
+      <trans-unit id="f0dda55bdf7ef293e66010ff78a4595d">
+        <source>Не удалось сохранить настройки</source>
+        <target state="needs-translation">Не удалось сохранить настройки</target>
+      </trans-unit>
+      <trans-unit id="6a1fdb2ca3074d928589076e7b4b3147">
+        <source>Метод требует значение</source>
+        <target state="needs-translation">Метод требует значение</target>
+      </trans-unit>
+      <trans-unit id="e6c35ebc336cd5a8b7589ca6e848decd">
+        <source>QueryBuilder поддерживает только равенства; несовместимые условия: {list}</source>
+        <target state="needs-translation">QueryBuilder поддерживает только равенства; несовместимые условия: {list}</target>
+      </trans-unit>
+      <trans-unit id="532a374ce013064b90615757d6ca0ce5">
+        <source>TableQuery принимает только равенства; условие «{column}» составное</source>
+        <target state="needs-translation">TableQuery принимает только равенства; условие «{column}» составное</target>
+      </trans-unit>
+      <trans-unit id="165ee5ca70cd893a01edf6f4bf478a87">
+        <source>Нельзя выполнить операцию: не задан первичный ключ.</source>
+        <target state="needs-translation">Нельзя выполнить операцию: не задан первичный ключ.</target>
+      </trans-unit>
+      <trans-unit id="ec8f078b0e47ed20077dfba901420acd">
+        <source>Неизвестная колонка «{column}» для таблицы {table}</source>
+        <target state="needs-translation">Неизвестная колонка «{column}» для таблицы {table}</target>
+      </trans-unit>
+      <trans-unit id="3058f2b572e0ec900ab2160688e8657f">
+        <source>Нет права «{action}» на таблицу «{table}»</source>
+        <target state="needs-translation">Нет права «{action}» на таблицу «{table}»</target>
+      </trans-unit>
+      <trans-unit id="22a74e1be402b6eba8e760e918ca8769">
+        <source>Неизвестный метод</source>
+        <target state="needs-translation">Неизвестный метод</target>
+      </trans-unit>
+      <trans-unit id="33c042517a0e43e7fa42ef0450ab55ca">
+        <source>Правка записи</source>
+        <target state="needs-translation">Правка записи</target>
+      </trans-unit>
+      <trans-unit id="7a1120532aa97273a04050fa34e867ec">
+        <source>Источник</source>
+        <target state="needs-translation">Источник</target>
+      </trans-unit>
+      <trans-unit id="d3ce1b51ae167809b50da863f1450be8">
+        <source>авто</source>
+        <target state="needs-translation">авто</target>
+      </trans-unit>
+      <trans-unit id="937a2dd685f39edbdf869cbaca88cf5f">
+        <source>Назад к списку</source>
+        <target state="needs-translation">Назад к списку</target>
+      </trans-unit>
+      <trans-unit id="987b33c664dce148f1d17f6eb9ab3e79">
+        <source>Отмена</source>
+        <target state="needs-translation">Отмена</target>
+      </trans-unit>
+      <trans-unit id="660f855f65d26e82b32382ce7594686d">
+        <source>В таблице отображаются пакеты из composer.json и manifest модулей. Обязательные пакеты (hardRequired) помечены в колонке «Обязательный». Если чего-то не хватает — сверху строка «Установить все» (composer install).</source>
+        <target state="needs-translation">В таблице отображаются пакеты из composer.json и manifest модулей. Обязательные пакеты (hardRequired) помечены в колонке «Обязательный». Если чего-то не хватает — сверху строка «Установить все» (composer install).</target>
+      </trans-unit>
+      <trans-unit id="5eba283b81890978e67f4aa96dde1724">
+        <source>Добавить</source>
+        <target state="needs-translation">Добавить</target>
+      </trans-unit>
+      <trans-unit id="e7e466c4aca17e01d9b8c2efffb081f6">
+        <source>Meta name/content для head. Автозаписи нельзя удалить — только выключить. Порядок — за ручку слева.</source>
+        <target state="needs-translation">Meta name/content для head. Автозаписи нельзя удалить — только выключить. Порядок — за ручку слева.</target>
+      </trans-unit>
+      <trans-unit id="4052a506d6d3d093770c628f47321839">
+        <source>При активном фильтре порядок не меняется — сначала снимите правила.</source>
+        <target state="needs-translation">При активном фильтре порядок не меняется — сначала снимите правила.</target>
+      </trans-unit>
+      <trans-unit id="b1affa8c217f764378b64f16e7b002f5">
+        <source>Имя (name)</source>
+        <target state="needs-translation">Имя (name)</target>
+      </trans-unit>
+      <trans-unit id="4340becc14dc4e969a3fd0c087af7b30">
+        <source>Содержимое</source>
+        <target state="needs-translation">Содержимое</target>
+      </trans-unit>
+      <trans-unit id="318150c53b2ec43a3ffef0f443596df1">
+        <source>Активен</source>
+        <target state="needs-translation">Активен</target>
+      </trans-unit>
+      <trans-unit id="fb3df31bf52df6c142a279ecdb6dd94c">
+        <source>Действия</source>
+        <target state="needs-translation">Действия</target>
+      </trans-unit>
+      <trans-unit id="7df152e793f12927e74d67bb3f8e4286">
+        <source>Перетащить</source>
+        <target state="needs-translation">Перетащить</target>
+      </trans-unit>
+      <trans-unit id="47e2436e5560837160a70c64466ea22b">
+        <source>Изменить</source>
+        <target state="needs-translation">Изменить</target>
+      </trans-unit>
+      <trans-unit id="a8482fbc461eec86c430e3f0bf788d2e">
+        <source>Пока нет записей</source>
+        <target state="needs-translation">Пока нет записей</target>
+      </trans-unit>
+      <trans-unit id="28dc2b45dd41e1f081788c0d3ccbce50">
+        <source>Перетащите строки за ручку слева. Автозаписи нельзя удалить — только выключить.</source>
+        <target state="needs-translation">Перетащите строки за ручку слева. Автозаписи нельзя удалить — только выключить.</target>
+      </trans-unit>
+      <trans-unit id="d81fbd569d6b472f7409c1691c0cb9fc">
+        <source>Метка</source>
+        <target state="needs-translation">Метка</target>
+      </trans-unit>
+      <trans-unit id="e06a5354f0dfac4ed207e1395c53d258">
+        <source>только выкл.</source>
+        <target state="needs-translation">только выкл.</target>
+      </trans-unit>
+      <trans-unit id="330d05257aab70e6ba73974bc0bcdcce">
+        <source>Правка заголовка</source>
+        <target state="needs-translation">Правка заголовка</target>
+      </trans-unit>
+      <trans-unit id="d1227a44b07d793ba8fafaf61c853e87">
+        <source>Обновлено</source>
+        <target state="needs-translation">Обновлено</target>
+      </trans-unit>
+      <trans-unit id="9225d38a589d5a9009adda33154600c4">
+        <source>Порядок сохранён</source>
+        <target state="needs-translation">Порядок сохранён</target>
+      </trans-unit>
+      <trans-unit id="f2c85e04f11bdaea5c5073a9271267e8">
+        <source>Желаемый порядок скорректирован из‑за зависимостей между записями</source>
+        <target state="needs-translation">Желаемый порядок скорректирован из‑за зависимостей между записями</target>
+      </trans-unit>
+      <trans-unit id="a35b3c10fe0d20db5c971e119268d01e">
+        <source>Установить все</source>
+        <target state="needs-translation">Установить все</target>
+      </trans-unit>
+      <trans-unit id="52238732be1d66d49178fd955bc406e4">
+        <source>Демо-раздел quickstart</source>
+        <target state="needs-translation">Демо-раздел quickstart</target>
+      </trans-unit>
+      <trans-unit id="22d3aaccc5bd246d16175900133d0345">
+        <source>Некорректный тип ресурса</source>
+        <target state="needs-translation">Некорректный тип ресурса</target>
+      </trans-unit>
+      <trans-unit id="69ef837668689b1d47bfdb0262967923">
+        <source>Автозапись нельзя редактировать как ручную</source>
+        <target state="needs-translation">Автозапись нельзя редактировать как ручную</target>
+      </trans-unit>
+      <trans-unit id="61192ac6d34e3216c8293d41fb61d0fd">
+        <source>Укажите локальный путь или внешний URL</source>
+        <target state="needs-translation">Укажите локальный путь или внешний URL</target>
+      </trans-unit>
+      <trans-unit id="920e6fa1eff8446e0ddb6bb9634d219b">
+        <source>Путь не должен содержать ..</source>
+        <target state="needs-translation">Путь не должен содержать ..</target>
+      </trans-unit>
+      <trans-unit id="475be5f8f973a7f03c76810ed04f32c3">
+        <source>Активная запись с таким путём уже существует</source>
+        <target state="needs-translation">Активная запись с таким путём уже существует</target>
+      </trans-unit>
+      <trans-unit id="26ad87a962598852a1544a919c213d3b">
+        <source>Автозапись нельзя удалить — только выключить</source>
+        <target state="needs-translation">Автозапись нельзя удалить — только выключить</target>
+      </trans-unit>
+      <trans-unit id="1057e38d9cbda3c4c35fa91f9b19bfe6">
+        <source>Неизвестный режим удаления</source>
+        <target state="needs-translation">Неизвестный режим удаления</target>
+      </trans-unit>
+      <trans-unit id="af2e35b75e311f5e7cac5d540822e1b2">
+        <source>Автозаписи при удалении вместе не удаляются — только отвязываются</source>
+        <target state="needs-translation">Автозаписи при удалении вместе не удаляются — только отвязываются</target>
+      </trans-unit>
+      <trans-unit id="2bb0a69cb7bc48b29eeb53fb7653a1ca">
+        <source>Моя страница</source>
+        <target state="needs-translation">Моя страница</target>
+      </trans-unit>
+      <trans-unit id="f02c02261662788bb90505e4777af605">
+        <source>Новости за дату</source>
+        <target state="needs-translation">Новости за дату</target>
+      </trans-unit>
+      <trans-unit id="c95a1e2de00ee86634e177aecca00aed">
+        <source>Категория</source>
+        <target state="needs-translation">Категория</target>
+      </trans-unit>
+      <trans-unit id="8590d1284469ca243496bfc039047171">
+        <source>Полная новость</source>
+        <target state="needs-translation">Полная новость</target>
+      </trans-unit>
+      <trans-unit id="bfc95980634bf529e8a406db2c842b31">
+        <source>Поиск</source>
+        <target state="needs-translation">Поиск</target>
+      </trans-unit>
+      <trans-unit id="603e7f5fb95e1ad573015a5a12c347d8">
+        <source>Поиск по доп. полю</source>
+        <target state="needs-translation">Поиск по доп. полю</target>
+      </trans-unit>
+      <trans-unit id="10d660a5c0012887a5ba584eb0a4eead">
+        <source>Профиль пользователя</source>
+        <target state="needs-translation">Профиль пользователя</target>
+      </trans-unit>
+      <trans-unit id="0b93f81293f084dbfa4dbe93a8280555">
+        <source>Регистрация</source>
+        <target state="needs-translation">Регистрация</target>
+      </trans-unit>
+      <trans-unit id="5e3753ce80a1394ad160591140abb966">
+        <source>Статистика</source>
+        <target state="needs-translation">Статистика</target>
+      </trans-unit>
+      <trans-unit id="4fd9ccbe36b8845c7c8d75e4e15586f2">
+        <source>Личные сообщения</source>
+        <target state="needs-translation">Личные сообщения</target>
+      </trans-unit>
+      <trans-unit id="0e2e04bd2885cdc169471ea2a113a43f">
+        <source>Обратная связь</source>
+        <target state="needs-translation">Обратная связь</target>
+      </trans-unit>
+      <trans-unit id="1e3fc78d38f5730e9cdc3d562fdc02ae">
+        <source>Закладки</source>
+        <target state="needs-translation">Закладки</target>
+      </trans-unit>
+      <trans-unit id="50b0a4e6cd20cc3ea0c53102028509e7">
+        <source>Новые сообщения</source>
+        <target state="needs-translation">Новые сообщения</target>
+      </trans-unit>
+      <trans-unit id="cfcb0926524089afa2cab76df57daf6c">
+        <source>Добавление новости</source>
+        <target state="needs-translation">Добавление новости</target>
+      </trans-unit>
+      <trans-unit id="3d184219eab3c29303e21b120e8d14ff">
+        <source>Последние новости</source>
+        <target state="needs-translation">Последние новости</target>
+      </trans-unit>
+      <trans-unit id="011d433689a8330fdbfbbfa9d76d228c">
+        <source>Последние комментарии</source>
+        <target state="needs-translation">Последние комментарии</target>
+      </trans-unit>
+      <trans-unit id="f490b86156968b0c43cbf28feefacd33">
+        <source>Восстановление пароля</source>
+        <target state="needs-translation">Восстановление пароля</target>
+      </trans-unit>
+      <trans-unit id="2c1f1e22a714429f66f2ad99c2684376">
+        <source>Статическая страница</source>
+        <target state="needs-translation">Статическая страница</target>
+      </trans-unit>
+      <trans-unit id="7ae8d67b7acb8c40955e9e2145ec2ffd">
+        <source>Каталог страниц</source>
+        <target state="needs-translation">Каталог страниц</target>
+      </trans-unit>
+      <trans-unit id="247b7f2096839122959890210d928770">
+        <source>Облако тегов</source>
+        <target state="needs-translation">Облако тегов</target>
+      </trans-unit>
+      <trans-unit id="1bf029833c1cc606f9ab75617ac1133a">
+        <source>Новости по тегу</source>
+        <target state="needs-translation">Новости по тегу</target>
+      </trans-unit>
+      <trans-unit id="03641635d3f4dc0ae19b7ba90887f3dd">
+        <source>Все новости</source>
+        <target state="needs-translation">Все новости</target>
+      </trans-unit>
+      <trans-unit id="3276ac9e136c0f3e612f1c643c4ebd81">
+        <source>Разрешены только HTTPS URL</source>
+        <target state="needs-translation">Разрешены только HTTPS URL</target>
+      </trans-unit>
+      <trans-unit id="328e5369fee9171b47a1fe7ecd348425">
+        <source>Некорректный URL</source>
+        <target state="needs-translation">Некорректный URL</target>
+      </trans-unit>
+      <trans-unit id="7bb797e2c84a1fdbcfd76d48b727da0e">
+        <source>Не удалось загрузить файл по URL</source>
+        <target state="needs-translation">Не удалось загрузить файл по URL</target>
+      </trans-unit>
+      <trans-unit id="4daec0c0705e7ae56570b0742e4bf35d">
+        <source>Файл превышает лимит 2 МиБ</source>
+        <target state="needs-translation">Файл превышает лимит 2 МиБ</target>
+      </trans-unit>
+      <trans-unit id="37c15e21bcbe078475b52a1a15c29b62">
+        <source>Не удалось создать каталог для внешних ресурсов</source>
+        <target state="needs-translation">Не удалось создать каталог для внешних ресурсов</target>
+      </trans-unit>
+      <trans-unit id="b074d06d3a042dc937506cdce96f7fae">
+        <source>Недопустимый Content-Type для ресурса</source>
+        <target state="needs-translation">Недопустимый Content-Type для ресурса</target>
+      </trans-unit>
+      <trans-unit id="29e9f1ab7523e971e34d63c8e1c2d84a">
+        <source>Обнаружен цикл зависимостей — сохранение отменено</source>
+        <target state="needs-translation">Обнаружен цикл зависимостей — сохранение отменено</target>
+      </trans-unit>
+      <trans-unit id="1f98428a82ecc8c11ab114b125903f66">
+        <source>Обнаружен цикл зависимостей</source>
+        <target state="needs-translation">Обнаружен цикл зависимостей</target>
+      </trans-unit>
+      <trans-unit id="0e6acd127c05be3a521fee9dfa88545d">
+        <source>Имя и содержимое обязательны</source>
+        <target state="needs-translation">Имя и содержимое обязательны</target>
+      </trans-unit>
+      <trans-unit id="19e9b14047f9ca8dd00ac1b20d8d55ce">
+        <source>Публичные стили</source>
+        <target state="needs-translation">Публичные стили</target>
+      </trans-unit>
+      <trans-unit id="6cfdb4562bc280d1e5a8326bbe7f87ea">
+        <source>Публичные скрипты</source>
+        <target state="needs-translation">Публичные скрипты</target>
+      </trans-unit>
+      <trans-unit id="df9e77744b3d7b77c1d2bed1e10862ff">
+        <source>Публичные заголовки</source>
+        <target state="needs-translation">Публичные заголовки</target>
+      </trans-unit>
+      <trans-unit id="fa93931513adfe5e27d91f455bbf6050">
+        <source>На эту запись ссылаются другие:</source>
+        <target state="needs-translation">На эту запись ссылаются другие:</target>
+      </trans-unit>
+      <trans-unit id="a8468df8e5b39ccab442d6c64c964c71">
+        <source>Удалить с зависимыми?</source>
+        <target state="needs-translation">Удалить с зависимыми?</target>
+      </trans-unit>
+      <trans-unit id="29f0ceb69152671e0e3f4cc006cf282f">
+        <source>Отвязать и удалить</source>
+        <target state="needs-translation">Отвязать и удалить</target>
+      </trans-unit>
+      <trans-unit id="65f3fe8c7a8f93d45a794cbd8f27aca1">
+        <source>Не удалось удалить</source>
+        <target state="needs-translation">Не удалось удалить</target>
+      </trans-unit>
+      <trans-unit id="eb3cfc88279fb85fc6c12befd6ef8b5d">
+        <source>Каскадное удаление</source>
+        <target state="needs-translation">Каскадное удаление</target>
+      </trans-unit>
+      <trans-unit id="4d86bed39cdb74ca3fb53fea10b7177f">
+        <source>Не удалось сохранить</source>
+        <target state="needs-translation">Не удалось сохранить</target>
+      </trans-unit>
+      <trans-unit id="f539958e2fc7154fdd609bff56842759">
+        <source>Не удалось обновить</source>
+        <target state="needs-translation">Не удалось обновить</target>
+      </trans-unit>
+      <trans-unit id="0cc1b3da9e7e67fd1f78ea9bdfb31236">
+        <source>Шаблон формы не найден</source>
+        <target state="needs-translation">Шаблон формы не найден</target>
+      </trans-unit>
+      <trans-unit id="3091df2f4e7321b1d161b1c3d0f3f828">
+        <source>Добавить запись</source>
+        <target state="needs-translation">Добавить запись</target>
+      </trans-unit>
+      <trans-unit id="42861708d33774cdb291f68425b67d9d">
+        <source>Копировать заголовок</source>
+        <target state="needs-translation">Копировать заголовок</target>
+      </trans-unit>
+      <trans-unit id="2ee10b7ded17455d91070aef7b6ffefe">
+        <source>Добавить заголовок</source>
+        <target state="needs-translation">Добавить заголовок</target>
+      </trans-unit>
+      <trans-unit id="78f6ab1edae1026ab3181ee393ea8bbe">
+        <source>Публичные ресурсы</source>
+        <target state="needs-translation">Публичные ресурсы</target>
+      </trans-unit>
+      <trans-unit id="6045ca5042b3123f24b7fa5802004e37">
+        <source>Компрессия публичных стилей и скриптов</source>
+        <target state="needs-translation">Компрессия публичных стилей и скриптов</target>
+      </trans-unit>
+      <trans-unit id="bbe043f8bfed35c68bada51813b3f2b3">
+        <source>При включении CSS и JS оболочки объединяются и минифицируются в кэш-файлы.</source>
+        <target state="needs-translation">При включении CSS и JS оболочки объединяются и минифицируются в кэш-файлы.</target>
+      </trans-unit>
+      <trans-unit id="2b754ce5b464d9451478fe88d06abbbb">
+        <source>При выключении каждый файл подключается отдельным тегом.</source>
+        <target state="needs-translation">При выключении каждый файл подключается отдельным тегом.</target>
+      </trans-unit>
+      <trans-unit id="201ba2cb6ccc741150c37a1e2f07a34c">
+        <source>Путь экспорта плагинов</source>
+        <target state="needs-translation">Путь экспорта плагинов</target>
+      </trans-unit>
+      <trans-unit id="88d2c7bd3f61fb01081ec889b21670a8">
+        <source>Каталог для install.xml / ZIP при вызове SDK &lt;code&gt;PluginPresenter::export()&lt;/code&gt; без явного &lt;code&gt;$path&lt;/code&gt;.&lt;br&gt;По умолчанию: &lt;code&gt;{path}&lt;/code&gt;</source>
+        <target state="needs-translation">Каталог для install.xml / ZIP при вызове SDK &lt;code&gt;PluginPresenter::export()&lt;/code&gt; без явного &lt;code&gt;$path&lt;/code&gt;.&lt;br&gt;По умолчанию: &lt;code&gt;{path}&lt;/code&gt;</target>
+      </trans-unit>
+      <trans-unit id="ae7ee588f6b02f194525b446b3cab607">
+        <source>JS оболочки сайта: авто из манифестов модулей и ручные записи. Порядок — перетаскиванием.</source>
+        <target state="needs-translation">JS оболочки сайта: авто из манифестов модулей и ручные записи. Порядок — перетаскиванием.</target>
+      </trans-unit>
+      <trans-unit id="3d5b5fb588344d509483ca08d2beef5f">
+        <source>CSS оболочки сайта: авто из манифестов модулей и ручные записи. Порядок — перетаскиванием.</source>
+        <target state="needs-translation">CSS оболочки сайта: авто из манифестов модулей и ручные записи. Порядок — перетаскиванием.</target>
+      </trans-unit>
+      <trans-unit id="8629c7d44b19060e398528861fe6f893">
+        <source>Meta name/content для head. Автозаписи только выключаются. Порядок — перетаскиванием.</source>
+        <target state="needs-translation">Meta name/content для head. Автозаписи только выключаются. Порядок — перетаскиванием.</target>
+      </trans-unit>
+      <trans-unit id="00a48ae6687e9bdc0c20104754ea5d0b">
+        <source>Новая запись</source>
+        <target state="needs-translation">Новая запись</target>
+      </trans-unit>
+      <trans-unit id="4effac7ca2406d6ee3e84d360f162432">
+        <source>Короткое имя для списка в админке.</source>
+        <target state="needs-translation">Короткое имя для списка в админке.</target>
+      </trans-unit>
+      <trans-unit id="93d0531fdbd84c1dd34bd9998ff6d5d8">
+        <source>Локальный путь</source>
+        <target state="needs-translation">Локальный путь</target>
+      </trans-unit>
+      <trans-unit id="1ae0159f469befe71c8731e8bb13f8e5">
+        <source>Путь от корня сайта, например &lt;code&gt;devcraft/src/...&lt;/code&gt;.</source>
+        <target state="needs-translation">Путь от корня сайта, например &lt;code&gt;devcraft/src/...&lt;/code&gt;.</target>
+      </trans-unit>
+      <trans-unit id="02de5c3d4ce32221da4eba48c12aaac3">
+        <source>Или HTTPS URL</source>
+        <target state="needs-translation">Или HTTPS URL</target>
+      </trans-unit>
+      <trans-unit id="1fd6098fd0cd87884d43fbec3aaae7c2">
+        <source>Внешний файл будет скачан в кэш (HTTPS, CSS/JS).</source>
+        <target state="needs-translation">Внешний файл будет скачан в кэш (HTTPS, CSS/JS).</target>
+      </trans-unit>
+      <trans-unit id="2e9d7991efe99efaf9cf325b6f10d8a0">
+        <source>Заголовок</source>
+        <target state="needs-translation">Заголовок</target>
+      </trans-unit>
+      <trans-unit id="c612c5fb9f35bfd83e25e7d7cb3258f6">
+        <source>Зависимости и показ</source>
+        <target state="needs-translation">Зависимости и показ</target>
+      </trans-unit>
+      <trans-unit id="c2484f4cd91d1d20d8291e1dc719e161">
+        <source>Зависит от</source>
+        <target state="needs-translation">Зависит от</target>
+      </trans-unit>
+      <trans-unit id="a32835d02e1f3f67c9d94e49e6a4c15a">
+        <source>Разделы показа</source>
+        <target state="needs-translation">Разделы показа</target>
+      </trans-unit>
+      <trans-unit id="20e97618390aa1fd8107effdd67dab7e">
+        <source>Пустой список — на всех разделах сайта.</source>
+        <target state="needs-translation">Пустой список — на всех разделах сайта.</target>
+      </trans-unit>
+      <trans-unit id="c805385747bd4f7d39242e4c53ce4ec3">
+        <source>Запись</source>
+        <target state="needs-translation">Запись</target>
+      </trans-unit>
+      <trans-unit id="fd1d4ff723bbdd6aaceeb75be4246ebf">
+        <source>Путь от корня сайта.</source>
+        <target state="needs-translation">Путь от корня сайта.</target>
+      </trans-unit>
+      <trans-unit id="6d37eef7f1d242f232ce7ee4dc7c4fcc">
+        <source>Записи той же категории, которые должны идти раньше.</source>
+        <target state="needs-translation">Записи той же категории, которые должны идти раньше.</target>
+      </trans-unit>
+      <trans-unit id="d2cd736225ef0448e52a938d9b5e2a35">
+        <source>Новый заголовок</source>
+        <target state="needs-translation">Новый заголовок</target>
+      </trans-unit>
+      <trans-unit id="f7aaa4bc012ef74c4d05e0f5e8f8105a">
+        <source>Атрибут &lt;code&gt;name&lt;/code&gt; тега meta.</source>
+        <target state="needs-translation">Атрибут &lt;code&gt;name&lt;/code&gt; тега meta.</target>
+      </trans-unit>
+      <trans-unit id="8001df6864daeef3bedb70298aec8644">
+        <source>Атрибут &lt;code&gt;content&lt;/code&gt; тега meta.</source>
+        <target state="needs-translation">Атрибут &lt;code&gt;content&lt;/code&gt; тега meta.</target>
+      </trans-unit>
+      <trans-unit id="15576e3cd83398ac3a4a2672e683e358">
+        <source>Пустой список — на всех разделах сайта (кроме исключений ниже).</source>
+        <target state="needs-translation">Пустой список — на всех разделах сайта (кроме исключений ниже).</target>
+      </trans-unit>
+      <trans-unit id="0f8a28e5e50204a4c01128afb90878e0">
+        <source>Разделы-исключения</source>
+        <target state="needs-translation">Разделы-исключения</target>
+      </trans-unit>
+      <trans-unit id="da442f0c167659a3d4d7d1ea56d6d1f8">
+        <source>На этих разделах запись не показывается, даже если они есть в «Разделы показа» или список показа пуст.</source>
+        <target state="needs-translation">На этих разделах запись не показывается, даже если они есть в «Разделы показа» или список показа пуст.</target>
+      </trans-unit>
+      <trans-unit id="29d6fd98ff6a7ffbed34e26d5008ecd9">
+        <source>Порядок</source>
+        <target state="needs-translation">Порядок</target>
+      </trans-unit>
+      <trans-unit id="d38d6d925c80a2267031f3f03d0a9070">
+        <source>Имя</source>
+        <target state="needs-translation">Имя</target>
+      </trans-unit>
+      <trans-unit id="f433044b11578100f6d0f7163f8a1d57">
+        <source>Встроенный SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.</source>
+        <target state="needs-translation">Встроенный SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.</target>
+      </trans-unit>
+      <trans-unit id="7cab5d823fcb3ce459087c6da33c2b86">
+        <source>Мост равенств между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.</source>
+        <target state="needs-translation">Мост равенств между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.</target>
+      </trans-unit>
+      <trans-unit id="7990859d2716bb050ae37f191002fea9">
+        <source>`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).</source>
+        <target state="needs-translation">`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).</target>
+      </trans-unit>
+      <trans-unit id="1062c246f287c0d7484852b7c9dee306">
+        <source>SDK Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` по DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); константы `SchemaTableNames`, связи в `RelationMap`, refs в `TableRowUnion`.</source>
+        <target state="needs-translation">SDK Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` по DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); константы `SchemaTableNames`, связи в `RelationMap`, refs в `TableRowUnion`.</target>
+      </trans-unit>
+      <trans-unit id="2cf0421f03bafcd8641ab6e26e92c9ed">
+        <source>Канон сателлитов: публичный слой `Controller/`; патчи DLE через систему плагинов — маркеры `// DevCraft {Name}: start` / `end`.</source>
+        <target state="needs-translation">Канон сателлитов: публичный слой `Controller/`; патчи DLE через систему плагинов — маркеры `// DevCraft {Name}: start` / `end`.</target>
+      </trans-unit>
+      <trans-unit id="801050fdacee83512a3e650efbd1a8d0">
+        <source>Публичный `dle_template`: у `[if]` — опциональный `[else]`; новый блок `[has value="…" condition="!=" comparison=""]` с `[else]` — только при `compile(..., true)`, патч `engine/classes/templates.class.php` (маркеры `// DevCraft Admin`) через `install.xml`.</source>
+        <target state="needs-translation">Публичный `dle_template`: у `[if]` — опциональный `[else]`; новый блок `[has value="…" condition="!=" comparison=""]` с `[else]` — только при `compile(..., true)`, патч `engine/classes/templates.class.php` (маркеры `// DevCraft Admin`) через `install.xml`.</target>
+      </trans-unit>
+      <trans-unit id="ee441ae7f1f1fc5bdfd1de73a46e325b">
+        <source>Публичные ресурсы оболочки: зависимости между записями, список разделов показа и список исключений, отдельные страницы правки, справочник режимов страницы DLE (`$do`). Зависимости подтягиваются в оболочку даже если раздел не совпал; при удалении — отвязать ссылки или удалить зависимые ручные записи; при перетаскивании с нарушением порядка — предупреждение и исправленный порядок. В `siteAssets` те же поля задаются в `js()` / `css()` (`dependsOn`, `available`, `notAvailable`, `active`) и пишутся только если записи ещё нет в БД.</source>
+        <target state="needs-translation">Публичные ресурсы оболочки: зависимости между записями, список разделов показа и список исключений, отдельные страницы правки, справочник режимов страницы DLE (`$do`). Зависимости подтягиваются в оболочку даже если раздел не совпал; при удалении — отвязать ссылки или удалить зависимые ручные записи; при перетаскивании с нарушением порядка — предупреждение и исправленный порядок. В `siteAssets` те же поля задаются в `js()` / `css()` (`dependsOn`, `available`, `notAvailable`, `active`) и пишутся только если записи ещё нет в БД.</target>
+      </trans-unit>
+      <trans-unit id="f8545c80d9a1b814886ee36a15a60fae">
+        <source>Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.</source>
+        <target state="needs-translation">Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.</target>
+      </trans-unit>
+      <trans-unit id="7f810467b7a10c2e07a775fc345671c5">
+        <source>Поставка расширений условий шаблонов — в `install.xml` Admin (`plugins_files`), без отдельного DLE-плагина.</source>
+        <target state="needs-translation">Поставка расширений условий шаблонов — в `install.xml` Admin (`plugins_files`), без отдельного DLE-плагина.</target>
+      </trans-unit>
+      <trans-unit id="5616f9b7af16e68f024abc00a352e6f9">
+        <source>Собранные публичные CSS/JS хранятся отдельно для каждого раздела сайта; в оболочке зависимости идут раньше зависимых записей.</source>
+        <target state="needs-translation">Собранные публичные CSS/JS хранятся отдельно для каждого раздела сайта; в оболочке зависимости идут раньше зависимых записей.</target>
+      </trans-unit>
+      <trans-unit id="e085fdfdb562200c0993edf7ffb31265">
+        <source>Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.</source>
+        <target state="needs-translation">Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.</target>
+      </trans-unit>
+      <trans-unit id="e47d9ee875daa23790f258257fd9e5b6">
+        <source>Синхронизация таблиц Cycle: индекс `kind` + `local_path` у `dc_public_assets` на utf8mb4 превышал лимит ключа MySQL (3072 байта). Индекс по длинному пути убран.</source>
+        <target state="needs-translation">Синхронизация таблиц Cycle: индекс `kind` + `local_path` у `dc_public_assets` на utf8mb4 превышал лимит ключа MySQL (3072 байта). Индекс по длинному пути убран.</target>
+      </trans-unit>
+      <trans-unit id="9c29d3d731ba0207019e54d61e80b6a4">
+        <source>Cycle ORM: при пересборке схемы (нет или устарел `cycle_orm_schema.ser`) всегда включается GenerateMigrations — таблицы сателлитов (в т.ч. `api_*`) создаются после установки ядра Admin, а не только при первом bootstrap.</source>
+        <target state="needs-translation">Cycle ORM: при пересборке схемы (нет или устарел `cycle_orm_schema.ser`) всегда включается GenerateMigrations — таблицы сателлитов (в т.ч. `api_*`) создаются после установки ядра Admin, а не только при первом bootstrap.</target>
+      </trans-unit>
+      <trans-unit id="ba31118856f6a458a64538e42bc7343c">
+        <source>SDK: `create()` любой Schema падал с «Table `PREFIX_PREFIX_*` doesn't exist» — INSERT шёл через builder Cycle, у которого префикс уже настроен. Теперь префикс не удваивается.</source>
+        <target state="needs-translation">SDK: `create()` любой Schema падал с «Table `PREFIX_PREFIX_*` doesn't exist» — INSERT шёл через builder Cycle, у которого префикс уже настроен. Теперь префикс не удваивается.</target>
+      </trans-unit>
+      <trans-unit id="e35ea7941086f3e3de8f5789d00be607">
+        <source>SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.</source>
+        <target state="needs-translation">SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.</target>
+      </trans-unit>
+      <trans-unit id="eb954f787dff4670cda73bec0f7c276a">
+        <source>SDK Schema типы по install/dump DLE 21: `category.schema_org` и `storage.name` / `vote.date` — string; `rss.category` — int.</source>
+        <target state="needs-translation">SDK Schema типы по install/dump DLE 21: `category.schema_org` и `storage.name` / `vote.date` — string; `rss.category` — int.</target>
+      </trans-unit>
+      <trans-unit id="5926584bca2702026eea1ba1ea087d0e">
+        <source>Генератор модулей: latin/`toTranslit` сохраняет `_` и `-`; Identity `MODULE=%dir%`, `CODE=%latin%`; каталог модуля — PascalCase от имени; `engine/inc` — slug без префикса `dle_`.</source>
+        <target state="needs-translation">Генератор модулей: latin/`toTranslit` сохраняет `_` и `-`; Identity `MODULE=%dir%`, `CODE=%latin%`; каталог модуля — PascalCase от имени; `engine/inc` — slug без префикса `dle_`.</target>
+      </trans-unit>
+      <trans-unit id="08d44a07e43e3e917cfaa517f4f5486e">
+        <source>Собранные публичные CSS/JS: в `cache/public_assets/` пишется `.htaccess` с доступом — иначе родительский `devcraft/.htaccess` отдаёт 403 на `bundle.css` / `bundle.js`.</source>
+        <target state="needs-translation">Собранные публичные CSS/JS: в `cache/public_assets/` пишется `.htaccess` с доступом — иначе родительский `devcraft/.htaccess` отдаёт 403 на `bundle.css` / `bundle.js`.</target>
+      </trans-unit>
+      <trans-unit id="3c3dcc5cfeb2f82a03102d24ef304920">
+        <source>Подстановка файлов из `siteAssets` описания модуля: если файлов в описании больше нет (или список пуст), старые автозаписи модуля выключаются — на сайт не попадает лишний админский JS.</source>
+        <target state="needs-translation">Подстановка файлов из `siteAssets` описания модуля: если файлов в описании больше нет (или список пуст), старые автозаписи модуля выключаются — на сайт не попадает лишний админский JS.</target>
+      </trans-unit>
+      <trans-unit id="67929fc4679b95e508aaac300e150aa8">
+        <source>Подстановка из `siteAssets` больше не включает снова автозаписи, которые выключили вручную в админке.</source>
+        <target state="needs-translation">Подстановка из `siteAssets` больше не включает снова автозаписи, которые выключили вручную в админке.</target>
+      </trans-unit>
+      <trans-unit id="faa023fcc3efbfa4a3a9345e14ceec7e">
+        <source>`DevCraft.copyText` в ядре (`devcraft.js`): копирование в буфер на всех страницах админки, в т.ч. по HTTP (запасной `execCommand`).</source>
+        <target state="needs-translation">`DevCraft.copyText` в ядре (`devcraft.js`): копирование в буфер на всех страницах админки, в т.ч. по HTTP (запасной `execCommand`).</target>
+      </trans-unit>
+      <trans-unit id="f49bbf8058ff4c602ce598bf15b846bb">
+        <source>Публичные стили/скрипты/заголовки: переключатель «Активен» брал id с обёртки Metro Switch (класс уехал с checkbox, data-id остался на input) — «Запись не найдена» и два запроса/уведомления. Id берётся из строки таблицы; повторный сигнал change сливается в один запрос.</source>
+        <target state="needs-translation">Публичные стили/скрипты/заголовки: переключатель «Активен» брал id с обёртки Metro Switch (класс уехал с checkbox, data-id остался на input) — «Запись не найдена» и два запроса/уведомления. Id берётся из строки таблицы; повторный сигнал change сливается в один запрос.</target>
+      </trans-unit>
+      <trans-unit id="eb1c77a02953f41582e5207e74200021">
+        <source>Публичные списки: таблица Metro пересобирала строки (терялся `data-id`, ломалось перетаскивание) и искала колонки не по тем именам (поиск ничего не находил). Теперь штатная полоса фильтра и обычная таблица; перетаскивание по живым строкам, при фильтре порядок не пишется.</source>
+        <target state="needs-translation">Публичные списки: таблица Metro пересобирала строки (терялся `data-id`, ломалось перетаскивание) и искала колонки не по тем именам (поиск ничего не находил). Теперь штатная полоса фильтра и обычная таблица; перетаскивание по живым строкам, при фильтре порядок не пишется.</target>
+      </trans-unit>
+      <trans-unit id="8e54f0002f8e28b62ec3d0ab2f3f47b0">
+        <source>История изменений: те же записи о выпуске, новый формат с группами «Добавлено», «Изменено» и т.д.</source>
+        <target state="needs-translation">История изменений: те же записи о выпуске, новый формат с группами «Добавлено», «Изменено» и т.д.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

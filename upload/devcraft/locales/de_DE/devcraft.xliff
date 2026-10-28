@@ -1700,247 +1700,903 @@
       </trans-unit>
       <trans-unit id="f22e965c29ef73a6804e2e7b6d8b59fb">
         <source>сюда переводимый текст</source>
-        <target state="needs-translation">сюда переводимый текст</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">hier ist der übersetzte Text</target>
       </trans-unit>
       <trans-unit id="f6e158418c2e52a336a53395342e0f92">
         <source>here is the text to be translated</source>
-        <target state="needs-translation">here is the text to be translated</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hier ist der zu übersetzende Text</target>
       </trans-unit>
       <trans-unit id="0234cbc8e4e2a67bcd8aa0202448684f">
         <source>сюди перекладений текст</source>
-        <target state="needs-translation">сюди перекладений текст</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hier den übersetzten Text einfügen</target>
       </trans-unit>
       <trans-unit id="701d36a0efd6fa23819da3a0df3c8c59">
         <source>hier Text übersetzen</source>
-        <target state="needs-translation">hier Text übersetzen</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">hier Text übersetzen</target>
       </trans-unit>
       <trans-unit id="45c0f93d630438c045c460c395ce7038">
         <source>Нет доступных значений для этого поля.</source>
-        <target state="needs-translation">Нет доступных значений для этого поля.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Für dieses Feld sind keine Werte verfügbar.</target>
       </trans-unit>
       <trans-unit id="1a07204125aa8c3a122a3003e59cc9ca">
         <source>Metro UI или #dc-filter-dialog недоступен</source>
-        <target state="needs-translation">Metro UI или #dc-filter-dialog недоступен</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Metro UI oder #dc-filter-dialog ist nicht verfügbar</target>
       </trans-unit>
       <trans-unit id="520614eaf2509907682b2eb74b0c8ff3">
         <source>Укажите корректный диапазон дат (от и до)</source>
-        <target state="needs-translation">Укажите корректный диапазон дат (от и до)</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bitte geben Sie den korrekten Datumsbereich (von und bis) an</target>
       </trans-unit>
       <trans-unit id="bc992db9125d6e96130525f6d624f20f">
         <source>Выберите значение для правила фильтра</source>
-        <target state="needs-translation">Выберите значение для правила фильтра</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Wählen Sie einen Wert für die Filterregel aus</target>
       </trans-unit>
       <trans-unit id="0be52474e750f80b63fb8a2d82c2b335">
         <source>Плагин dialog не инициализирован</source>
-        <target state="needs-translation">Плагин dialog не инициализирован</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Plugin „dialog“ wurde nicht initialisiert</target>
       </trans-unit>
       <trans-unit id="51bb8f5dd1cd86235055011872139940">
         <source>Правило фильтра</source>
-        <target state="needs-translation">Правило фильтра</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Filterregel</target>
       </trans-unit>
       <trans-unit id="19a33cea9317b482f4ff86f2c3982713">
         <source>Панель фильтра не найдена</source>
-        <target state="needs-translation">Панель фильтра не найдена</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Filterfeld wurde nicht gefunden</target>
       </trans-unit>
       <trans-unit id="a4d84fc3bc9e742f4c02d13593371cbe">
         <source>Установка пакета…</source>
-        <target state="needs-translation">Установка пакета…</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Installation des Pakets „… “</target>
       </trans-unit>
       <trans-unit id="17fb87bbe6242b97b4784347b9131842">
         <source>Обновление пакета…</source>
-        <target state="needs-translation">Обновление пакета…</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aktualisierung des Pakets „… “</target>
       </trans-unit>
       <trans-unit id="76a23e98b8725f11f8835b10c571827a">
         <source>Удаление пакета…</source>
-        <target state="needs-translation">Удаление пакета…</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Deinstallation des Pakets „… “</target>
       </trans-unit>
       <trans-unit id="1f42f7d417a24787fa24ac097f581020">
         <source>Выполнение Composer…</source>
-        <target state="needs-translation">Выполнение Composer…</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ausführung von Composer…</target>
       </trans-unit>
       <trans-unit id="b914bbbdaa648da254438d014a74349d">
         <source>Повторить</source>
-        <target state="needs-translation">Повторить</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Wiederholen</target>
       </trans-unit>
       <trans-unit id="dd9463bd5d0c650b468fc5d6cfa1073c">
         <source>Закрыть</source>
-        <target state="needs-translation">Закрыть</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Schließen</target>
       </trans-unit>
       <trans-unit id="6c21b0c36105b65fe06438fca7a8caa8">
         <source>Не удалось выполнить Composer-действие</source>
-        <target state="needs-translation">Не удалось выполнить Composer-действие</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Composer-Aktion konnte nicht ausgeführt werden</target>
       </trans-unit>
       <trans-unit id="d3319c14f43f4be23a109610eca40cb4">
         <source>Выполнение dump-autoload…</source>
-        <target state="needs-translation">Выполнение dump-autoload…</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ausführung von „dump-autoload“…</target>
       </trans-unit>
       <trans-unit id="7fb1beef1320a88b22061ae45ad1fc0e">
         <source>Не удалось выполнить dump-autoload</source>
-        <target state="needs-translation">Не удалось выполнить dump-autoload</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">„dump-autoload“ konnte nicht ausgeführt werden</target>
       </trans-unit>
       <trans-unit id="782f99cef267396297f309826350cedd">
         <source>Metro UI недоступен</source>
-        <target state="needs-translation">Metro UI недоступен</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Metro UI ist nicht verfügbar</target>
       </trans-unit>
       <trans-unit id="35248488a3784ff504af411cca7c08dc">
         <source>Не удалось открыть диалог</source>
-        <target state="needs-translation">Не удалось открыть диалог</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Dialogfeld konnte nicht geöffnet werden</target>
       </trans-unit>
       <trans-unit id="56fe50fcb17c93e9b59e8bed5e1c2d0f">
         <source>Сеть или сервер недоступен</source>
-        <target state="needs-translation">Сеть или сервер недоступен</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Netzwerk oder der Server ist nicht erreichbar</target>
       </trans-unit>
       <trans-unit id="36b91b4161cbc171a5c6dd97e782cb36">
         <source>Сервер вернул не-JSON ответ</source>
-        <target state="needs-translation">Сервер вернул не-JSON ответ</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der Server hat eine Nicht-JSON-Antwort zurückgegeben</target>
       </trans-unit>
       <trans-unit id="4375f421fb9a9e20f9e0f947b914de8a">
         <source>Не удалось разобрать JSON-ответ</source>
-        <target state="needs-translation">Не удалось разобрать JSON-ответ</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die JSON-Antwort konnte nicht geparst werden</target>
       </trans-unit>
       <trans-unit id="2a0870ed61058c4836a50ef7422a2560">
         <source>Ожидался FormData</source>
-        <target state="needs-translation">Ожидался FormData</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es wurde FormData erwartet</target>
       </trans-unit>
       <trans-unit id="cb519198416d2e54588cd852c3a79c6b">
         <source>Сетевая ошибка</source>
-        <target state="needs-translation">Сетевая ошибка</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Netzwerkfehler</target>
       </trans-unit>
       <trans-unit id="07a1962e89665f29033d9874339f8a2a">
         <source>Файл {file} создан</source>
-        <target state="needs-translation">Файл {file} создан</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Datei {file} erstellt</target>
       </trans-unit>
       <trans-unit id="861b48f1f3978ee321ec45c1192ca940">
         <source>Открыть на сайте</source>
-        <target state="needs-translation">Открыть на сайте</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Auf der Seite öffnen</target>
       </trans-unit>
       <trans-unit id="4bfc89372e33e86e0decd6b612ac04e3">
         <source>Плагин «{name}» был создан</source>
-        <target state="needs-translation">Плагин «{name}» был создан</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Plugin „{name}“ wurde entwickelt</target>
       </trans-unit>
       <trans-unit id="27059278a7af90ca2004a9f8a1be9212">
         <source>Плагин не был создан!</source>
-        <target state="needs-translation">Плагин не был создан!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Das Plugin wurde nicht erstellt!</target>
       </trans-unit>
       <trans-unit id="365552bb70b76fe898fc974d8c5884a5">
         <source>Проверка ресурсов…</source>
-        <target state="needs-translation">Проверка ресурсов…</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Überprüfung der Ressourcen unter…</target>
       </trans-unit>
       <trans-unit id="9a53302738e7a371d8f3f48e4d7fc17c">
         <source>Сравнение локальных файлов с сервером разработчика</source>
-        <target state="needs-translation">Сравнение локальных файлов с сервером разработчика</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vergleich der lokalen Dateien mit dem Server des Entwicklers</target>
       </trans-unit>
       <trans-unit id="33e361ca74c6a9ed9db541c1175beefc">
         <source>Не удалось проверить ресурсы</source>
-        <target state="needs-translation">Не удалось проверить ресурсы</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Ressourcen konnten nicht überprüft werden</target>
       </trans-unit>
       <trans-unit id="876621a234a5cac345245e1a33c16db6">
         <source>Повторите попытку позже</source>
-        <target state="needs-translation">Повторите попытку позже</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bitte versuchen Sie es später erneut.</target>
       </trans-unit>
       <trans-unit id="43d5186d2dedf9d1f12f6f1758b66a88">
         <source>Все ресурсы актуальны</source>
-        <target state="needs-translation">Все ресурсы актуальны</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle Ressourcen sind aktuell</target>
       </trans-unit>
       <trans-unit id="5b07d4f5203503d2082e38820221d7e6">
         <source>На сервере: {remote}, локально: {local}</source>
-        <target state="needs-translation">На сервере: {remote}, локально: {local}</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Auf dem Server: {remote}, lokal: {local}</target>
       </trans-unit>
       <trans-unit id="0caaff865c32af5d96b02ca685c1dd0b">
         <source>Обнаружены расхождения ресурсов</source>
-        <target state="needs-translation">Обнаружены расхождения ресурсов</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es wurden Abweichungen bei den Ressourcen festgestellt</target>
       </trans-unit>
       <trans-unit id="d7279895ac16f823d5e6fb37a45f2624">
         <source>Отличается файлов: {count} (на сервере: {remote}, локально: {local})</source>
-        <target state="needs-translation">Отличается файлов: {count} (на сервере: {remote}, локально: {local})</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Unterschiede zwischen den Dateien: {count} (auf dem Server: {remote}, lokal: {local})</target>
       </trans-unit>
       <trans-unit id="db5f55c14912a071887b91510eb9f39c">
         <source>Подробнее</source>
-        <target state="needs-translation">Подробнее</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Weitere Informationen</target>
       </trans-unit>
       <trans-unit id="19f66e8e3e5b3ab87deff28b9005c0d3">
         <source>Ресурсы</source>
-        <target state="needs-translation">Ресурсы</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ressourcen</target>
       </trans-unit>
       <trans-unit id="766ac4bfdb5bc1104672c7028bd171f5">
         <source>Отличается файлов: {count}</source>
-        <target state="needs-translation">Отличается файлов: {count}</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Unterschiede zwischen den Dateien: {count}</target>
       </trans-unit>
       <trans-unit id="ecec2c0ddf48adc1e55e56c84cabdd79">
         <source>Все файлы ресурсов совпадают с сервером разработчика.</source>
-        <target state="needs-translation">Все файлы ресурсов совпадают с сервером разработчика.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle Ressourcendateien stimmen mit denen auf dem Server des Entwicklers überein.</target>
       </trans-unit>
       <trans-unit id="11de90b8bd3c5ec77367e62c6c250de5">
         <source>Требуют установки</source>
-        <target state="needs-translation">Требуют установки</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Erfordert die Installation</target>
       </trans-unit>
       <trans-unit id="947a01e04969876af12db78482a0102d">
         <source>Требуют обновления</source>
-        <target state="needs-translation">Требуют обновления</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Benötigt Updates</target>
       </trans-unit>
       <trans-unit id="0c827e8033147a197b7e8d0fdbbffb4c">
         <source>Заменить все</source>
-        <target state="needs-translation">Заменить все</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle ersetzen</target>
       </trans-unit>
       <trans-unit id="cba368aa4e4d54e0e2fc9e53136c3216">
         <source>Заменить изменённые</source>
-        <target state="needs-translation">Заменить изменённые</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geänderte ersetzen</target>
       </trans-unit>
       <trans-unit id="77a209d6357fb19e7312a1ee8e9e8cc0">
         <source>Расхождения ресурсов</source>
-        <target state="needs-translation">Расхождения ресурсов</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Abweichungen bei den Ressourcen</target>
       </trans-unit>
       <trans-unit id="4c7ec82198facb9847c90f4b4b0a24b4">
         <source>Проверка ресурсов</source>
-        <target state="needs-translation">Проверка ресурсов</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Überprüfung der Ressourcen</target>
       </trans-unit>
       <trans-unit id="96f0f927a5f0c6a88640eab13f8687a2">
         <source>Синхронизация</source>
-        <target state="needs-translation">Синхронизация</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Synchronisation</target>
       </trans-unit>
       <trans-unit id="dc6b492e62f66eb9eccebb4e3f5b4402">
         <source>Загрузка файлов ресурсов…</source>
-        <target state="needs-translation">Загрузка файлов ресурсов…</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Herunterladen der Ressourcendateien unter…</target>
       </trans-unit>
       <trans-unit id="911a987de5d843c7d1e122b3e73abde4">
         <source>Текущая версия: v{version}</source>
-        <target state="needs-translation">Текущая версия: v{version}</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aktuelle Version: v{version}</target>
       </trans-unit>
       <trans-unit id="8ac5d56f3ac89de9f11852ce94731b2b">
         <source>Обновлено: {date}</source>
-        <target state="needs-translation">Обновлено: {date}</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aktualisiert: {date}</target>
       </trans-unit>
       <trans-unit id="559e725e9699aeca8c191d20b5f1ef60">
         <source>Доступна новая версия</source>
-        <target state="needs-translation">Доступна новая версия</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eine neue Version ist verfügbar</target>
       </trans-unit>
       <trans-unit id="5dad7b0a025be1b1dd97ed9bae68e48b">
         <source>Скачать</source>
-        <target state="needs-translation">Скачать</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Herunterladen</target>
       </trans-unit>
       <trans-unit id="2af0fc0910f1b139829ecf56b0274f11">
         <source>Не удалось проверить версию</source>
-        <target state="needs-translation">Не удалось проверить версию</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Version konnte nicht überprüft werden</target>
       </trans-unit>
       <trans-unit id="71d8f10f78db5722acbfb8c4d0a0d4e7">
         <source>Не удалось синхронизировать пакеты с БД</source>
-        <target state="needs-translation">Не удалось синхронизировать пакеты с БД</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Pakete konnten nicht mit der Datenbank synchronisiert werden</target>
       </trans-unit>
       <trans-unit id="494ae75f14e03467159934e085c69eba">
         <source>Текст скопирован в буфер обмена</source>
-        <target state="needs-translation">Текст скопирован в буфер обмена</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der Text wurde in die Zwischenablage kopiert</target>
       </trans-unit>
       <trans-unit id="05ff06965fe69fe596819c30e3422f72">
         <source>Текст выделен — используйте Ctrl+C</source>
-        <target state="needs-translation">Текст выделен — используйте Ctrl+C</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der Text ist markiert – verwenden Sie Strg+C</target>
       </trans-unit>
       <trans-unit id="54f3a404e75a886c4b44101403de4206">
         <source>Не удалось удалить запись</source>
-        <target state="needs-translation">Не удалось удалить запись</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der Eintrag konnte nicht gelöscht werden</target>
       </trans-unit>
       <trans-unit id="29b2d9e4f5dc76f5b0288896055e7833">
         <source>Модуль Admin инициализирован</source>
-        <target state="needs-translation">Модуль Admin инициализирован</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Admin-Modul wurde initialisiert</target>
+      </trans-unit>
+      <trans-unit id="6cfff539a39a7ced31d046ca282675df">
+        <source>Панель</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Blende</target>
+      </trans-unit>
+      <trans-unit id="6b961afd635bed9fc64045bd99367d9d">
+        <source>Включено</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Enthalten</target>
+      </trans-unit>
+      <trans-unit id="65f433db41656ea6a36513660f4c1ddf">
+        <source>Установка всех пакетов из composer.json…</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Installation aller Pakete aus der Datei „composer.json“…</target>
+      </trans-unit>
+      <trans-unit id="659627d9f8e6e058239d74d1bc8f4516">
+        <source>Пожалуйста, подождите, идёт обработка…</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bitte haben Sie einen Moment Geduld, die Seite wird gerade geladen:…</target>
+      </trans-unit>
+      <trans-unit id="0b4bb442cf6cb1b69fd4a98388244173">
+        <source>Сохраняем изменения, пожалуйста подождите…</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Wir speichern die Änderungen. Bitte haben Sie einen Moment Geduld:…</target>
+      </trans-unit>
+      <trans-unit id="8632c8dc9f5894f26504166dbef2f8ca">
+        <source>Выполняем запрос, пожалуйста подождите…</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Wir bearbeiten Ihre Anfrage, bitte haben Sie einen Moment Geduld…</target>
+      </trans-unit>
+      <trans-unit id="e9666d81e24a38994c5ffdc594673ce0">
+        <source>Загружаем данные, пожалуйста подождите…</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Daten werden geladen, bitte haben Sie einen Moment Geduld…</target>
+      </trans-unit>
+      <trans-unit id="3bfa3edd78fe0ed37287fbdabfd1f8c1">
+        <source>Установить все из composer.json</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle Elemente aus der Datei „composer.json“ installieren</target>
+      </trans-unit>
+      <trans-unit id="3f43041a76b80ed9f9f297b3c3661ec9">
+        <source>Одна команда composer install — все зависимости из файла, не по одному пакету.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ein einziger Befehl „composer install“ – alle Abhängigkeiten aus der Datei, nicht Paket für Paket.</target>
+      </trans-unit>
+      <trans-unit id="3b2097914379b13085e21ebad9157ae8">
+        <source>Все пакеты из composer.json</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle Pakete aus composer.json</target>
+      </trans-unit>
+      <trans-unit id="bac5b4b04bde8aee5e5320bfee8bd3d7">
+        <source>Недостаточно прав</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Unzureichende Berechtigungen</target>
+      </trans-unit>
+      <trans-unit id="cb94f80662910b312ca50884ca9a3304">
+        <source>Неизвестное направление сортировки: {dir}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Unbekannte Sortierreihenfolge: {dir}</target>
+      </trans-unit>
+      <trans-unit id="e5fff5eda785d6b3e41d9091a7baac13">
+        <source>mod манифеста не может быть пустым</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das „mod“-Feld des Manifests darf nicht leer sein</target>
+      </trans-unit>
+      <trans-unit id="a813022c24444e31b28ac7ca80fa9032">
+        <source>Некорректный manifest.php в «{dir}» — модуль пропущен</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fehlerhafte „manifest.php“-Datei in „{dir}“ – Modul wird übersprungen</target>
+      </trans-unit>
+      <trans-unit id="a79785c9aaffb6d577c2729a924a0efe">
+        <source>Манифест без mod в каталоге «{dir}» пропущен</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Manifest ohne „mod“ im Verzeichnis „{dir}“ wurde übersprungen</target>
+      </trans-unit>
+      <trans-unit id="bd9d5fdfe0ff92cb8830921aa343cafa">
+        <source>Дубликат mod «{mod}»: каталог «{prev}» вытеснен «{next}» (побеждает последний)</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Duplikat des Mods „{mod}“: Der Ordner „{prev}“ wurde durch „{next}“ überschrieben (letzterer hat Vorrang)</target>
+      </trans-unit>
+      <trans-unit id="359250bef6d309bad58cf066c405970d">
+        <source>Ошибка манифеста «{dir}»: {msg}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fehler im Manifest „{dir}“: {msg}</target>
+      </trans-unit>
+      <trans-unit id="2e699ea2b673d16f58ac9305ded3bfe9">
+        <source>Хеш не совпал: {manifestKey}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der Hash stimmt nicht überein: {manifestKey}</target>
+      </trans-unit>
+      <trans-unit id="8ffe1fdaad15955a2ff7af46529fba13">
+        <source>Не удалось заменить файл: {targetPath}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Datei konnte nicht ersetzt werden: {targetPath}</target>
+      </trans-unit>
+      <trans-unit id="bc0207715adc4fba10e03bcad96b4e59">
+        <source>Пакет devcraftclub/dev-tools не установлен: файловый кэш отключён до composer install.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Paket „devcraftclub/dev-tools“ ist nicht installiert: Der Dateicache ist bis zum Befehl „composer install“ deaktiviert.</target>
+      </trans-unit>
+      <trans-unit id="ab7bdeb7cdfd483ccdd0123c509bccd5">
+        <source>Не удалось загрузить манифесты для PSR-4: {msg}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Manifestdateien für PSR-4 konnten nicht geladen werden: {msg}</target>
+      </trans-unit>
+      <trans-unit id="c7f318cce51e51718b46ad3fa6b6667c">
+        <source>PSR-4 модуля «{mod}»: {msg}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">PSR-4 des Moduls „{mod}“: {msg}</target>
+      </trans-unit>
+      <trans-unit id="dfa776d62af86a62e39d98b7e95f68e7">
+        <source>PSR-4: каталог модуля «{mod}» недоступен: {path}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">PSR-4: Das Verzeichnis des Moduls „{mod}“ ist nicht verfügbar: {path}</target>
+      </trans-unit>
+      <trans-unit id="f0dda55bdf7ef293e66010ff78a4595d">
+        <source>Не удалось сохранить настройки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Einstellungen konnten nicht gespeichert werden</target>
+      </trans-unit>
+      <trans-unit id="6a1fdb2ca3074d928589076e7b4b3147">
+        <source>Метод требует значение</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Methode erfordert einen Wert</target>
+      </trans-unit>
+      <trans-unit id="e6c35ebc336cd5a8b7589ca6e848decd">
+        <source>QueryBuilder поддерживает только равенства; несовместимые условия: {list}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der QueryBuilder unterstützt ausschließlich Gleichheitsvergleiche; nicht kompatible Bedingungen: {list}</target>
+      </trans-unit>
+      <trans-unit id="532a374ce013064b90615757d6ca0ce5">
+        <source>TableQuery принимает только равенства; условие «{column}» составное</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">TableQuery akzeptiert nur Gleichheitsbedingungen; die Bedingung „{column}“ ist zusammengesetzt</target>
+      </trans-unit>
+      <trans-unit id="165ee5ca70cd893a01edf6f4bf478a87">
+        <source>Нельзя выполнить операцию: не задан первичный ключ.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Vorgang kann nicht durchgeführt werden: Primärschlüssel nicht angegeben.</target>
+      </trans-unit>
+      <trans-unit id="ec8f078b0e47ed20077dfba901420acd">
+        <source>Неизвестная колонка «{column}» для таблицы {table}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Unbekannte Spalte «{column}» für Tabelle {table}</target>
+      </trans-unit>
+      <trans-unit id="3058f2b572e0ec900ab2160688e8657f">
+        <source>Нет права «{action}» на таблицу «{table}»</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Keine Berechtigung «{action}» für Tabelle «{table}»</target>
+      </trans-unit>
+      <trans-unit id="22a74e1be402b6eba8e760e918ca8769">
+        <source>Неизвестный метод</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Unbekannte Methode</target>
+      </trans-unit>
+      <trans-unit id="33c042517a0e43e7fa42ef0450ab55ca">
+        <source>Правка записи</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eintrag bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="7a1120532aa97273a04050fa34e867ec">
+        <source>Источник</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Quelle</target>
+      </trans-unit>
+      <trans-unit id="d3ce1b51ae167809b50da863f1450be8">
+        <source>авто</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Auto</target>
+      </trans-unit>
+      <trans-unit id="937a2dd685f39edbdf869cbaca88cf5f">
+        <source>Назад к списку</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zurück zur Liste</target>
+      </trans-unit>
+      <trans-unit id="987b33c664dce148f1d17f6eb9ab3e79">
+        <source>Отмена</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="660f855f65d26e82b32382ce7594686d">
+        <source>В таблице отображаются пакеты из composer.json и manifest модулей. Обязательные пакеты (hardRequired) помечены в колонке «Обязательный». Если чего-то не хватает — сверху строка «Установить все» (composer install).</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">In der Tabelle werden die Pakete aus der Datei „composer.json“ und den Modul-Manifesten angezeigt. Die obligatorischen Pakete (hardRequired) sind in der Spalte „Obligatorisch“ gekennzeichnet. Falls etwas fehlt, finden Sie oben die Zeile „Alle installieren“ (composer install).</target>
+      </trans-unit>
+      <trans-unit id="5eba283b81890978e67f4aa96dde1724">
+        <source>Добавить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="e7e466c4aca17e01d9b8c2efffb081f6">
+        <source>Meta name/content для head. Автозаписи нельзя удалить — только выключить. Порядок — за ручку слева.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Meta-Name/Inhalt für den Head-Bereich. Automatische Einträge können nicht gelöscht, sondern nur deaktiviert werden. Reihenfolge: am Griff links.</target>
+      </trans-unit>
+      <trans-unit id="4052a506d6d3d093770c628f47321839">
+        <source>При активном фильтре порядок не меняется — сначала снимите правила.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bei aktiviertem Filter ändert sich die Reihenfolge nicht – heben Sie zunächst die Regeln auf.</target>
+      </trans-unit>
+      <trans-unit id="b1affa8c217f764378b64f16e7b002f5">
+        <source>Имя (name)</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Name (name)</target>
+      </trans-unit>
+      <trans-unit id="4340becc14dc4e969a3fd0c087af7b30">
+        <source>Содержимое</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Inhalt</target>
+      </trans-unit>
+      <trans-unit id="318150c53b2ec43a3ffef0f443596df1">
+        <source>Активен</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aktiv</target>
+      </trans-unit>
+      <trans-unit id="fb3df31bf52df6c142a279ecdb6dd94c">
+        <source>Действия</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Maßnahmen</target>
+      </trans-unit>
+      <trans-unit id="7df152e793f12927e74d67bb3f8e4286">
+        <source>Перетащить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ziehen</target>
+      </trans-unit>
+      <trans-unit id="47e2436e5560837160a70c64466ea22b">
+        <source>Изменить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="a8482fbc461eec86c430e3f0bf788d2e">
+        <source>Пока нет записей</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bislang liegen keine Einträge vor</target>
+      </trans-unit>
+      <trans-unit id="28dc2b45dd41e1f081788c0d3ccbce50">
+        <source>Перетащите строки за ручку слева. Автозаписи нельзя удалить — только выключить.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ziehen Sie die Zeilen am Griff auf der linken Seite. Automatische Einträge können nicht gelöscht, sondern nur deaktiviert werden.</target>
+      </trans-unit>
+      <trans-unit id="d81fbd569d6b472f7409c1691c0cb9fc">
+        <source>Метка</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Stichwort</target>
+      </trans-unit>
+      <trans-unit id="e06a5354f0dfac4ed207e1395c53d258">
+        <source>только выкл.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">nur „Aus“</target>
+      </trans-unit>
+      <trans-unit id="330d05257aab70e6ba73974bc0bcdcce">
+        <source>Правка заголовка</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Änderung der Überschrift</target>
+      </trans-unit>
+      <trans-unit id="d1227a44b07d793ba8fafaf61c853e87">
+        <source>Обновлено</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aktualisiert</target>
+      </trans-unit>
+      <trans-unit id="9225d38a589d5a9009adda33154600c4">
+        <source>Порядок сохранён</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Reihenfolge wurde beibehalten</target>
+      </trans-unit>
+      <trans-unit id="f2c85e04f11bdaea5c5073a9271267e8">
+        <source>Желаемый порядок скорректирован из‑за зависимостей между записями</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die gewünschte Reihenfolge wurde aufgrund von Abhängigkeiten zwischen den Einträgen angepasst</target>
+      </trans-unit>
+      <trans-unit id="a35b3c10fe0d20db5c971e119268d01e">
+        <source>Установить все</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle installieren</target>
+      </trans-unit>
+      <trans-unit id="52238732be1d66d49178fd955bc406e4">
+        <source>Демо-раздел quickstart</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Demo-Bereich „Quickstart“</target>
+      </trans-unit>
+      <trans-unit id="22d3aaccc5bd246d16175900133d0345">
+        <source>Некорректный тип ресурса</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Falscher Ressourcentyp</target>
+      </trans-unit>
+      <trans-unit id="69ef837668689b1d47bfdb0262967923">
+        <source>Автозапись нельзя редактировать как ручную</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eine automatische Aufzeichnung kann nicht wie eine manuelle bearbeitet werden</target>
+      </trans-unit>
+      <trans-unit id="61192ac6d34e3216c8293d41fb61d0fd">
+        <source>Укажите локальный путь или внешний URL</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geben Sie einen lokalen Pfad oder eine externe URL an</target>
+      </trans-unit>
+      <trans-unit id="920e6fa1eff8446e0ddb6bb9634d219b">
+        <source>Путь не должен содержать ..</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der Pfad darf nicht enthalten …</target>
+      </trans-unit>
+      <trans-unit id="475be5f8f973a7f03c76810ed04f32c3">
+        <source>Активная запись с таким путём уже существует</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ein Eintrag mit diesem Pfad existiert bereits</target>
+      </trans-unit>
+      <trans-unit id="26ad87a962598852a1544a919c213d3b">
+        <source>Автозапись нельзя удалить — только выключить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die automatische Aufzeichnung kann nicht gelöscht, sondern nur deaktiviert werden</target>
+      </trans-unit>
+      <trans-unit id="1057e38d9cbda3c4c35fa91f9b19bfe6">
+        <source>Неизвестный режим удаления</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Unbekannter Löschmodus</target>
+      </trans-unit>
+      <trans-unit id="af2e35b75e311f5e7cac5d540822e1b2">
+        <source>Автозаписи при удалении вместе не удаляются — только отвязываются</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Automatische Einträge werden beim Löschen nicht mitgelöscht – sie werden lediglich entkoppelt.</target>
+      </trans-unit>
+      <trans-unit id="2bb0a69cb7bc48b29eeb53fb7653a1ca">
+        <source>Моя страница</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Meine Seite</target>
+      </trans-unit>
+      <trans-unit id="f02c02261662788bb90505e4777af605">
+        <source>Новости за дату</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nachrichten nach Datum</target>
+      </trans-unit>
+      <trans-unit id="c95a1e2de00ee86634e177aecca00aed">
+        <source>Категория</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kategorie</target>
+      </trans-unit>
+      <trans-unit id="8590d1284469ca243496bfc039047171">
+        <source>Полная новость</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vollständiger Artikel</target>
+      </trans-unit>
+      <trans-unit id="bfc95980634bf529e8a406db2c842b31">
+        <source>Поиск</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Suche</target>
+      </trans-unit>
+      <trans-unit id="603e7f5fb95e1ad573015a5a12c347d8">
+        <source>Поиск по доп. полю</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Suche nach einem zusätzlichen Feld</target>
+      </trans-unit>
+      <trans-unit id="10d660a5c0012887a5ba584eb0a4eead">
+        <source>Профиль пользователя</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Benutzerprofil</target>
+      </trans-unit>
+      <trans-unit id="0b93f81293f084dbfa4dbe93a8280555">
+        <source>Регистрация</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Registrierung</target>
+      </trans-unit>
+      <trans-unit id="5e3753ce80a1394ad160591140abb966">
+        <source>Статистика</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Statistik</target>
+      </trans-unit>
+      <trans-unit id="4fd9ccbe36b8845c7c8d75e4e15586f2">
+        <source>Личные сообщения</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Private Nachrichten</target>
+      </trans-unit>
+      <trans-unit id="0e2e04bd2885cdc169471ea2a113a43f">
+        <source>Обратная связь</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Feedback</target>
+      </trans-unit>
+      <trans-unit id="1e3fc78d38f5730e9cdc3d562fdc02ae">
+        <source>Закладки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Lesezeichen</target>
+      </trans-unit>
+      <trans-unit id="50b0a4e6cd20cc3ea0c53102028509e7">
+        <source>Новые сообщения</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Neue Beiträge</target>
+      </trans-unit>
+      <trans-unit id="cfcb0926524089afa2cab76df57daf6c">
+        <source>Добавление новости</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nachricht hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="3d184219eab3c29303e21b120e8d14ff">
+        <source>Последние новости</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aktuelle Nachrichten</target>
+      </trans-unit>
+      <trans-unit id="011d433689a8330fdbfbbfa9d76d228c">
+        <source>Последние комментарии</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Neueste Kommentare</target>
+      </trans-unit>
+      <trans-unit id="f490b86156968b0c43cbf28feefacd33">
+        <source>Восстановление пароля</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Passwortwiederherstellung</target>
+      </trans-unit>
+      <trans-unit id="2c1f1e22a714429f66f2ad99c2684376">
+        <source>Статическая страница</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Statische Seite</target>
+      </trans-unit>
+      <trans-unit id="7ae8d67b7acb8c40955e9e2145ec2ffd">
+        <source>Каталог страниц</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Seitenverzeichnis</target>
+      </trans-unit>
+      <trans-unit id="247b7f2096839122959890210d928770">
+        <source>Облако тегов</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tag-Cloud</target>
+      </trans-unit>
+      <trans-unit id="1bf029833c1cc606f9ab75617ac1133a">
+        <source>Новости по тегу</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nachrichten zum Stichwort</target>
+      </trans-unit>
+      <trans-unit id="03641635d3f4dc0ae19b7ba90887f3dd">
+        <source>Все новости</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle Nachrichten</target>
+      </trans-unit>
+      <trans-unit id="3276ac9e136c0f3e612f1c643c4ebd81">
+        <source>Разрешены только HTTPS URL</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es sind ausschließlich HTTPS-URLs zulässig</target>
+      </trans-unit>
+      <trans-unit id="328e5369fee9171b47a1fe7ecd348425">
+        <source>Некорректный URL</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Falsche URL</target>
+      </trans-unit>
+      <trans-unit id="7bb797e2c84a1fdbcfd76d48b727da0e">
+        <source>Не удалось загрузить файл по URL</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Datei konnte nicht über die URL geladen werden</target>
+      </trans-unit>
+      <trans-unit id="4daec0c0705e7ae56570b0742e4bf35d">
+        <source>Файл превышает лимит 2 МиБ</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Datei überschreitet das Limit von 2 MiB</target>
+      </trans-unit>
+      <trans-unit id="37c15e21bcbe078475b52a1a15c29b62">
+        <source>Не удалось создать каталог для внешних ресурсов</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es ist nicht gelungen, einen Katalog für externe Ressourcen zu erstellen</target>
+      </trans-unit>
+      <trans-unit id="b074d06d3a042dc937506cdce96f7fae">
+        <source>Недопустимый Content-Type для ресурса</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ungültiger Content-Type für die Ressource</target>
+      </trans-unit>
+      <trans-unit id="29e9f1ab7523e971e34d63c8e1c2d84a">
+        <source>Обнаружен цикл зависимостей — сохранение отменено</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es wurde ein Abhängigkeitszyklus festgestellt – die Speicherung wurde abgebrochen</target>
+      </trans-unit>
+      <trans-unit id="1f98428a82ecc8c11ab114b125903f66">
+        <source>Обнаружен цикл зависимостей</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Es wurde ein Abhängigkeitszyklus festgestellt</target>
+      </trans-unit>
+      <trans-unit id="0e6acd127c05be3a521fee9dfa88545d">
+        <source>Имя и содержимое обязательны</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Name und Inhalt sind Pflichtangaben</target>
+      </trans-unit>
+      <trans-unit id="19e9b14047f9ca8dd00ac1b20d8d55ce">
+        <source>Публичные стили</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliche Stile</target>
+      </trans-unit>
+      <trans-unit id="6cfdb4562bc280d1e5a8326bbe7f87ea">
+        <source>Публичные скрипты</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliche Skripte</target>
+      </trans-unit>
+      <trans-unit id="df9e77744b3d7b77c1d2bed1e10862ff">
+        <source>Публичные заголовки</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliche Überschriften</target>
+      </trans-unit>
+      <trans-unit id="fa93931513adfe5e27d91f455bbf6050">
+        <source>На эту запись ссылаются другие:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Auf diesen Eintrag verweisen andere:</target>
+      </trans-unit>
+      <trans-unit id="a8468df8e5b39ccab442d6c64c964c71">
+        <source>Удалить с зависимыми?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zusammen mit den abhängigen Elementen löschen?</target>
+      </trans-unit>
+      <trans-unit id="29f0ceb69152671e0e3f4cc006cf282f">
+        <source>Отвязать и удалить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Entkoppeln und entfernen</target>
+      </trans-unit>
+      <trans-unit id="65f3fe8c7a8f93d45a794cbd8f27aca1">
+        <source>Не удалось удалить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Löschen ist fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="eb3cfc88279fb85fc6c12befd6ef8b5d">
+        <source>Каскадное удаление</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kaskadenlöschung</target>
+      </trans-unit>
+      <trans-unit id="4d86bed39cdb74ca3fb53fea10b7177f">
+        <source>Не удалось сохранить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Speichern ist fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="f539958e2fc7154fdd609bff56842759">
+        <source>Не удалось обновить</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Aktualisierung ist fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="0cc1b3da9e7e67fd1f78ea9bdfb31236">
+        <source>Шаблон формы не найден</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Formularvorlage wurde nicht gefunden</target>
+      </trans-unit>
+      <trans-unit id="3091df2f4e7321b1d161b1c3d0f3f828">
+        <source>Добавить запись</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eintrag hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="42861708d33774cdb291f68425b67d9d">
+        <source>Копировать заголовок</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Überschrift kopieren</target>
+      </trans-unit>
+      <trans-unit id="2ee10b7ded17455d91070aef7b6ffefe">
+        <source>Добавить заголовок</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Überschrift hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="78f6ab1edae1026ab3181ee393ea8bbe">
+        <source>Публичные ресурсы</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliche Ressourcen</target>
+      </trans-unit>
+      <trans-unit id="6045ca5042b3123f24b7fa5802004e37">
+        <source>Компрессия публичных стилей и скриптов</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Komprimierung öffentlicher Stile und Skripte</target>
+      </trans-unit>
+      <trans-unit id="bbe043f8bfed35c68bada51813b3f2b3">
+        <source>При включении CSS и JS оболочки объединяются и минифицируются в кэш-файлы.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Wenn CSS und JS aktiviert sind, werden die Dateien gebündelt und zu Cache-Dateien minimiert.</target>
+      </trans-unit>
+      <trans-unit id="2b754ce5b464d9451478fe88d06abbbb">
+        <source>При выключении каждый файл подключается отдельным тегом.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Beim Ausschalten wird jede Datei mit einem eigenen Tag verknüpft.</target>
+      </trans-unit>
+      <trans-unit id="201ba2cb6ccc741150c37a1e2f07a34c">
+        <source>Путь экспорта плагинов</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pfad für den Export von Plugins</target>
+      </trans-unit>
+      <trans-unit id="88d2c7bd3f61fb01081ec889b21670a8">
+        <source>Каталог для install.xml / ZIP при вызове SDK &lt;code&gt;PluginPresenter::export()&lt;/code&gt; без явного &lt;code&gt;$path&lt;/code&gt;.&lt;br&gt;По умолчанию: &lt;code&gt;{path}&lt;/code&gt;</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Katalog für install.xml / ZIP beim Aufruf des SDK &lt;code&gt;PluginPresenter::export()&lt;/code&gt; ohne explizite Angabe &lt;code&gt;$path&lt;/code&gt;.&lt;br&gt;Standardmäßig: &lt;code&gt;{path}&lt;/code&gt;</target>
+      </trans-unit>
+      <trans-unit id="ae7ee588f6b02f194525b446b3cab607">
+        <source>JS оболочки сайта: авто из манифестов модулей и ручные записи. Порядок — перетаскиванием.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">JS-Shell der Website: automatisch aus Modul-Manifesten und manuellen Einträgen. Reihenfolge – per Drag &amp; Drop.</target>
+      </trans-unit>
+      <trans-unit id="3d5b5fb588344d509483ca08d2beef5f">
+        <source>CSS оболочки сайта: авто из манифестов модулей и ручные записи. Порядок — перетаскиванием.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">CSS-Hülle der Website: automatisch aus den Modul-Manifesten generiert und manuelle Einträge. Reihenfolge – per Drag &amp; Drop.</target>
+      </trans-unit>
+      <trans-unit id="8629c7d44b19060e398528861fe6f893">
+        <source>Meta name/content для head. Автозаписи только выключаются. Порядок — перетаскиванием.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Meta-Name/Inhalt für den Head-Bereich. Die automatische Speicherung wird lediglich deaktiviert. Die Reihenfolge wird per Drag &amp; Drop festgelegt.</target>
+      </trans-unit>
+      <trans-unit id="00a48ae6687e9bdc0c20104754ea5d0b">
+        <source>Новая запись</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Neuer Eintrag</target>
+      </trans-unit>
+      <trans-unit id="4effac7ca2406d6ee3e84d360f162432">
+        <source>Короткое имя для списка в админке.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kurzname für die Liste im Admin-Bereich.</target>
+      </trans-unit>
+      <trans-unit id="93d0531fdbd84c1dd34bd9998ff6d5d8">
+        <source>Локальный путь</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Lokaler Pfad</target>
+      </trans-unit>
+      <trans-unit id="1ae0159f469befe71c8731e8bb13f8e5">
+        <source>Путь от корня сайта, например &lt;code&gt;devcraft/src/...&lt;/code&gt;.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pfad vom Stammverzeichnis der Website, zum Beispiel &lt;code&gt;devcraft/src/...&lt;/code&gt;.</target>
+      </trans-unit>
+      <trans-unit id="02de5c3d4ce32221da4eba48c12aaac3">
+        <source>Или HTTPS URL</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Oder eine HTTPS-URL</target>
+      </trans-unit>
+      <trans-unit id="1fd6098fd0cd87884d43fbec3aaae7c2">
+        <source>Внешний файл будет скачан в кэш (HTTPS, CSS/JS).</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die externe Datei wird in den Cache heruntergeladen (HTTPS, CSS/JS).</target>
+      </trans-unit>
+      <trans-unit id="2e9d7991efe99efaf9cf325b6f10d8a0">
+        <source>Заголовок</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-tm">Titel</target>
+      </trans-unit>
+      <trans-unit id="c612c5fb9f35bfd83e25e7d7cb3258f6">
+        <source>Зависимости и показ</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Abhängigkeiten und Darstellung</target>
+      </trans-unit>
+      <trans-unit id="c2484f4cd91d1d20d8291e1dc719e161">
+        <source>Зависит от</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das hängt ab von</target>
+      </trans-unit>
+      <trans-unit id="a32835d02e1f3f67c9d94e49e6a4c15a">
+        <source>Разделы показа</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ausstellungsbereiche</target>
+      </trans-unit>
+      <trans-unit id="20e97618390aa1fd8107effdd67dab7e">
+        <source>Пустой список — на всех разделах сайта.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eine leere Liste – in allen Bereichen der Website.</target>
+      </trans-unit>
+      <trans-unit id="c805385747bd4f7d39242e4c53ce4ec3">
+        <source>Запись</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eintrag</target>
+      </trans-unit>
+      <trans-unit id="fd1d4ff723bbdd6aaceeb75be4246ebf">
+        <source>Путь от корня сайта.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pfad ab dem Stammverzeichnis der Website.</target>
+      </trans-unit>
+      <trans-unit id="6d37eef7f1d242f232ce7ee4dc7c4fcc">
+        <source>Записи той же категории, которые должны идти раньше.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Beiträge derselben Kategorie, die vor diesen erscheinen sollten.</target>
+      </trans-unit>
+      <trans-unit id="d2cd736225ef0448e52a938d9b5e2a35">
+        <source>Новый заголовок</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Neue Überschrift</target>
+      </trans-unit>
+      <trans-unit id="f7aaa4bc012ef74c4d05e0f5e8f8105a">
+        <source>Атрибут &lt;code&gt;name&lt;/code&gt; тега meta.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Attribute „ &lt;“, „code“&gt;, „name“&lt;und „code“&gt; des meta-Tags.</target>
+      </trans-unit>
+      <trans-unit id="8001df6864daeef3bedb70298aec8644">
+        <source>Атрибут &lt;code&gt;content&lt;/code&gt; тега meta.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das Attribut „ &lt;“ des meta-Tags mit dem Code „&gt;“ und dem Inhalt „&lt;“ /code „&gt;“.</target>
+      </trans-unit>
+      <trans-unit id="15576e3cd83398ac3a4a2672e683e358">
+        <source>Пустой список — на всех разделах сайта (кроме исключений ниже).</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Leere Liste – auf allen Bereichen der Website (mit Ausnahme der unten aufgeführten Fälle).</target>
+      </trans-unit>
+      <trans-unit id="0f8a28e5e50204a4c01128afb90878e0">
+        <source>Разделы-исключения</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ausnahmeabschnitte</target>
+      </trans-unit>
+      <trans-unit id="da442f0c167659a3d4d7d1ea56d6d1f8">
+        <source>На этих разделах запись не показывается, даже если они есть в «Разделы показа» или список показа пуст.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">In diesen Partitionen wird der Eintrag nicht angezeigt, selbst wenn sie unter „Anzuzeigende Partitionen“ aufgeführt sind oder die Liste leer ist.</target>
+      </trans-unit>
+      <trans-unit id="29d6fd98ff6a7ffbed34e26d5008ecd9">
+        <source>Порядок</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Reihenfolge</target>
+      </trans-unit>
+      <trans-unit id="d38d6d925c80a2267031f3f03d0a9070">
+        <source>Имя</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Name</target>
+      </trans-unit>
+      <trans-unit id="f433044b11578100f6d0f7163f8a1d57">
+        <source>Встроенный SDK для ядра DLE переехал в Admin: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Сателлитам больше не нужен установленный пакет DLE API — фасады доступны сразу после `devcraft/init.php`.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Das integrierte SDK für den DLE-Kern wurde in den Admin-Bereich verschoben: `devcraft/src/sdk/dle/` (`DcApi`, `DevCraft\Dle\Schema\*`, `DevCraft\Dle\Fluent\*`, `DevCraft\Dle\Xfield\*`). Satelliten benötigen das DLE-API-Paket nicht mehr – die Fassaden sind unmittelbar nach dem Aufruf von `devcraft/init.php` verfügbar.</target>
+      </trans-unit>
+      <trans-unit id="7cab5d823fcb3ce459087c6da33c2b86">
+        <source>Мост равенств между `TableQuery` и `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` переносят колонки, равенства, сортировку и limit/offset; LIKE, отрицание, RelationMap и доп. поля не переносятся.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gleichheitsverknüpfungen zwischen `TableQuery` und `QueryBuilder`: `toQueryBuilder()` / `fromQueryBuilder()` übertragen Spalten, Gleichheitsverknüpfungen, Sortierung sowie Limit und Offset; LIKE, Negation, RelationMap und zusätzliche Felder werden nicht übertragen.</target>
+      </trans-unit>
+      <trans-unit id="7990859d2716bb050ae37f191002fea9">
+        <source>`PluginPresenter::export(?path, bool $archivate = false)`: снимок install.xml из `plugins` / `plugins_files`; при `$archivate` — ZIP DLE-совместимый (XML + `filelist`). Каталог по умолчанию: настройка Admin `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">`PluginPresenter::export(?path, bool $archivate =false)`: Snapshot der Datei „install.xml“ aus dem Verzeichnis `plugins` / `plugins_files`; bei `$archivate` – DLE-kompatibles ZIP-Archiv (XML + `filelist`). Standardverzeichnis: Admin-Einstellung `plugin_exports_path` / `Paths::pluginExports()` (`devcraft/cache/plugin_exports`).</target>
+      </trans-unit>
+      <trans-unit id="1062c246f287c0d7484852b7c9dee306">
+        <source>SDK Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` по DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); константы `SchemaTableNames`, связи в `RelationMap`, refs в `TableRowUnion`.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">SDK-Schema: `MailCampaignsSchema` / `MailCampaignUsersSchema` gemäß DDL DLE 21 (`mail_campaigns`, `mail_campaign_users`); Konstanten in `SchemaTableNames`, Verknüpfungen in `RelationMap`, Referenzen in `TableRowUnion`.</target>
+      </trans-unit>
+      <trans-unit id="2cf0421f03bafcd8641ab6e26e92c9ed">
+        <source>Канон сателлитов: публичный слой `Controller/`; патчи DLE через систему плагинов — маркеры `// DevCraft {Name}: start` / `end`.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Satelliten-Kanon: öffentliche Ebene `Controller/`; DLE-Patches über das Plug-in-System – Markierungen `// DevCraft {Name}: start` / `end`.</target>
+      </trans-unit>
+      <trans-unit id="801050fdacee83512a3e650efbd1a8d0">
+        <source>Публичный `dle_template`: у `[if]` — опциональный `[else]`; новый блок `[has value="…" condition="!=" comparison=""]` с `[else]` — только при `compile(..., true)`, патч `engine/classes/templates.class.php` (маркеры `// DevCraft Admin`) через `install.xml`.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliches `dle_template`: Bei `[if]` – optionales `[else]`; ein neuer Block `[has value="…" condition="!=" comparison=""]` mit `[else]` – nur bei `compile(..., true)`, Patch `engine/classes/templates.class.php` (Markierungen `// DevCraft Admin“) über `install.xml`.</target>
+      </trans-unit>
+      <trans-unit id="ee441ae7f1f1fc5bdfd1de73a46e325b">
+        <source>Публичные ресурсы оболочки: зависимости между записями, список разделов показа и список исключений, отдельные страницы правки, справочник режимов страницы DLE (`$do`). Зависимости подтягиваются в оболочку даже если раздел не совпал; при удалении — отвязать ссылки или удалить зависимые ручные записи; при перетаскивании с нарушением порядка — предупреждение и исправленный порядок. В `siteAssets` те же поля задаются в `js()` / `css()` (`dependsOn`, `available`, `notAvailable`, `active`) и пишутся только если записи ещё нет в БД.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliche Ressourcen der Benutzeroberfläche: Abhängigkeiten zwischen Einträgen, Liste der Anzeigebereiche und Liste der Ausnahmen, einzelne Bearbeitungsseiten, Referenzhandbuch zu den DLE-Seitenmodi (`$do`). Abhängigkeiten werden in die Benutzeroberfläche übernommen, auch wenn der Bereich nicht übereinstimmt; beim Löschen: Verknüpfungen aufheben oder abhängige manuelle Einträge löschen; beim Verschieben mit Reihenfolgeverletzung: Warnung und korrigierte Reihenfolge. In `siteAssets` werden dieselben Felder in `js()` / `css()` (`dependsOn`, `available`, `notAvailable`, `active`) festgelegt und nur dann geschrieben, wenn der Eintrag noch nicht in der Datenbank vorhanden ist.</target>
+      </trans-unit>
+      <trans-unit id="f8545c80d9a1b814886ee36a15a60fae">
+        <source>Namespace SDK переименован из `DleApi\{Schema,Fluent,Xfield,Sdk}` в `DevCraft\Dle\...`. Глобальный фасад `DcApi` и сигнатуры методов не изменились.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Der Namespace „SDK“ wurde von `DleApi\{Schema,Fluent,Xfield,Sdk}` in `DevCraft\Dle\...` umbenannt. Die globale Fassade `DcApi` und die Methodensignaturen blieben unverändert.</target>
+      </trans-unit>
+      <trans-unit id="7f810467b7a10c2e07a775fc345671c5">
+        <source>Поставка расширений условий шаблонов — в `install.xml` Admin (`plugins_files`), без отдельного DLE-плагина.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bereitstellung von Erweiterungen für Vorlagenbedingungen – in der Datei `install.xml` des Admin-Bereichs (`plugins_files`), ohne separates DLE-Plugin.</target>
+      </trans-unit>
+      <trans-unit id="5616f9b7af16e68f024abc00a352e6f9">
+        <source>Собранные публичные CSS/JS хранятся отдельно для каждого раздела сайта; в оболочке зависимости идут раньше зависимых записей.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die kompilierten öffentlichen CSS-/JS-Dateien werden für jeden Bereich der Website separat gespeichert; im Abhängigkeits-Shell werden sie vor den abhängigen Einträgen aufgeführt.</target>
+      </trans-unit>
+      <trans-unit id="e085fdfdb562200c0993edf7ffb31265">
+        <source>Старые имена `DleApi\{Schema,Fluent,Xfield,Sdk}\*` работают через автоматические алиасы классов; алиасы будут удалены в следующем мажоре — переводите код на `DevCraft\Dle\*`.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die alten Bezeichnungen `DleApi\{Schema,Fluent,Xfield,Sdk}\*` funktionieren über automatische Klassenaliase; diese Aliase werden in der nächsten Hauptversion entfernt – passen Sie Ihren Code bitte an `DevCraft\Dle\*` an.</target>
+      </trans-unit>
+      <trans-unit id="e47d9ee875daa23790f258257fd9e5b6">
+        <source>Синхронизация таблиц Cycle: индекс `kind` + `local_path` у `dc_public_assets` на utf8mb4 превышал лимит ключа MySQL (3072 байта). Индекс по длинному пути убран.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Synchronisierung der Cycle-Tabellen: Der Index `kind` + `local_path` in der Tabelle `dc_public_assets` unter utf8mb4 überschritt die MySQL-Schlüsselgrenze (3072 Byte). Der Index für den langen Pfad wurde entfernt.</target>
+      </trans-unit>
+      <trans-unit id="9c29d3d731ba0207019e54d61e80b6a4">
+        <source>Cycle ORM: при пересборке схемы (нет или устарел `cycle_orm_schema.ser`) всегда включается GenerateMigrations — таблицы сателлитов (в т.ч. `api_*`) создаются после установки ядра Admin, а не только при первом bootstrap.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Cycle ORM: Beim Neuaufbau des Schemas (wenn `cycle_orm_schema.ser` fehlt oder veraltet ist) wird stets „GenerateMigrations“ aktiviert – Satellitentabellen (einschließlich `api_*`) werden nach der Installation des Admin-Kerns erstellt und nicht erst beim ersten Bootstrap.</target>
+      </trans-unit>
+      <trans-unit id="ba31118856f6a458a64538e42bc7343c">
+        <source>SDK: `create()` любой Schema падал с «Table `PREFIX_PREFIX_*` doesn't exist» — INSERT шёл через builder Cycle, у которого префикс уже настроен. Теперь префикс не удваивается.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">SDK: Die Methode `create()` eines beliebigen Schemas führte zu der Fehlermeldung „Table `PREFIX_PREFIX_*` doesn't exist“ – der INSERT-Befehl wurde über den Builder-Zyklus ausgeführt, bei dem das Präfix bereits konfiguriert war. Nun wird das Präfix nicht mehr doppelt verwendet.</target>
+      </trans-unit>
+      <trans-unit id="e35ea7941086f3e3de8f5789d00be607">
+        <source>SDK: пользовательские таблицы DLE (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) читались и писались с PREFIX вместо USERPREFIX. На сайтах с разными префиксами это указывало на несуществующие таблицы.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">SDK: Die benutzerdefinierten DLE-Tabellen (`admin_logs`, `banned`, `twofactor`, `conversations*`, `social_login`, `ignore_list`, `downloads_log`, `lostdb`, `mail_log`) wurden mit „PREFIX“ anstelle von „USERPREFIX“ gelesen und geschrieben. Auf Websites mit unterschiedlichen Präfixen führte dies zu Verweisen auf nicht vorhandene Tabellen.</target>
+      </trans-unit>
+      <trans-unit id="eb954f787dff4670cda73bec0f7c276a">
+        <source>SDK Schema типы по install/dump DLE 21: `category.schema_org` и `storage.name` / `vote.date` — string; `rss.category` — int.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">SDK-Schema-Typen gemäß install/dump DLE 21: `category.schema_org` und `storage.name` / `vote.date` – Zeichenfolge; `rss.category` – Ganzzahl.</target>
+      </trans-unit>
+      <trans-unit id="5926584bca2702026eea1ba1ea087d0e">
+        <source>Генератор модулей: latin/`toTranslit` сохраняет `_` и `-`; Identity `MODULE=%dir%`, `CODE=%latin%`; каталог модуля — PascalCase от имени; `engine/inc` — slug без префикса `dle_`.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Modulgenerator: latin/`toTranslit` behält `_` und `-` bei; Identität `MODULE=%dir%`, `CODE=%latin%`; Modulverzeichnis – PascalCase aus dem Namen; `engine/inc` – Slug ohne das Präfix `dle_`.</target>
+      </trans-unit>
+      <trans-unit id="08d44a07e43e3e917cfaa517f4f5486e">
+        <source>Собранные публичные CSS/JS: в `cache/public_assets/` пишется `.htaccess` с доступом — иначе родительский `devcraft/.htaccess` отдаёт 403 на `bundle.css` / `bundle.js`.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gekompilierte öffentliche CSS-/JS-Dateien: Im Verzeichnis `cache/public_assets/` wird eine `.htaccess`-Datei mit den entsprechenden Zugriffsrechten erstellt – andernfalls gibt die übergeordnete `devcraft/.htaccess`-Datei einen 403-Fehler für `bundle.css` bzw. `bundle.js` zurück.</target>
+      </trans-unit>
+      <trans-unit id="3c3dcc5cfeb2f82a03102d24ef304920">
+        <source>Подстановка файлов из `siteAssets` описания модуля: если файлов в описании больше нет (или список пуст), старые автозаписи модуля выключаются — на сайт не попадает лишний админский JS.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Einbindung von Dateien aus dem Verzeichnis `siteAssets` der Modulbeschreibung: Wenn in der Beschreibung keine Dateien mehr vorhanden sind (oder die Liste leer ist), werden die alten automatischen Einbindungen des Moduls deaktiviert – so gelangt kein überflüssiges Admin-JS auf die Website.</target>
+      </trans-unit>
+      <trans-unit id="67929fc4679b95e508aaac300e150aa8">
+        <source>Подстановка из `siteAssets` больше не включает снова автозаписи, которые выключили вручную в админке.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Die Einbindung aus `siteAssets` umfasst nun keine automatischen Einträge mehr, die manuell im Admin-Bereich deaktiviert wurden.</target>
+      </trans-unit>
+      <trans-unit id="faa023fcc3efbfa4a3a9345e14ceec7e">
+        <source>`DevCraft.copyText` в ядре (`devcraft.js`): копирование в буфер на всех страницах админки, в т.ч. по HTTP (запасной `execCommand`).</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">`DevCraft.copyText` im Kern (`devcraft.js`): Kopieren in die Zwischenablage auf allen Seiten des Admin-Bereichs, einschließlich über HTTP (alternativer `execCommand`).</target>
+      </trans-unit>
+      <trans-unit id="f49bbf8058ff4c602ce598bf15b846bb">
+        <source>Публичные стили/скрипты/заголовки: переключатель «Активен» брал id с обёртки Metro Switch (класс уехал с checkbox, data-id остался на input) — «Запись не найдена» и два запроса/уведомления. Id берётся из строки таблицы; повторный сигнал change сливается в один запрос.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliche Stile/Skripte/Überschriften: Der Schalter „Aktiv“ übernahm die ID aus dem Metro-Switch-Wrapper (die Klasse wurde mit dem Kontrollkästchen entfernt, die data-id verblieb beim Eingabefeld) — „Eintrag nicht gefunden“ sowie zwei Anfragen/Benachrichtigungen. Die ID wird aus einer Zeile der Tabelle übernommen; wiederholte „change“-Signale werden zu einer einzigen Anfrage zusammengefasst.</target>
+      </trans-unit>
+      <trans-unit id="eb1c77a02953f41582e5207e74200021">
+        <source>Публичные списки: таблица Metro пересобирала строки (терялся `data-id`, ломалось перетаскивание) и искала колонки не по тем именам (поиск ничего не находил). Теперь штатная полоса фильтра и обычная таблица; перетаскивание по живым строкам, при фильтре порядок не пишется.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Öffentliche Listen: Die Metro-Tabelle hat die Zeilen neu zusammengestellt (dabei ging `data-id` verloren, das Ziehen und Ablegen funktionierte nicht mehr) und suchte nach Spalten unter falschen Namen (die Suche lieferte keine Ergebnisse). Nun gibt es eine integrierte Filterleiste und eine normale Tabelle; das Ziehen und Ablegen erfolgt über aktive Zeilen, und bei Verwendung des Filters wird die Reihenfolge nicht festgelegt.</target>
+      </trans-unit>
+      <trans-unit id="8e54f0002f8e28b62ec3d0ab2f3f47b0">
+        <source>История изменений: те же записи о выпуске, новый формат с группами «Добавлено», «Изменено» и т.д.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Änderungshistorie: dieselben Einträge zur Veröffentlichung, neues Format mit den Gruppen „Hinzugefügt“, „Geändert“ usw.</target>
       </trans-unit>
     </body>
   </file>

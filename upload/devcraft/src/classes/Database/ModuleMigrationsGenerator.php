@@ -40,10 +40,12 @@ final class ModuleMigrationsGenerator implements GeneratorInterface {
 	/**
 	 * @since 200.4.2
 	 *
-	 * @param   EntityPathResolver  $paths  Резолвер каталогов миграций.
+	 * @param   EntityPathResolver     $paths    Резолвер каталогов миграций.
+	 * @param   array<string, string>  $patched  Файл модели с патчем плагина → её исходный файл.
 	 */
 	public function __construct(
 		private readonly EntityPathResolver $paths,
+		private readonly array              $patched = [],
 	) {}
 
 	/**
@@ -67,6 +69,7 @@ final class ModuleMigrationsGenerator implements GeneratorInterface {
 			$table = $registry->getTableSchema($entity);
 			$class = $entity->getClass();
 			$file  = $class !== null && class_exists($class)? (new \ReflectionClass($class))->getFileName() : false;
+			$file  = is_string($file)? ($this->patched[$file] ?? $file) : false;
 
 			$databases[$registry->getDatabase($entity)][] = $table;
 			$targets[spl_object_id($table)]               = is_string($file)

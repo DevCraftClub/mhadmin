@@ -127,16 +127,10 @@ final class SchemaSyncService {
 				}
 			}
 
-			$this->compileSchema(
-				new SchemaRegistry($this->gateway->databaseManager()),
-				$path_resolver->entityModelDirectories(),
-				$path_resolver,
-				TRUE,
-				FALSE,
-			);
+			$written = (new SchemaMigrationService($this, $this->gateway, $path_resolver))->capture()['written'];
 			$this->dropCachedSchema();
 
-			return $this->lastWritten;
+			return $written;
 		} finally {
 			$this->releaseLock($lock);
 		}
@@ -233,7 +227,19 @@ final class SchemaSyncService {
 		}
 	}
 
-	private function pendingCount(Migrations\Migrator $migrator): int {
+	/**
+	 * Файлы миграций, созданные последней сборкой схемы.
+	 *
+	 * @since 200.4.2
+	 *
+	 * @return list<string>
+	 */
+	public function lastWritten(): array {
+		return $this->lastWritten;
+	}
+
+	/** @internal Для `SchemaMigrationService`. */
+	public function pendingCount(Migrations\Migrator $migrator): int {
 		$count = 0;
 
 		foreach ($migrator->getMigrations() as $migration) {
@@ -301,27 +307,23 @@ final class SchemaSyncService {
 		}
 
 		$model_directories = $path_resolver->entityModelDirectories();
-		$registry          = new SchemaRegistry($this->gateway->databaseManager());
 
 		if ($debug) {
+			$registry     = new SchemaRegistry($this->gateway->databaseManager());
 			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, FALSE, TRUE);
 			$this->storeCachedSchema($fingerprint, $schema_array);
 
 			return $schema_array;
 		}
 
-		$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, TRUE, FALSE);
-
-		if ($this->lastWritten !== []) {
-			$this->runPending($migrator);
-		}
+		// Отличия моделей от базы — в файлы миграций и накат; совпадает — ни файла, ни запроса.
+		$migrations   = new SchemaMigrationService($this, $this->gateway, $path_resolver);
+		$schema_array = $migrations->captureAndApply()['schema'];
 
 		// Таблиц нет, а create уже «выполнен» или файл не появился — только миграции, не SyncTables.
 		if (!$this->schemaTablesExist($schema_array)) {
 			$this->unmarkCreateMigrationsWithAllTablesMissing($migrator);
-			$registry     = new SchemaRegistry($this->gateway->databaseManager());
-			$schema_array = $this->compileSchema($registry, $model_directories, $path_resolver, TRUE, FALSE);
-			$this->runPending($migrator);
+			$schema_array = $migrations->captureAndApply()['schema'];
 		}
 
 		// Файлы миграций не создали таблицы (чистая база или ложная отметка «выполнена»).
@@ -336,10 +338,29 @@ final class SchemaSyncService {
 		return $schema_array;
 	}
 
+	/** Блокировка схемы уже взята этим же запросом. */
+	private static bool $locked = FALSE;
+
+	/**
+	 * Идёт ли сборка схемы в текущем запросе. Пока идёт, ORM недоступен — в базу писать нельзя.
+	 *
+	 * @since 200.4.2
+	 */
+	public static function isLocked(): bool {
+		return self::$locked;
+	}
+
 	/**
 	 * @return resource|null
+	 *
+	 * @throws \RuntimeException Если этот же запрос уже держит блокировку.
 	 */
 	private function acquireLock() {
+		// Второй flock в том же процессе ждал бы сам себя вечно и вешал все остальные запросы.
+		if (self::$locked) {
+			throw new \RuntimeException(__('Схема уже собирается в этом запросе'));
+		}
+
 		$dir = rtrim(Paths::cache(), '/\\');
 
 		if (!is_dir($dir) && !@mkdir($dir, 0775, TRUE) && !is_dir($dir)) {
@@ -354,6 +375,7 @@ final class SchemaSyncService {
 		}
 
 		flock($handle, LOCK_EX);
+		self::$locked = TRUE;
 
 		return $handle;
 	}
@@ -366,11 +388,13 @@ final class SchemaSyncService {
 			return;
 		}
 
+		self::$locked = FALSE;
 		flock($handle, LOCK_UN);
 		fclose($handle);
 	}
 
-	private function runPending(Migrations\Migrator $migrator): void {
+	/** @internal Для `SchemaMigrationService`; вызывать под блокировкой схемы. */
+	public function runPending(Migrations\Migrator $migrator): void {
 		$capsule = new Capsule($this->gateway->databaseManager()->database());
 		$migrator->configure();
 		$this->skipCreateMigrationsForExistingTables($migrator);
@@ -520,33 +544,8 @@ final class SchemaSyncService {
 			}
 		}
 
-		// Патчи DLEPlugins меняют модели без смены mtime исходника — иначе кэш схемы
-		// остаётся старым после включения/выключения сателлита.
-		if (defined('ENGINE_DIR')) {
-			$pluginsDir = ENGINE_DIR . '/cache/system/plugins';
-
-			if (is_dir($pluginsDir)) {
-				$maxMtime = (int) (@filemtime($pluginsDir) ? : 0);
-				$count    = 0;
-
-				foreach (scandir($pluginsDir) ? : [] as $name) {
-					if ($name === '.' || $name === '..') {
-						continue;
-					}
-
-					$path = $pluginsDir . '/' . $name;
-
-					if (!is_file($path)) {
-						continue;
-					}
-
-					$count++;
-					$maxMtime = max($maxMtime, (int) (@filemtime($path) ? : 0));
-				}
-
-				$parts[] = $pluginsDir . ':' . $maxMtime . ':' . $count;
-			}
-		}
+		// Патчи сателлитов: кэш схемы сбрасывает сам плагин (unlink cycle_orm_schema.ser).
+		// В отпечаток каталог engine/cache/system/plugins не входит — иначе пересборка на каждый запрос.
 
 		sort($parts);
 
@@ -676,11 +675,13 @@ final class SchemaSyncService {
 	}
 
 	/**
+	 * @internal Для `SchemaMigrationService`; вызывать под блокировкой схемы.
+	 *
 	 * @param   list<string>  $model_directories
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function compileSchema(
+	public function compileSchema(
 		SchemaRegistry     $registry,
 		array              $model_directories,
 		EntityPathResolver $path_resolver,
@@ -693,6 +694,9 @@ final class SchemaSyncService {
 
 		// ClassLocator молча пропускает класс, который не загрузился — подгружаем файлы заранее.
 		// Через DLEPlugins::Check, иначе патчи сателлитов к моделям не попадают в схему и миграции.
+		// Файл с патчем лежит в кэше плагинов — запоминаем исходник, чтобы миграция легла в свой модуль.
+		$patched = [];
+
 		foreach ($model_directories as $directory) {
 			foreach (glob(rtrim($directory, '/\\') . '/*.php') ? : [] as $file) {
 				if (!is_file($file)) {
@@ -702,6 +706,10 @@ final class SchemaSyncService {
 				try {
 					$load = class_exists('DLEPlugins', false) ? \DLEPlugins::Check($file) : $file;
 					require_once $load;
+
+					if ($load !== $file) {
+						$patched[realpath($load) ? : $load] = $file;
+					}
 				} catch (\Throwable $e) {
 					LogGenerator::for('SchemaSyncService')->debug(
 						__('Не загружена модель {file}', ['{file}' => $file]),
@@ -739,7 +747,7 @@ final class SchemaSyncService {
 
 		// По файлу на таблицу, в Migrations модуля-владельца: общий файл откатывает создание журнала
 		// и заголовков, если соседняя таблица в том же шаге уже есть.
-		$migrationsGenerator = $generateMigrations ? new ModuleMigrationsGenerator($path_resolver) : NULL;
+		$migrationsGenerator = $generateMigrations ? new ModuleMigrationsGenerator($path_resolver, $patched) : NULL;
 
 		if ($migrationsGenerator !== NULL) {
 			$generators[] = $migrationsGenerator;

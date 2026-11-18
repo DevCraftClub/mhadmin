@@ -24,6 +24,7 @@ use InvalidArgumentException;
 use DevCraft\Core\Application;
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Core\Database\SchemaSyncService;
 use DevCraft\Core\I18n\Translation;
 use DevCraft\Modules\Admin\Models\LogRecord;
 
@@ -859,7 +860,8 @@ final class LogGenerator {
 	private static function dbLog(array $message, string $type): void {
 		self::init();
 
-		if(!self::isDbLogs() || self::$dbLogBusy) {
+		// Пока собирается схема, ORM не готов: запись в базу снова запросила бы схему под той же блокировкой.
+		if(!self::isDbLogs() || self::$dbLogBusy || SchemaSyncService::isLocked()) {
 			return;
 		}
 

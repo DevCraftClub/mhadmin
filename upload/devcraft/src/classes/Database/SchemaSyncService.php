@@ -520,6 +520,34 @@ final class SchemaSyncService {
 			}
 		}
 
+		// Патчи DLEPlugins меняют модели без смены mtime исходника — иначе кэш схемы
+		// остаётся старым после включения/выключения сателлита.
+		if (defined('ENGINE_DIR')) {
+			$pluginsDir = ENGINE_DIR . '/cache/system/plugins';
+
+			if (is_dir($pluginsDir)) {
+				$maxMtime = (int) (@filemtime($pluginsDir) ? : 0);
+				$count    = 0;
+
+				foreach (scandir($pluginsDir) ? : [] as $name) {
+					if ($name === '.' || $name === '..') {
+						continue;
+					}
+
+					$path = $pluginsDir . '/' . $name;
+
+					if (!is_file($path)) {
+						continue;
+					}
+
+					$count++;
+					$maxMtime = max($maxMtime, (int) (@filemtime($path) ? : 0));
+				}
+
+				$parts[] = $pluginsDir . ':' . $maxMtime . ':' . $count;
+			}
+		}
+
 		sort($parts);
 
 		return hash('sha256', implode('|', $parts));
@@ -664,6 +692,7 @@ final class SchemaSyncService {
 		ModulePsr4Registrar::registerAll();
 
 		// ClassLocator молча пропускает класс, который не загрузился — подгружаем файлы заранее.
+		// Через DLEPlugins::Check, иначе патчи сателлитов к моделям не попадают в схему и миграции.
 		foreach ($model_directories as $directory) {
 			foreach (glob(rtrim($directory, '/\\') . '/*.php') ? : [] as $file) {
 				if (!is_file($file)) {
@@ -671,7 +700,8 @@ final class SchemaSyncService {
 				}
 
 				try {
-					require_once $file;
+					$load = class_exists('DLEPlugins', false) ? \DLEPlugins::Check($file) : $file;
+					require_once $load;
 				} catch (\Throwable $e) {
 					LogGenerator::for('SchemaSyncService')->debug(
 						__('Не загружена модель {file}', ['{file}' => $file]),

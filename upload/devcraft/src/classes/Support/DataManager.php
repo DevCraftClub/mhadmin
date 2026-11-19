@@ -85,20 +85,15 @@ final class DataManager {
 			return self::$psr4MapCache = [];
 		}
 
-		$fingerprint = self::moduleManifestFingerprint($modulesRoot);
-		$cacheFile   = rtrim(Paths::cache(), '/\\') . '/module_psr4.php';
+		// ponytail: без scandir/mtime на каждый hit — доверяем файлу до resetManifestCache().
+		$cacheFile = rtrim(Paths::cache(), '/\\') . '/module_psr4.php';
 
 		if(is_file($cacheFile)) {
 			try {
 				/** @var mixed $cached */
 				$cached = include $cacheFile;
 
-				if(
-					is_array($cached)
-					&& ($cached['fp'] ?? null) === $fingerprint
-					&& isset($cached['map'])
-					&& is_array($cached['map'])
-				) {
+				if(is_array($cached) && isset($cached['map']) && is_array($cached['map'])) {
 					/** @var list<array{id: string, namespace: string, path: string}> $map */
 					$map = [];
 
@@ -124,6 +119,8 @@ final class DataManager {
 				// Пересоберём карту ниже.
 			}
 		}
+
+		$fingerprint = self::moduleManifestFingerprint($modulesRoot);
 
 		$map = self::buildModulePsr4Map($modulesRoot);
 		self::writeModulePsr4Cache($cacheFile, $fingerprint, $map);

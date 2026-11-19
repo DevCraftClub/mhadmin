@@ -6,6 +6,7 @@ namespace DevCraft\Modules\Admin\DebugToolbar;
 
 use DevCraft\Core\Application;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Core\Debug\DebugHooks;
 
 /**
  * Сборщик и рендер отладочной панели.
@@ -70,8 +71,18 @@ final class ToolbarService
 
 	public function boot(string $surface = 'admin'): void
 	{
-		// Группы проверяем при показе: на раннем init ещё нет $member_id.
 		if($this->booted || !$this->canCollect($surface)) {
+			return;
+		}
+
+		// Без $member_id не собираем SQL (иначе платят все посетители сайта).
+		global $member_id;
+
+		if(!is_array($member_id ?? null) || !isset($member_id['user_group'])) {
+			return;
+		}
+
+		if(!$this->currentUserAllowed()) {
 			return;
 		}
 
@@ -90,6 +101,7 @@ final class ToolbarService
 
 		self::mark('toolbar_boot');
 		QueryRegistry::clear();
+		DebugHooks::refreshCycleSqlTap();
 	}
 
 	public function renderHtml(): string
@@ -666,16 +678,16 @@ final class ToolbarService
 	 */
 	private function canCollect(string $surface): bool
 	{
-		// Не зависит от debug / ?dc_debug=1 — только от настроек панели.
-		if(!(bool) DevCraftConfig::get('debug_toolbar', true)) {
+		// Не зависит от debug / ?dc_debug=1 — только от настроек панели (по умолчанию выкл.).
+		if(!(bool) DevCraftConfig::get('debug_toolbar', false)) {
 			return false;
 		}
 
-		if($surface === 'admin' && !(bool) DevCraftConfig::get('debug_toolbar_admin', true)) {
+		if($surface === 'admin' && !(bool) DevCraftConfig::get('debug_toolbar_admin', false)) {
 			return false;
 		}
 
-		if($surface === 'public' && !(bool) DevCraftConfig::get('debug_toolbar_public', true)) {
+		if($surface === 'public' && !(bool) DevCraftConfig::get('debug_toolbar_public', false)) {
 			return false;
 		}
 

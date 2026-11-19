@@ -30,7 +30,7 @@ use Cycle\Database\DatabaseInterface;
 use Cycle\Database\StatementInterface;
 use Cycle\ORM\Transaction\StateInterface;
 use Symfony\Component\DependencyInjection\Container;
-use DevCraft\Modules\Admin\DebugToolbar\CycleQueryLogger;
+use DevCraft\Core\Debug\DebugHooks;
 
 /**
  * Шлюз доступа к базе данных через Cycle ORM.
@@ -431,10 +431,32 @@ final class DatabaseGateway {
 		}
 
 		$this->database_manager = new DatabaseManager($this->generateOrmConfig());
-		// Запись в панель — когда ToolbarService уже запущен (см. QueryRegistry::record).
-		$this->database_manager->setLogger(new CycleQueryLogger());
+		$this->attachCycleSqlLoggerIfNeeded();
 
 		return $this->database_manager;
+	}
+
+	/**
+	 * Включает перехват SQL Cycle, если панель отладки уже запущена.
+	 *
+	 * @since 200.4.2
+	 */
+	public function enableCycleSqlTap(): void {
+		$this->attachCycleSqlLoggerIfNeeded();
+	}
+
+	private function attachCycleSqlLoggerIfNeeded(): void {
+		if($this->database_manager === null || !DebugHooks::isBooted()) {
+			return;
+		}
+
+		$loggerClass = 'DevCraft\\Modules\\Admin\\DebugToolbar\\CycleQueryLogger';
+
+		if(!class_exists($loggerClass)) {
+			return;
+		}
+
+		$this->database_manager->setLogger(new $loggerClass());
 	}
 
 	/**
@@ -482,7 +504,8 @@ final class DatabaseGateway {
 						reconnect : true,
 						timezone  : $config['date_adjust'] ?? 'UTC',
 						queryCache: true,
-						options   : ['logInterpolatedQueries' => true],
+						// Интерполяция SQL — только пока панель уже собирает (иначе лишний CPU).
+						options   : ['logInterpolatedQueries' => DebugHooks::isBooted()],
 					),
 				],
 			],

@@ -49,7 +49,16 @@ if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
 
 	// Composer определяет путь, а DLE применяет изменения плагинов к классам DevCraft.
 	// Если classmap устарел и путь не существует, пробуем PSR-4 fallback для локальных классов.
+	// Только префиксы DevCraft / PhpStorm: иначе prepend-обработчик звал findFile на
+	// каждый класс DLE/темы за запрос и раздувал «генерацию страницы» сотнями мс.
 	spl_autoload_register(static function (string $class) use ($dcLoader, $dcSourceRoot): void {
+		if(
+			!str_starts_with($class, 'DevCraft\\')
+			&& !str_starts_with($class, 'JetBrains\\PhpStorm\\')
+		) {
+			return;
+		}
+
 		$file = $dcLoader->findFile($class);
 		$path = ($file !== false) ? realpath($file) : false;
 

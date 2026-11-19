@@ -111,15 +111,15 @@ return FormSchemaBuilder::create(AdminIdentity::code())
 		                        ->default(false)
 	                        ->checkbox('debug_toolbar', __('Показывать панель отладки'))
 		                        ->description(
-			                        __('Нижняя панель с SQL-запросами ($db, Cycle и прочие). Не зависит от «Режим отладки» и <code>?dc_debug=1</code> — достаточно этой настройки, группы и места показа.'),
+			                        __('Нижняя панель с SQL-запросами ($db, Cycle и прочие). Не зависит от «Режим отладки» и <code>?dc_debug=1</code> — достаточно этой настройки, группы и места показа. По умолчанию выключено.'),
 		                        )
-		                        ->default(true)
+		                        ->default(false)
 	                        ->checkbox('debug_toolbar_admin', __('Панель в админке'))
 		                        ->description(__('Показывать панель на всех страницах admin.php: настройки DLE, чужие модули и DevCraft.'))
-		                        ->default(true)
+		                        ->default(false)
 	                        ->checkbox('debug_toolbar_public', __('Панель на сайте'))
-		                        ->description(__('Показывать панель на публичных страницах сайта.'))
-		                        ->default(true)
+		                        ->description(__('Показывать панель на публичных страницах сайта. Сбор SQL только у разрешённых групп.'))
+		                        ->default(false)
 	                        ->multi('debug_toolbar_groups', __('Группы с доступом к панели'))
 		                        ->description(
 			                        __('Панель видна только выбранным группам. По умолчанию — администраторы. ')

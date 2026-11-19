@@ -40,8 +40,12 @@ assert(str_contains($partial, 'Самые долгие запросы'), 'slowes
 assert(str_contains($toolbar, 'function sortByTimeDesc'), 'sort queries by duration');
 assert(str_contains($toolbar, 'function buildStages'), 'buildStages');
 assert(str_contains($toolbar, 'function mark'), 'Timing marks');
-assert(str_contains($app, "mark('devcraft_boot_start')"), 'boot start mark');
-assert(str_contains($app, "boot('public')"), 'early public toolbar boot');
+assert(str_contains($app, 'DebugHooks'), 'Application uses DebugHooks not hard ToolbarService use');
+assert(str_contains($app, "mark('devcraft_boot_start')") || str_contains($app, "DebugHooks::mark('devcraft_boot_start')"), 'boot start mark');
+assert(str_contains($toolbar, 'currentUserAllowed'), 'boot waits for allowed group');
+assert(str_contains($toolbar, "member_id"), 'boot needs member_id before collect');
+assert(str_contains($gateway, 'enableCycleSqlTap') || str_contains($gateway, 'attachCycleSqlLoggerIfNeeded') || str_contains($gateway, 'DebugHooks::isBooted'), 'Cycle logger gated');
+assert(str_contains($schema, '->default(false)'), 'toolbar defaults off');
 assert(str_contains($toolbar, 'Генерация страницы'), 'page-work stage label');
 assert(str_contains($toolbar, "'kind'  => 'timing'"), 'time section kind');
 assert(str_contains($toolbar, "'kind'  => 'vars'"), 'vars section kind');

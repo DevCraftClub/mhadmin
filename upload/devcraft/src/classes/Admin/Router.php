@@ -24,7 +24,7 @@ use DevCraft\Core\I18n\Translation;
 use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Module\PluginContext;
 use DevCraft\Core\Config\DevCraftConfig;
-use DevCraft\Modules\Admin\DebugToolbar\ToolbarService;
+use DevCraft\Core\Debug\DebugHooks;
 use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Core\Twig\EnvironmentFactory;
 use DevCraft\Core\Interfaces\PageInterface;
@@ -141,9 +141,9 @@ final class Router {
 		$orchestrator = new PageOrchestrator();
 		$orchestrated = $orchestrator->prepare($page, $plugin, $action);
 
-		ToolbarService::mark('page_handle_start');
+		DebugHooks::mark('page_handle_start');
 		$result = $page->handle();
-		ToolbarService::mark('page_handle_end');
+		DebugHooks::mark('page_handle_end');
 
 		$adminContext->finalizeBreadcrumbs($mod, $action);
 
@@ -197,7 +197,7 @@ final class Router {
 			'html_lang' => $data['devcraft_html_lang'],
 		]);
 
-		ToolbarService::mark('layout_start');
+		DebugHooks::mark('layout_start');
 		echo $this->layoutWrap($view, $data, $adminContext, (string) ($meta['version'] ?? '1.0.0'));
 	}
 
@@ -310,14 +310,18 @@ final class Router {
 	private function layoutWrap(string $contentView, array $data, AdminContext $adminContext, string $version): string {
 		$inner = Application::instance()->twig()->render(AbstractPage::resolveViewKey($contentView), $data);
 		$debugToolbar = null;
-		$toolbar      = ToolbarService::instance();
+		$toolbarClass = 'DevCraft\\Modules\\Admin\\DebugToolbar\\ToolbarService';
 
-		if($toolbar->isActive('admin')) {
-			// Не вызывать boot() повторно в конце — иначе сбросятся собранные Cycle-запросы.
-			if(!$toolbar->isBooted()) {
-				$toolbar->boot('admin');
+		if(class_exists($toolbarClass)) {
+			$toolbar = $toolbarClass::instance();
+
+			if($toolbar->isActive('admin')) {
+				// Не вызывать boot() повторно в конце — иначе сбросятся собранные Cycle-запросы.
+				if(!$toolbar->isBooted()) {
+					$toolbar->boot('admin');
+				}
+				$debugToolbar = $toolbar->viewModel();
 			}
-			$debugToolbar = $toolbar->viewModel();
 		}
 
 		return Application::instance()->twig()->render('core/layout.twig', array_merge($data, [

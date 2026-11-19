@@ -32,8 +32,8 @@ use DevCraft\Core\Support\AssetsCheckerService;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Support\ExceptionDetailFormatter;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Core\Debug\DebugHooks;
 use DevCraft\Core\Logging\LogGenerator;
-use DevCraft\Modules\Admin\DebugToolbar\ToolbarService;
 
 /**
  * Главный контейнер приложения DevCraft (Singleton).
@@ -153,24 +153,24 @@ final class Application {
 			return;
 		}
 
-		ToolbarService::mark('devcraft_boot_start');
+		DebugHooks::mark('devcraft_boot_start');
 
 		Paths::register();
 		$this->registry = new Registry();
 		$this->booted   = true;
 		// После booted: загрузка манифестов может снова вызвать boot() (БД и т.п.).
 		ModulePsr4Registrar::registerAll();
-		ToolbarService::mark('devcraft_psr4');
+		DebugHooks::mark('devcraft_psr4');
 
-		// Админка DLE без runAdmin; на сайте — сразу boot('public'), иначе панель
-		// стартует только в main.tpl и «съедает» всю генерацию страницы в один этап.
-		ToolbarService::instance()->hookDleAdmin();
+		// Админка DLE: ранний хук. Публичный boot панели — позже (есть $member_id),
+		// из PublicAssetTagService / runAdmin — иначе SQL собирали бы у всех гостей.
+		DebugHooks::hookDleAdmin();
 
-		if(!ToolbarService::instance()->isBooted()) {
-			ToolbarService::instance()->boot('public');
+		if(!DebugHooks::isBooted()) {
+			DebugHooks::boot('public');
 		}
 
-		ToolbarService::mark('devcraft_boot_end');
+		DebugHooks::mark('devcraft_boot_end');
 	}
 
 	/**
@@ -196,8 +196,8 @@ final class Application {
 			$_SESSION['dc_debug'] = true;
 		}
 
-		ToolbarService::instance()->boot('admin');
-		ToolbarService::mark('run_admin_start');
+		DebugHooks::boot('admin');
+		DebugHooks::mark('run_admin_start');
 
 		$action = '';
 
@@ -337,6 +337,15 @@ final class Application {
 		}
 
 		return $this->database ??= new DatabaseGateway($this->registry);
+	}
+
+	/**
+	 * Подключает перехват Cycle SQL, если панель уже запущена и шлюз создан.
+	 *
+	 * @since 200.4.2
+	 */
+	public function notifyDebugSqlTap(): void {
+		$this->database?->enableCycleSqlTap();
 	}
 
 	/**

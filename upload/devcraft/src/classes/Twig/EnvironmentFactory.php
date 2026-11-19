@@ -59,7 +59,8 @@ final class EnvironmentFactory {
 
 		$twig = new Environment($loader, [
 			'autoescape' => 'html',
-			'cache'      => self::cachePath($useDebug),
+			'cache'      => self::cachePath(),
+			'auto_reload' => $useDebug,
 			'debug'      => $useDebug,
 		]);
 
@@ -74,15 +75,9 @@ final class EnvironmentFactory {
 	 *
 	 * @since 200.4.0
 	 *
-	 * @param   bool  $useDebug  Включён ли режим отладки.
-	 *
-	 * @return string|false Абсолютный путь кеша Twig или false.
+	 * @return string Абсолютный путь кеша Twig.
 	 */
-	private static function cachePath(bool $useDebug): string|false {
-		if($useDebug) {
-			return false;
-		}
-
+	private static function cachePath(): string {
 		$config    = DevCraftConfig::raw();
 		$cachePath = trim((string) ($config['cache_path'] ?? Paths::cache()));
 

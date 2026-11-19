@@ -24,7 +24,11 @@ final class PublicAssetTagService {
 	) {}
 
 	public function applyToTemplate(object $tpl): void {
-		(new PublicAssetSeedService())->ensureRegistered();
+		// Публичка не сидит списки: полный seed — Dashboard / Public Assets.
+		// В debug — только sync, если изменились mtime манифестов.
+		if(LogGenerator::isDebugEnabled()) {
+			(new PublicAssetManifestSyncService())->syncIfChanged();
+		}
 
 		$copy = (string) ($tpl->copy_template ?? '');
 		$hasAll     = str_contains($copy, '{devcraft}');

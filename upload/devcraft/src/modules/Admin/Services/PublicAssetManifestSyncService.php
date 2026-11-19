@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DevCraft\Modules\Admin\Services;
 
 use DevCraft\Core\Application;
+use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Support\DataManager;
 use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Modules\Admin\Models\PublicAssetEntry;
@@ -36,9 +37,78 @@ final class PublicAssetManifestSyncService {
 				}
 				$this->syncModule($manifest, false);
 			}
+			$this->writeManifestStamp($this->manifestsFingerprint());
 		} catch(\Throwable) {
 			// Схема ещё не готова — повтор при следующем заходе в админку или на сайт.
 		}
+	}
+
+	/**
+	 * Sync только если изменились mtime `manifest.php` (для публички в debug).
+	 */
+	public function syncIfChanged(): void {
+		static $checked = false;
+		if($checked) {
+			return;
+		}
+		$checked = true;
+
+		try {
+			$fp = $this->manifestsFingerprint();
+			if($fp !== '' && $fp === $this->readManifestStamp()) {
+				return;
+			}
+			$this->syncAll();
+		} catch(\Throwable) {
+			// Как syncAll: без схемы БД — тихо выходим.
+		}
+	}
+
+	/**
+	 * Отпечаток манифестов: путь → mtime (порядок стабильный).
+	 */
+	public function manifestsFingerprint(): string {
+		$parts = [];
+
+		foreach(DataManager::readManifest() as $manifest) {
+			if(!$manifest instanceof ModuleManifest) {
+				continue;
+			}
+			$file = rtrim($manifest->path, '/\\') . '/manifest.php';
+			$mtime = is_file($file) ? (string) (filemtime($file) ?: 0) : '0';
+			$parts[$file] = $mtime;
+		}
+
+		ksort($parts);
+		$raw = '';
+		foreach($parts as $file => $mtime) {
+			$raw .= $file . '=' . $mtime . "\n";
+		}
+
+		return $raw === '' ? '' : hash('sha256', $raw);
+	}
+
+	private function stampPath(): string {
+		return Paths::cache() . '/public_assets/manifest_sync.stamp';
+	}
+
+	private function readManifestStamp(): string {
+		$file = $this->stampPath();
+
+		return is_file($file) ? trim((string) @file_get_contents($file)) : '';
+	}
+
+	private function writeManifestStamp(string $fingerprint): void {
+		if($fingerprint === '') {
+			return;
+		}
+
+		$dir = Paths::cache() . '/public_assets';
+		if(!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+			return;
+		}
+
+		@file_put_contents($this->stampPath(), $fingerprint);
 	}
 
 	public function syncModule(ModuleManifest $manifest, bool $isFirstInstall = false): void {

@@ -265,12 +265,44 @@ final class SchemaSyncService {
 	public function ensureSchemaReady(): array {
 		Paths::register();
 
+		// Быстрый путь без flock и без N× information_schema: доверяем отпечатку кэша.
+		$trusted = $this->tryTrustedCachedSchema();
+		if($trusted !== NULL) {
+			return $trusted;
+		}
+
 		$lock = $this->acquireLock();
 
 		try {
 			return $this->ensureSchemaReadyLocked();
 		} finally {
 			$this->releaseLock($lock);
+		}
+	}
+
+	/**
+	 * Кэш схемы по отпечатку моделей + нет ожидающих миграций.
+	 * Без проверки каждой таблицы (дорого на публичном hit).
+	 *
+	 * @return array<string, mixed>|null
+	 */
+	private function tryTrustedCachedSchema(): ?array {
+		try {
+			$path_resolver = new EntityPathResolver($this->registry);
+			$fingerprint   = $this->quickModelsSignature();
+			$cached        = $this->loadCachedSchema($fingerprint);
+
+			if($cached === NULL) {
+				return NULL;
+			}
+
+			if($this->migrationFilesNeedApply($path_resolver->migrationDirectories())) {
+				return NULL;
+			}
+
+			return $cached;
+		} catch(\Throwable) {
+			return NULL;
 		}
 	}
 
@@ -288,7 +320,8 @@ final class SchemaSyncService {
 		$needPending   = $this->migrationFilesNeedApply($migrationDirs);
 		$cached        = $bootstrap ? NULL : $this->loadCachedSchema($fingerprint);
 
-		if ($cached !== NULL && !$needPending && !$bootstrap && $this->schemaTablesExist($cached)) {
+		// Повторная проверка под блокировкой: таблицы не дёргаем — отпечаток уже сверил кэш.
+		if ($cached !== NULL && !$needPending && !$bootstrap) {
 			return $cached;
 		}
 

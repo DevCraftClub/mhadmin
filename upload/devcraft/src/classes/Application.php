@@ -129,13 +129,19 @@ final class Application {
 	 */
 	public function twig(): Environment {
 		$this->boot();
+
+		if($this->twig === NULL) {
+			$this->twig = EnvironmentFactory::create();
+		}
+
 		EnvironmentFactory::ensureTranslationExtension($this->twig);
 
 		return $this->twig;
 	}
 
 	/**
-	 * Выполняет однократную инициализацию путей, реестра модулей и Twig.
+	 * Однократная инициализация путей и реестра модулей.
+	 * Twig поднимается лениво в {@see twig()} — публичные теги assets не платят за шаблоны.
 	 *
 	 * @since 200.4.0
 	 *
@@ -149,7 +155,6 @@ final class Application {
 
 		Paths::register();
 		$this->registry = new Registry();
-		$this->twig     = EnvironmentFactory::create();
 		$this->booted   = true;
 		// После booted: загрузка манифестов может снова вызвать boot() (БД и т.п.).
 		ModulePsr4Registrar::registerAll();

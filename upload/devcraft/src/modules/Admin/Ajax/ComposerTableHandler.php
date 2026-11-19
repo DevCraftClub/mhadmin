@@ -84,7 +84,7 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 					['name' => 'plugin', 'title' => __('Модуль'), 'sortable' => true],
 					['name' => 'required', 'title' => __('Обязательный'), 'sortable' => true],
 					['name' => 'installed', 'title' => __('Установлен'), 'sortable' => true],
-					['name' => 'appCode', 'title' => __('Код приложения'), 'sortable' => true],
+					['name' => 'app_code', 'title' => __('Код приложения'), 'sortable' => true],
 					['name' => 'actions', 'title' => '', 'sortable' => false],
 				],
 				'data'   => $rows,
@@ -100,7 +100,7 @@ final class ComposerTableHandler implements AjaxHandlerInterface {
 					['name' => 'plugin', 'title' => __('Модуль'), 'sortable' => true],
 					['name' => 'required', 'title' => __('Обязательный'), 'sortable' => true],
 					['name' => 'installed', 'title' => __('Установлен'), 'sortable' => true],
-					['name' => 'appCode', 'title' => __('Код приложения'), 'sortable' => true],
+					['name' => 'app_code', 'title' => __('Код приложения'), 'sortable' => true],
 					['name' => 'actions', 'title' => '', 'sortable' => false],
 				],
 				'data'   => [

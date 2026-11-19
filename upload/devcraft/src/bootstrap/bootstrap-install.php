@@ -10,7 +10,7 @@ if(!defined('DATALIFEENGINE')) {
 	die('Hacking attempt!');
 }
 
-require_once __DIR__ . '/composer_marker.php';
+require_once DLEPlugins::Check(ROOT_DIR . '/devcraft/src/bootstrap/composer_marker.php');
 
 /**
  * @return array{dir:string,log:string,pid:string,exit:string}

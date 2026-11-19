@@ -35,6 +35,10 @@ use DevCraft\Modules\Admin\Repositories\LogRecordRepository;
 #[Entity(role: 'log_record', repository: LogRecordRepository::class, table: 'devcraft_logs')]
 #[Uuid1(field: 'uuid', node: '00000fffffff', clockSeq: 0xffff, nullable: false)]
 #[Index(columns: ['uuid'], unique: true)]
+#[Index(columns: ['plugin'], name: 'idx_devcraft_logs_plugin')]
+#[Index(columns: ['log_type'], name: 'idx_devcraft_logs_log_type')]
+#[Index(columns: ['fn_name'], name: 'idx_devcraft_logs_fn_name')]
+#[Index(columns: ['time'], name: 'idx_devcraft_logs_time')]
 class LogRecord extends AbstractEntity {
 
 	/**

@@ -21,7 +21,6 @@ use Cycle\Database\Config;
 use Cycle\ORM\EntityManager;
 use Cycle\ORM\SchemaInterface;
 use DevCraft\Core\Config\Paths;
-use DevCraft\Core\Logging\LogGenerator;
 use Spiral\Pagination\Paginator;
 use Cycle\ORM\RepositoryInterface;
 use DevCraft\Core\Module\Registry;
@@ -31,7 +30,7 @@ use Cycle\Database\DatabaseInterface;
 use Cycle\Database\StatementInterface;
 use Cycle\ORM\Transaction\StateInterface;
 use Symfony\Component\DependencyInjection\Container;
-use DevCraft\Modules\Admin\DebugToolbar\QueryRegistry;
+use DevCraft\Modules\Admin\DebugToolbar\CycleQueryLogger;
 
 /**
  * Шлюз доступа к базе данных через Cycle ORM.
@@ -305,14 +304,8 @@ final class DatabaseGateway {
 	 *     $stmt = $db->query('SELECT COUNT(*) FROM {table}', ['table' => 'users']);
 	 */
 	public function query(string $sql, array $params = []): StatementInterface {
-		$startedAt = LogGenerator::isDebugEnabled()? microtime(true) : null;
-		try {
-			return $this->connection()->query($sql, $params);
-		} finally {
-			if($startedAt !== null) {
-				QueryRegistry::record('cycle', $sql, (microtime(true) - $startedAt) * 1000);
-			}
-		}
+		// SQL пишется в панель через CycleQueryLogger на драйвере (и raw query, и ORM Select).
+		return $this->connection()->query($sql, $params);
 	}
 
 	/**
@@ -433,7 +426,15 @@ final class DatabaseGateway {
 	}
 
 	private function generateManager(): DatabaseManager {
-		return $this->database_manager ??= new DatabaseManager($this->generateOrmConfig());
+		if($this->database_manager !== null) {
+			return $this->database_manager;
+		}
+
+		$this->database_manager = new DatabaseManager($this->generateOrmConfig());
+		// Запись в панель — когда ToolbarService уже запущен (см. QueryRegistry::record).
+		$this->database_manager->setLogger(new CycleQueryLogger());
+
+		return $this->database_manager;
 	}
 
 	/**
@@ -481,6 +482,7 @@ final class DatabaseGateway {
 						reconnect : true,
 						timezone  : $config['date_adjust'] ?? 'UTC',
 						queryCache: true,
+						options   : ['logInterpolatedQueries' => true],
 					),
 				],
 			],
@@ -527,7 +529,7 @@ final class DatabaseGateway {
 		}
 
 		/** Подключение файла конфигурации базы данных DLE. */
-		require_once $dbconfig;
+		require_once \DLEPlugins::Check($dbconfig);
 	}
 
 }

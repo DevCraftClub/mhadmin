@@ -164,7 +164,7 @@ final class ComposerRuntimeAdapter {
 			$verb = (string) ($args[0] ?? '');
 
 			if($verb === 'install' || $verb === 'update') {
-				require_once ROOT_DIR . '/devcraft/src/bootstrap/composer_marker.php';
+				require_once \DLEPlugins::Check(ROOT_DIR . '/devcraft/src/bootstrap/composer_marker.php');
 				dc_composer_mark_initialized(true);
 			}
 		}

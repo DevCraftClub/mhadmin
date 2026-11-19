@@ -35,6 +35,13 @@ use DevCraft\Core\Exception\JsonResponseException;
 final class Registry {
 
 	/**
+	 * Контексты модулей в рамках одного запроса (ключ = каталог + mod + extends).
+	 *
+	 * @var array<string, PluginContext|null>
+	 */
+	private array $contextCache = [];
+
+	/**
 	 * Возвращает карту активных модулей, индексированную по идентификатору mod.
 	 *
 	 * @since 200.4.0
@@ -182,16 +189,22 @@ final class Registry {
 			return NULL;
 		}
 
+		$cacheKey = $moduleDir . "\0" . ($modOverride ?? '') . "\0" . ($applyExtensions ? '1' : '0');
+
+		if(array_key_exists($cacheKey, $this->contextCache)) {
+			return $this->contextCache[$cacheKey];
+		}
+
 		$path = DataManager::normalizePath(DEVCRAFT_MODULES . '/' . $moduleDir);
 
 		if(!is_dir($path)) {
-			return NULL;
+			return $this->contextCache[$cacheKey] = NULL;
 		}
 
 		$manifestFile = $path . '/manifest.php';
 
 		if(!is_file($manifestFile)) {
-			return NULL;
+			return $this->contextCache[$cacheKey] = NULL;
 		}
 
 		try {
@@ -199,7 +212,7 @@ final class Registry {
 			$loaded = require DLEPlugins::Check($manifestFile);
 
 			if(!$loaded instanceof ModuleManifest && !is_array($loaded)) {
-				return NULL;
+				return $this->contextCache[$cacheKey] = NULL;
 			}
 
 			$manifestMod = $loaded instanceof ModuleManifest
@@ -208,11 +221,14 @@ final class Registry {
 			$effectiveMod = $modOverride ?? $manifestMod;
 
 			if($effectiveMod === '') {
-				return NULL;
+				return $this->contextCache[$cacheKey] = NULL;
 			}
 
 			$manifest = ModuleManifest::fromLoaded($effectiveMod, $loaded, $path);
 			$context  = new PluginContext($effectiveMod, $manifest, $path);
+
+			// В кэш до enrich: иначе recursive extensionsOf снова создаёт тот же host.
+			$this->contextCache[$cacheKey] = $context;
 
 			if($applyExtensions && ($manifest->extends === NULL || $manifest->extends === '')) {
 				ModuleExtensionMerger::enrich($context, $this);
@@ -222,7 +238,7 @@ final class Registry {
 		} catch(\Throwable $throwable) {
 			LogGenerator::for(Registry::class)->log($throwable->getMessage());
 
-			return NULL;
+			return $this->contextCache[$cacheKey] = NULL;
 		}
 	}
 

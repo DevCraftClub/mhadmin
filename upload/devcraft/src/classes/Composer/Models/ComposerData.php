@@ -27,7 +27,7 @@ class ComposerData extends AbstractEntity {
 	#[Column(type: 'string')]
 	public string $version;
 
-	#[Column(type: 'string')]
+	#[Column(type: 'string', name: 'app_code')]
 	public string $appCode;
 
 	#[Column(type: 'boolean')]

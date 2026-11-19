@@ -28,6 +28,11 @@ assert(
 	'applyToTemplate must syncIfChanged only when debug is on',
 );
 assert(
+	str_contains($tag, 'Считать только нужные части')
+	&& !preg_match('/\$bundle\s*=\s*\$this->renderBundle\(\);\s*\$header\s*=\s*\$this->renderHeader\(\);\s*\$scripts\s*=\s*\$this->renderScripts\(\);/', $tag),
+	'applyToTemplate must not always render bundle+header+scripts',
+);
+assert(
 	str_contains($sync, 'function syncIfChanged')
 	&& str_contains($sync, 'function manifestsFingerprint')
 	&& str_contains($sync, 'manifest_sync.stamp'),
@@ -38,5 +43,14 @@ assert(
 	&& str_contains($list, 'ensureRegistered()'),
 	'Dashboard and Public Assets must keep full seed',
 );
+
+$catalog = (string) file_get_contents(__DIR__ . '/PublicAssetCatalogCache.php');
+$assetRepo = (string) file_get_contents(dirname(__DIR__) . '/Repositories/PublicAssetEntryRepository.php');
+$headerRepo = (string) file_get_contents(dirname(__DIR__) . '/Repositories/PublicHeaderEntryRepository.php');
+$bundle = (string) file_get_contents(__DIR__ . '/PublicAssetBundleCacheService.php');
+assert(str_contains($catalog, 'CacheControl::getCache'), 'catalog uses CacheControl');
+assert(str_contains($assetRepo, 'PublicAssetCatalogCache::assets'), 'listByKind via catalog cache');
+assert(str_contains($headerRepo, 'PublicAssetCatalogCache::headers'), 'listAllOrdered via catalog cache');
+assert(str_contains($bundle, 'PublicAssetCatalogCache::invalidate'), 'bundle invalidate clears catalog');
 
 fwrite(STDOUT, "PublicAssetTagService.selfcheck: ok\n");

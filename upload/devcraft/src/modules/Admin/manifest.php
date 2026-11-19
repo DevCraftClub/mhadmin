@@ -13,6 +13,7 @@
 
 declare(strict_types=1);
 
+use DevCraft\Core\Config\Paths;
 use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Types\AdminLink;
 use DevCraft\Types\ModuleManifest;
@@ -121,10 +122,10 @@ return ModuleManifestBuilder::create()
 		ComposerTypeBuilder::create('cycle/orm')->minVersion('2.9')->hardRequired()->build(),
 		ComposerTypeBuilder::create('symfony/translation')->minVersion('7.4')->hardRequired()->build(),
 	])
-	->changelog(require DLEPlugins::Check(__DIR__ . '/changelog.data.php'))
+	->changelog(require DLEPlugins::Check(Paths::modules() . '/Admin/changelog.data.php'))
 	->assets(ModuleAssetsBuilder::create()->js('admin.js'))
 	->siteAssets(
 		ModuleSiteAssetsBuilder::create()
 			->js('devcraft/src/templates/core/assets/js/dc_public.js')
 	)
-	->build(__DIR__);
+	->build(Paths::modules() . '/Admin');

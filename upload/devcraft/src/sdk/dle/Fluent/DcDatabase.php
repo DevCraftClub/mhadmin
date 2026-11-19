@@ -12,8 +12,9 @@ use DevCraft\Core\Database\DatabaseGateway;
 use DevCraft\Dle\Schema\SchemaRegistry;
 
 if(!class_exists(\JetBrains\PhpStorm\ExpectedValues::class, false)) {
-	$path = __DIR__ . '/../Support/PhpStorm/ExpectedValues.php';
-	require_once class_exists('DLEPlugins', false) ? DLEPlugins::Check($path) : $path;
+	$path = (defined('ROOT_DIR') ? rtrim((string) ROOT_DIR, '/\\') . '/devcraft' : dirname(__DIR__, 3))
+		. '/src/sdk/dle/Support/PhpStorm/ExpectedValues.php';
+	require_once class_exists('DLEPlugins', false) ? \DLEPlugins::Check($path) : $path;
 }
 
 if(!function_exists('dle_api_db')) {

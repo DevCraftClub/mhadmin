@@ -63,6 +63,43 @@ if (is_file(ROOT_DIR . '/devcraft/init.php')) {
       <versioncompare>greater</versioncompare>
     </operation>
   </file>
+  <file name="engine/inc/include/functions.inc.php">
+    <operation action="replace">
+      <searchcode><![CDATA[function echofooter() {
+	global $is_loged_in, $skin_footer, $skin_not_logged_footer;
+
+	if( $is_loged_in ) echo $skin_footer;
+	else echo $skin_not_logged_footer;
+
+}]]></searchcode>
+      <replacecode><![CDATA[function echofooter() {
+	global $is_loged_in, $skin_footer, $skin_not_logged_footer;
+
+	$html = $is_loged_in ? $skin_footer : $skin_not_logged_footer;
+
+	// DevCraft Admin: start
+	if (class_exists(\DevCraft\Modules\Admin\DebugToolbar\ToolbarService::class)) {
+		try {
+			$svc = \DevCraft\Modules\Admin\DebugToolbar\ToolbarService::instance();
+			if (!$svc->isBooted()) {
+				$svc->boot('admin');
+			}
+			$html = $svc->injectIntoHtml((string) $html);
+		} catch (\Throwable) {
+			// Панель не должна ронять админку DLE.
+		}
+	}
+	// DevCraft Admin: end
+
+	echo $html;
+}]]></replacecode>
+      <searchcount>1</searchcount>
+      <replacecount>1</replacecount>
+      <enabled>1</enabled>
+      <dleversion>20</dleversion>
+      <versioncompare>greater</versioncompare>
+    </operation>
+  </file>
   <file name="engine/classes/templates.class.php">
     <operation action="replace">
       <searchcode><![CDATA[		if( $compile_if AND stripos( $this->copy_template, "[if" ) !== false){

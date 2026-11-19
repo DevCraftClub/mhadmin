@@ -30,7 +30,9 @@ if(!defined('DEVCRAFT_BOOTSTRAPPED')) {
 	$dcRoot          = defined('ROOT_DIR') ? rtrim((string) ROOT_DIR, '/\\') . '/devcraft' : __DIR__;
 	$vendor_autoload = $dcRoot . '/vendor/autoload.php';
 
-	require_once $dcRoot . '/src/bootstrap/composer_marker.php';
+	require_once class_exists('DLEPlugins', false)
+		? DLEPlugins::Check($dcRoot . '/src/bootstrap/composer_marker.php')
+		: $dcRoot . '/src/bootstrap/composer_marker.php';
 
 	if(!is_file($vendor_autoload) || !dc_composer_initialized()) {
 		define('DEVCRAFT_VENDOR_MISSING', true);

@@ -187,6 +187,7 @@ final class ModuleGeneratorService {
 		                     && ($normalized['db'] === false || $report['plugin']['fails'] === []);
 
 		if($report['success']) {
+			DataManager::resetManifestCache();
 			LogGenerator::for(self::class)->log(
 				__('Каркас модуля {dir} записан', ['{dir}' => $dirName]),
 				'info',

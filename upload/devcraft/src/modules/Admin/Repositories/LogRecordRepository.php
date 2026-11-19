@@ -30,6 +30,33 @@ use DevCraft\Core\Abstracts\AbstractRepository;
 class LogRecordRepository extends AbstractRepository {
 
 	/**
+	 * Типы для фильтра — без DISTINCT по 50k+ строк (см. LogGenerator::allowedTypes).
+	 *
+	 * @var list<string>
+	 */
+	private const FILTER_LOG_TYPES = [
+		'debug',
+		'info',
+		'notice',
+		'warning',
+		'error',
+		'critical',
+		'urgent',
+	];
+
+	/**
+	 * @return list<string>
+	 */
+	public function distinctColumnValues(string $column): array {
+		if($column === 'log_type') {
+			// Подписи в UI — value=ключ; warn/crit/emergency — алиасы, в фильтре не дублируем.
+			return self::FILTER_LOG_TYPES;
+		}
+
+		return parent::distinctColumnValues($column);
+	}
+
+	/**
 	 * Удаляет запись журнала по строковому UUID.
 	 *
 	 * @since 200.4.0

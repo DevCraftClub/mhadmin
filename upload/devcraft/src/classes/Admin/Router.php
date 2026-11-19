@@ -141,7 +141,9 @@ final class Router {
 		$orchestrator = new PageOrchestrator();
 		$orchestrated = $orchestrator->prepare($page, $plugin, $action);
 
+		ToolbarService::mark('page_handle_start');
 		$result = $page->handle();
+		ToolbarService::mark('page_handle_end');
 
 		$adminContext->finalizeBreadcrumbs($mod, $action);
 
@@ -195,6 +197,7 @@ final class Router {
 			'html_lang' => $data['devcraft_html_lang'],
 		]);
 
+		ToolbarService::mark('layout_start');
 		echo $this->layoutWrap($view, $data, $adminContext, (string) ($meta['version'] ?? '1.0.0'));
 	}
 
@@ -307,12 +310,12 @@ final class Router {
 	private function layoutWrap(string $contentView, array $data, AdminContext $adminContext, string $version): string {
 		$inner = Application::instance()->twig()->render(AbstractPage::resolveViewKey($contentView), $data);
 		$debugToolbar = null;
+		$toolbar      = ToolbarService::instance();
 
-		if(LogGenerator::isDebugEnabled()) {
-			$toolbar = ToolbarService::instance();
+		if($toolbar->isActive('admin')) {
 			// Не вызывать boot() повторно в конце — иначе сбросятся собранные Cycle-запросы.
 			if(!$toolbar->isBooted()) {
-				$toolbar->boot();
+				$toolbar->boot('admin');
 			}
 			$debugToolbar = $toolbar->viewModel();
 		}

@@ -41,6 +41,22 @@ $logsSaveTypesDescr = __('Какие типы записывать в файл, 
                      . __('При включённом debug DevCraft сохраняются все типы независимо от выбора.<br>')
                      . __('Если выбрано «Все», остальные выбранные значения игнорируются');
 
+$debugToolbarGroupOptions = [];
+global $user_group;
+if(is_array($user_group ?? null)) {
+	foreach($user_group as $groupId => $group) {
+		if(!is_array($group) || empty($group['allow_admin'])) {
+			continue;
+		}
+
+		$debugToolbarGroupOptions[(string) $groupId] = (string) ($group['group_name'] ?? $groupId);
+	}
+}
+
+if($debugToolbarGroupOptions === []) {
+	$debugToolbarGroupOptions = ['1' => __('Администраторы')];
+}
+
 return FormSchemaBuilder::create(AdminIdentity::code())
                         ->layout(FormLayout::TABS)
                         ->section(__('Общие'))
@@ -93,6 +109,36 @@ return FormSchemaBuilder::create(AdminIdentity::code())
 			                        __('Для разовой проверки без сохранения настроек: <code>?dc_debug=1</code> (сессия DLE, действует во всех вкладках браузера).'),
 		                        )
 		                        ->default(false)
+	                        ->checkbox('debug_toolbar', __('Показывать панель отладки'))
+		                        ->description(
+			                        __('Нижняя панель с SQL-запросами ($db, Cycle и прочие). Не зависит от «Режим отладки» и <code>?dc_debug=1</code> — достаточно этой настройки, группы и места показа.'),
+		                        )
+		                        ->default(true)
+	                        ->checkbox('debug_toolbar_admin', __('Панель в админке'))
+		                        ->description(__('Показывать панель на всех страницах admin.php: настройки DLE, чужие модули и DevCraft.'))
+		                        ->default(true)
+	                        ->checkbox('debug_toolbar_public', __('Панель на сайте'))
+		                        ->description(__('Показывать панель на публичных страницах сайта.'))
+		                        ->default(true)
+	                        ->multi('debug_toolbar_groups', __('Группы с доступом к панели'))
+		                        ->description(
+			                        __('Панель видна только выбранным группам. По умолчанию — администраторы. ')
+			                        . __('Если не выбрано ни одной группы, панель скрыта для всех. ')
+			                        . __('В списке только группы с доступом в админку: панель показывает SQL-запросы.'),
+		                        )
+		                        ->options($debugToolbarGroupOptions)
+		                        ->default('1')
+	                        ->multi('debug_toolbar_panels', __('Источники SQL в панели'))
+		                        ->description(
+			                        __('Какие вкладки показывать в панели. Вкладка All собирает выбранные источники. ')
+			                        . __('Если ничего не выбрано — SQL-вкладки пустые, остаётся только время запроса.'),
+		                        )
+		                        ->options([
+			                        'dle'   => __('$db (DLE)'),
+			                        'cycle' => __('Cycle ORM'),
+			                        'other' => __('Прочие'),
+		                        ])
+		                        ->default('dle cycle other')
                         ->section(__('Пути'))
 	                        ->text('cache_path', __('Путь до кеша файлов'))
 		                        ->description(

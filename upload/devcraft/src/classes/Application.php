@@ -153,11 +153,24 @@ final class Application {
 			return;
 		}
 
+		ToolbarService::mark('devcraft_boot_start');
+
 		Paths::register();
 		$this->registry = new Registry();
 		$this->booted   = true;
 		// После booted: загрузка манифестов может снова вызвать boot() (БД и т.п.).
 		ModulePsr4Registrar::registerAll();
+		ToolbarService::mark('devcraft_psr4');
+
+		// Админка DLE без runAdmin; на сайте — сразу boot('public'), иначе панель
+		// стартует только в main.tpl и «съедает» всю генерацию страницы в один этап.
+		ToolbarService::instance()->hookDleAdmin();
+
+		if(!ToolbarService::instance()->isBooted()) {
+			ToolbarService::instance()->boot('public');
+		}
+
+		ToolbarService::mark('devcraft_boot_end');
 	}
 
 	/**
@@ -183,9 +196,8 @@ final class Application {
 			$_SESSION['dc_debug'] = true;
 		}
 
-		if(LogGenerator::isDebugEnabled()) {
-			ToolbarService::instance()->boot();
-		}
+		ToolbarService::instance()->boot('admin');
+		ToolbarService::mark('run_admin_start');
 
 		$action = '';
 
@@ -275,6 +287,7 @@ final class Application {
 
 		CacheControl::clearCache('all');
 		DataManager::clearCacheContents(Paths::cache());
+		DataManager::resetManifestCache();
 		DevCraftConfig::resetCache();
 
 		$return = (string) ($_GET['return'] ?? '');

@@ -7,6 +7,7 @@ namespace DevCraft\Modules\Admin\Repositories;
 use DevCraft\Core\Abstracts\AbstractRepository;
 use DevCraft\Core\Admin\FilterFormService;
 use DevCraft\Modules\Admin\Models\PublicAssetEntry;
+use DevCraft\Modules\Admin\Services\PublicAssetCatalogCache;
 
 /**
  * Репозиторий записей публичных CSS/JS (`dc_public_assets`).
@@ -105,8 +106,10 @@ class PublicAssetEntryRepository extends AbstractRepository {
 	 * @return list<PublicAssetEntry>
 	 */
 	public function listByKind(string $kind): array {
-		/** @var list<PublicAssetEntry> */
-		return $this->select()->where('kind', $kind)->orderBy('sort_order', 'ASC')->fetchAll();
+		return PublicAssetCatalogCache::assets($kind, function () use ($kind): array {
+			/** @var list<PublicAssetEntry> */
+			return $this->select()->where('kind', $kind)->orderBy('sort_order', 'ASC')->fetchAll();
+		});
 	}
 
 	/**

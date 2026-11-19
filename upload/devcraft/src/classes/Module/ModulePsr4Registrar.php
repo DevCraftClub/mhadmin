@@ -20,7 +20,7 @@ use DevCraft\Core\Logging\LogGenerator;
 final class ModulePsr4Registrar {
 
 	/**
-	 * Регистрирует пространства имён всех загруженных манифестов.
+	 * Регистрирует пространства имён всех модулей (лёгкая карта + файловый кэш).
 	 *
 	 * Ошибка одного модуля не прерывает регистрацию остальных.
 	 *
@@ -28,27 +28,23 @@ final class ModulePsr4Registrar {
 	 */
 	public static function registerAll(): void {
 		try {
-			$manifests = DataManager::readManifest();
+			$map = DataManager::modulePsr4Map();
 		} catch(Throwable $throwable) {
 			LogGenerator::for(self::class)->log(
-				__('Не удалось загрузить манифесты для PSR-4: {msg}', ['{msg}' => $throwable->getMessage()]),
+				__('Не удалось загрузить карту PSR-4: {msg}', ['{msg}' => $throwable->getMessage()]),
 				'warning',
 			);
 
 			return;
 		}
 
-		foreach($manifests as $manifest) {
-			if(!$manifest instanceof ModuleManifest) {
-				continue;
-			}
-
+		foreach($map as $row) {
 			try {
-				self::registerOne($manifest);
+				self::registerPrefix($row['namespace'], $row['path'], $row['id']);
 			} catch(Throwable $throwable) {
 				LogGenerator::for(self::class)->log(
 					__('PSR-4 модуля «{mod}»: {msg}', [
-						'{mod}' => $manifest->id,
+						'{mod}' => $row['id'],
 						'{msg}' => $throwable->getMessage(),
 					]),
 					'warning',
@@ -63,19 +59,30 @@ final class ModulePsr4Registrar {
 	 * @since 200.4.1
 	 */
 	public static function registerOne(ModuleManifest $manifest): void {
-		$prefix = ModuleManifest::normalizeNamespace($manifest->namespace);
+		self::registerPrefix(
+			ModuleManifest::normalizeNamespace($manifest->namespace),
+			rtrim($manifest->path, '/\\'),
+			$manifest->id,
+		);
+	}
+
+	/**
+	 * @since 200.4.2
+	 */
+	public static function registerPrefix(string $prefix, string $path, string $modId = ''): void {
+		$prefix = ModuleManifest::normalizeNamespace($prefix);
 
 		if($prefix === '') {
 			return;
 		}
 
-		$path = rtrim($manifest->path, '/\\');
+		$path = rtrim($path, '/\\');
 
 		if($path === '' || !is_dir($path)) {
 			LogGenerator::for(self::class)->log(
 				__('PSR-4: каталог модуля «{mod}» недоступен: {path}', [
-					'{mod}'  => $manifest->id,
-					'{path}' => $manifest->path,
+					'{mod}'  => $modId !== '' ? $modId : $prefix,
+					'{path}' => $path,
 				]),
 				'warning',
 			);
@@ -83,7 +90,7 @@ final class ModulePsr4Registrar {
 			return;
 		}
 
-		$base = $path . DIRECTORY_SEPARATOR;
+		$base   = $path . DIRECTORY_SEPARATOR;
 		$loader = self::resolveClassLoader();
 
 		if($loader instanceof ClassLoader) {

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace DevCraft\Modules\Admin\DebugToolbar;
 
-use DevCraft\Core\Logging\LogGenerator;
-
 /**
  * Накопитель запросов отладки на один запрос.
  */
@@ -23,7 +21,7 @@ final class QueryRegistry
 
 	public static function record(string $source, string $sql, float|int $timeMs = 0.0, ?string $file = null): void
 	{
-		if(!LogGenerator::isDebugEnabled()) {
+		if(!ToolbarService::instance()->isBooted()) {
 			return;
 		}
 
@@ -91,11 +89,12 @@ final class QueryRegistry
 	{
 		$skipClasses = [
 			self::class,
+			CycleQueryLogger::class,
 			ToolbarService::class,
 			\DevCraft\Core\Database\DatabaseGateway::class,
 		];
 
-		foreach(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8) as $frame) {
+		foreach(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 24) as $frame) {
 			$class = (string) ($frame['class'] ?? '');
 			$file  = (string) ($frame['file'] ?? '');
 
@@ -104,6 +103,11 @@ final class QueryRegistry
 			}
 
 			if($class !== '' && in_array($class, $skipClasses, true)) {
+				continue;
+			}
+
+			// Внутри Cycle DBAL / ORM — ищем вызывающий код приложения.
+			if(str_starts_with($class, 'Cycle\\') || str_contains($file, '/vendor/cycle/')) {
 				continue;
 			}
 

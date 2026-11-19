@@ -157,6 +157,10 @@ final class LogGenerator {
 	 *     $debug = LogGenerator::isDebugEnabled();
 	 */
 	public static function isDebugEnabled(): bool {
+		if(isset($_GET['dc_debug']) && (string) $_GET['dc_debug'] === '1') {
+			return true;
+		}
+
 		if(isset($_SESSION['dc_debug']) && $_SESSION['dc_debug'] === true) {
 			return true;
 		}

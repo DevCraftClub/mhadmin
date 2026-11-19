@@ -644,7 +644,7 @@ final class Translation {
 		if(is_file($metaFile)) {
 			try {
 				/** @var mixed $loaded */
-				$loaded = require $metaFile;
+				$loaded = require \DLEPlugins::Check($metaFile);
 
 				if($loaded instanceof LanguageData) {
 					return $loaded;

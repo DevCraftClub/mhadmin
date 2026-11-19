@@ -39,7 +39,7 @@ return [
 					'id'    => 'app_code',
 					'type'  => 'multi',
 					'label' => __('Код приложения'),
-					'metro' => ['db_column' => 'appCode'],
+					'metro' => ['db_column' => 'app_code'],
 				],
 				[
 					'id'    => 'required',

@@ -25,6 +25,7 @@ use Cycle\Annotated\Annotation\Table\Index;
 use Cycle\ORM\Entity\Behavior\Event\Mapper\Command\OnCreate;
 use Cycle\ORM\Entity\Behavior\Event\Mapper\Command\OnUpdate;
 use DevCraft\Core\Database\Audit\CreatedByHook;
+use DevCraft\Core\Database\Audit\CurrentDleUserId;
 use DevCraft\Core\Database\Audit\UpdatedByHook;
 
 /**
@@ -104,16 +105,31 @@ abstract class AbstractEntity {
 	protected int $id;
 
 	/**
-	 * Совместимость: раньше писал автора. Теперь автор заполняется поведениями Cycle.
+	 * Пишет автора из `$member_id` DLE.
+	 *
+	 * Поведения Cycle `CreatedByHook` / `UpdatedByHook` на этом классе в схему ORM
+	 * не попадают (атрибуты родителя не наследуются компилятором) — поэтому автор
+	 * ставится здесь, до persist.
 	 *
 	 * @since 200.4.0
-	 * @since 200.4.1 Не записывает `creator` / `lastEditor`.
 	 *
 	 * @example
 	 *     $entity->beforeSave();
 	 *     $database->getManager()->persist($entity)->run();
 	 */
-	public function beforeSave(): void {}
+	public function beforeSave(): void {
+		$id = CurrentDleUserId::resolve();
+
+		if($id <= 0) {
+			return;
+		}
+
+		if($this->id() === 0 && ($this->creator === null || $this->creator === 0)) {
+			$this->setCreator($id);
+		}
+
+		$this->setLastEditor($id);
+	}
 
 	/**
 	 * Возвращает дату и время создания записи.

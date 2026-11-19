@@ -22,29 +22,36 @@ final class PublicAssetTagService {
 
 	private static bool $debugToolbarBufferStarted = false;
 
+	/** @var array<string, list<PublicAssetEntry>> */
+	private static array $assetsByKind = [];
+
+	/** @var list<PublicHeaderEntry>|null */
+	private static ?array $headersCache = null;
+
 	public function __construct(
 		private readonly PublicAssetDependencyService $deps = new PublicAssetDependencyService(),
 	) {}
 
 	public function applyToTemplate(object $tpl): void {
 		if(LogGenerator::isDebugEnabled()) {
-			ToolbarService::instance()->boot();
-
-			// Не ob_start: у DLE свои буферы — callback мог отдавать пустую страницу.
-			if(!self::$debugToolbarBufferStarted) {
-				self::$debugToolbarBufferStarted = true;
-				register_shutdown_function(static function (): void {
-					try {
-						echo ToolbarService::instance()->renderHtml();
-					} catch(\Throwable) {
-						// Панель не должна ронять публичную страницу.
-					}
-				});
-			}
-
 			// Публичка не сидит списки: полный seed — Dashboard / Public Assets.
 			// В debug — только sync, если изменились mtime манифестов.
 			(new PublicAssetManifestSyncService())->syncIfChanged();
+		}
+
+		$toolbar = ToolbarService::instance();
+		$toolbar->boot('public');
+
+		// Не ob_start: у DLE свои буферы — callback мог отдавать пустую страницу.
+		if($toolbar->isBooted() && !self::$debugToolbarBufferStarted) {
+			self::$debugToolbarBufferStarted = true;
+			register_shutdown_function(static function (): void {
+				try {
+					echo ToolbarService::instance()->renderHtml();
+				} catch(\Throwable) {
+					// Панель не должна ронять публичную страницу.
+				}
+			});
 		}
 
 		$copy = (string) ($tpl->copy_template ?? '');
@@ -56,29 +63,26 @@ final class PublicAssetTagService {
 			return;
 		}
 
+		// Считать только нужные части: раньше всегда вызывались bundle+header+scripts → ×2–×3 одних SQL.
 		$conflict = $hasAll && ($hasHeader || $hasScripts);
-		$bundle   = $this->renderBundle();
-		$header   = $this->renderHeader();
-		$scripts  = $this->renderScripts();
 
-		if($conflict) {
-			$tpl->set('{devcraft}', $bundle);
-			$tpl->set('{devcraft-header}', '');
-			$tpl->set('{devcraft-scripts}', '');
+		if($conflict || $hasAll) {
+			$tpl->set('{devcraft}', $this->renderBundle());
+
+			if($conflict) {
+				$tpl->set('{devcraft-header}', '');
+				$tpl->set('{devcraft-scripts}', '');
+			}
 
 			return;
 		}
 
-		if($hasAll) {
-			$tpl->set('{devcraft}', $bundle);
-		}
-
 		if($hasHeader) {
-			$tpl->set('{devcraft-header}', $header);
+			$tpl->set('{devcraft-header}', $this->renderHeader());
 		}
 
 		if($hasScripts) {
-			$tpl->set('{devcraft-scripts}', $scripts);
+			$tpl->set('{devcraft-scripts}', $this->renderScripts());
 		}
 	}
 
@@ -156,10 +160,16 @@ final class PublicAssetTagService {
 	 * @return list<PublicAssetEntry>
 	 */
 	private function outputAssets(string $kind): array {
+		$sectionKey = DleSiteSectionRegistry::instance()->currentKey();
+		$cacheKey   = $kind . ':' . $sectionKey;
+
+		if(isset(self::$assetsByKind[$cacheKey])) {
+			return self::$assetsByKind[$cacheKey];
+		}
+
 		try {
 			/** @var PublicAssetEntryRepository $repo */
 			$repo       = Application::instance()->database()->repository(PublicAssetEntry::class);
-			$sectionKey = DleSiteSectionRegistry::instance()->currentKey();
 			$entries    = $repo->listByKind($kind);
 			$depsMap    = $this->deps->buildDepsMap($entries);
 			$candidates = [];
@@ -191,11 +201,11 @@ final class PublicAssetTagService {
 				}
 			}
 
-			return $result;
+			return self::$assetsByKind[$cacheKey] = $result;
 		} catch(\Throwable $e) {
 			$this->swallowed('outputAssets', $e);
 
-			return [];
+			return self::$assetsByKind[$cacheKey] = [];
 		}
 	}
 
@@ -203,6 +213,10 @@ final class PublicAssetTagService {
 	 * @return list<PublicHeaderEntry>
 	 */
 	private function outputHeaders(): array {
+		if(self::$headersCache !== null) {
+			return self::$headersCache;
+		}
+
 		try {
 			/** @var PublicHeaderEntryRepository $repo */
 			$repo       = Application::instance()->database()->repository(PublicHeaderEntry::class);
@@ -238,11 +252,11 @@ final class PublicAssetTagService {
 				}
 			}
 
-			return $result;
+			return self::$headersCache = $result;
 		} catch(\Throwable $e) {
 			$this->swallowed('outputHeaders', $e);
 
-			return [];
+			return self::$headersCache = [];
 		}
 	}
 

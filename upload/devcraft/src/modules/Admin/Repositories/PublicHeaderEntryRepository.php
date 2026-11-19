@@ -6,6 +6,7 @@ namespace DevCraft\Modules\Admin\Repositories;
 
 use DevCraft\Core\Abstracts\AbstractRepository;
 use DevCraft\Modules\Admin\Models\PublicHeaderEntry;
+use DevCraft\Modules\Admin\Services\PublicAssetCatalogCache;
 
 /**
  * Репозиторий публичных meta-заголовков (`dc_public_headers`).
@@ -69,8 +70,10 @@ class PublicHeaderEntryRepository extends AbstractRepository {
 	 * @return list<PublicHeaderEntry>
 	 */
 	public function listAllOrdered(): array {
-		/** @var list<PublicHeaderEntry> */
-		return $this->select()->orderBy('sort_order', 'ASC')->fetchAll();
+		return PublicAssetCatalogCache::headers(function (): array {
+			/** @var list<PublicHeaderEntry> */
+			return $this->select()->orderBy('sort_order', 'ASC')->fetchAll();
+		});
 	}
 
 	/**

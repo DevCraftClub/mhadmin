@@ -58,6 +58,11 @@ final class PluginContext {
 	private ?FormSchema $settingsSchema = NULL;
 
 	/**
+	 * Схемы грузим при первом запросе — иначе каждый обход модулей (extends) бьёт в БД из settings.schema.php.
+	 */
+	private bool $schemasLoaded = false;
+
+	/**
 	 * @since 200.4.0
 	 * @var array<string, FilterSchema>
 	 */
@@ -90,8 +95,6 @@ final class PluginContext {
 		$this->ajaxPublicMethods = $manifest->ajax->public;
 
 		AdminLinkResolver::validateStartActions($this->menu);
-
-		$this->loadSchemas();
 	}
 
 	/**
@@ -153,6 +156,7 @@ final class PluginContext {
 	}
 
 	public function setSettingsSchema(?FormSchema $schema): void {
+		$this->schemasLoaded  = true;
 		$this->settingsSchema = $schema;
 	}
 
@@ -189,10 +193,14 @@ final class PluginContext {
 	}
 
 	public function settingsSchema(): ?FormSchema {
+		$this->ensureSchemasLoaded();
+
 		return $this->settingsSchema;
 	}
 
 	public function filterSchema(string $action): ?FilterSchema {
+		$this->ensureSchemasLoaded();
+
 		return $this->filterSchemas[$action] ?? NULL;
 	}
 
@@ -318,8 +326,13 @@ final class PluginContext {
 	/**
 	 * Загружает settings.schema.php и Filter/logs.filter.schema.php модуля при наличии.
 	 */
-	private function loadSchemas(): void {
-		$settingsFile = $this->modulePath . '/settings.schema.php';
+	private function ensureSchemasLoaded(): void {
+		if($this->schemasLoaded) {
+			return;
+		}
+
+		$this->schemasLoaded = true;
+		$settingsFile        = $this->modulePath . '/settings.schema.php';
 
 		if(is_file($settingsFile)) {
 			/** Подключает схему настроек модуля. */

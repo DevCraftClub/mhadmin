@@ -19,6 +19,7 @@ namespace DevCraft\Core\Abstracts;
 use DevCraft\Core\Application;
 use Cycle\ORM\Select\Repository;
 use Cycle\ORM\RepositoryInterface;
+use Cycle\Database\Injection\Fragment;
 use Cycle\Database\Injection\Parameter;
 use DevCraft\Core\Admin\FilterFormService;
 use DevCraft\Core\Interfaces\FilterableRepositoryInterface;
@@ -171,10 +172,22 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 			return $this->distinctCache[$column];
 		}
 
-		$rows = $this
-			->select()
+		if(!$this->isSafeColumnName($column)) {
+			return $this->distinctCache[$column] = [];
+		}
+
+		// ORM Select->columns()+groupBy()+fetchAll() всё равно тянет все поля сущности
+		// (см. логи: GROUP BY plugin при SELECT uuid, message, … → 100+ мс).
+		// Берём клон DBAL-запроса и делаем настоящий DISTINCT по одной колонке.
+		$query = $this->select()->getBuilder()->getQuery();
+
+		if($query === null) {
+			return $this->distinctCache[$column] = [];
+		}
+
+		$rows = $query
 			->columns([$column])
-			->groupBy($column)
+			->distinct()
 			->orderBy($column)
 			->fetchAll();
 
@@ -188,9 +201,7 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 			}
 		}
 
-		$this->distinctCache[$column] = $values;
-
-		return $values;
+		return $this->distinctCache[$column] = $values;
 	}
 
 	/**
@@ -210,20 +221,44 @@ abstract class AbstractRepository extends Repository implements RepositoryInterf
 			return $this->boundsCache[$column];
 		}
 
-		$rows = $this
-			->select()
-			->columns([$column])
-			->orderBy($column)
+		if(!$this->isSafeColumnName($column)) {
+			return $this->boundsCache[$column] = ['min' => NULL, 'max' => NULL];
+		}
+
+		// Один SELECT MIN/MAX вместо двух отдельных проходов.
+		$query = $this->select()->getBuilder()->getQuery();
+
+		if($query === null) {
+			return $this->boundsCache[$column] = ['min' => NULL, 'max' => NULL];
+		}
+
+		$quoted = '`' . str_replace('`', '``', $column) . '`';
+		$rows   = $query
+			->columns([
+				new Fragment('MIN(' . $quoted . ') AS bound_min'),
+				new Fragment('MAX(' . $quoted . ') AS bound_max'),
+			])
 			->fetchAll();
 
-		if($rows === []) {
+		$row = $rows[0] ?? null;
+		$min = is_array($row)? ($row['bound_min'] ?? null) : null;
+		$max = is_array($row)? ($row['bound_max'] ?? null) : null;
+
+		if($min === null && $max === null) {
 			return $this->boundsCache[$column] = ['min' => NULL, 'max' => NULL];
 		}
 
 		return $this->boundsCache[$column] = [
-			'min' => $this->extractColumnValue($rows[0], $column),
-			'max' => $this->extractColumnValue($rows[count($rows) - 1], $column),
+			'min' => $min,
+			'max' => $max,
 		];
+	}
+
+	/**
+	 * Имя колонки без точки/выражений — только для DISTINCT/MIN/MAX в фильтрах.
+	 */
+	private function isSafeColumnName(string $column): bool {
+		return preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $column) === 1;
 	}
 
 	/**

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use DevCraft\Core\Config\Paths;
 use DevCraft\Types\AdminLink;
 use DevCraft\Types\ModuleManifest;
 use DevCraft\Builders\ModuleManifestBuilder;
@@ -28,5 +29,5 @@ return ModuleManifestBuilder::create()
 		ModuleAjaxConfigBuilder::create('admin')
 			->method('settings', SettingsHandler::class)
 	)
-	->changelog(require __DIR__ . '/changelog.data.php')
-	->build(__DIR__);
+	->changelog(require DLEPlugins::Check(Paths::modules() . '/%dir%/changelog.data.php'))
+	->build(Paths::modules() . '/%dir%');

@@ -25,30 +25,209 @@
                     role="tabpanel"
                     {% if not loop.first %}hidden{% endif %}
                 >
-                    <header class="dc-debug-toolbar__section-head">
-                        <strong>{{ section.label|e }}</strong>
-                        <span>{{ section.count|default(0) }}</span>
-                    </header>
+                    {% if section.kind|default('sql') == 'timing' %}
+                        {% set timing = toolbar.timing|default({}) %}
+                        <header class="dc-debug-toolbar__section-head">
+                            <strong>Куда ушло время</strong>
+                            <span>{{ timing.request_ms_label|default('0') }} ms</span>
+                        </header>
 
-                    {% if section.items|default([]) %}
-                        <ol class="dc-debug-toolbar__list">
-                            {% for item in section.items %}
-                                <li class="dc-debug-toolbar__item">
-                                    <div class="dc-debug-toolbar__sql">
-                                        <span class="dc-debug-toolbar__source">{{ item.source_label|e }}</span>
-                                        <code class="dc-debug-toolbar__sql-text">{{ item.sql|e }}</code>
+                        {% if timing.verdict|default('') %}
+                            <p class="dc-debug-toolbar__verdict">{{ timing.verdict|e }}</p>
+                        {% endif %}
+
+                        <div class="dc-debug-toolbar__timing-grid">
+                            <div class="dc-debug-toolbar__timing-card">
+                                <span>Всего на сервере</span>
+                                <strong>{{ timing.request_ms_label|default('0') }} ms</strong>
+                            </div>
+                            <div class="dc-debug-toolbar__timing-card">
+                                <span>PHP и прочее ({{ timing.php_pct|default(0) }}%)</span>
+                                <strong>{{ timing.php_ms_label|default('0') }} ms</strong>
+                            </div>
+                            <div class="dc-debug-toolbar__timing-card">
+                                <span>SQL ({{ timing.sql_pct|default(0) }}%)</span>
+                                <strong>{{ timing.sql_ms_label|default('0') }} ms</strong>
+                            </div>
+                            <div class="dc-debug-toolbar__timing-card">
+                                <span>Пик памяти</span>
+                                <strong>{{ timing.memory_label|default('0') }} МБ</strong>
+                            </div>
+                        </div>
+
+                        <div class="dc-debug-toolbar__bars" aria-label="Доля от времени страницы">
+                            <div class="dc-debug-toolbar__bar-row">
+                                <span>PHP</span>
+                                <div class="dc-debug-toolbar__bar-track">
+                                    <i style="width: {{ timing.php_pct|default(0) }}%;" class="is-php"></i>
+                                </div>
+                                <strong>{{ timing.php_pct|default(0) }}%</strong>
+                            </div>
+                            <div class="dc-debug-toolbar__bar-row">
+                                <span>SQL</span>
+                                <div class="dc-debug-toolbar__bar-track">
+                                    <i style="width: {{ timing.sql_pct|default(0) }}%;" class="is-sql"></i>
+                                </div>
+                                <strong>{{ timing.sql_pct|default(0) }}%</strong>
+                            </div>
+                        </div>
+
+                        <h3 class="dc-debug-toolbar__subhead">Этапы генерации (по убыванию)</h3>
+                        {% if timing.stages|default([]) %}
+                            <ol class="dc-debug-toolbar__stages">
+                                {% for stage in timing.stages %}
+                                    <li>
+                                        <div class="dc-debug-toolbar__source-head">
+                                            <span>{{ stage.label|e }}</span>
+                                            <span>{{ stage.ms_label }} ms · {{ stage.pct }}%</span>
+                                        </div>
+                                        <div class="dc-debug-toolbar__bar-track">
+                                            <i style="width: {{ stage.pct }}%;" class="is-stage"></i>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% else %}
+                            <p class="dc-debug-toolbar__empty">Меток этапов пока нет.</p>
+                        {% endif %}
+
+                        <h3 class="dc-debug-toolbar__subhead">По источникам SQL</h3>
+                        <ul class="dc-debug-toolbar__source-list">
+                            {% for row in timing.by_source|default([]) %}
+                                <li>
+                                    <div class="dc-debug-toolbar__source-head">
+                                        <span>{{ row.label|e }}</span>
+                                        <span>{{ row.count }} шт · {{ row.ms_label }} ms · {{ row.pct }}% страницы</span>
                                     </div>
-                                    <div class="dc-debug-toolbar__meta">
-                                        <span>{{ item.time_label|default('0') }} ms</span>
-                                        {% if item.file is defined and item.file %}
-                                            <span>Файл: {{ item.file|e }}</span>
-                                        {% endif %}
+                                    <div class="dc-debug-toolbar__bar-track">
+                                        <i style="width: {{ row.pct }}%;" class="is-source-{{ row.key|e }}"></i>
                                     </div>
                                 </li>
                             {% endfor %}
-                        </ol>
+                        </ul>
+
+                        <h3 class="dc-debug-toolbar__subhead">Самые долгие запросы</h3>
+                        {% if timing.slowest|default([]) %}
+                            <ol class="dc-debug-toolbar__list">
+                                {% for item in timing.slowest %}
+                                    <li class="dc-debug-toolbar__item">
+                                        <div class="dc-debug-toolbar__sql">
+                                            <span class="dc-debug-toolbar__source">{{ item.source_label|e }}</span>
+                                            <code class="dc-debug-toolbar__sql-text">{{ item.sql|e }}</code>
+                                        </div>
+                                        <div class="dc-debug-toolbar__meta">
+                                            <span>{{ item.time_label|default('0') }} ms</span>
+                                            {% if item.file is defined and item.file %}
+                                                <span>Файл: {{ item.file|e }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% else %}
+                            <p class="dc-debug-toolbar__empty">Запросов нет — тормоза, скорее всего, в PHP или внешних вызовах.</p>
+                        {% endif %}
+
+                        <p class="dc-debug-toolbar__note">{{ timing.note|default('')|e }}</p>
+                    {% elseif section.kind|default('sql') == 'vars' %}
+                        {% set vars = toolbar.vars|default({}) %}
+                        <header class="dc-debug-toolbar__section-head">
+                            <strong>Переменные запроса</strong>
+                            <span>{{ vars.count|default(0) }} ключей</span>
+                        </header>
+
+                        {% for bag in vars.bags|default([]) %}
+                            <details class="dc-debug-toolbar__bag"{% if bag.count > 0 and bag.key in ['get', 'post'] %} open{% endif %}>
+                                <summary>
+                                    <strong>{{ bag.label|e }}</strong>
+                                    <span>{{ bag.count }}</span>
+                                </summary>
+                                {% if bag.items|default([]) %}
+                                    <table class="dc-debug-toolbar__vars-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Ключ</th>
+                                                <th>Значение</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in bag.items %}
+                                                <tr{% if item.redacted %} class="is-redacted"{% endif %}>
+                                                    <th scope="row"><code>{{ item.name|e }}</code></th>
+                                                    <td><code>{{ item.value|e }}</code></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p class="dc-debug-toolbar__empty">Пусто.</p>
+                                {% endif %}
+                            </details>
+                        {% endfor %}
+
+                        <details class="dc-debug-toolbar__bag" open>
+                            <summary>
+                                <strong>localStorage</strong>
+                                <span data-toolbar-localstorage-count>0</span>
+                            </summary>
+                            <table class="dc-debug-toolbar__vars-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ключ</th>
+                                        <th>Значение</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-toolbar-localstorage>
+                                    <tr><td colspan="2" class="dc-debug-toolbar__empty">Читается в браузере…</td></tr>
+                                </tbody>
+                            </table>
+                        </details>
+
+                        <details class="dc-debug-toolbar__bag">
+                            <summary>
+                                <strong>sessionStorage</strong>
+                                <span data-toolbar-sessionstorage-count>0</span>
+                            </summary>
+                            <table class="dc-debug-toolbar__vars-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ключ</th>
+                                        <th>Значение</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-toolbar-sessionstorage>
+                                    <tr><td colspan="2" class="dc-debug-toolbar__empty">Читается в браузере…</td></tr>
+                                </tbody>
+                            </table>
+                        </details>
+
+                        <p class="dc-debug-toolbar__note">{{ vars.note|default('')|e }}</p>
                     {% else %}
-                        <p class="dc-debug-toolbar__empty">Запросов нет.</p>
+                        <header class="dc-debug-toolbar__section-head">
+                            <strong>{{ section.label|e }}</strong>
+                            <span>{{ section.count|default(0) }}</span>
+                        </header>
+
+                        {% if section.items|default([]) %}
+                            <ol class="dc-debug-toolbar__list">
+                                {% for item in section.items %}
+                                    <li class="dc-debug-toolbar__item">
+                                        <div class="dc-debug-toolbar__sql">
+                                            <span class="dc-debug-toolbar__source">{{ item.source_label|e }}</span>
+                                            <code class="dc-debug-toolbar__sql-text">{{ item.sql|e }}</code>
+                                        </div>
+                                        <div class="dc-debug-toolbar__meta">
+                                            <span>{{ item.time_label|default('0') }} ms</span>
+                                            {% if item.file is defined and item.file %}
+                                                <span>Файл: {{ item.file|e }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% else %}
+                            <p class="dc-debug-toolbar__empty">Запросов нет.</p>
+                        {% endif %}
                     {% endif %}
                 </section>
             {% endfor %}
@@ -56,9 +235,24 @@
     </div>
 
     <div class="dc-debug-toolbar__bar">
-        <button type="button" class="dc-debug-toolbar__toggle" data-toolbar-toggle aria-expanded="false">
-            <span>Debug</span>
-            <strong>{{ toolbar.request_ms_label|default('0') }} ms</strong>
+        <button
+            type="button"
+            class="dc-debug-toolbar__toggle"
+            data-toolbar-toggle
+            data-speed="{{ toolbar.speed|default('success') }}"
+            aria-expanded="false"
+        >
+            <span class="dc-debug-toolbar__brand">Debug</span>
+            <strong class="dc-debug-toolbar__server" title="Время генерации страницы на сервере">
+                {{ toolbar.request_ms_label|default('0') }} ms
+            </strong>
+            <span class="dc-debug-toolbar__php-total" title="Оценка PHP и прочего без SQL">
+                PHP {{ toolbar.php_ms_label|default(toolbar.timing.php_ms_label|default('0')) }} ms
+            </span>
+            <span class="dc-debug-toolbar__sql-total" title="Сумма времени SQL-запросов">
+                SQL {{ toolbar.sql_ms_label|default('0') }} ms
+            </span>
+            <span class="dc-debug-toolbar__browser" data-toolbar-browser-ms title="Время загрузки в браузере" hidden></span>
             <span>{{ toolbar.total_count|default(0) }} запросов</span>
         </button>
     </div>
@@ -85,6 +279,13 @@
     border-top: 1px solid rgba(148, 163, 184, 0.24);
     background: rgba(15, 23, 42, 0.98);
     box-shadow: 0 -16px 36px rgba(15, 23, 42, 0.35);
+}
+
+/* display:grid у секций иначе перебивает HTML-атрибут hidden */
+.dc-debug-toolbar [hidden],
+.dc-debug-toolbar__panel[hidden],
+.dc-debug-toolbar__section[hidden] {
+    display: none !important;
 }
 
 .dc-debug-toolbar__tabs {
@@ -186,6 +387,189 @@
     color: #94a3b8;
 }
 
+.dc-debug-toolbar__timing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+.dc-debug-toolbar__timing-card {
+    display: grid;
+    gap: 4px;
+    padding: 10px 12px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 12px;
+    background: rgba(2, 6, 23, 0.9);
+}
+
+.dc-debug-toolbar__timing-card span {
+    color: #94a3b8;
+}
+
+.dc-debug-toolbar__timing-card strong {
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+    color: #f8fafc;
+}
+
+.dc-debug-toolbar__bars,
+.dc-debug-toolbar__source-list {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dc-debug-toolbar__bar-row,
+.dc-debug-toolbar__source-head {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.dc-debug-toolbar__source-head {
+    grid-template-columns: 1fr auto;
+    margin-bottom: 4px;
+    color: #cbd5e1;
+}
+
+.dc-debug-toolbar__bar-track {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(51, 65, 85, 0.9);
+    overflow: hidden;
+}
+
+.dc-debug-toolbar__bar-track i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #38bdf8;
+}
+
+.dc-debug-toolbar__bar-track i.is-sql { background: #38bdf8; }
+.dc-debug-toolbar__bar-track i.is-php { background: #a78bfa; }
+.dc-debug-toolbar__bar-track i.is-stage { background: #f472b6; }
+.dc-debug-toolbar__bar-track i.is-source-dle { background: #34d399; }
+.dc-debug-toolbar__bar-track i.is-source-cycle { background: #fbbf24; }
+.dc-debug-toolbar__bar-track i.is-source-other { background: #fb7185; }
+
+.dc-debug-toolbar__verdict {
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 12px;
+    background: rgba(120, 53, 15, 0.35);
+    color: #fde68a;
+}
+
+.dc-debug-toolbar__stages {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+}
+
+.dc-debug-toolbar__subhead {
+    margin: 8px 0 0;
+    font-size: 12px;
+    font-weight: 650;
+    color: #e2e8f0;
+}
+
+.dc-debug-toolbar__note {
+    margin: 4px 0 0;
+    color: #64748b;
+}
+
+.dc-debug-toolbar__bag {
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 12px;
+    background: rgba(2, 6, 23, 0.9);
+    overflow: hidden;
+}
+
+.dc-debug-toolbar__bag + .dc-debug-toolbar__bag {
+    margin-top: 8px;
+}
+
+.dc-debug-toolbar__bag > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    list-style: none;
+    color: #e2e8f0;
+}
+
+.dc-debug-toolbar__bag > summary::-webkit-details-marker {
+    display: none;
+}
+
+.dc-debug-toolbar__bag > summary span {
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
+.dc-debug-toolbar__vars-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.dc-debug-toolbar__vars-table th,
+.dc-debug-toolbar__vars-table td {
+    padding: 8px 12px;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    text-align: left;
+    vertical-align: top;
+    word-break: break-word;
+}
+
+.dc-debug-toolbar__vars-table thead th {
+    width: 30%;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.dc-debug-toolbar__vars-table tbody th {
+    width: 30%;
+    color: #7dd3fc !important;
+    font-weight: 500;
+}
+
+.dc-debug-toolbar .dc-debug-toolbar__vars-table code,
+.dc-debug-toolbar__vars-table code {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent !important;
+    font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    opacity: 1 !important;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.dc-debug-toolbar .dc-debug-toolbar__vars-table tbody th code,
+.dc-debug-toolbar__vars-table tbody th code {
+    color: #7dd3fc !important;
+    -webkit-text-fill-color: #7dd3fc !important;
+}
+
+.dc-debug-toolbar .dc-debug-toolbar__vars-table tr.is-redacted td code,
+.dc-debug-toolbar__vars-table tr.is-redacted td code {
+    color: #fbbf24 !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+}
+
 .dc-debug-toolbar__bar {
     border-top: 1px solid rgba(148, 163, 184, 0.24);
     background: rgba(2, 6, 23, 0.98);
@@ -195,21 +579,58 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px 16px;
     padding: 10px 14px;
     border: 0;
     background: transparent;
     color: inherit;
     cursor: pointer;
+    position: relative;
 }
 
-.dc-debug-toolbar__toggle strong {
+.dc-debug-toolbar__toggle::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 5px;
+    height: 22px;
+    transform: translateY(-50%);
+    border-radius: 0 4px 4px 0;
+    background: #38bdf8;
+}
+
+.dc-debug-toolbar__toggle[data-speed="success"]::before { background: #4ade80; }
+.dc-debug-toolbar__toggle[data-speed="warn"]::before { background: #fbbf24; }
+.dc-debug-toolbar__toggle[data-speed="error"]::before { background: #f87171; }
+
+.dc-debug-toolbar__brand {
+    margin-left: 8px;
+    color: #cbd5e1;
+}
+
+.dc-debug-toolbar__server {
+    min-width: 4.5rem;
+    font-variant-numeric: tabular-nums;
     color: #38bdf8;
 }
 
+.dc-debug-toolbar__toggle[data-speed="success"] .dc-debug-toolbar__server { color: #4ade80; }
+.dc-debug-toolbar__toggle[data-speed="warn"] .dc-debug-toolbar__server { color: #fbbf24; }
+.dc-debug-toolbar__toggle[data-speed="error"] .dc-debug-toolbar__server { color: #f87171; }
+
+.dc-debug-toolbar__php-total,
+.dc-debug-toolbar__sql-total,
+.dc-debug-toolbar__browser,
 .dc-debug-toolbar__toggle span {
     color: #cbd5e1;
+    font-variant-numeric: tabular-nums;
+}
+
+.dc-debug-toolbar__php-total {
+    color: #c4b5fd;
 }
 </style>
 
@@ -254,7 +675,7 @@
         openPanel(!isOpen);
 
         if (!isOpen) {
-            selectTab('all');
+            selectTab('time');
         }
     });
 
@@ -265,6 +686,105 @@
         });
     });
 
-    selectTab('all');
+    selectTab('time');
+
+    const browser = root.querySelector('[data-toolbar-browser-ms]');
+    const fillBrowserMs = function () {
+        if (!browser || !window.performance || typeof performance.getEntriesByType !== 'function') {
+            return;
+        }
+
+        const nav = performance.getEntriesByType('navigation')[0];
+        if (!nav || !nav.duration) {
+            return;
+        }
+
+        browser.hidden = false;
+        browser.textContent = Math.round(nav.duration) + ' ms браузер';
+    };
+
+    if (document.readyState === 'complete') {
+        fillBrowserMs();
+    } else {
+        window.addEventListener('load', fillBrowserMs);
+    }
+
+    const escapeHtml = function (value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    };
+
+    const isSensitiveKey = function (key) {
+        const normalized = String(key).toLowerCase();
+        const needles = ['password', 'passwd', 'pass', 'secret', 'token', 'api_key', 'apikey', 'authorization', 'auth', 'csrf', 'hash', 'salt', 'private', 'session_id'];
+
+        return needles.some(function (needle) {
+            return normalized.indexOf(needle) !== -1;
+        });
+    };
+
+    const fillStorage = function (storage, bodySelector, countSelector) {
+        const body = root.querySelector(bodySelector);
+        const count = root.querySelector(countSelector);
+
+        if (!body) {
+            return;
+        }
+
+        let html = '';
+        let total = 0;
+
+        try {
+            if (!storage) {
+                throw new Error('unavailable');
+            }
+
+            const keys = [];
+            for (let i = 0; i < storage.length; i += 1) {
+                keys.push(storage.key(i));
+            }
+            keys.sort();
+            total = keys.length;
+
+            if (keys.length === 0) {
+                html = '<tr><td colspan="2" class="dc-debug-toolbar__empty">Пусто.</td></tr>';
+            } else {
+                keys.forEach(function (key) {
+                    if (!key) {
+                        return;
+                    }
+
+                    let value = storage.getItem(key) || '';
+                    const redacted = isSensitiveKey(key);
+
+                    if (redacted) {
+                        value = '••••••••';
+                    } else if (value.length > 500) {
+                        value = value.slice(0, 500) + '…';
+                    }
+
+                    html += '<tr' + (redacted ? ' class="is-redacted"' : '') + '>'
+                        + '<th scope="row"><code>' + escapeHtml(key) + '</code></th>'
+                        + '<td><code>' + escapeHtml(value) + '</code></td>'
+                        + '</tr>';
+                });
+            }
+        } catch (error) {
+            html = '<tr><td colspan="2" class="dc-debug-toolbar__empty">Недоступно в этом контексте.</td></tr>';
+            total = 0;
+        }
+
+        body.innerHTML = html;
+
+        if (count) {
+            count.textContent = String(total);
+        }
+    };
+
+    fillStorage(window.localStorage, '[data-toolbar-localstorage]', '[data-toolbar-localstorage-count]');
+    fillStorage(window.sessionStorage, '[data-toolbar-sessionstorage]', '[data-toolbar-sessionstorage-count]');
 })();
 </script>

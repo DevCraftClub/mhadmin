@@ -14,6 +14,9 @@ use DevCraft\Modules\Admin\Repositories\PublicAssetEntryRepository;
  */
 final class PublicAssetBundleCacheService {
 
+	/** @var array<string, list<PublicAssetEntry>> */
+	private static array $entriesByKindSection = [];
+
 	public function __construct(
 		private readonly PublicAssetMinify            $minify = new PublicAssetMinify(),
 		private readonly PublicAssetDependencyService $deps   = new PublicAssetDependencyService(),
@@ -100,6 +103,8 @@ final class PublicAssetBundleCacheService {
 	}
 
 	public function invalidateAllSections(string $kind): void {
+		PublicAssetCatalogCache::invalidate();
+
 		$dir = Paths::cache() . '/public_assets';
 		if(!is_dir($dir)) {
 			return;
@@ -123,6 +128,12 @@ final class PublicAssetBundleCacheService {
 	 * @return list<PublicAssetEntry>
 	 */
 	private function activeEntriesForSection(string $kind, string $sectionKey): array {
+		$cacheKey = $kind . ':' . $sectionKey;
+
+		if(isset(self::$entriesByKindSection[$cacheKey])) {
+			return self::$entriesByKindSection[$cacheKey];
+		}
+
 		try {
 			/** @var PublicAssetEntryRepository $repo */
 			$repo    = Application::instance()->database()->repository(PublicAssetEntry::class);
@@ -159,9 +170,9 @@ final class PublicAssetBundleCacheService {
 				$result[] = $byId[$id];
 			}
 
-			return $result;
+			return self::$entriesByKindSection[$cacheKey] = $result;
 		} catch(\Throwable) {
-			return [];
+			return self::$entriesByKindSection[$cacheKey] = [];
 		}
 	}
 

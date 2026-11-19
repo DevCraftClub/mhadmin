@@ -40,6 +40,20 @@ use DevCraft\Core\Exception\JsonResponseException;
 final class DataManager {
 
 	/**
+	 * Манифесты модулей в рамках одного запроса.
+	 *
+	 * @var array<string, ModuleManifest>|null
+	 */
+	private static ?array $manifestsCache = null;
+
+	/**
+	 * PSR-4 карта модулей в рамках одного запроса.
+	 *
+	 * @var list<array{id: string, namespace: string, path: string}>|null
+	 */
+	private static ?array $psr4MapCache = null;
+
+	/**
 	 * Возвращает карту манифестов модулей, индексированную по `mod`.
 	 *
 	 * @since 200.4.0
@@ -51,6 +65,84 @@ final class DataManager {
 	 */
 	public static function readManifest(): array {
 		return self::loadManifests();
+	}
+
+	/**
+	 * Лёгкая карта namespace → path для PSR-4 (файловый кэш между запросами).
+	 *
+	 * На публичном boot не нужно `require` всех manifest.php на каждый hit.
+	 *
+	 * @return list<array{id: string, namespace: string, path: string}>
+	 */
+	public static function modulePsr4Map(): array {
+		if(self::$psr4MapCache !== null) {
+			return self::$psr4MapCache;
+		}
+
+		$modulesRoot = Paths::modules();
+
+		if(!is_dir($modulesRoot)) {
+			return self::$psr4MapCache = [];
+		}
+
+		$fingerprint = self::moduleManifestFingerprint($modulesRoot);
+		$cacheFile   = rtrim(Paths::cache(), '/\\') . '/module_psr4.php';
+
+		if(is_file($cacheFile)) {
+			try {
+				/** @var mixed $cached */
+				$cached = include $cacheFile;
+
+				if(
+					is_array($cached)
+					&& ($cached['fp'] ?? null) === $fingerprint
+					&& isset($cached['map'])
+					&& is_array($cached['map'])
+				) {
+					/** @var list<array{id: string, namespace: string, path: string}> $map */
+					$map = [];
+
+					foreach($cached['map'] as $row) {
+						if(!is_array($row)) {
+							continue;
+						}
+
+						$id  = (string) ($row['id'] ?? '');
+						$ns  = (string) ($row['namespace'] ?? '');
+						$dir = (string) ($row['path'] ?? '');
+
+						if($id === '' || $ns === '' || $dir === '') {
+							continue;
+						}
+
+						$map[] = ['id' => $id, 'namespace' => $ns, 'path' => $dir];
+					}
+
+					return self::$psr4MapCache = $map;
+				}
+			} catch(Throwable) {
+				// Пересоберём карту ниже.
+			}
+		}
+
+		$map = self::buildModulePsr4Map($modulesRoot);
+		self::writeModulePsr4Cache($cacheFile, $fingerprint, $map);
+
+		return self::$psr4MapCache = $map;
+	}
+
+	/**
+	 * Сбрасывает кэш манифестов (после генерации модуля / смены каталогов).
+	 */
+	public static function resetManifestCache(): void {
+		self::$manifestsCache = null;
+		self::$psr4MapCache   = null;
+
+		$cacheFile = rtrim(Paths::cache(), '/\\') . '/module_psr4.php';
+
+		if(is_file($cacheFile)) {
+			@unlink($cacheFile);
+		}
 	}
 
 	/**
@@ -107,23 +199,130 @@ final class DataManager {
 	 *
 	 * @return array<string, ModuleManifest> Карта mod → метаданные.
 	 */
-	private static function loadManifests(): array {
-		$modulesRoot = Paths::modules();
+	/**
+	 * @return list<array{id: string, namespace: string, path: string}>
+	 */
+	private static function buildModulePsr4Map(string $modulesRoot): array {
+		$map     = [];
+		$entries = scandir($modulesRoot, SCANDIR_SORT_NONE);
 
-		if(!is_dir($modulesRoot)) {
+		if($entries === false) {
 			return [];
 		}
 
-		$entries = self::scanDirectory($modulesRoot);
+		foreach($entries as $entry) {
+			if($entry === '.' || $entry === '..') {
+				continue;
+			}
 
-		if($entries === []) {
-			return [];
+			$modulePath   = self::normalizePath($modulesRoot . '/' . $entry);
+			$manifestFile = $modulePath . '/manifest.php';
+
+			if(!is_dir($modulePath) || !is_file($manifestFile)) {
+				continue;
+			}
+
+			try {
+				$loaded = require DLEPlugins::Check($manifestFile);
+
+				if(!$loaded instanceof ModuleManifest && !is_array($loaded)) {
+					continue;
+				}
+
+				$manifest = ModuleManifest::fromLoaded(
+					$loaded instanceof ModuleManifest ? $loaded->id : (string) ($loaded['mod'] ?? $entry),
+					$loaded,
+					$modulePath,
+				);
+				$ns = ModuleManifest::normalizeNamespace($manifest->namespace);
+
+				if($ns === '') {
+					continue;
+				}
+
+				$map[] = [
+					'id'        => $manifest->id,
+					'namespace' => $ns,
+					'path'      => rtrim($manifest->path, '/\\'),
+				];
+			} catch(Throwable) {
+				continue;
+			}
+		}
+
+		return $map;
+	}
+
+	private static function moduleManifestFingerprint(string $modulesRoot): string {
+		$parts   = [];
+		$entries = scandir($modulesRoot, SCANDIR_SORT_NONE);
+
+		if($entries === false) {
+			return 'empty';
+		}
+
+		foreach($entries as $entry) {
+			if($entry === '.' || $entry === '..') {
+				continue;
+			}
+
+			$manifestFile = $modulesRoot . '/' . $entry . '/manifest.php';
+
+			if(!is_file($manifestFile)) {
+				continue;
+			}
+
+			$parts[] = $entry . ':' . (string) filemtime($manifestFile);
+		}
+
+		sort($parts);
+
+		return hash('xxh3', implode('|', $parts));
+	}
+
+	/**
+	 * @param   list<array{id: string, namespace: string, path: string}>  $map
+	 */
+	private static function writeModulePsr4Cache(string $cacheFile, string $fingerprint, array $map): void {
+		$dir = dirname($cacheFile);
+
+		if(!is_dir($dir) && !self::createDir($dir)) {
+			return;
+		}
+
+		$export = var_export(
+			[
+				'fp'  => $fingerprint,
+				'map' => $map,
+			],
+			true,
+		);
+
+		@file_put_contents($cacheFile, "<?php\n\nreturn " . $export . ";\n", LOCK_EX);
+	}
+
+	private static function loadManifests(): array {
+		if(self::$manifestsCache !== null) {
+			return self::$manifestsCache;
+		}
+
+		$modulesRoot = Paths::modules();
+
+		if(!is_dir($modulesRoot)) {
+			return self::$manifestsCache = [];
+		}
+
+		// Только каталоги верхнего уровня: полный scanDirectory обходил все 600+ файлов модулей.
+		$entries = scandir($modulesRoot, SCANDIR_SORT_NONE);
+
+		if($entries === false) {
+			return self::$manifestsCache = [];
 		}
 
 		$manifests = [];
 
-		foreach($entries as $entry => $subtree) {
-			if(!is_string($entry)) {
+		foreach($entries as $entry) {
+			if($entry === '.' || $entry === '..') {
 				continue;
 			}
 
@@ -185,7 +384,7 @@ final class DataManager {
 
 		ksort($manifests);
 
-		return $manifests;
+		return self::$manifestsCache = $manifests;
 	}
 
 	/**

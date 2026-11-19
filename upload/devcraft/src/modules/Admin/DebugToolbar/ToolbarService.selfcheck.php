@@ -26,7 +26,7 @@ assert(str_contains($registry, 'function record'), 'QueryRegistry::record');
 assert(str_contains($partial, 'data-devcraft-debug-toolbar'), 'toolbar marker');
 assert(str_contains($layout, 'debug_toolbar.twig'), 'admin layout include');
 assert(str_contains($tag, 'ToolbarService::instance()->boot()'), 'public boot');
-assert(str_contains($tag, 'ob_start'), 'public output buffer inject');
+assert(str_contains($tag, 'register_shutdown_function'), 'public shutdown inject');
 assert(str_contains($app, 'ToolbarService::instance()->boot()'), 'admin runAdmin boot');
 assert(str_contains($router, 'viewModel()'), 'Router passes viewModel');
 assert(str_contains($gateway, "QueryRegistry::record('cycle'"), 'Cycle query recording');

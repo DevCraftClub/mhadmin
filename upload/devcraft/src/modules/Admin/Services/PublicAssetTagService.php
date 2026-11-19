@@ -30,9 +30,16 @@ final class PublicAssetTagService {
 		if(LogGenerator::isDebugEnabled()) {
 			ToolbarService::instance()->boot();
 
+			// Не ob_start: у DLE свои буферы — callback мог отдавать пустую страницу.
 			if(!self::$debugToolbarBufferStarted) {
-				ob_start([ToolbarService::instance(), 'injectIntoHtml']);
 				self::$debugToolbarBufferStarted = true;
+				register_shutdown_function(static function (): void {
+					try {
+						echo ToolbarService::instance()->renderHtml();
+					} catch(\Throwable) {
+						// Панель не должна ронять публичную страницу.
+					}
+				});
 			}
 
 			// Публичка не сидит списки: полный seed — Dashboard / Public Assets.

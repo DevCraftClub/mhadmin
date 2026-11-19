@@ -44,30 +44,38 @@ final class ToolbarService
 			return '';
 		}
 
-		return Application::instance()->twig()->render('core/includes/debug_toolbar.twig', [
-			'toolbar' => $this->viewModel(),
-		]);
+		try {
+			return Application::instance()->twig()->render('core/includes/debug_toolbar.twig', [
+				'toolbar' => $this->viewModel(),
+			]);
+		} catch(\Throwable) {
+			return '';
+		}
 	}
 
 	public function injectIntoHtml(string $html): string
 	{
-		if(!LogGenerator::isDebugEnabled()) {
+		if(!LogGenerator::isDebugEnabled() || $html === '') {
 			return $html;
 		}
 
-		$toolbar = $this->renderHtml();
+		try {
+			$toolbar = $this->renderHtml();
 
-		if($toolbar === '' || str_contains($html, 'data-devcraft-debug-toolbar')) {
+			if($toolbar === '' || str_contains($html, 'data-devcraft-debug-toolbar')) {
+				return $html;
+			}
+
+			$position = strripos($html, '</body>');
+
+			if($position === false) {
+				return $html . $toolbar;
+			}
+
+			return substr($html, 0, $position) . $toolbar . substr($html, $position);
+		} catch(\Throwable) {
 			return $html;
 		}
-
-		$position = strripos($html, '</body>');
-
-		if($position === false) {
-			return $html . $toolbar;
-		}
-
-		return substr($html, 0, $position) . $toolbar . substr($html, $position);
 	}
 
 	/**

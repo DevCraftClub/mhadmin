@@ -50,6 +50,28 @@
 		return input && input.value ? input.value : '';
 	}
 
+	function setUserHash(hash) {
+		if (typeof hash !== 'string' || hash === '') {
+			return;
+		}
+
+		global.dle_login_hash = hash;
+		document.querySelectorAll('input[name="user_hash"], input[name="dle_login_hash"]').forEach(function (input) {
+			input.value = hash;
+		});
+	}
+
+	function isStaleSessionHash(payload) {
+		return !!(payload
+			&& payload.success === false
+			&& payload.error
+			&& payload.error.code === 'auth_failed'
+			&& payload.data
+			&& typeof payload.data.dle_login_hash === 'string'
+			&& payload.data.dle_login_hash !== ''
+			&& payload.data.dle_login_hash !== getUserHash());
+	}
+
 	function parseJsonResponse(response) {
 		const contentType = response.headers.get('content-type') || '';
 
@@ -151,20 +173,40 @@
 		notify(notice.title || t('Уведомление'), notice.message, notice.type || 'info');
 	}
 
-	function post(mod, method, data) {
+	/**
+	 * @param {string} mod
+	 * @param {string} method
+	 * @param {object} [data]
+	 * @param {{silent?: boolean, retried?: boolean}} [options] silent — без всплывающих ошибок (фон/опрос)
+	 */
+	function post(mod, method, data, options) {
+		const opts = options && typeof options === 'object' ? options : {};
+		const silent = !!opts.silent;
+		const retried = !!opts.retried;
+
 		return fetch(buildUrl(ajaxBaseUrl(), {
 			mod: mod,
 			controller: 'public',
 			method: method
 		}), {
 			method: 'POST',
+			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams({
 				user_hash: getUserHash(),
 				data: JSON.stringify(data || {})
 			}).toString()
 		}).then(parseJsonResponse).then(function (payload) {
-			handleNotice(payload);
+			// Вход в другом браузере меняет hash в БД — подтянуть и повторить один раз без тоста.
+			if (!retried && isStaleSessionHash(payload)) {
+				setUserHash(payload.data.dle_login_hash);
+				return post(mod, method, data, { silent: silent, retried: true });
+			}
+
+			if (!silent) {
+				handleNotice(payload);
+			}
+
 			return payload;
 		});
 	}

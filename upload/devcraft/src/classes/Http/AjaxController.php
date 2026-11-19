@@ -98,22 +98,29 @@ final class AjaxController {
 			return;
 		}
 
-		$allowGuest = $isPublic && $registry->allowsGuest($request->controller, $request->method);
+		$allowGuest  = $isPublic && $registry->allowsGuest($request->controller, $request->method);
+		$requestHash = (string) ($_REQUEST['user_hash'] ?? '');
 
 		if (!$allowGuest) {
-			$requestHash = (string) ($_REQUEST['user_hash'] ?? '');
-
 			if ($requestHash === '' || !isset($dle_login_hash) || $requestHash !== $dle_login_hash) {
 				LogGenerator::for(AjaxController::class)->log([
-					'error'          => __('Недопустимый хеш сессии'),
-					'requestHash'    => $requestHash,
-					'dle_login_hash' => $dle_login_hash,
+					'error'       => __('Недопустимый хеш сессии'),
+					'requestHash' => $requestHash === '' ? '' : substr($requestHash, 0, 8),
+					'expectHash'  => substr((string) $dle_login_hash, 0, 8),
 				]);
+				// Полный хеш только для вошедшего: клиент подтянет и повторит. Гостю токен не отдаём.
+				$failData = [];
+
+				if ((!empty($is_logged) || !empty($is_loged_in)) && (string) $dle_login_hash !== '') {
+					$failData['dle_login_hash'] = (string) $dle_login_hash;
+				}
+
 				$this->sendTimed(JsonResponse::fail(
 					__('Ошибка'),
 					__('Недопустимый хеш сессии'),
 					'auth_failed',
 					403,
+					$failData === [] ? [] : ['data' => $failData],
 				),
 					$mark);
 
@@ -184,12 +191,12 @@ final class AjaxController {
 		} catch (JsonResponseException $e) {
 			$mark('handler_fail');
 			LogGenerator::for(AjaxController::class)->log([
-				'error'          => $e->getMessage(),
-				'requestHash'    => $requestHash,
-				'dle_login_hash' => $dle_login_hash,
-				'handlerClass'   => $handlerClass,
-				'plugin'         => $plugin,
-				'request'        => $request,
+				'error'        => $e->getMessage(),
+				'requestHash'  => $requestHash === '' ? '' : substr($requestHash, 0, 8),
+				'expectHash'   => substr((string) ($dle_login_hash ?? ''), 0, 8),
+				'handlerClass' => $handlerClass,
+				'plugin'       => $plugin,
+				'request'      => $request,
 			]);
 			$this->sendTimed($e->response(), $mark);
 
@@ -197,12 +204,12 @@ final class AjaxController {
 		} catch (\Throwable $e) {
 			$mark('handler_fail');
 			LogGenerator::for(AjaxController::class)->log([
-				'error'          => $e->getMessage(),
-				'requestHash'    => $requestHash,
-				'dle_login_hash' => $dle_login_hash,
-				'handlerClass'   => $handlerClass,
-				'plugin'         => $plugin,
-				'request'        => $request,
+				'error'        => $e->getMessage(),
+				'requestHash'  => $requestHash === '' ? '' : substr($requestHash, 0, 8),
+				'expectHash'   => substr((string) ($dle_login_hash ?? ''), 0, 8),
+				'handlerClass' => $handlerClass,
+				'plugin'       => $plugin,
+				'request'      => $request,
 			]);
 			$this->sendInternalError($e);
 
@@ -210,16 +217,16 @@ final class AjaxController {
 		}
 
 		LogGenerator::for(AjaxController::class)->log([
-			'error'          => __('Обработчик недоступен для вызова: {method} (mod={mod}, controller={controller})', [
+			'error' => __('Обработчик недоступен для вызова: {method} (mod={mod}, controller={controller})', [
 				'{method}'     => $request->method,
 				'{mod}'        => $request->mod,
 				'{controller}' => $request->controller,
 			]),
-			'requestHash'    => $requestHash,
-			'dle_login_hash' => $dle_login_hash,
-			'handlerClass'   => $handlerClass,
-			'plugin'         => $plugin,
-			'request'        => $request,
+			'requestHash'  => $requestHash === '' ? '' : substr($requestHash, 0, 8),
+			'expectHash'   => substr((string) ($dle_login_hash ?? ''), 0, 8),
+			'handlerClass' => $handlerClass,
+			'plugin'       => $plugin,
+			'request'      => $request,
 		]);
 
 		$this->sendTimed(JsonResponse::fail(

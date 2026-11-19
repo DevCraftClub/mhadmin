@@ -1,0 +1,253 @@
+<div class="dc-debug-toolbar" data-devcraft-debug-toolbar data-open="0">
+    <div class="dc-debug-toolbar__panel" data-toolbar-panel hidden>
+        <div class="dc-debug-toolbar__tabs" role="tablist" aria-label="Панель отладки">
+            {% for key, section in toolbar.sections|default({}) %}
+                <button
+                    type="button"
+                    class="dc-debug-toolbar__tab{% if loop.first %} is-active{% endif %}"
+                    data-toolbar-tab="{{ key }}"
+                    role="tab"
+                    aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                    aria-controls="dc-debug-toolbar-section-{{ key }}"
+                >
+                    <span>{{ section.label|e }}</span>
+                    <strong>{{ section.count|default(0) }}</strong>
+                </button>
+            {% endfor %}
+        </div>
+
+        <div class="dc-debug-toolbar__sections">
+            {% for key, section in toolbar.sections|default({}) %}
+                <section
+                    class="dc-debug-toolbar__section"
+                    id="dc-debug-toolbar-section-{{ key }}"
+                    data-toolbar-section="{{ key }}"
+                    role="tabpanel"
+                    {% if not loop.first %}hidden{% endif %}
+                >
+                    <header class="dc-debug-toolbar__section-head">
+                        <strong>{{ section.label|e }}</strong>
+                        <span>{{ section.count|default(0) }}</span>
+                    </header>
+
+                    {% if section.items|default([]) %}
+                        <ol class="dc-debug-toolbar__list">
+                            {% for item in section.items %}
+                                <li class="dc-debug-toolbar__item">
+                                    <div class="dc-debug-toolbar__sql">
+                                        <span class="dc-debug-toolbar__source">{{ item.source_label|e }}</span>
+                                        <code>{{ item.sql|e }}</code>
+                                    </div>
+                                    <div class="dc-debug-toolbar__meta">
+                                        <span>{{ item.time_label|default('0') }} ms</span>
+                                        {% if item.file is defined and item.file %}
+                                            <span>Файл: {{ item.file|e }}</span>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    {% else %}
+                        <p class="dc-debug-toolbar__empty">Запросов нет.</p>
+                    {% endif %}
+                </section>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="dc-debug-toolbar__bar">
+        <button type="button" class="dc-debug-toolbar__toggle" data-toolbar-toggle aria-expanded="false">
+            <span>Debug</span>
+            <strong>{{ toolbar.request_ms_label|default('0') }} ms</strong>
+            <span>{{ toolbar.total_count|default(0) }} запросов</span>
+        </button>
+    </div>
+</div>
+
+<style>
+.dc-debug-toolbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2147483640;
+    font: 12px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #e5e7eb;
+}
+
+.dc-debug-toolbar__panel {
+    max-height: 42vh;
+    overflow: auto;
+    border-top: 1px solid rgba(148, 163, 184, 0.24);
+    background: rgba(15, 23, 42, 0.98);
+    box-shadow: 0 -16px 36px rgba(15, 23, 42, 0.35);
+}
+
+.dc-debug-toolbar__tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    flex-wrap: wrap;
+}
+
+.dc-debug-toolbar__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 999px;
+    background: rgba(30, 41, 59, 0.82);
+    color: inherit;
+    cursor: pointer;
+}
+
+.dc-debug-toolbar__tab.is-active {
+    background: rgba(56, 189, 248, 0.16);
+    border-color: rgba(56, 189, 248, 0.5);
+    color: #f8fafc;
+}
+
+.dc-debug-toolbar__sections {
+    padding: 10px;
+}
+
+.dc-debug-toolbar__section {
+    display: grid;
+    gap: 10px;
+}
+
+.dc-debug-toolbar__section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 2px;
+    color: #cbd5e1;
+}
+
+.dc-debug-toolbar__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+}
+
+.dc-debug-toolbar__item {
+    padding: 10px 12px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 12px;
+    background: rgba(2, 6, 23, 0.9);
+}
+
+.dc-debug-toolbar__sql {
+    display: grid;
+    gap: 6px;
+}
+
+.dc-debug-toolbar__source {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #38bdf8;
+}
+
+.dc-debug-toolbar__sql code {
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #e2e8f0;
+}
+
+.dc-debug-toolbar__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+    color: #94a3b8;
+}
+
+.dc-debug-toolbar__empty {
+    margin: 0;
+    padding: 8px 2px;
+    color: #94a3b8;
+}
+
+.dc-debug-toolbar__bar {
+    border-top: 1px solid rgba(148, 163, 184, 0.24);
+    background: rgba(2, 6, 23, 0.98);
+}
+
+.dc-debug-toolbar__toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.dc-debug-toolbar__toggle strong {
+    color: #38bdf8;
+}
+
+.dc-debug-toolbar__toggle span {
+    color: #cbd5e1;
+}
+</style>
+
+<script>
+(function () {
+    const root = document.querySelector('[data-devcraft-debug-toolbar]');
+
+    if (!root) {
+        return;
+    }
+
+    const panel = root.querySelector('[data-toolbar-panel]');
+    const toggle = root.querySelector('[data-toolbar-toggle]');
+    const tabs = Array.from(root.querySelectorAll('[data-toolbar-tab]'));
+    const sections = Array.from(root.querySelectorAll('[data-toolbar-section]'));
+
+    const openPanel = function (state) {
+        root.dataset.open = state ? '1' : '0';
+        panel.hidden = !state;
+        toggle.setAttribute('aria-expanded', state ? 'true' : 'false');
+    };
+
+    const selectTab = function (key) {
+        tabs.forEach(function (button) {
+            const active = button.dataset.toolbarTab === key;
+            button.classList.toggle('is-active', active);
+            button.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+
+        sections.forEach(function (section) {
+            section.hidden = section.dataset.toolbarSection !== key;
+        });
+    };
+
+    toggle.addEventListener('click', function () {
+        const isOpen = root.dataset.open === '1';
+        openPanel(!isOpen);
+
+        if (!isOpen) {
+            selectTab('all');
+        }
+    });
+
+    tabs.forEach(function (button) {
+        button.addEventListener('click', function () {
+            selectTab(button.dataset.toolbarTab);
+            openPanel(true);
+        });
+    });
+
+    selectTab('all');
+})();
+</script>

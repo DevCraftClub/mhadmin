@@ -33,6 +33,7 @@ use DevCraft\Core\Support\DataManager;
 use DevCraft\Core\Support\ExceptionDetailFormatter;
 use DevCraft\Core\Config\DevCraftConfig;
 use DevCraft\Core\Logging\LogGenerator;
+use DevCraft\Modules\Admin\DebugToolbar\ToolbarService;
 
 /**
  * Главный контейнер приложения DevCraft (Singleton).
@@ -171,6 +172,10 @@ final class Application {
 	 */
 	public function runAdmin(string $moduleDir, ?string $mod = NULL): void {
 		$this->boot();
+
+		if(LogGenerator::isDebugEnabled()) {
+			ToolbarService::instance()->boot();
+		}
 
 		$action = '';
 

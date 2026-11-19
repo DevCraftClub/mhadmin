@@ -8,6 +8,7 @@ use DevCraft\Core\Application;
 use DevCraft\Core\Config\Paths;
 use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Support\DataManager;
+use DevCraft\Modules\Admin\DebugToolbar\ToolbarService;
 use DevCraft\Modules\Admin\AdminIdentity;
 use DevCraft\Modules\Admin\Models\PublicAssetEntry;
 use DevCraft\Modules\Admin\Models\PublicHeaderEntry;
@@ -19,14 +20,23 @@ use DevCraft\Modules\Admin\Repositories\PublicHeaderEntryRepository;
  */
 final class PublicAssetTagService {
 
+	private static bool $debugToolbarBufferStarted = false;
+
 	public function __construct(
 		private readonly PublicAssetDependencyService $deps = new PublicAssetDependencyService(),
 	) {}
 
 	public function applyToTemplate(object $tpl): void {
-		// Публичка не сидит списки: полный seed — Dashboard / Public Assets.
-		// В debug — только sync, если изменились mtime манифестов.
 		if(LogGenerator::isDebugEnabled()) {
+			ToolbarService::instance()->boot();
+
+			if(!self::$debugToolbarBufferStarted) {
+				ob_start([ToolbarService::instance(), 'injectIntoHtml']);
+				self::$debugToolbarBufferStarted = true;
+			}
+
+			// Публичка не сидит списки: полный seed — Dashboard / Public Assets.
+			// В debug — только sync, если изменились mtime манифестов.
 			(new PublicAssetManifestSyncService())->syncIfChanged();
 		}
 

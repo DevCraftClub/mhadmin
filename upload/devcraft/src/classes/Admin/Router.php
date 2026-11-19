@@ -24,6 +24,7 @@ use DevCraft\Core\I18n\Translation;
 use DevCraft\Core\Logging\LogGenerator;
 use DevCraft\Core\Module\PluginContext;
 use DevCraft\Core\Config\DevCraftConfig;
+use DevCraft\Modules\Admin\DebugToolbar\ToolbarService;
 use DevCraft\Core\Abstracts\AbstractPage;
 use DevCraft\Core\Twig\EnvironmentFactory;
 use DevCraft\Core\Interfaces\PageInterface;
@@ -305,12 +306,20 @@ final class Router {
 	 */
 	private function layoutWrap(string $contentView, array $data, AdminContext $adminContext, string $version): string {
 		$inner = Application::instance()->twig()->render(AbstractPage::resolveViewKey($contentView), $data);
+		$debugToolbar = [];
+
+		if(LogGenerator::isDebugEnabled()) {
+			$toolbar = ToolbarService::instance();
+			$toolbar->boot();
+			$debugToolbar = $toolbar->viewModel();
+		}
 
 		return Application::instance()->twig()->render('core/layout.twig', array_merge($data, [
 			'content' => $inner,
 			'title'   => (string) ($data['page_title'] ?? 'DevCraft'),
 			'version' => $version,
 			'admin'   => $adminContext->toArray(),
+			'debug_toolbar' => $debugToolbar,
 		]));
 	}
 

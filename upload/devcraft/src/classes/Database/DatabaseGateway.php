@@ -21,6 +21,7 @@ use Cycle\Database\Config;
 use Cycle\ORM\EntityManager;
 use Cycle\ORM\SchemaInterface;
 use DevCraft\Core\Config\Paths;
+use DevCraft\Core\Logging\LogGenerator;
 use Spiral\Pagination\Paginator;
 use Cycle\ORM\RepositoryInterface;
 use DevCraft\Core\Module\Registry;
@@ -30,6 +31,7 @@ use Cycle\Database\DatabaseInterface;
 use Cycle\Database\StatementInterface;
 use Cycle\ORM\Transaction\StateInterface;
 use Symfony\Component\DependencyInjection\Container;
+use DevCraft\Modules\Admin\DebugToolbar\QueryRegistry;
 
 /**
  * Шлюз доступа к базе данных через Cycle ORM.
@@ -303,7 +305,14 @@ final class DatabaseGateway {
 	 *     $stmt = $db->query('SELECT COUNT(*) FROM {table}', ['table' => 'users']);
 	 */
 	public function query(string $sql, array $params = []): StatementInterface {
-		return $this->connection()->query($sql, $params);
+		$startedAt = LogGenerator::isDebugEnabled()? microtime(true) : null;
+		try {
+			return $this->connection()->query($sql, $params);
+		} finally {
+			if($startedAt !== null) {
+				QueryRegistry::record('cycle', $sql, (microtime(true) - $startedAt) * 1000);
+			}
+		}
 	}
 
 	/**

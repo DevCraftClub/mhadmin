@@ -141,5 +141,8 @@
 {% for js_url in module_js_urls|default([]) %}
     <script src="{{ js_url }}"></script>
 {% endfor %}
+{% if debug_toolbar is defined and debug_toolbar %}
+    {% include 'core/includes/debug_toolbar.twig' with { toolbar: debug_toolbar } %}
+{% endif %}
 </body>
 </html>

@@ -178,6 +178,11 @@ final class Application {
 	public function runAdmin(string $moduleDir, ?string $mod = NULL): void {
 		$this->boot();
 
+		// ?dc_debug=1 до страницы — иначе boot панели и сбор SQL не успевают.
+		if(isset($_GET['dc_debug']) && (string) $_GET['dc_debug'] === '1') {
+			$_SESSION['dc_debug'] = true;
+		}
+
 		if(LogGenerator::isDebugEnabled()) {
 			ToolbarService::instance()->boot();
 		}

@@ -306,20 +306,24 @@ final class Router {
 	 */
 	private function layoutWrap(string $contentView, array $data, AdminContext $adminContext, string $version): string {
 		$inner = Application::instance()->twig()->render(AbstractPage::resolveViewKey($contentView), $data);
-		$debugToolbar = [];
+		$debugToolbar = null;
 
 		if(LogGenerator::isDebugEnabled()) {
 			$toolbar = ToolbarService::instance();
-			$toolbar->boot();
+			// Не вызывать boot() повторно в конце — иначе сбросятся собранные Cycle-запросы.
+			if(!$toolbar->isBooted()) {
+				$toolbar->boot();
+			}
 			$debugToolbar = $toolbar->viewModel();
 		}
 
 		return Application::instance()->twig()->render('core/layout.twig', array_merge($data, [
-			'content' => $inner,
-			'title'   => (string) ($data['page_title'] ?? 'DevCraft'),
-			'version' => $version,
-			'admin'   => $adminContext->toArray(),
-			'debug_toolbar' => $debugToolbar,
+			'content'             => $inner,
+			'title'               => (string) ($data['page_title'] ?? 'DevCraft'),
+			'version'             => $version,
+			'admin'               => $adminContext->toArray(),
+			'devcraft_debug'      => LogGenerator::isDebugEnabled(),
+			'debug_toolbar'       => $debugToolbar,
 		]));
 	}
 

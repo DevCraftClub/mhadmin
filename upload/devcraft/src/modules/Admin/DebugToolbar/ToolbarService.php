@@ -24,6 +24,11 @@ final class ToolbarService
 		return self::$instance ??= new self();
 	}
 
+	public function isBooted(): bool
+	{
+		return $this->booted;
+	}
+
 	public function boot(): void
 	{
 		if($this->booted || !LogGenerator::isDebugEnabled()) {

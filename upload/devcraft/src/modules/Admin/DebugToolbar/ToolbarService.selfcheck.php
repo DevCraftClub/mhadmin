@@ -19,16 +19,21 @@ $gateway = (string) file_get_contents(dirname(__DIR__, 3) . '/classes/Database/D
 $router = (string) file_get_contents(dirname(__DIR__, 3) . '/classes/Admin/Router.php');
 
 assert(str_contains($toolbar, 'function boot'), 'ToolbarService::boot');
+assert(str_contains($toolbar, 'function isBooted'), 'ToolbarService::isBooted');
 assert(str_contains($toolbar, 'function renderHtml'), 'ToolbarService::renderHtml');
 assert(str_contains($toolbar, 'function injectIntoHtml'), 'ToolbarService::injectIntoHtml');
 assert(str_contains($toolbar, 'query_list'), 'DLE query_list snapshot');
 assert(str_contains($registry, 'function record'), 'QueryRegistry::record');
 assert(str_contains($partial, 'data-devcraft-debug-toolbar'), 'toolbar marker');
+assert(str_contains($partial, 'appendChild'), 'reparent toolbar to body');
 assert(str_contains($layout, 'debug_toolbar.twig'), 'admin layout include');
+assert(str_contains($layout, 'devcraft_debug'), 'admin layout gated by devcraft_debug');
 assert(str_contains($tag, 'ToolbarService::instance()->boot()'), 'public boot');
 assert(str_contains($tag, 'register_shutdown_function'), 'public shutdown inject');
 assert(str_contains($app, 'ToolbarService::instance()->boot()'), 'admin runAdmin boot');
+assert(str_contains($app, "\$_SESSION['dc_debug']"), 'dc_debug early in runAdmin');
 assert(str_contains($router, 'viewModel()'), 'Router passes viewModel');
+assert(str_contains($router, 'isBooted()'), 'Router does not reboot toolbar');
 assert(str_contains($gateway, "QueryRegistry::record('cycle'"), 'Cycle query recording');
 
 fwrite(STDOUT, "ToolbarService.selfcheck: ok\n");

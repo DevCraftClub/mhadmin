@@ -36,7 +36,7 @@
                                 <li class="dc-debug-toolbar__item">
                                     <div class="dc-debug-toolbar__sql">
                                         <span class="dc-debug-toolbar__source">{{ item.source_label|e }}</span>
-                                        <code>{{ item.sql|e }}</code>
+                                        <code class="dc-debug-toolbar__sql-text">{{ item.sql|e }}</code>
                                     </div>
                                     <div class="dc-debug-toolbar__meta">
                                         <span>{{ item.time_label|default('0') }} ms</span>
@@ -154,10 +154,18 @@
     color: #38bdf8;
 }
 
-.dc-debug-toolbar__sql code {
+.dc-debug-toolbar__sql-text {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
     white-space: pre-wrap;
     word-break: break-word;
-    color: #e2e8f0;
+    font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc;
+    opacity: 1;
 }
 
 .dc-debug-toolbar__meta {

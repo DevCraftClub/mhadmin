@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="banner.png" alt="Баннер" width="1920" />
+</p>
+
 [![GitHub issues](https://img.shields.io/github/issues/DevCraftClub/mhadmin.svg?style=flat-square)](https://github.com/DevCraftClub/mhadmin/issues)[![GitHub forks](https://img.shields.io/github/forks/DevCraftClub/mhadmin.svg?style=flat-square)](https://github.com/DevCraftClub/mhadmin/network)[![GitHub license](https://img.shields.io/github/license/DevCraftClub/mhadmin.svg?style=flat-square)](https://github.com/DevCraftClub/mhadmin/blob/master/LICENSE)
 
 # DevCraft Admin
